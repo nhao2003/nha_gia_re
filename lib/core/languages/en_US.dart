@@ -2,5 +2,11 @@
 
 const Map<String, String> enLanguagePackage = {
   // login
-  'Sign In': 'Sign in',
+  'Login': 'Login',
+  'Forgot password?' : 'Forgot password?',
+  'Register' : 'Register',
+  'Enter your password' : 'Enter your password',
+  'Enter your email' : 'Enter your email', 
+  'or login with' : 'or login with',
+  'Password' : 'Password'
 };

@@ -9,4 +9,12 @@ class CustomTextStyle extends TextStyle {
       color: color,
     );
   }
+  static TextStyle login(Color color)
+  {
+    return GoogleFonts.roboto(
+      fontSize: 15,
+      fontWeight: FontWeight.w600,
+      color: color,
+    );
+  }
 }

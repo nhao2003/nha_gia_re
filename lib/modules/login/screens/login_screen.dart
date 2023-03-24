@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nha_gia_re/core/theme/text_styles.dart';
+import 'package:nha_gia_re/core/values/assets_image.dart';
+import 'package:nha_gia_re/modules/login/widgets/login_form.dart';
 
 import '../login_controller.dart';
+import '../widgets/register_form.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,14 +15,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final LoginController _controller = Get.find<LoginController>();
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text("Login"),
-      ),
+    return Scaffold(
+      body: LoginForm(),
     );
   }
 }
