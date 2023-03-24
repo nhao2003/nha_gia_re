@@ -17,4 +17,12 @@ class CustomTextStyle extends TextStyle {
       color: color,
     );
   }
+  static TextStyle title(Color color)
+  {
+    return GoogleFonts.roboto(
+      fontSize: 20,
+      fontWeight: FontWeight.w600,
+      color: color,
+    );
+  }
 }

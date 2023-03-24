@@ -1,0 +1,66 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:nha_gia_re/core/theme/text_styles.dart';
+import 'package:nha_gia_re/core/values/assets_image.dart';
+
+import '../login_controller.dart';
+
+class ForgetPasswordPage extends StatefulWidget {
+  const ForgetPasswordPage({super.key});
+
+  @override
+  State<ForgetPasswordPage> createState() => _ForgetPasswordPageState();
+}
+
+class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
+  
+  final LoginController _controller = Get.find<LoginController>();
+  final forgotPassFormGlobalKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () { Get.back(); },
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+        ),
+        titleSpacing: 0,
+        title: Text('Forget password'.tr, style: CustomTextStyle.title(Colors.black),),
+        actions: [
+          IconButton(onPressed: () {}, icon: Image.asset(Assets.messCircle)),          
+          IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
+        ],
+        ),
+      body: Container(
+          padding: const EdgeInsets.all(35),
+          child: Form(
+            key: forgotPassFormGlobalKey,
+            child: Center(
+              child: Column(
+                children: [
+                  Image.asset(Assets.forgetPass, width: MediaQuery.of(context).size.width * 0.65,),
+                  const SizedBox(height: 20,),
+                   TextFormField(
+                  decoration: InputDecoration(
+                      hintText: 'example@email.com',
+                      labelText: 'Enter your email'.tr,
+                      border: const OutlineInputBorder()),
+                  validator: _controller.validateEmail,
+                  ),
+                  const SizedBox(height: 20,),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (forgotPassFormGlobalKey.currentState!.validate()) {}
+                      }, 
+                      child: Text('Reset password'.tr),),
+                    ),
+              ]),
+            ),
+          )),
+    );
+  }
+}
