@@ -1,12 +1,38 @@
 import 'package:flutter/cupertino.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-class CustomTextStyle extends TextStyle {
-  static TextStyle logo(Color color) {
-    return GoogleFonts.workSans(
-      fontSize: 35,
-      fontWeight: FontWeight.w700,
-      color: color,
-    );
-  }
+class AppTextStyles{
+  static TextStyle roboto12regular = TextStyle(
+    fontSize: 12,
+  );
+  static TextStyle roboto12semiBold = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+  );
+  static TextStyle roboto12Bold = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w700,
+  );
+  static TextStyle roboto14regular = TextStyle(
+    fontSize: 14,
+  );
+  static TextStyle roboto14semiBold = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+  );
+  static TextStyle roboto14Bold = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w700,
+  );
+
+  static TextStyle roboto16regular = TextStyle(
+    fontSize: 16,
+  );
+  static TextStyle roboto16semiBold = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+  );
+  static TextStyle roboto16Bold = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+  );
 }
