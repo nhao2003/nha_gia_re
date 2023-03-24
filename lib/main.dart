@@ -2,19 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/routers/app_pages.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 
-import 'core/languages/localization_service.dart';
 import 'core/values/app_strings.dart';
 
 Future main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  //WidgetsFlutterBinding.ensureInitialized();
   //await Firebase.initializeApp();
-  initializeDateFormatting();
+  //initializeDateFormatting();
 
   runApp(const MyApp());
 }
@@ -33,18 +30,12 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: AppStrings.appName,
       theme: ThemeData(
-        primarySwatch: AppColors.customColor,
+        primaryColor: AppColors.primaryColor,
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        textTheme: TextTheme(
-          bodyMedium: GoogleFonts.workSans(),
-        ),
       ),
       builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
-      locale: LocalizationService.locale,
-      fallbackLocale: LocalizationService.fallbackLocale,
-      translations: LocalizationService(),
-      initialRoute: AppRoutes.login,
+      initialRoute: AppRoutes.home,
       getPages: AppPages.pages,
       defaultTransition: Transition.cupertino,
     );

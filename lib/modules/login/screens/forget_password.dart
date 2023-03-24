@@ -27,7 +27,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
         titleSpacing: 0,
-        title: Text('Forget password'.tr, style: CustomTextStyle.title(Colors.black),),
+        title: Text('Forget password'.tr, style: AppTextStyles.roboto20semiBold,),
         actions: [
           IconButton(onPressed: () {}, icon: Image.asset(Assets.messCircle)),          
           IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))

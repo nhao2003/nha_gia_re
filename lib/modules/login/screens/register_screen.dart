@@ -30,7 +30,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("LOGO", style: CustomTextStyle.logo(Colors.black), textAlign: TextAlign.center,),
+                  const Text("LOGO", style: TextStyle(color: Colors.black, fontSize: 64)),
                   const SizedBox(height: 50,),
                   TextFormField(
                     decoration: InputDecoration(

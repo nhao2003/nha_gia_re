@@ -31,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("LOGO", style: CustomTextStyle.logo(Colors.black), textAlign: TextAlign.center,),
+                const Text("LOGO", style: TextStyle(color: Colors.black, fontSize: 64)),
                 const SizedBox(height: 50,),
                 TextFormField(
                   decoration: InputDecoration(
@@ -73,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 Text(
                   "or login with".tr,
-                  style: CustomTextStyle.login(Colors.grey),
+                  style: AppTextStyles.roboto16regular,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 10,),
