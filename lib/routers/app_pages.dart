@@ -4,6 +4,7 @@ import '../modules/home/home_binding.dart';
 import '../modules/home/screens/home_screen.dart';
 import '../modules/login/login_binding.dart';
 import '../modules/login/screens/login_screen.dart';
+import '../modules/search/search_binding.dart';
 import 'app_routes.dart';
 
 abstract class AppPages {
@@ -21,7 +22,7 @@ abstract class AppPages {
     GetPage(
       name: AppRoutes.search,
       page: () => SearchScreen(),
-      binding: LoginBinding(),
+      binding: SearchBinding(),
     ),
   ];
 }
