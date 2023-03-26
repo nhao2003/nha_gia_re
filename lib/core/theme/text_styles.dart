@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-class AppTextStyles{
+class AppTextStyles {
   static TextStyle roboto12regular = TextStyle(
     fontSize: 12,
   );
