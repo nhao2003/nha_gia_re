@@ -36,20 +36,19 @@ class SearchController extends GetxController {
   /// delete a query in history
   void deleteHistory(String query) {
     history.remove(query);
-    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     // update suggestion to sync
-    updateSuggestions(query);
+    updateSuggestions("");
   }
 
   /// get list Suggestions
-  Iterable<String> getSuggestions(String query) {
+  List<String> getSuggestions(String query) {
     return query.isEmpty
-        ? history
-        : dummydata.where((word) => word.startsWith(query));
+        ? [...history]
+        : dummydata.where((word) => word.startsWith(query)).toList();
   }
 
   /// update suggestions
-  void updateSuggestions(String query) {
-    suggestions = [...getSuggestions(query)].obs;
+  void updateSuggestions(String query) async {
+    suggestions.value = getSuggestions(query);
   }
 }
