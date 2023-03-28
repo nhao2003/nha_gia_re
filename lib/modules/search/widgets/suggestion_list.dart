@@ -4,14 +4,18 @@ import 'package:flutter/material.dart';
 // Suggestions list widget displayed in the search page.
 // query is the text input
 class SuggestionList extends StatelessWidget {
-  const SuggestionList(
-      {required this.suggestions,
-      required this.query,
-      required this.onSelected});
+  const SuggestionList({
+    super.key,
+    required this.suggestions,
+    required this.query,
+    required this.onSelected,
+    required this.onDeleted,
+  });
 
   final List<String> suggestions;
   final String query;
   final ValueChanged<String> onSelected;
+  final Function(String query) onDeleted;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +31,7 @@ class SuggestionList extends StatelessWidget {
                   icon: const Icon(Icons.cancel_outlined),
                   onPressed: () {
                     // delete a history
+                    onDeleted(suggestion);
                   },
                 )
               : const Icon(null),

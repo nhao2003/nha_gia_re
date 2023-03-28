@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/modules/search/search_controller.dart';
+import 'package:nha_gia_re/modules/search/widgets/result_page.dart';
 import 'package:nha_gia_re/modules/search/widgets/suggestion_list.dart';
 
 // Defines the content of the search page in `showSearch()`.
@@ -10,6 +12,11 @@ class MySearchDelegate extends SearchDelegate<String> {
   final SearchController controller;
 
   MySearchDelegate(this.controller);
+
+  void closeDelegate(BuildContext context, String value) {
+    // SearchDelegate.close() can return vlaues, similar to Navigator.pop().
+    close(context, value);
+  }
 
 // custom search bar style
   // hint text
@@ -52,8 +59,7 @@ class MySearchDelegate extends SearchDelegate<String> {
         progress: transitionAnimation,
       ),
       onPressed: () {
-        // SearchDelegate.close() can return vlaues, similar to Navigator.pop().
-        this.close(context, '');
+        closeDelegate(context, "");
       },
     );
   }
@@ -61,49 +67,32 @@ class MySearchDelegate extends SearchDelegate<String> {
   // Widget of result page.
   @override
   Widget buildResults(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            const Text('You have selected the word:'),
-            GestureDetector(
-              onTap: () {
-                // Returns this.query as result to previous screen, c.f.
-                // `showSearch()` above.
-                this.close(context, this.query);
-              },
-              child: Text(
-                this.query,
-                style: Theme.of(context)
-                    .textTheme
-                    .headline4!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    return const ResultPage();
+  }
+
+  @override
+  void showResults(BuildContext context) {
+    /// add the query to history
+    controller.addToHistory(query.trim());
+    super.showResults(context);
   }
 
   // Suggestions list while typing (this.query).
   @override
   Widget buildSuggestions(BuildContext context) {
-    final Iterable<String> suggestions = this.query.isEmpty
-        ? controller.history
-        : controller.dummydata.where((word) => word.startsWith(query));
+    controller.updateSuggestions(query);
 
-    return SuggestionList(
-      query: this.query,
-      suggestions: suggestions.toList(),
-      onSelected: (String suggestion) {
-        this.query = suggestion;
-        controller.history.insert(0, suggestion);
-        showResults(context);
-      },
-    );
+    return Obx(() => SuggestionList(
+          query: query,
+          suggestions: controller.suggestions.value,
+          onSelected: (String suggestion) {
+            // event when tap in suggestion
+            query = suggestion;
+            controller.history.insert(0, suggestion);
+            showResults(context);
+          },
+          onDeleted: controller.deleteHistory,
+        ));
   }
 
   // Action buttons at the right of search bar.
@@ -115,7 +104,7 @@ class MySearchDelegate extends SearchDelegate<String> {
           tooltip: 'Voice Search',
           icon: const Icon(Icons.mic),
           onPressed: () {
-            this.query = 'TODO: implement voice input';
+            query = 'TODO: implement voice input';
           },
         )
       else
