@@ -6,7 +6,7 @@ import '../search_controller.dart';
 import '../widgets/my_search_delegate.dart';
 
 class SearchScreen extends StatefulWidget {
-  SearchScreen({super.key});
+  const SearchScreen({super.key});
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();

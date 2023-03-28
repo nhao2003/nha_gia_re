@@ -19,7 +19,7 @@ class SuggestionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme.subtitle1!;
+    final textTheme = Theme.of(context).textTheme.titleMedium!;
     return ListView.builder(
       itemCount: suggestions.length,
       itemBuilder: (BuildContext context, int i) {

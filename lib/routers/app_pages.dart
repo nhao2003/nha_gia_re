@@ -21,7 +21,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.search,
-      page: () => SearchScreen(),
+      page: () => const SearchScreen(),
       binding: SearchBinding(),
     ),
   ];

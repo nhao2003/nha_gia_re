@@ -82,17 +82,19 @@ class MySearchDelegate extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
     controller.updateSuggestions(query);
 
-    return Obx(() => SuggestionList(
-          query: query,
-          suggestions: controller.suggestions.value,
-          onSelected: (String suggestion) {
-            // event when tap in suggestion
-            query = suggestion;
-            controller.history.insert(0, suggestion);
-            showResults(context);
-          },
-          onDeleted: controller.deleteHistory,
-        ));
+    return Obx(
+      () => SuggestionList(
+        query: query,
+        suggestions: controller.suggestions,
+        onSelected: (String suggestion) {
+          // event when tap in suggestion
+          query = suggestion;
+          controller.history.insert(0, suggestion);
+          showResults(context);
+        },
+        onDeleted: controller.deleteHistory,
+      ),
+    );
   }
 
   // Action buttons at the right of search bar.

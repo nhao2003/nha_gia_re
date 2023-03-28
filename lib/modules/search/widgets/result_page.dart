@@ -5,27 +5,15 @@ class ResultPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            const Text('You have selected the word:'),
-            GestureDetector(
-              onTap: () {
-                //
-              },
-              child: Text(
-                "Result Page",
-                style: Theme.of(context)
-                    .textTheme
-                    .headline4!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-            ),
-          ],
-        ),
+    return Expanded(
+      child: Column(
+        children: [
+          // khu vuc toan quoc + loc
+
+          // tab : Lien quan - tin moi nhat
+
+          // listView
+        ],
       ),
     );
   }
