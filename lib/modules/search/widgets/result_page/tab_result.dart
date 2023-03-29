@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nha_gia_re/modules/search/widgets/result_page/related_list.dart';
 import '../../../../core/theme/app_colors.dart';
 
 class TabResult extends StatelessWidget {
@@ -22,21 +23,11 @@ class TabResult extends StatelessWidget {
                 ),
               ],
             ),
-            Expanded(
+            const Expanded(
               child: TabBarView(
                 children: [
-                  Container(
-                    color: AppColors.blue,
-                    child: const Center(
-                      child: Text("Lien quan"),
-                    ),
-                  ),
-                  Container(
-                    color: AppColors.green,
-                    child: const Center(
-                      child: Text("Tin mới nhất"),
-                    ),
-                  ),
+                  RelatedList(),
+                  RelatedList(),
                 ],
               ),
             ),

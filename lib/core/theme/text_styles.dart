@@ -1,6 +1,28 @@
 import 'package:flutter/cupertino.dart';
 
 class AppTextStyles {
+  static TextStyle roboto10regular = TextStyle(
+    fontSize: 10,
+  );
+  static TextStyle roboto10semiBold = TextStyle(
+    fontSize: 10,
+    fontWeight: FontWeight.w600,
+  );
+  static TextStyle roboto10Bold = TextStyle(
+    fontSize: 10,
+    fontWeight: FontWeight.w700,
+  );
+  static TextStyle roboto11regular = TextStyle(
+    fontSize: 11,
+  );
+  static TextStyle roboto11semiBold = TextStyle(
+    fontSize: 11,
+    fontWeight: FontWeight.w600,
+  );
+  static TextStyle roboto11Bold = TextStyle(
+    fontSize: 11,
+    fontWeight: FontWeight.w700,
+  );
   static TextStyle roboto12regular = TextStyle(
     fontSize: 12,
   );
