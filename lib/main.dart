@@ -30,12 +30,17 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: AppStrings.appName,
       theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          color: AppColors.primaryColor,
+          foregroundColor: AppColors.black,
+          elevation: 0,
+        ),
         primaryColor: AppColors.primaryColor,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.home,
+      initialRoute: AppRoutes.chat,
       getPages: AppPages.pages,
       defaultTransition: Transition.cupertino,
     );
