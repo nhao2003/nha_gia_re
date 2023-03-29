@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/modules/search/search_controller.dart';
-import 'package:nha_gia_re/modules/search/widgets/result_page.dart';
+import 'package:nha_gia_re/modules/search/widgets/result_page/result_page.dart';
 import 'package:nha_gia_re/modules/search/widgets/suggestion_list.dart';
 
 // Defines the content of the search page in `showSearch()`.
@@ -67,7 +66,7 @@ class MySearchDelegate extends SearchDelegate<String> {
   // Widget of result page.
   @override
   Widget buildResults(BuildContext context) {
-    return const ResultPage();
+    return ResultPage();
   }
 
   @override
@@ -82,18 +81,16 @@ class MySearchDelegate extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
     controller.updateSuggestions(query);
 
-    return Obx(
-      () => SuggestionList(
-        query: query,
-        suggestions: controller.suggestions,
-        onSelected: (String suggestion) {
-          // event when tap in suggestion
-          query = suggestion;
-          controller.history.insert(0, suggestion);
-          showResults(context);
-        },
-        onDeleted: controller.deleteHistory,
-      ),
+    return SuggestionList(
+      query: query,
+      suggestions: controller.suggestions,
+      onSelected: (String suggestion) {
+        // event when tap in suggestion
+        query = suggestion;
+        controller.addToHistory(suggestion);
+        showResults(context);
+      },
+      onDeleted: controller.deleteHistory,
     );
   }
 
