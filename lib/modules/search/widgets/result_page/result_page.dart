@@ -1,28 +1,11 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
-
-import '../../search_controller.dart';
+import 'package:nha_gia_re/modules/search/widgets/result_page/dropdownbutton_cities.dart';
+import 'package:nha_gia_re/modules/search/widgets/result_page/tab_result.dart';
 
 class ResultPage extends StatelessWidget {
-  ResultPage({super.key});
-
-  final SearchController searchController = Get.find<SearchController>();
-
-  /// data in fill city
-  final List<DropdownMenuItem<String>> dropDownMenuItems =
-      SearchController.provinces
-          .map(
-            (String value) => DropdownMenuItem<String>(
-              value: value,
-              child: Text(value,
-                  style: AppTextStyles.roboto14regular
-                      .copyWith(color: AppColors.black)),
-            ),
-          )
-          .toList();
+  const ResultPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,32 +31,7 @@ class ResultPage extends StatelessWidget {
                     ),
                     const SizedBox(width: 5),
                     // dropdown button
-                    Obx(
-                      () => DropdownButtonHideUnderline(
-                        child: DropdownButton2(
-                          isExpanded: true,
-                          value: searchController.selectedTypeItem.value,
-                          style: AppTextStyles.roboto14regular
-                              .copyWith(color: AppColors.black),
-                          onChanged: (String? newValue) {
-                            if (newValue != null) {
-                              searchController.changeSelectedItem(newValue);
-                            }
-                          },
-                          items: dropDownMenuItems,
-                          buttonStyleData: const ButtonStyleData(
-                            height: 40,
-                            width: 140,
-                          ),
-                          menuItemStyleData: const MenuItemStyleData(
-                            height: 40,
-                          ),
-                          dropdownStyleData: const DropdownStyleData(
-                            maxHeight: 400,
-                          ),
-                        ),
-                      ),
-                    ),
+                    DropdownButtonCities(),
                   ],
                 ),
               ),
@@ -100,25 +58,7 @@ class ResultPage extends StatelessWidget {
           ),
         ),
         // tab : Lien quan - tin moi nhat
-        DefaultTabController(
-          length: 2,
-          child: Column(
-            children: [
-              TabBar(
-                indicatorColor: AppColors.primaryColor,
-                tabs: const [
-                  Tab(
-                    text: "Liên quan",
-                  ),
-                  Tab(
-                    text: "Tin mới nhất",
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        // listView
+        const TabResult(),
       ],
     );
   }
