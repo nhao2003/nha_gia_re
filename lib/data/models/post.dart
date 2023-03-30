@@ -6,7 +6,7 @@ class Post {
   late final String id;
   late Address address;
   late final String userID;
-  String? propertyID;
+  String propertyID;
   int price;
   int? deposit;
   bool isLease;
@@ -32,7 +32,7 @@ class Post {
     required this.isProSeller,
     this.deposit,
     this.numOfFavs = 0,
-    this.propertyID,
+    required this.propertyID,
   })  : assert((isLease == false && deposit == null) ||
             (isLease == true && deposit != null && deposit > 0)),
         assert(id.trim().isNotEmpty),
