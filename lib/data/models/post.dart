@@ -1,5 +1,3 @@
-import 'package:nha_gia_re/data/models/property.dart';
-
 import 'address.dart';
 
 class Post {
