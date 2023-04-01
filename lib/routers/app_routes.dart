@@ -3,4 +3,6 @@ abstract class AppRoutes {
   static const home = '/home';
   // login
   static const login = '/login';
+  //chat
+  static const chat = '/chat';
 }

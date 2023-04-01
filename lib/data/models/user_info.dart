@@ -2,10 +2,9 @@ import 'address.dart';
 
 class UserInfo {
   String uid;
+  late Address address;
   bool isMale;
   String? avatarUrl;
-  List<String>? following;
-  late Address address;
   String fullName;
   DateTime createdAt;
   String phoneNumber;
@@ -25,7 +24,6 @@ class UserInfo {
     required this.email,
     this.description,
     this.avatarUrl,
-    this.following,
   })  : assert(uid.isNotEmpty),
         assert(avatarUrl == null || avatarUrl.isNotEmpty),
         assert(fullName.isNotEmpty),
