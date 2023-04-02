@@ -1,6 +1,8 @@
-import 'property.dart';
+import 'package:nha_gia_re/data/models/address.dart';
 
-class Land extends Property {
+import 'post.dart';
+
+class Land extends Post {
   String? landLotCode;
   String? subdivisionName;
   LandType? landType;
@@ -8,14 +10,12 @@ class Land extends Property {
   double length;
   Direction? landDirection;
   LegalDocumentStatus? legalDocumentStatus;
-  bool isFacade;
-  bool isWidensTowardsTheBack;
-  bool hasWideAlley;
-
+  bool? isFacade;
+  bool? isWidensTowardsTheBack;
+  bool? hasWideAlley;
   Land({
     required String id,
-    FurnitureStatus? furnitureStatus,
-    required int area,
+    required double area,
     String? projectName,
     this.landLotCode,
     this.subdivisionName,
@@ -24,17 +24,41 @@ class Land extends Property {
     required this.length,
     this.landDirection,
     this.legalDocumentStatus,
-    this.isFacade = false,
-    this.isWidensTowardsTheBack = false,
-    this.hasWideAlley = false,
+    this.isFacade,
+    this.isWidensTowardsTheBack,
+    this.hasWideAlley,
+    required Address address,
+    required PropertyType type,
+    required String userID,
+    required bool isLease,
+    required int price,
+    required String title,
+    required String description,
+    required DateTime postedAt,
+    required DateTime expiryDate,
+    required List<String> imagesUrl,
+    required bool isProSeller,
+    int? deposit,
+    int numOfFavs = 0,
   })  : assert(landLotCode?.trim().isNotEmpty ?? true),
         assert(width * length > 0),
         assert(subdivisionName?.trim().isNotEmpty ?? true),
         super(
           id: id,
-          furnitureStatus: furnitureStatus,
-          type: PropertyType.land,
           area: area,
+          type: type,
+          address: address,
+          userID: userID,
+          isLease: isLease,
+          price: price,
+          title: title,
+          description: description,
+          postedAt: postedAt,
+          expiryDate: expiryDate,
+          imagesUrl: imagesUrl,
+          isProSeller: isProSeller,
           projectName: projectName,
+          deposit: deposit,
+          numOfFavs: numOfFavs,
         );
 }
