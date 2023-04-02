@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:nha_gia_re/modules/chat/chat_binding.dart';
 import 'package:nha_gia_re/modules/chat/screens/chat_screen.dart';
+import 'package:nha_gia_re/modules/login/screens/register_screen.dart';
 import '../modules/home/home_binding.dart';
 import '../modules/home/screens/home_screen.dart';
 import '../modules/login/login_binding.dart';
@@ -24,5 +25,6 @@ abstract class AppPages {
       page: () => const ChatScreen(),
       binding: ChatBinding(),
     ),
+    GetPage(name: AppRoutes.register, page: () => const RegisterScreen()),
   ];
 }

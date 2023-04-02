@@ -73,6 +73,10 @@ flutter:
      - assets/images/
      - assets/images/3D Avatars/
   #   - images/a_dot_ham.jpeg
+    - assets/icons/facebook.png
+    - assets/icons/google.png
+    - assets/icons/message-circle.png
+    - assets/images/rafiki.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

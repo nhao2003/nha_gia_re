@@ -1,4 +1,5 @@
 const imagePath = 'assets/images';
+
 class Assets {
   Assets._();
   static const String emptyChat = '$imagePath/pana.png';
@@ -32,4 +33,11 @@ class Assets {
   static const String avatar_28 = '$imagePath/3D Avatars/28.png';
   static const String avatar_29 = '$imagePath/3D Avatars/29.png';
   static const String avatar_30 = '$imagePath/3D Avatars/30.png';
+
+  // icon
+  static const String facebook = 'assets/icons/facebook.png';
+  static const String google = 'assets/icons/google.png';
+  static const String messCircle = 'assets/icons/message-circle.png';
+  // image
+  static const String forgetPass = 'assets/images/rafiki.png';
 }
