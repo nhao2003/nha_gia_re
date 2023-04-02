@@ -18,18 +18,18 @@ class Address {
         assert(latitude == null || (-90 <= latitude && latitude <= 90));
 
   Map<String, dynamic> toJson() => {
-        'cityCode': cityCode,
-        'districtCode': districtCode,
-        'wardCode': wardCode,
+        'city_code': cityCode,
+        'district_code': districtCode,
+        'ward_code': wardCode,
         'detail': detail,
         'latitude': latitude,
         'longitude': longitude,
       };
 
   Address.fromJson(Map<String, dynamic> json)
-      : cityCode = json['cityCode'],
-        districtCode = json['districtCode'],
-        wardCode = json['wardCode'],
+      : cityCode = json['city_code'],
+        districtCode = json['district_code'],
+        wardCode = json['ward_code'],
         detail = json['detail'],
         latitude = json['latitude'],
         longitude = json['longitude'];

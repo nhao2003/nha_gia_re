@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
       ),
       builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.chat,
+      initialRoute: AppRoutes.login,
       getPages: AppPages.pages,
       defaultTransition: Transition.cupertino,
     );
