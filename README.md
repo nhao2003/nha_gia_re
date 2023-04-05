@@ -51,7 +51,6 @@
 
 ## Resources
 
-- Design Figma:
-- Git:
-- Firebase:
+- Design Figma: https://www.figma.com/file/9iuWpQ1psfTWTmDjaDwnsZ/Untitled?node-id=1%3A15&t=YfcIgabdHXBUrCGr-1
+- Git: https://github.com/nhao2003/nha_gia_re
 - Reference codebase: https://github.com/kauemurakami/getx_pattern
