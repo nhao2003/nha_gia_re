@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -15,13 +17,13 @@ class InforCardProps {
   String price;
   String address;
   DateTime postTime;
-  String imagePath;
+  String imageUrl;
   InforCardProps(
       {required this.title,
       required this.price,
       required this.address,
       required this.postTime,
-      required this.imagePath});
+      required this.imageUrl});
 }
 
 class InforCard extends StatelessWidget {
@@ -39,9 +41,9 @@ class InforCard extends StatelessWidget {
           ClipRRect(
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-            child: Image.asset(
+            child: Image.network(
+              props.imageUrl + Random().nextInt(20).toString(),
               fit: BoxFit.fill,
-              props.imagePath,
               height: 110,
               width: 180,
             ),
@@ -96,7 +98,7 @@ InforCardProps props = InforCardProps(
     address: '131/2 tay son quy nhon',
     price: '1.6000.000/căn',
     postTime: DateTime(2023, 3, 23, 15, 36),
-    imagePath: Assets.nha);
+    imageUrl: 'https://picsum.photos/110/180?random=');
 
 class _InforCardListState extends State<InforCardList> {
   @override

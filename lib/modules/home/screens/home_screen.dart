@@ -37,11 +37,11 @@ class HomeScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
           child: Column(
-        children: const [
-          CarouselAd(),
-          InforCardList(title: 'Gần bạn', list: []),
-          InforCardList(title: 'Nhà bán', list: []),
-          InforCardList(title: 'Nhà cho thuê', list: []),
+        children: [
+          CarouselAd(imgList: _controller.imgList, aspectRatio: 2.59, indicatorSize: 6,),
+          const InforCardList(title: 'Gần bạn', list: []),
+          const InforCardList(title: 'Nhà bán', list: []),
+          const InforCardList(title: 'Nhà cho thuê', list: []),
         ],
       )),
 

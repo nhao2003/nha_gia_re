@@ -12,6 +12,8 @@ class Assets {
   static const String edit = '$iconPath/edit.png';
   static const String bell = '$iconPath/bell.png';
   static const String person = '$iconPath/person.png';
+  static const String map_pin = '$iconPath/map-pin.png';
+  static const String clock= '$iconPath/clock.png';
   // image
   static const String forgetPass = '$imagePath/rafiki.png';
   static const String nha = '$imagePath/nha.jpg';
