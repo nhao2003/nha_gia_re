@@ -44,15 +44,12 @@ dependencies:
   flutter_easyloading: ^3.0.5
   http_parser: ^4.0.2
   dropdown_button2: ^2.0.0
-<<<<<<< HEAD
   supabase_flutter: ^1.6.2
-  
-=======
   image_gallery_saver: ^1.7.1
   image_picker: ^0.8.6+4
   permission_handler: ^10.2.0
   path_provider: ^2.0.11
->>>>>>> 889f328dcdea17c84b8348e815b20abcb277fb41
+  get_it: ^7.2.0
 
 dev_dependencies:
   flutter_test:
@@ -77,13 +74,13 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-     - assets/images/
-     - assets/images/3D Avatars/
-  #   - images/a_dot_ham.jpeg
-     - assets/icons/facebook.png
-     - assets/icons/google.png
-     - assets/icons/message-circle.png
-     - assets/images/rafiki.png
+    - assets/images/
+    - assets/images/3D Avatars/
+    #   - images/a_dot_ham.jpeg
+    - assets/icons/facebook.png
+    - assets/icons/google.png
+    - assets/icons/message-circle.png
+    - assets/images/rafiki.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
