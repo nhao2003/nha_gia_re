@@ -7,6 +7,7 @@ import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/routers/app_pages.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 
+import 'core/languages/localization_service.dart';
 import 'core/values/app_strings.dart';
 
 Future main() async {
@@ -31,12 +32,21 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: AppStrings.appName,
       theme: ThemeData(
+        primarySwatch: AppColors.customColor,
         primaryColor: AppColors.primaryColor,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        appBarTheme: AppBarTheme(
+          color: AppColors.primaryColor,
+          foregroundColor: AppColors.black,
+          elevation: 0,
+        ),
       ),
+      locale: LocalizationService.locale,
+      fallbackLocale: LocalizationService.fallbackLocale,
+      translations: LocalizationService(),
       builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.search,
+      initialRoute: AppRoutes.home,
       getPages: AppPages.pages,
       defaultTransition: Transition.cupertino,
     );

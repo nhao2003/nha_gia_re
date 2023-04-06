@@ -33,6 +33,31 @@ extension DateTimeX on DateTime {
     return "$days ${"days ago".tr}";
   }
 
+  // get time has passed since post
+  String getTimeAgo() {
+    Duration difference = DateTime.now().difference(this);
+
+    if (difference.inDays >= 365) {
+      int years = (difference.inDays / 365).floor();
+      return '${years.toString()} ${'year${years > 1 ? 's' : ''}'.tr} ${'ago'.tr}';
+    } else if (difference.inDays >= 30) {
+      int months = (difference.inDays / 30).floor();
+      return '${months.toString()} ${'month${months > 1 ? 's' : ''}'.tr} ${'ago'.tr}';
+    } else if (difference.inDays >= 1) {
+      if (difference.inDays == 1) {
+        return 'Yesterday'.tr;
+      } else {
+        return '${difference.inDays.toString()} ${'day${difference.inDays > 1 ? 's' : ''}'.tr} ${'ago'.tr}';
+      }
+    } else if (difference.inHours >= 1) {
+      return '${difference.inHours.toString()} ${'hour${difference.inHours > 1 ? 's' : ''}'.tr} ${'ago'.tr}';
+    } else if (difference.inMinutes >= 1) {
+      return '${difference.inMinutes.toString()} ${'minute${difference.inMinutes > 1 ? 's' : ''}'.tr} ${'ago'.tr}';
+    } else {
+      return 'Just now'.tr;
+    }
+  }
+
   /// get the first, second, third, fourth and fifth week of the month
   int get getWeekOfDateInMonth {
     return day % 7 + 1;
