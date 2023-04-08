@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       ),
       builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.search,
+      initialRoute: AppRoutes.personal,
       getPages: AppPages.pages,
       defaultTransition: Transition.cupertino,
     );

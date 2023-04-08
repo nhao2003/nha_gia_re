@@ -11,7 +11,7 @@ class AppColors {
   static Color secondary = _fromHex("FFE9C2");
   static Color grey = _fromHex("90959A");
   static Color blue = _fromHex("00B4FF");
-
+  static Color gery2 = grey;
   static Color _fromHex(String hexColorString) {
     if (hexColorString.length == 6) {
       hexColorString = "FF$hexColorString"; // 8 char with opacity 100%
