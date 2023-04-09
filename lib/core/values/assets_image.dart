@@ -1,4 +1,5 @@
 const imagePath = 'assets/images';
+const iconPath = 'assets/icons';
 
 class Assets {
   Assets._();
@@ -35,9 +36,17 @@ class Assets {
   static const String avatar_30 = '$imagePath/3D Avatars/30.png';
 
   // icon
-  static const String facebook = 'assets/icons/facebook.png';
-  static const String google = 'assets/icons/google.png';
-  static const String messCircle = 'assets/icons/message-circle.png';
+  static const String facebook = '$iconPath/facebook.png';
+  static const String google = '$iconPath/google.png';
+  static const String messCircle = '$iconPath/message-circle.png';
+  static const String home = '$iconPath/home.png';
+  static const String post = '$iconPath/post.png';
+  static const String edit = '$iconPath/edit.png';
+  static const String bell = '$iconPath/bell.png';
+  static const String person = '$iconPath/person.png';
+  static const String map_pin = '$iconPath/map-pin.png';
+  static const String clock = '$iconPath/clock.png';
   // image
-  static const String forgetPass = 'assets/images/rafiki.png';
+  static const String forgetPass = '$imagePath/rafiki.png';
+  static const String nha = '$imagePath/nha.jpg';
 }

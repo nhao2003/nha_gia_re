@@ -7,6 +7,7 @@ import 'package:nha_gia_re/routers/app_pages.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'core/languages/localization_service.dart';
 import 'core/values/app_strings.dart';
 
 Future main() async {
@@ -40,6 +41,9 @@ class MyApp extends StatelessWidget {
         primaryColor: AppColors.primaryColor,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      locale: LocalizationService.locale,
+      fallbackLocale: LocalizationService.fallbackLocale,
+      translations: LocalizationService(),
       builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
       initialRoute: AppRoutes.login,
