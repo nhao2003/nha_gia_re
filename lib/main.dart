@@ -2,20 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/routers/app_pages.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'core/languages/localization_service.dart';
+import 'core/values/api_values.dart';
 import 'core/values/app_strings.dart';
 
-Future main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
-    url: 'SUPABASE_URL',
-    anonKey: 'SUPABASE_ANON_KEY',
+    url: SUPABASE_URL,
+    anonKey: SUPABASE_ANON_KEY,
   );
+  await Hive.initFlutter();
   runApp(const MyApp());
 }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nha_gia_re/data/providers/remote/remote_data_source_impl.dart';
 import 'package:nha_gia_re/modules/login/screens/forget_password.dart';
 import 'package:nha_gia_re/modules/login/screens/login_screen.dart';
 
@@ -17,6 +18,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   final LoginController _controller = Get.find<LoginController>();
   final registerFormGlobalKey = GlobalKey<FormState>();
+  final TextEditingController _user = TextEditingController();
   final TextEditingController _pass = TextEditingController();
 
   @override
@@ -33,6 +35,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   const Text("LOGO", style: TextStyle(color: Colors.black, fontSize: 64)),
                   const SizedBox(height: 50,),
                   TextFormField(
+                    controller: _user,
                     decoration: InputDecoration(
                         hintText: 'Email'.tr,
                         labelText: 'Email',
@@ -76,9 +79,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 10,
                   ),
                   ElevatedButton(
-                      onPressed: () {
-                        if (registerFormGlobalKey.currentState!.validate()) {}
-                      }, 
+                      onPressed: () async {
+                        if (registerFormGlobalKey.currentState!.validate()) {
+                          print(_user.text + "/"+ _pass.text);
+                          RemoteDataSourceImpl remote = RemoteDataSourceImpl();
+                          await remote.signUp(email: _user.text, password: _pass.text);
+                        }
+                      },
                       child: Text('Register'.tr)),
                   Row(
                     children: [

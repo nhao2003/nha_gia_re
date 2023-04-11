@@ -2,8 +2,8 @@ import '../address.dart';
 import 'post.dart';
 
 class Apartment extends Post {
-  bool? isCorner;
-  bool? isHandOver;
+  bool isCorner;
+  bool isHandOver;
   int? numOfBedRooms;
   Direction? balconyDirection;
   Direction? mainDoorDirection;
@@ -19,8 +19,8 @@ class Apartment extends Post {
     required double area,
     String? projectName,
     this.apartmentType,
-    this.isCorner,
-    this.isHandOver,
+    this.isCorner = false,
+    this.isHandOver = false,
     this.numOfBedRooms,
     this.balconyDirection,
     this.mainDoorDirection,

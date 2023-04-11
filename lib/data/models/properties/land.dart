@@ -10,9 +10,9 @@ class Land extends Post {
   double length;
   Direction? landDirection;
   LegalDocumentStatus? legalDocumentStatus;
-  bool? isFacade;
-  bool? isWidensTowardsTheBack;
-  bool? hasWideAlley;
+  bool isFacade;
+  bool isWidensTowardsTheBack;
+  bool hasWideAlley;
   Land({
     required String id,
     required double area,
@@ -24,9 +24,9 @@ class Land extends Post {
     required this.length,
     this.landDirection,
     this.legalDocumentStatus,
-    this.isFacade,
-    this.isWidensTowardsTheBack,
-    this.hasWideAlley,
+    this.isFacade = false,
+    this.isWidensTowardsTheBack = false,
+    this.hasWideAlley = false,
     required Address address,
     required PropertyType type,
     required String userID,

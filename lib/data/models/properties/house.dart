@@ -2,8 +2,8 @@ import '../address.dart';
 import 'post.dart';
 
 class House extends Post {
-  bool? hasWideAlley;
-  bool? isFacade;
+  bool hasWideAlley;
+  bool isFacade;
   double? areaUsed;
   HouseType? houseType;
   double? width;
@@ -19,8 +19,8 @@ class House extends Post {
     this.furnitureStatus,
     required double area,
     String? projectName,
-    this.hasWideAlley,
-    this.isFacade,
+    this.hasWideAlley = false,
+    this.isFacade = false,
     this.areaUsed,
     this.width,
     this.length,

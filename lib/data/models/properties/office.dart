@@ -3,8 +3,8 @@ import 'package:nha_gia_re/data/models/address.dart';
 import 'post.dart';
 
 class Office extends Post {
-  bool? hasWideAlley;
-  bool? isFacade;
+  bool hasWideAlley;
+  bool isFacade;
   OfficeType? officeType;
   Direction? mainDoorDirection;
   LegalDocumentStatus? legalDocumentStatus;
@@ -27,8 +27,8 @@ class Office extends Post {
     String? projectName,
     int? deposit,
     int numOfFavs = 0,
-    this.hasWideAlley,
-    this.isFacade,
+    this.hasWideAlley = false,
+    this.isFacade = false,
     this.officeType,
     this.mainDoorDirection,
     this.legalDocumentStatus,
@@ -51,4 +51,38 @@ class Office extends Post {
           deposit: deposit,
           numOfFavs: numOfFavs,
         );
+  factory Office.fromJson(Map<String, dynamic> json) {
+    return Office(
+      id: json['id'],
+      area: json['area'],
+      type: PropertyType.values[json['type']],
+      address: Address.fromJson(json['address']),
+      userID: json['userID'],
+      isLease: json['isLease'],
+      price: json['price'],
+      title: json['title'],
+      description: json['description'],
+      postedAt: DateTime.parse(json['postedAt']),
+      expiryDate: DateTime.parse(json['expiryDate']),
+      imagesUrl: List<String>.from(json['imagesUrl']),
+      isProSeller: json['isProSeller'],
+      projectName: json['projectName'],
+      deposit: json['deposit'],
+      numOfFavs: json['numOfFavs'],
+      hasWideAlley: json['hasWideAlley'],
+      isFacade: json['isFacade'],
+      officeType: json['officeType'] != null
+          ? OfficeType.values[json['officeType']]
+          : null,
+      mainDoorDirection: json['mainDoorDirection'] != null
+          ? Direction.values[json['mainDoorDirection']]
+          : null,
+      legalDocumentStatus: json['legalDocumentStatus'] != null
+          ? LegalDocumentStatus.values[json['legalDocumentStatus']]
+          : null,
+      furnitureStatus: json['furnitureStatus'] != null
+          ? FurnitureStatus.values.firstWhere((element) => element.toString() == json['furnitureStatus'])
+          : null,
+    );
+  }
 }

@@ -1,7 +1,7 @@
-import '../../../core/enums/property_enums.dart';
+import '../../enums/property_enums.dart';
 import '../address.dart';
 
-export '../../../core/enums/property_enums.dart';
+export '../../enums/property_enums.dart';
 export 'package:nha_gia_re/data/models/properties/office.dart';
 export 'package:nha_gia_re/data/models/properties/apartment.dart';
 export 'package:nha_gia_re/data/models/properties/post.dart';
@@ -43,7 +43,7 @@ abstract class Post {
     required this.isProSeller,
     this.projectName,
     this.deposit,
-    this.numOfFavs = 0,
+    required this.numOfFavs,
   })  : assert(id.trim().isNotEmpty),
         assert(area >= 0),
         assert(projectName?.trim().isNotEmpty ?? true),
