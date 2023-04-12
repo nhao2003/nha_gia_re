@@ -13,20 +13,21 @@ class Land extends Post {
   bool isFacade;
   bool isWidensTowardsTheBack;
   bool hasWideAlley;
+
   Land({
     required String id,
     required double area,
-    String? projectName,
-    this.landLotCode,
-    this.subdivisionName,
-    this.landType,
+    required String? projectName,
+    required this.landLotCode,
+    required this.subdivisionName,
+    required this.landType,
     required this.width,
     required this.length,
-    this.landDirection,
-    this.legalDocumentStatus,
-    this.isFacade = false,
-    this.isWidensTowardsTheBack = false,
-    this.hasWideAlley = false,
+    required this.landDirection,
+    required this.legalDocumentStatus,
+    required this.isFacade,
+    required this.isWidensTowardsTheBack,
+    required this.hasWideAlley,
     required Address address,
     required PropertyType type,
     required String userID,
@@ -34,12 +35,12 @@ class Land extends Post {
     required int price,
     required String title,
     required String description,
-    required DateTime postedAt,
+    required DateTime postedDate,
     required DateTime expiryDate,
     required List<String> imagesUrl,
     required bool isProSeller,
-    int? deposit,
-    int numOfFavs = 0,
+    required int? deposit,
+    required int numOfLikes,
   })  : assert(landLotCode?.trim().isNotEmpty ?? true),
         assert(width * length > 0),
         assert(subdivisionName?.trim().isNotEmpty ?? true),
@@ -53,12 +54,47 @@ class Land extends Post {
           price: price,
           title: title,
           description: description,
-          postedAt: postedAt,
+          postedDate: postedDate,
           expiryDate: expiryDate,
           imagesUrl: imagesUrl,
           isProSeller: isProSeller,
           projectName: projectName,
           deposit: deposit,
-          numOfFavs: numOfFavs,
+          numOfLikes: numOfLikes,
         );
+
+  factory Land.fromJson(Map<String, dynamic> json) {
+    return Land(
+      id: json['id'],
+      area: json['area'],
+      type: PropertyType.values[json['property_type']],
+      address: Address.fromJson(json['address']),
+      userID: json['user_id'],
+      isLease: json['is_lease'],
+      price: json['price'],
+      title: json['title'],
+      description: json['description'],
+      postedDate: DateTime.parse(json['posted_date']),
+      expiryDate: DateTime.parse(json['expiry_date']),
+      imagesUrl: List<String>.from(json['images_url']),
+      isProSeller: json['is_pro_seller'],
+      projectName: json['project_name'],
+      deposit: json['deposit'],
+      numOfLikes: json['num_of_likes'],
+      hasWideAlley: json['has_wide_alley'],
+      isFacade: json['is_facade'],
+      landType: json['land_type'] != null ? LandType.parse(json['land_type']) : null,
+      landDirection: json['land_direction'] != null
+          ? Direction.values[json['land_direction']]
+          : null,
+      legalDocumentStatus: json['legal_document_status'] != null
+          ? LegalDocumentStatus.values[json['legal_document_status']]
+          : null,
+      width: json['width'],
+      length: json['length'],
+      landLotCode: json['land_lot_code'],
+      subdivisionName: json['subdivision_name'],
+      isWidensTowardsTheBack: json['is_widens_towards_the_back'],
+    );
+  }
 }

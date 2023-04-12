@@ -9,8 +9,9 @@ class Office extends Post {
   Direction? mainDoorDirection;
   LegalDocumentStatus? legalDocumentStatus;
   FurnitureStatus? furnitureStatus;
+
   Office({
-    this.furnitureStatus,
+    required this.furnitureStatus,
     required String id,
     required double area,
     required PropertyType type,
@@ -20,13 +21,13 @@ class Office extends Post {
     required int price,
     required String title,
     required String description,
-    required DateTime postedAt,
+    required DateTime postedDate,
     required DateTime expiryDate,
     required List<String> imagesUrl,
     required bool isProSeller,
-    String? projectName,
-    int? deposit,
-    int numOfFavs = 0,
+    required String? projectName,
+    required int? deposit,
+    required int numOfLikes,
     this.hasWideAlley = false,
     this.isFacade = false,
     this.officeType,
@@ -43,45 +44,45 @@ class Office extends Post {
           price: price,
           title: title,
           description: description,
-          postedAt: postedAt,
+          postedDate: postedDate,
           expiryDate: expiryDate,
           imagesUrl: imagesUrl,
           isProSeller: isProSeller,
           projectName: projectName,
           deposit: deposit,
-          numOfFavs: numOfFavs,
+          numOfLikes: numOfLikes,
         );
+
   factory Office.fromJson(Map<String, dynamic> json) {
     return Office(
       id: json['id'],
       area: json['area'],
-      type: PropertyType.values[json['type']],
+      type: PropertyType.values[json['property_type']],
       address: Address.fromJson(json['address']),
-      userID: json['userID'],
-      isLease: json['isLease'],
+      userID: json['user_id'],
+      isLease: json['is_lease'],
       price: json['price'],
       title: json['title'],
       description: json['description'],
-      postedAt: DateTime.parse(json['postedAt']),
-      expiryDate: DateTime.parse(json['expiryDate']),
-      imagesUrl: List<String>.from(json['imagesUrl']),
-      isProSeller: json['isProSeller'],
-      projectName: json['projectName'],
+      postedDate: DateTime.parse(json['posted_date']),
+      expiryDate: DateTime.parse(json['expiry_date']),
+      imagesUrl: List<String>.from(json['images_url']),
+      isProSeller: json['is_pro_seller'],
+      projectName: json['project_name'],
       deposit: json['deposit'],
-      numOfFavs: json['numOfFavs'],
-      hasWideAlley: json['hasWideAlley'],
-      isFacade: json['isFacade'],
-      officeType: json['officeType'] != null
-          ? OfficeType.values[json['officeType']]
+      numOfLikes: json['num_of_likes'],
+      hasWideAlley: json['has_wide_alley'],
+      isFacade: json['is_facade'],
+      officeType:
+          json['office_type'] != null ? OfficeType.parse(json['office_type']) : null,
+      mainDoorDirection: json['main_door_direction'] != null
+          ? Direction.values[json['main_door_direction']]
           : null,
-      mainDoorDirection: json['mainDoorDirection'] != null
-          ? Direction.values[json['mainDoorDirection']]
+      legalDocumentStatus: json['legal_document_status'] != null
+          ? LegalDocumentStatus.values[json['legal_document_status']]
           : null,
-      legalDocumentStatus: json['legalDocumentStatus'] != null
-          ? LegalDocumentStatus.values[json['legalDocumentStatus']]
-          : null,
-      furnitureStatus: json['furnitureStatus'] != null
-          ? FurnitureStatus.values.firstWhere((element) => element.toString() == json['furnitureStatus'])
+      furnitureStatus: json['furniture_status'] != null
+          ? FurnitureStatus.parse(json['furniture_status'])
           : null,
     );
   }

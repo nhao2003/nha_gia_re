@@ -1,7 +1,23 @@
 --USER DATABASE
+DROP TABLE IF EXISTS user_follow;
+DROP TABLE IF EXISTS user_like;
+DROP TABLE IF EXISTS messages;
+DROP TABLE IF EXISTS conservations;
+DROP TABLE IF EXISTS offices;
+DROP TABLE IF EXISTS motels;
+DROP TABLE IF EXISTS houses;
+DROP TABLE IF EXISTS apartments;
+DROP TABLE IF EXISTS lands;
+DROP TABLE IF EXISTS post;
+DROP TABLE IF EXISTS user_info;
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+DROP TRIGGER IF EXISTS on_auth_user_updated ON public.user_info;
+DROP FUNCTION IF EXISTS handle_new_user();
+DROP FUNCTION IF EXISTS handle_updated_user();
+
+
+
 SET TIME ZONE 'Asia/Ho_Chi_Minh';
-
-
 CREATE TABLE IF NOT EXISTS user_info
 (
     uid              uuid REFERENCES auth.users ON DELETE CASCADE NOT NULL PRIMARY KEY,
@@ -14,10 +30,16 @@ CREATE TABLE IF NOT EXISTS user_info
     dob              timestamp,
     last_activity_at timestamp,
     description      TEXT,
-    updated_at timestamp
+    updated_at timestamp,
+    --Số người theo dõi bạn
+    num_of_followers int DEFAULT 0,
+    --Số người bạn theo dõi 
+    num_of_followees int DEFAULT 0,
+    CHECK(num_of_followers >= 0),
+    CHECK(num_of_followees >= 0)
 );
 
-
+-- Trigger to call `handle_new_user` when new user signs up
 create or replace function handle_new_user() returns trigger as
 $$
 begin
@@ -27,8 +49,6 @@ begin
     return new;
 end;
 $$ language plpgsql security definer;
-
--- Trigger to call `handle_new_user` when new user signs up
 
 create trigger on_auth_user_created
     after
@@ -64,12 +84,51 @@ CREATE TABLE user_follow
 (
     follower_id uuid      NOT NULL,
     followed_id uuid      NOT NULL,
-    follow_date TIMESTAMP NOT NULL DEFAULT NOW(),
     PRIMARY KEY (follower_id,
                  followed_id),
     FOREIGN KEY (follower_id) REFERENCES public.user_info (uid) ON DELETE CASCADE,
     FOREIGN KEY (followed_id) REFERENCES public.user_info (uid) ON DELETE CASCADE
 );
+
+-- Follow Trigger
+CREATE OR REPLACE FUNCTION handle_follow()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE user_info
+    SET num_of_followers = num_of_followers + 1
+    WHERE uid = NEW.followed_id;
+
+    UPDATE user_info
+    SET num_of_followees = num_of_followees + 1
+    WHERE uid = NEW.follower_id;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER follow_trigger
+AFTER INSERT ON user_follow
+FOR EACH ROW
+EXECUTE FUNCTION handle_follow();
+
+--Unfollow trigger
+CREATE OR REPLACE FUNCTION handle_unfollow()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE user_info
+    SET num_of_followers = num_of_followers - 1
+    WHERE uid = NEW.followed_id;
+
+    UPDATE user_info
+    SET num_of_followees = num_of_followees - 1
+    WHERE uid = NEW.follower_id;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER unfollow_trigger
+AFTER DELETE ON user_follow
+FOR EACH ROW
+EXECUTE FUNCTION handle_unfollow();
 
 
 CREATE TABLE conservations
@@ -113,10 +172,11 @@ CREATE TABLE post
     is_lease      BOOLEAN      NOT NULL,
     title         VARCHAR(255) NOT NULL,
     description   TEXT         NOT NULL,
-    posted_at     TIMESTAMP    NOT NULL             DEFAULT NOW(),
+    posted_date     TIMESTAMP    NOT NULL             DEFAULT NOW(),
     expiry_date   TIMESTAMP    NOT NULL,
     images_url    TEXT[]       NOT NULL,
     is_pro_seller BOOLEAN      NOT NULL,
+    num_of_likes INT NOT NULL DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES public.user_info (uid) on delete cascade,
     CHECK (area > 0),
     CHECK (property_type IN ('Apartment',
@@ -132,7 +192,8 @@ CREATE TABLE post
     CHECK (expiry_date > posted_at),
     CHECK (address ->> 'city_code' IS NOT NULL
         AND address ->> 'district_code' IS NOT NULL
-        AND address ->> 'ward_code' IS NOT NULL)
+        AND address ->> 'ward_code' IS NOT NULL),
+        CHECK(num_of_likes >= 0)
 );
 
 
@@ -339,3 +400,34 @@ CREATE TABLE user_like
     FOREIGN KEY (post_id) REFERENCES public.post (id) ON DELETE CASCADE
 );
 
+-- Like Trigger
+CREATE OR REPLACE FUNCTION handle_like()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE post
+    SET num_of_likes = num_of_likes + 1
+    WHERE id = NEW.post_id;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER like_trigger
+AFTER INSERT ON user_like
+FOR EACH ROW
+EXECUTE FUNCTION handle_like();
+
+--Unlike trigger
+CREATE OR REPLACE FUNCTION handle_unlike()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE post
+    SET num_of_likes = num_of_likes - 1
+    WHERE id = NEW.post_id;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER unlike_trigger
+AFTER DELETE ON user_like
+FOR EACH ROW
+EXECUTE FUNCTION handle_unlike();

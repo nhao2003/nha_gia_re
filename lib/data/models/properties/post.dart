@@ -21,9 +21,9 @@ abstract class Post {
   bool isLease;
   String title;
   String description;
-  DateTime postedAt;
+  DateTime postedDate;
   DateTime expiryDate;
-  int numOfFavs;
+  int numOfLikes;
   List<String> imagesUrl;
   bool isProSeller;
 
@@ -37,13 +37,13 @@ abstract class Post {
     required this.price,
     required this.title,
     required this.description,
-    required this.postedAt,
+    required this.postedDate,
     required this.expiryDate,
     required this.imagesUrl,
     required this.isProSeller,
-    this.projectName,
-    this.deposit,
-    required this.numOfFavs,
+    required this.projectName,
+    required this.deposit,
+    required this.numOfLikes,
   })  : assert(id.trim().isNotEmpty),
         assert(area >= 0),
         assert(projectName?.trim().isNotEmpty ?? true),
@@ -51,6 +51,6 @@ abstract class Post {
         assert(price > 0),
         assert(title.trim().isNotEmpty),
         assert(description.trim().isNotEmpty),
-        assert(postedAt.isBefore(expiryDate)),
-        assert(numOfFavs >= 0);
+        assert(postedDate.isBefore(expiryDate)),
+        assert(numOfLikes >= 0);
 }

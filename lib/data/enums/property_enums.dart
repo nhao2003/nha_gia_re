@@ -7,6 +7,13 @@ enum PropertyType {
   motel,
   house;
 
+  static PropertyType parse(String value) {
+    for (PropertyType type in PropertyType.values) {
+      if (type.toString() == value) return type;
+    }
+    throw Exception("Can't parse PropertyType! Your input value is \"$value\"");
+  }
+
   @override
   String toString() {
     switch (this) {
@@ -30,6 +37,14 @@ enum ApartmentType {
   service,
   dormitory,
   officetel;
+
+  static ApartmentType parse(String value) {
+    for (ApartmentType type in ApartmentType.values) {
+      if (type.toString() == value) return type;
+    }
+    throw Exception(
+        "Can't parse ApartmentType! Your input value is \"$value\"");
+  }
 
   @override
   String toString() {
@@ -55,6 +70,13 @@ enum HouseType {
   villa,
   rowHouse;
 
+  static HouseType parse(String value) {
+    for (HouseType type in HouseType.values) {
+      if (type.toString() == value) return type;
+    }
+    throw Exception("Can't parse HouseType");
+  }
+
   @override
   String toString() {
     switch (this) {
@@ -77,6 +99,13 @@ enum OfficeType {
   officetel,
   commercialSpace,
   shopHouse;
+
+  static OfficeType parse(String value) {
+    for (OfficeType type in OfficeType.values) {
+      if (type.toString() == value) return type;
+    }
+    throw Exception("Can't parse OfficeType! Your input value is \"$value\"");
+  }
 
   @override
   String toString() {
@@ -124,6 +153,13 @@ enum Direction {
         return AppStrings.directionSouthWest;
     }
   }
+
+  static Direction parse(String value) {
+    for (Direction type in Direction.values) {
+      if (type.toString() == value) return type;
+    }
+    throw Exception("Can't parse Direction! Your input value is \"$value\"");
+  }
 }
 
 enum LandType {
@@ -131,6 +167,13 @@ enum LandType {
   agricultural,
   industrial,
   project;
+
+  static LandType parse(String value) {
+    for (LandType type in LandType.values) {
+      if (type.toString() == value) return type;
+    }
+    throw Exception("Can't parse LandType! Your input value is \"$value\"");
+  }
 
   @override
   String toString() {
@@ -152,6 +195,14 @@ enum LegalDocumentStatus {
   haveCertificate,
   otherDocuments;
 
+  static LegalDocumentStatus parse(String value) {
+    for (LegalDocumentStatus type in LegalDocumentStatus.values) {
+      if (type.toString() == value) return type;
+    }
+    throw Exception(
+        "Can't parse LegalDocumentStatus! Your input value is \"$value\"");
+  }
+
   @override
   String toString() {
     switch (this) {
@@ -170,6 +221,14 @@ enum FurnitureStatus {
   basic,
   full,
   highEnd;
+
+  static FurnitureStatus parse(String value) {
+    for (FurnitureStatus type in FurnitureStatus.values) {
+      if (type.toString() == value) return type;
+    }
+    throw Exception(
+        "Can't parse FurnitureStatus! Your input value is \"$value\"");
+  }
 
   @override
   String toString() {

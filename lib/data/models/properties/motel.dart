@@ -6,13 +6,14 @@ class Motel extends Post {
   int? electricPrice;
   int? waterPrice;
   FurnitureStatus? furnitureStatus;
+
   Motel({
     required String id,
-    this.furnitureStatus,
+    required this.furnitureStatus,
     required double area,
-    String? projectName,
-    this.electricPrice,
-    this.waterPrice,
+    required String? projectName,
+    required this.electricPrice,
+    required this.waterPrice,
     required Address address,
     required PropertyType type,
     required String userID,
@@ -20,12 +21,12 @@ class Motel extends Post {
     required int price,
     required String title,
     required String description,
-    required DateTime postedAt,
+    required DateTime postedDate,
     required DateTime expiryDate,
     required List<String> imagesUrl,
     required bool isProSeller,
-    int? deposit,
-    int numOfFavs = 0,
+    required int? deposit,
+    required int numOfLikes,
   })  : assert(electricPrice == null || electricPrice > 0),
         assert(waterPrice == null || waterPrice > 0),
         super(
@@ -38,12 +39,38 @@ class Motel extends Post {
           price: price,
           title: title,
           description: description,
-          postedAt: postedAt,
+          postedDate: postedDate,
           expiryDate: expiryDate,
           imagesUrl: imagesUrl,
           isProSeller: isProSeller,
           projectName: projectName,
           deposit: deposit,
-          numOfFavs: numOfFavs,
+          numOfLikes: numOfLikes,
         );
+
+  factory Motel.fromJson(Map<String, dynamic> json) {
+    return Motel(
+      id: json['id'],
+      area: json['area'],
+      type: PropertyType.values[json['property_type']],
+      address: Address.fromJson(json['address']),
+      userID: json['user_id'],
+      isLease: json['is_lease'],
+      price: json['price'],
+      title: json['title'],
+      description: json['description'],
+      postedDate: DateTime.parse(json['posted_date']),
+      expiryDate: DateTime.parse(json['expiry_date']),
+      imagesUrl: List<String>.from(json['images_url']),
+      isProSeller: json['is_pro_seller'],
+      projectName: json['project_name'],
+      deposit: json['deposit'],
+      numOfLikes: json['num_of_likes'],
+      furnitureStatus: json['furniture_status'] != null
+          ? FurnitureStatus.parse(json['furniture_status'])
+          : null,
+      electricPrice: json['electric_price'],
+      waterPrice: json['water_price'],
+    );
+  }
 }

@@ -36,22 +36,22 @@ abstract class PostRequest {
   Map<String, dynamic> toJson() {
     return {
       'area': area,
-      'projectName': projectName,
-      'type': type.toString(),
+      'project_name': projectName,
+      'property_type': type.toString(),
       'address': address.toJson(),
-      'userID': userID,
+      'user_id': userID,
       'price': price,
       'deposit': deposit,
-      'isLease': isLease,
+      'is_lease': isLease,
       'title': title,
       'description': description,
-      'imagesUrl': imagesUrl,
-      'isProSeller': isProSeller,
+      'images_url': imagesUrl,
+      'is_pro_seller': isProSeller,
     };
   }
 }
 
-class Apartment extends PostRequest {
+class ApartmentRequest extends PostRequest {
   bool isCorner;
   bool isHandOver;
   int? numOfBedRooms;
@@ -63,7 +63,7 @@ class Apartment extends PostRequest {
   ApartmentType? apartmentType;
   LegalDocumentStatus? legalDocumentStatus;
   FurnitureStatus? furnitureStatus;
-  Apartment({
+  ApartmentRequest({
     required this.furnitureStatus,
     required double area,
     required String? projectName,
@@ -109,23 +109,23 @@ class Apartment extends PostRequest {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'isCorner': isCorner,
-      'isHandOver': isHandOver,
-      'numOfBedRooms': numOfBedRooms,
-      'balconyDirection': balconyDirection?.toString(),
-      'mainDoorDirection': mainDoorDirection?.toString(),
-      'numOfToilets': numOfToilets,
+      'is_corner': isCorner,
+      'is_hand_over': isHandOver,
+      'num_of_bedrooms': numOfBedRooms,
+      'balcony_direction': balconyDirection?.toString(),
+      'main_door_direction': mainDoorDirection?.toString(),
+      'num_of_toilets': numOfToilets,
       'block': block,
       'floor': floor,
-      'apartmentType': apartmentType?.toString(),
-      'legalDocumentStatus': legalDocumentStatus?.toString(),
-      'furnitureStatus': furnitureStatus?.toString(),
+      'apartment_type': apartmentType?.toString(),
+      'legal_document_status': legalDocumentStatus?.toString(),
+      'furniture_status': furnitureStatus?.toString(),
       ...super.toJson()
     };
   }
 }
 
-class House extends PostRequest {
+class HouseRequest extends PostRequest {
   bool hasWideAlley;
   bool isFacade;
   double? areaUsed;
@@ -138,7 +138,7 @@ class House extends PostRequest {
   Direction? mainDoorDirection;
   LegalDocumentStatus? legalDocumentStatus;
   FurnitureStatus? furnitureStatus;
-  House({
+  HouseRequest({
     required this.furnitureStatus,
     required double area,
     required String? projectName,
@@ -187,24 +187,24 @@ class House extends PostRequest {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'hasWideAlley': hasWideAlley,
-      'isFacade': isFacade,
-      'areaUsed': areaUsed,
-      'houseType': houseType?.toString(),
+      'has_wide_alley': hasWideAlley,
+      'is_facade': isFacade,
+      'area_used': areaUsed,
+      'house_type': houseType?.toString(),
       'width': width,
       'length': length,
-      'numOfBedRooms': numOfBedRooms,
-      'numOfToilets': numOfToilets,
-      'numOfFloors': numOfFloors,
-      'mainDoorDirection': mainDoorDirection?.toString(),
-      'legalDocumentStatus': legalDocumentStatus?.toString(),
-      'furnitureStatus': furnitureStatus?.toString(),
+      'numOf_bed_rooms': numOfBedRooms,
+      'num_of_toilets': numOfToilets,
+      'num_of_floors': numOfFloors,
+      'main_door_direction': mainDoorDirection?.toString(),
+      'legal_document_status': legalDocumentStatus?.toString(),
+      'furniture_status': furnitureStatus?.toString(),
       ...super.toJson(),
     };
   }
 }
 
-class Land extends PostRequest {
+class LandRequest extends PostRequest {
   String? landLotCode;
   String? subdivisionName;
   LandType? landType;
@@ -215,7 +215,7 @@ class Land extends PostRequest {
   bool isFacade;
   bool isWidensTowardsTheBack;
   bool hasWideAlley;
-  Land({
+  LandRequest({
     required double area,
     required String? projectName,
     required this.landLotCode,
@@ -256,28 +256,29 @@ class Land extends PostRequest {
           deposit: deposit,
         );
 
+  @override
   Map<String, dynamic> toJson() {
     return {
-      'landLotCode': landLotCode,
+      'land_lot_code': landLotCode,
       'subdivisionName': subdivisionName,
       'landType': landType?.toString().split('.')[1],
       'width': width,
       'length': length,
-      'landDirection': landDirection?.toString().split('.')[1],
-      'legalDocumentStatus': legalDocumentStatus?.toString().split('.')[1],
-      'isFacade': isFacade,
-      'isWidensTowardsTheBack': isWidensTowardsTheBack,
-      'hasWideAlley': hasWideAlley,
+      'land_direction': landDirection?.toString().split('.')[1],
+      'legal_document_status': legalDocumentStatus?.toString().split('.')[1],
+      'is_facade': isFacade,
+      'is_widens_towards_the_back': isWidensTowardsTheBack,
+      'has_wide_alley': hasWideAlley,
       ...super.toJson()
     };
   }
 }
 
-class Motel extends PostRequest {
+class MotelRequest extends PostRequest {
   int? electricPrice;
   int? waterPrice;
   FurnitureStatus? furnitureStatus;
-  Motel({
+  MotelRequest({
     required this.furnitureStatus,
     required double area,
     required String? projectName,
@@ -315,22 +316,22 @@ class Motel extends PostRequest {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'electricPrice': electricPrice,
-      'waterPrice': waterPrice,
-      'furnitureStatus': furnitureStatus?.toString(),
+      'electric_price': electricPrice,
+      'water_price': waterPrice,
+      'furniture_status': furnitureStatus?.toString(),
       ...super.toJson()
     };
   }
 }
 
-class Office extends PostRequest {
+class OfficeRequest extends PostRequest {
   bool hasWideAlley;
   bool isFacade;
   OfficeType? officeType;
   Direction? mainDoorDirection;
   LegalDocumentStatus? legalDocumentStatus;
   FurnitureStatus? furnitureStatus;
-  Office({
+  OfficeRequest({
     required this.furnitureStatus,
     required double area,
     required PropertyType type,
@@ -370,12 +371,12 @@ class Office extends PostRequest {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'hasWideAlley': hasWideAlley,
-      'isFacade': isFacade,
-      'officeType': officeType,
-      'mainDoorDirection': mainDoorDirection?.toString(),
-      'legalDocumentStatus': legalDocumentStatus?.toString(),
-      'furnitureStatus': furnitureStatus?.toString(),
+      'has_wide_alley': hasWideAlley,
+      'is_facade': isFacade,
+      'office_type': officeType,
+      'main_door_direction': mainDoorDirection?.toString(),
+      'legal_document_status': legalDocumentStatus?.toString(),
+      'furniture_status': furnitureStatus?.toString(),
       ...super.toJson(),
     };
   }
