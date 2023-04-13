@@ -30,13 +30,13 @@ CREATE TABLE IF NOT EXISTS user_info
     dob              timestamp,
     last_activity_at timestamp,
     description      TEXT,
-    updated_at timestamp,
+    updated_at       timestamp,
     --Số người theo dõi bạn
     num_of_followers int DEFAULT 0,
-    --Số người bạn theo dõi 
-    num_of_followees int DEFAULT 0,
-    CHECK(num_of_followers >= 0),
-    CHECK(num_of_followees >= 0)
+    --Số người bạn theo dõi
+    num_of_following int DEFAULT 0,
+    CHECK (num_of_followers >= 0),
+    CHECK (num_of_following >= 0)
 );
 
 -- Trigger to call `handle_new_user` when new user signs up
@@ -65,7 +65,7 @@ begin
     UPDATE public.user_info
     SET updated_at       = now(),
         last_activity_at = now()
-    WHERE uid = new.id;
+    WHERE uid = new.uid;
     return new;
 end
 $$ language plpgsql security definer;
@@ -73,7 +73,7 @@ $$ language plpgsql security definer;
 -- Trigger to call `handle_updated_user` when new user update data
 
 create or replace trigger on_auth_user_updated
-    after update
+    AFTER UPDATE OF phone, is_male, avatar_url, full_name, dob, description
     on public.user_info
     for each row
 execute function handle_updated_user();
@@ -82,52 +82,75 @@ execute function handle_updated_user();
 
 CREATE TABLE user_follow
 (
-    follower_id uuid      NOT NULL,
-    followed_id uuid      NOT NULL,
+    follower_id uuid NOT NULL,
+    followed_id uuid NOT NULL,
     PRIMARY KEY (follower_id,
                  followed_id),
     FOREIGN KEY (follower_id) REFERENCES public.user_info (uid) ON DELETE CASCADE,
     FOREIGN KEY (followed_id) REFERENCES public.user_info (uid) ON DELETE CASCADE
 );
 
--- Follow Trigger
+insert into user_follow (follower_id, followed_id)
+values ('de23a0b3-262b-4982-aa55-084dcb08961a'::uuid, 'f8a68af6-f0d7-45c8-8b9f-666f6e4f1314'::uuid)
+
+insert into user_follow (follower_id, followed_id)
+values ('f7f7631f-667b-4b38-924f-4a6d9e9db182'::uuid, '3ec257e0-0670-474d-bb8c-beb5178acd8c'::uuid)
+
+
+delete
+from auth.users
+where id = 'f8a68af6-f0d7-45c8-8b9f-666f6e4f1314' ::uuid
+
+delete
+from user_info
+where uid = '99785dd5-7516-4d5c-8310-d791a90256fc' ::uuid
+--follow trigger;
 CREATE OR REPLACE FUNCTION handle_follow()
-RETURNS TRIGGER AS $$
+    RETURNS TRIGGER AS
+$$
 BEGIN
     UPDATE user_info
-    SET num_of_followers = num_of_followers + 1
-    WHERE uid = NEW.followed_id;
+    SET num_of_followers = COALESCE((SELECT COUNT(*) FROM user_follow WHERE user_follow.followed_id = user_info.uid),
+                                    0)
+    WHERE user_info.uid = NEW.followed_id;
 
     UPDATE user_info
-    SET num_of_followees = num_of_followees + 1
-    WHERE uid = NEW.follower_id;
+    SET num_of_following = COALESCE((SELECT COUNT(*) FROM user_follow WHERE user_follow.follower_id = user_info.uid),
+                                    0)
+    WHERE user_info.uid = NEW.follower_id;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER follow_trigger
-AFTER INSERT ON user_follow
-FOR EACH ROW
+CREATE OR REPLACE TRIGGER follow_trigger
+    AFTER INSERT OR DELETE
+    ON user_follow
+    FOR EACH ROW
 EXECUTE FUNCTION handle_follow();
+
 
 --Unfollow trigger
 CREATE OR REPLACE FUNCTION handle_unfollow()
-RETURNS TRIGGER AS $$
+    RETURNS TRIGGER AS
+$$
 BEGIN
     UPDATE user_info
-    SET num_of_followers = num_of_followers - 1
-    WHERE uid = NEW.followed_id;
+    SET num_of_followers = COALESCE((SELECT COUNT(*) FROM user_follow WHERE user_follow.followed_id = user_info.uid),
+                                    0)
+    WHERE user_info.uid = old.followed_id;
 
     UPDATE user_info
-    SET num_of_followees = num_of_followees - 1
-    WHERE uid = NEW.follower_id;
-    RETURN NEW;
+    SET num_of_following = COALESCE((SELECT COUNT(*) FROM user_follow WHERE user_follow.follower_id = user_info.uid),
+                                    0)
+    WHERE user_info.uid = old.follower_id;
+    RETURN old;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER unfollow_trigger
-AFTER DELETE ON user_follow
-FOR EACH ROW
+CREATE OR REPLACE TRIGGER unfollow_trigger
+    AFTER INSERT OR DELETE
+    ON user_follow
+    FOR EACH ROW
 EXECUTE FUNCTION handle_unfollow();
 
 
@@ -172,11 +195,11 @@ CREATE TABLE post
     is_lease      BOOLEAN      NOT NULL,
     title         VARCHAR(255) NOT NULL,
     description   TEXT         NOT NULL,
-    posted_date     TIMESTAMP    NOT NULL             DEFAULT NOW(),
+    posted_date   TIMESTAMP    NOT NULL             DEFAULT NOW(),
     expiry_date   TIMESTAMP    NOT NULL,
     images_url    TEXT[]       NOT NULL,
     is_pro_seller BOOLEAN      NOT NULL,
-    num_of_likes INT NOT NULL DEFAULT 0,
+    num_of_likes  INT          NOT NULL             DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES public.user_info (uid) on delete cascade,
     CHECK (area > 0),
     CHECK (property_type IN ('Apartment',
@@ -193,16 +216,16 @@ CREATE TABLE post
     CHECK (address ->> 'city_code' IS NOT NULL
         AND address ->> 'district_code' IS NOT NULL
         AND address ->> 'ward_code' IS NOT NULL),
-        CHECK(num_of_likes >= 0)
+    CHECK (num_of_likes >= 0)
 );
 
 
 CREATE TABLE offices
 (
     furniture_status      VARCHAR(255),
-    has_wide_alley        BOOLEAN     NOT NULL,
-    is_facade             BOOLEAN     NOT NULL,
-    office_type           VARCHAR(50) NOT NULL,
+    has_wide_alley        BOOLEAN NOT NULL,
+    is_facade             BOOLEAN NOT NULL,
+    office_type           VARCHAR(50),
     main_door_direction   VARCHAR(255),
     legal_document_status VARCHAR(255),
     CHECK (office_type IS NULL
@@ -297,11 +320,11 @@ CREATE TABLE houses
     main_door_direction   VARCHAR(255),
     legal_document_status VARCHAR(255),
     CHECK (house_type IS NULL
-        OR house_type IN ('FrontHouse',
-                          'Town House',
-                          'Alley House',
+        OR house_type IN ('Front house',
+                          'Town house',
+                          'Alley house',
                           'Villa',
-                          'Row House')),
+                          'Row house')),
     CHECK (main_door_direction IS NULL
         OR main_door_direction IN ('North',
                                    'South',
@@ -402,7 +425,8 @@ CREATE TABLE user_like
 
 -- Like Trigger
 CREATE OR REPLACE FUNCTION handle_like()
-RETURNS TRIGGER AS $$
+    RETURNS TRIGGER AS
+$$
 BEGIN
     UPDATE post
     SET num_of_likes = num_of_likes + 1
@@ -412,13 +436,15 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER like_trigger
-AFTER INSERT ON user_like
-FOR EACH ROW
+    AFTER INSERT
+    ON user_like
+    FOR EACH ROW
 EXECUTE FUNCTION handle_like();
 
 --Unlike trigger
 CREATE OR REPLACE FUNCTION handle_unlike()
-RETURNS TRIGGER AS $$
+    RETURNS TRIGGER AS
+$$
 BEGIN
     UPDATE post
     SET num_of_likes = num_of_likes - 1
@@ -428,6 +454,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER unlike_trigger
-AFTER DELETE ON user_like
-FOR EACH ROW
+    AFTER DELETE
+    ON user_like
+    FOR EACH ROW
 EXECUTE FUNCTION handle_unlike();

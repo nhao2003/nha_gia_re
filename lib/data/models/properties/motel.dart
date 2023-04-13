@@ -52,7 +52,7 @@ class Motel extends Post {
     return Motel(
       id: json['id'],
       area: json['area'],
-      type: PropertyType.values[json['property_type']],
+      type: PropertyType.parse(json['property_type']),
       address: Address.fromJson(json['address']),
       userID: json['user_id'],
       isLease: json['is_lease'],

@@ -9,17 +9,19 @@ abstract class RemoteDataSource {
       {required String email, required String password});
   Future<void> signOut();
   Future<void> updateUser(Map<String, dynamic> data);
+  Future<Map<String, dynamic>> getUserInfo(String id);
+  Future<void> recoveryPassword(String email);
 
-  Future<List<Map<String, dynamic>>> postApartment(Map<String, dynamic> data);
-  Future<List<Map<String, dynamic>>> postHouse(Map<String, dynamic> data);
-  Future<List<Map<String, dynamic>>> postOffice(Map<String, dynamic> data);
-  Future<List<Map<String, dynamic>>> postMotel(Map<String, dynamic> data);
-  Future<List<Map<String, dynamic>>> postLand(Map<String, dynamic> data);
+  Future<Map<String, dynamic>> postApartment(Map<String, dynamic> data);
+  Future<Map<String, dynamic>> postHouse(Map<String, dynamic> data);
+  Future<Map<String, dynamic>> postOffice(Map<String, dynamic> data);
+  Future<Map<String, dynamic>> postMotel(Map<String, dynamic> data);
+  Future<Map<String, dynamic>> postLand(Map<String, dynamic> data);
 
-  // Future<void> editPostApartment(Map<String, dynamic> data);
-  // Future<void> editPostHouse(Map<String, dynamic> data);
-  // Future<void> editPostOffice(Map<String, dynamic> data);
-  // Future<void> editPostMotel(Map<String, dynamic> data);
-  // Future<void> editPostLand(Map<String, dynamic> data);
-  // Future<void> deletedPost(String id);
+  Future<Map<String, dynamic> > editPostApartment(String postId, Map<String, dynamic> data);
+  Future<Map<String, dynamic> > editPostHouse(String postId, Map<String, dynamic> data);
+  Future<Map<String, dynamic> > editPostOffice(String postId, Map<String, dynamic> data);
+  Future<Map<String, dynamic>> editPostMotel(String postId, Map<String, dynamic> data);
+  Future<Map<String, dynamic>> editPostLand(String postId, Map<String, dynamic> data);
+  Future<void> deletedPost(String id);
 }

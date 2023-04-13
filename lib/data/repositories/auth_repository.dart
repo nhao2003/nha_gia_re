@@ -1,39 +1,55 @@
+import 'package:nha_gia_re/data/models/user_info.dart';
+import 'package:nha_gia_re/data/providers/remote/request/update_profile_request.dart';
 import 'package:nha_gia_re/data/repositories/base_repository.dart';
-import 'package:supabase/supabase.dart';
 
 class AuthRepository extends BaseRepository {
-  Future<AuthResponse> signIn(
+  Future<UserInfo> signIn(
       {required String email, required String password}) async {
-    if (await internetConnectionChecker.hasConnection) {
-      try {
-        return await remoteDataSourceImpl.signIn(
-            email: 'email', password: 'password');
-      } catch (e) {
-        rethrow;
-      }
-    } else {
-      throw Exception("No Internet");
+    try {
+      final response =
+          await remoteDataSourceImpl.signIn(email: email, password: password);
+      final userInfo =
+          await remoteDataSourceImpl.getUserInfo(response.user!.id);
+      return UserInfo.fromJson(userInfo);
+    } catch (e) {
+      rethrow;
     }
   }
 
-  Future<AuthResponse> signUp(
+  Future<UserInfo> signUp(
       {required String email, required String password}) async {
-    if (await internetConnectionChecker.hasConnection) {
-      try {
-        return remoteDataSourceImpl.signUp(
-            email: 'email', password: 'password');
-      } catch (e) {
-        rethrow;
+    try {
+      final response =
+          await remoteDataSourceImpl.signUp(email: email, password: password);
+      if (response.user!.identities!.isEmpty) {
+        throw Exception(
+            "A user with this email address has already been registered");
       }
-    } else {
-      throw Exception("No Internet");
+      final userInfo =
+          await remoteDataSourceImpl.getUserInfo(response.user!.id);
+      return UserInfo.fromJson(userInfo);
+    } catch (e) {
+      rethrow;
     }
   }
-  Future<void> updateUser() async {
 
-  }
   Future<void> signOut(
       {required String email, required String password}) async {
     remoteDataSourceImpl.signOut();
+  }
+
+  Future<UserInfo> updateProfile(
+      UpdateProfileRequest updateProfileRequest) async {
+    final userRes =
+        await remoteDataSourceImpl.updateUser(updateProfileRequest.toJson());
+    return UserInfo.fromJson(userRes);
+  }
+
+  Future<void> recoveryPassword(String email) async {
+    try {
+      await remoteDataSourceImpl.recoveryPassword(email);
+    } catch (e) {
+      rethrow;
+    }
   }
 }

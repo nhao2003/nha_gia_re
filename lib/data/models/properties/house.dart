@@ -73,7 +73,7 @@ class House extends Post {
     return House(
       id: json['id'],
       area: json['area'],
-      type: PropertyType.values[json['property_type']],
+      type: PropertyType.parse(json['property_type']),
       address: Address.fromJson(json['address']),
       userID: json['user_id'],
       isLease: json['is_lease'],
@@ -92,17 +92,17 @@ class House extends Post {
       houseType:
           json['house_type']  != null ? HouseType.parse(json['house_type']) : null,
       mainDoorDirection: json['main_door_direction'] != null
-          ? Direction.values[json['main_door_direction']]
+          ? Direction.parse(json['main_door_direction'])
           : null,
       legalDocumentStatus: json['legal_document_status'] != null
-          ? LegalDocumentStatus.values[json['legal_document_status']]
+          ? LegalDocumentStatus.parse(json['legal_document_status'])
           : null,
       furnitureStatus: json['furniture_status'] != null
           ? FurnitureStatus.parse(json['furniture_status'])
           : null,
       areaUsed: json['area_used'],
-      width: json['width'],
-      length: json['length'],
+      width: json['width']?.toDouble(),
+      length: json['length']?.toDouble(),
       numOfBedRooms: json['nums_of_bed_rooms'],
       numOfToilets: json['nums_of_toilets'],
       numOfFloors: json['nums_of_floors'],

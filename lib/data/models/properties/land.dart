@@ -67,7 +67,7 @@ class Land extends Post {
     return Land(
       id: json['id'],
       area: json['area'],
-      type: PropertyType.values[json['property_type']],
+      type: PropertyType.parse(json['property_type']),
       address: Address.fromJson(json['address']),
       userID: json['user_id'],
       isLease: json['is_lease'],
@@ -85,13 +85,13 @@ class Land extends Post {
       isFacade: json['is_facade'],
       landType: json['land_type'] != null ? LandType.parse(json['land_type']) : null,
       landDirection: json['land_direction'] != null
-          ? Direction.values[json['land_direction']]
+          ? Direction.parse(json['land_direction'])
           : null,
       legalDocumentStatus: json['legal_document_status'] != null
-          ? LegalDocumentStatus.values[json['legal_document_status']]
+          ? LegalDocumentStatus.parse(json['legal_document_status'])
           : null,
-      width: json['width'],
-      length: json['length'],
+      width: json['width'].toDouble(),
+      length: json['length'].toDouble(),
       landLotCode: json['land_lot_code'],
       subdivisionName: json['subdivision_name'],
       isWidensTowardsTheBack: json['is_widens_towards_the_back'],
