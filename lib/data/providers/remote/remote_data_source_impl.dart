@@ -1,3 +1,4 @@
+import 'package:nha_gia_re/data/enums/property_enums.dart';
 import 'package:nha_gia_re/data/providers/remote/remote_data_source.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -200,5 +201,57 @@ class RemoteDataSourceImpl extends RemoteDataSource {
     } catch (e) {
       rethrow;
     }
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getAllPosts({int? limit}) async {
+    try {
+      if (limit != null) {
+        final response = await supabaseClient.from('post').select();
+        return List<Map<String, dynamic>>.from(response);
+      } else {
+        final response = await supabaseClient.from('post').select();
+        return List<Map<String, dynamic>>.from(response);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> getPostDetails(
+      String postId, PropertyType propertyType) async {
+    final response;
+    switch (propertyType) {
+      case PropertyType.apartment:
+        response =
+            await supabaseClient.from('apartments').select().eq('id', postId);
+        break;
+      case PropertyType.land:
+        response = await supabaseClient.from('lands').select().eq('id', postId);
+        break;
+      case PropertyType.office:
+        response =
+            await supabaseClient.from('offices').select().eq('id', postId);
+        break;
+      case PropertyType.motel:
+        response =
+            await supabaseClient.from('motels').select().eq('id', postId);
+        break;
+      case PropertyType.house:
+        response =
+            await supabaseClient.from('houses').select().eq('id', postId);
+        break;
+    }
+    return List<Map<String, dynamic>>.from(response).first;
+  }
+
+  @override
+  Future getConversation(String userId) async {
+    final currentUserId = supabaseClient.auth.currentUser!.id;
+    final res = await supabaseClient
+        .from('conservations')
+        .select('*, messages(sender_id, message, sent_at)')
+        .or('user1_id.eq.$currentUserId,user2_id.eq.$currentUserId');
   }
 }

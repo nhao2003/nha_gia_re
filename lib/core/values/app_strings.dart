@@ -23,8 +23,8 @@ class AppStrings {
 
   static const String officeTypeOffice = "Office";
   static const String officeTypeOfficetel = "Officetel";
-  static const String officeTypeCommercialSpace = "Commercial space";
-  static const String officeTypeShopHouse = "Shop house";
+  static const String officeTypeCommercialSpace = "Commercial Space";
+  static const String officeTypeShopHouse = "Shop House";
 
   static const String directionNorth = "North";
   static const String directionSouth = "South";

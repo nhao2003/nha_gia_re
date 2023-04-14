@@ -47,7 +47,7 @@ class OfficeRequest extends PostRequest {
     return {
       'has_wide_alley': hasWideAlley,
       'is_facade': isFacade,
-      'office_type': officeType,
+      'office_type': officeType.toString(),
       'main_door_direction': mainDoorDirection?.toString(),
       'legal_document_status': legalDocumentStatus?.toString(),
       'furniture_status': furnitureStatus?.toString(),

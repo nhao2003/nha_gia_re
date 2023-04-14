@@ -74,10 +74,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (sp.auth.currentUser == null) {
                         try {
                           print("Chưa đăng nhập");
-                          final user =
-                              await auth.signIn(
+                          final user = await auth.signIn(
                             password: '12345678',
-                            email: 'nhathaodx@gmail.com',
+                            email: 'haosince2003@gmail.com',
                           );
                           print("Success");
                         } catch (e) {
@@ -105,35 +104,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     TextButton(
                         onPressed: () async {
-                          PostRepository post = PostRepository();
-                          Office motel = await post.createPost(
-                            OfficeRequest(
-                              area: 200,
-                              projectName: 'projectName',
-                              address: Address(
-                                  cityCode: 10,
-                                  districtCode: 200,
-                                  wardCode: 300),
-                              userID: 'd8da06d6-ec21-411c-97cc-dbf991eb3dfc',
-                              price: 100,
-                              title: 'this is title',
-                              description: 'this is description',
-                              imagesUrl: [
-                                'https://picsum.photos/200/300?random=1',
-                                'https://picsum.photos/200/300?random=2',
-                                'https://picsum.photos/200/300?random=3'
-                              ],
-                              isProSeller: true,
-                              deposit: 200,
-                              hasWideAlley: false,
-                              isFacade: false,
-                              legalDocumentStatus: null,
-                              isLease: true,
-                              furnitureStatus: null,
-                              officeType: null,
-                              mainDoorDirection: Direction.south,
-                            ),
-                          ) as Office;
+                          final currentUserId = Supabase.instance.client.auth.currentUser!.id;
+                          final res = await Supabase.instance.client.from('conservations')
+                              .select('*, messages(sender_id, message, sent_at)')
+                              .or('user1_id.eq.$currentUserId,user2_id.eq.$currentUserId');
                           //Get.to(() => const RegisterScreen());
                         },
                         child: Text('Register now'.tr)),

@@ -1,3 +1,4 @@
+import 'package:nha_gia_re/data/enums/property_enums.dart';
 import 'package:supabase/supabase.dart';
 
 import '../../models/user_info.dart';
@@ -23,5 +24,10 @@ abstract class RemoteDataSource {
   Future<Map<String, dynamic> > editPostOffice(String postId, Map<String, dynamic> data);
   Future<Map<String, dynamic>> editPostMotel(String postId, Map<String, dynamic> data);
   Future<Map<String, dynamic>> editPostLand(String postId, Map<String, dynamic> data);
+  Future<List<Map<String, dynamic>>> getAllPosts({int? limit});
+  Future<Map<String, dynamic>> getPostDetails(String postId, PropertyType propertyType);
+
   Future<void> deletedPost(String id);
+
+  Future<dynamic> getConversation(String userId);
 }

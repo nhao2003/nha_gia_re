@@ -5,8 +5,18 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:flutter_test/flutter_test.dart';
+import 'package:supabase/supabase.dart';
+import 'dart:ui';
 enum Pe { A, B }
 
-void main() {
-  print(Pe.values['Pe.A'].toString());
-}
+Future<void> main() async {
+  final supabase = SupabaseClient(
+    'https://xyzcompany.supabase.co',
+    'public-anon-key',
+  );
+  if (supabase.auth.currentUser == null) {
+    final auth = await supabase.auth.signInWithPassword(
+        password: '12345678', email: 'haosince2003@gmail.com').then((value) => prints(value.user));
+        }
+    }
