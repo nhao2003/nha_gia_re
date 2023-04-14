@@ -141,6 +141,81 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
             ]),
           ),
           ExpandableContainer(
+            title: 'Gần bạn',
+            minHeight: 110,
+            child: Container(
+              padding: EdgeInsets.only(left: 20),
+              child: GridView.count(
+                childAspectRatio: 3,
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                children: [
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Image.asset(Assets.room_num, width: 24,),
+                      SizedBox(width: 10,),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.25,
+                        child: Text('Số phòng ngủ: 2 phòng', style: AppTextStyles.roboto14regular, maxLines: 2,)),
+                    ],
+                  ),
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Image.asset(Assets.paper, width: 24,),
+                      SizedBox(width: 10,),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.25,
+                        child: Text('Giấy tờ pháp lý: Đã có sổ', style: AppTextStyles.roboto14regular,)),
+                    ],
+                  ),
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Image.asset(Assets.area, width: 24,),
+                      SizedBox(width: 10,),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.25,
+                        child: Text('Diện tích đất: 75 m2', style: AppTextStyles.roboto14regular, maxLines: 2,)),
+                    ],
+                  ),
+                  
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Image.asset(Assets.home_type, width: 24,),
+                      SizedBox(width: 10,),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.25,
+                        child: Text('Loại hình nhà ở: Nhà mặt phố', style: AppTextStyles.roboto14regular,)),
+                    ],
+                  ),
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Image.asset(Assets.width, width: 24,),
+                      SizedBox(width: 10,),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.25,
+                        child: Text('Chiều ngang: 5m', style: AppTextStyles.roboto14regular, maxLines: 2,)),
+                    ],
+                  ),
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Image.asset(Assets.floor, width: 24,),
+                      SizedBox(width: 10,),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.25,
+                        child: Text('Tổng số tầng: 1', style: AppTextStyles.roboto14regular,)),
+                    ],
+                  ),                
+                ],
+              )
+            ),
+          ),
+          ExpandableContainer(
             title: 'Mô tả',
             minHeight: 114,
             child: SingleChildScrollView(
@@ -159,40 +234,57 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
         height: 80,
         child: Row(children: [
           Expanded(
-            child: MaterialButton(
-              onPressed: () {},
-              color: AppColors.green,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.phone_in_talk_outlined, size: 24,color: Colors.white,),
-                  Text('Gọi điện',style: AppTextStyles.roboto12regular.copyWith(color: Colors.white),)
-                ]
-
-            )
-          )),
+              child: MaterialButton(
+                  onPressed: () {},
+                  color: AppColors.green,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.phone_in_talk_outlined,
+                          size: 24,
+                          color: Colors.white,
+                        ),
+                        Text(
+                          'Gọi điện',
+                          style: AppTextStyles.roboto12regular
+                              .copyWith(color: Colors.white),
+                        )
+                      ]))),
           Expanded(
-            child: MaterialButton(
-              onPressed: () {},
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(Assets.messCircle, width: 24,color: AppColors.green,),
-                  Text('Chat',style: AppTextStyles.roboto12regular.copyWith(color: AppColors.green),)
-                ]
-            )
-          )),
+              child: MaterialButton(
+                  onPressed: () {},
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          Assets.messCircle,
+                          width: 24,
+                          color: AppColors.green,
+                        ),
+                        Text(
+                          'Chat',
+                          style: AppTextStyles.roboto12regular
+                              .copyWith(color: AppColors.green),
+                        )
+                      ]))),
           Expanded(
-            child: MaterialButton(
-              onPressed: () {},
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.sms_outlined, size: 24,color: AppColors.green,),
-                  Text('Tin nhắn sms',style: AppTextStyles.roboto12regular.copyWith(color: AppColors.green),)
-                ]
-            )
-          ))
+              child: MaterialButton(
+                  onPressed: () {},
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.sms_outlined,
+                          size: 24,
+                          color: AppColors.green,
+                        ),
+                        Text(
+                          'Tin nhắn sms',
+                          style: AppTextStyles.roboto12regular
+                              .copyWith(color: AppColors.green),
+                        )
+                      ])))
         ]),
       )),
     );

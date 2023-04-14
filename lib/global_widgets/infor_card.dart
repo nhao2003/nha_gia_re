@@ -105,7 +105,6 @@ class _InforCardListState extends State<InforCardList> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(10),
-      height: 300,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(
           widget.title,
@@ -117,6 +116,7 @@ class _InforCardListState extends State<InforCardList> {
         SizedBox(
           height: 210,
           child: ListView.separated(
+              shrinkWrap: true,
               itemCount: 10,
               scrollDirection: Axis.horizontal,
               separatorBuilder: (BuildContext context, int index) =>
