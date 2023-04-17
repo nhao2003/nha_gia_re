@@ -7,7 +7,6 @@ import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/routers/app_pages.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 
-import 'core/languages/localization_service.dart';
 import 'core/values/app_strings.dart';
 
 Future main() async {
