@@ -163,19 +163,42 @@ CREATE TABLE conservations
     FOREIGN KEY (user1_id) REFERENCES public.user_info (uid) ON DELETE CASCADE,
     FOREIGN KEY (user2_id) REFERENCES public.user_info (uid) ON DELETE CASCADE
 );
-
-
-ALTER publication supabase_realtime add table public.conservations;
-
-
+alter publication supabase_realtime add table public.conservations;
 CREATE TABLE messages
 (
     id        uuid      not null primary key default uuid_generate_v4(),
+    conservation_id uuid references public.rooms(id) on delete cascade not null;
     sender_id uuid      NOT NULL,
     message   TEXT      NOT NULL,
     sent_at   TIMESTAMP NOT NULL             DEFAULT NOW(),
     FOREIGN KEY (sender_id) REFERENCES public.user_info (uid) ON DELETE CASCADE
 );
+alter publication supabase_realtime add table public.messages;
+
+CREATE OR REPLACE FUNCTION get_or_create_conservation(user_info_id uuid)
+  RETURNS uuid AS
+$$
+DECLARE
+  conv_id uuid;
+BEGIN
+  -- Tìm conservation chứa user_info_id
+  SELECT id INTO conv_id
+  FROM conservations
+  WHERE (user1_id = auth.uid() and user2_id = user_info_id) OR (user2_id = auth.uid() and user1_id = user_info_id)
+  LIMIT 1;
+
+  -- Nếu không tìm thấy, tạo mới conservation
+  IF conv_id IS NULL THEN
+    INSERT INTO conservations(user1_id, user2_id)
+    VALUES(auth.uid(), user_info_id)
+    RETURNING id INTO conv_id;
+  END IF;
+
+  RETURN conv_id;
+END;
+$$
+LANGUAGE plpgsql;
+
 
 
 ALTER publication supabase_realtime add table public.messages;
