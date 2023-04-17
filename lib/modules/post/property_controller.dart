@@ -7,8 +7,6 @@ import 'package:nha_gia_re/data/models/province.dart';
 import 'package:nha_gia_re/modules/post/post_controller.dart';
 import 'dart:developer';
 
-import '../../data/models/property.dart';
-
 class PropertyController extends GetxController{
   PropertyController(){
     getProvince();
@@ -145,7 +143,7 @@ class PropertyController extends GetxController{
     selectedWards = value;
     update();
   }
-  void addPost(Property property){
-
-  }
+  // void addPost(Property property){
+  //
+  // }
 }

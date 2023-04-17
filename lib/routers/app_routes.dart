@@ -9,4 +9,8 @@ abstract class AppRoutes {
   static const post = '/post';
 
   static const personal = '/personal';
+  //chat
+  static const chat = '/chat';
+  static const register = '/register';
+  static const forgotPass = '/forgotPass';
 }

@@ -5,8 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:nha_gia_re/data/models/address.dart';
 import 'package:nha_gia_re/data/models/province.dart';
 import 'dart:developer';
-
-import '../../data/models/property.dart';
 class ApartmentController extends GetxController{
   ApartmentController();
   bool? isCorner = false;
@@ -110,7 +108,7 @@ class PostController extends GetxController {
     selectedWards = value;
     update();
   }
-  void addPost(Property property){
-
-  }
+  // void addPost(Property property){
+  //
+  // }
 }

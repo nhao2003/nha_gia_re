@@ -1,4 +1,3 @@
-import 'package:nha_gia_re/data/models/property.dart';
 import 'package:nha_gia_re/modules/post/property_controller.dart';
 
 import 'post_controller.dart';

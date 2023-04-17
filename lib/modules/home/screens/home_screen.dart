@@ -138,6 +138,12 @@ class HomeScreen extends StatelessWidget {
               title: 'Tài khoản',
             ),
           ],
+          onTap: (index){
+            switch(index){
+              case 0:
+
+            }
+          },
         ));
   }
 }

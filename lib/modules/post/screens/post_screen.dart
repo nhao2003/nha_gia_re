@@ -14,8 +14,6 @@ import 'package:nha_gia_re/modules/post/widgets/check_field.dart';
 import 'package:nha_gia_re/modules/post/widgets/dropdownfied.dart';
 import 'package:nha_gia_re/modules/post/widgets/seperator.dart';
 import 'package:nha_gia_re/modules/post/widgets/textformfield.dart';
-
-import '../../../data/models/property.dart';
 import '../widgets/hostel_body.dart';
 
 // Define a custom Form widget.
