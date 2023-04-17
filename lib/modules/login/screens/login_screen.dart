@@ -7,7 +7,9 @@ import 'package:nha_gia_re/data/models/address.dart';
 import 'package:nha_gia_re/data/providers/remote/remote_data_source_impl.dart';
 import 'package:nha_gia_re/data/providers/remote/request/post_request.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
+import 'package:nha_gia_re/data/repositories/chat_repository.dart';
 import 'package:nha_gia_re/data/repositories/post_repository.dart';
+import 'package:nha_gia_re/modules/chat/screens/onChattingScreen.dart';
 import 'package:nha_gia_re/modules/login/screens/register_screen.dart';
 import 'package:nha_gia_re/routers/app_pages.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
@@ -15,6 +17,7 @@ import 'package:supabase/supabase.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../data/models/properties/post.dart';
+import '../../../data/providers/remote/request/messsage_request.dart';
 import '../login_controller.dart';
 import 'forget_password.dart';
 
@@ -70,30 +73,24 @@ class _LoginScreenState extends State<LoginScreen> {
                 ElevatedButton(
                     onPressed: () async {
                       final sp = Supabase.instance.client;
+                      //sp.auth.refreshSession();
                       final auth = AuthRepository();
-                      if (sp.auth.currentUser == null) {
+                      if (sp.auth.currentSession == null) {
                         try {
                           print("Chưa đăng nhập");
-                          final user = await auth.signIn(
-                            password: '12345678',
-                            email: 'haosince2003@gmail.com',
-                          );
+                          final user = await auth
+                              .signIn(
+                                password: '12345678',
+                                email: 'haosince2003@gmail.com',
+                              )
+                              .then((value) => Get.toNamed(AppRoutes.chat));
                           print("Success");
                         } catch (e) {
-                          print(e.toString());
+                          rethrow;
                         }
                         return;
                       }
-                      return;
-                      print("Insert");
-                      try {
-                        await sp.auth.updateUser(UserAttributes(
-                            email: '21522046@gm.uit.edu.vn', data: {}));
-                        //print(sp.auth.currentUser?.userMetadata);
-                      } catch (e) {
-                        print('============================');
-                        print(e);
-                      }
+                      Get.toNamed(AppRoutes.chat);
                     },
                     onLongPress: () async {
                       SupabaseClient client = Supabase.instance.client;
@@ -104,10 +101,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     TextButton(
                         onPressed: () async {
-                          final currentUserId = Supabase.instance.client.auth.currentUser!.id;
-                          final res = await Supabase.instance.client.from('conservations')
-                              .select('*, messages(sender_id, message, sent_at)')
-                              .or('user1_id.eq.$currentUserId,user2_id.eq.$currentUserId');
+                          print("X");
+                          final post = ChatRepository();
+                          final result = post.getAllConservations();
+                          await post.sendMessage(MessageRequest(
+                              conservationId:
+                                  '841649b8-78e6-4e97-a59f-409e0088375a',
+                              content: 'Test test'));
                           //Get.to(() => const RegisterScreen());
                         },
                         child: Text('Register now'.tr)),

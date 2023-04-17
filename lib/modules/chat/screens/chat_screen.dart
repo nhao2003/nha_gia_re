@@ -1,113 +1,79 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:nha_gia_re/core/extensions/double_ex.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/values/assets_image.dart';
+import 'package:nha_gia_re/data/models/conversation.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/values/app_strings.dart';
+import '../../../data/repositories/chat_repository.dart';
 import '../chat_controller.dart';
 import 'onChattingScreen.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
 
   @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  final repo = ChatRepository();
+  late final stream;
+
+  @override
+  initState() {
+    // TODO: implement initState
+    super.initState();
+    final supabaseClient = Supabase.instance.client;
+    String uid = supabaseClient.auth.currentUser!.id;
+    stream = supabaseClient
+        .from('conservations')
+        .select(
+            '*, user1_info: user_info!conservations_user1_id_fkey(*), user2_info: user_info!conservations_user2_id_fkey(*), messages: messages(*)')
+        .or('user1_id.eq.$uid, user2_id.eq.$uid')
+        .asStream();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    List<UserMessage> dummy = const [
-      UserMessage(
-        imagePath: Assets.avatar_1,
-        name: 'John Smith',
-        message: 'Hi, how are you?',
-        time: '10:23 AM',
-        isRead: true,
-      ),
-      UserMessage(
-        imagePath: Assets.avatar_2,
-        name: 'Jane Doe',
-        message: 'I am doing well, thank you!',
-        time: '11:45 AM',
-      ),
-      UserMessage(
-        imagePath: Assets.avatar_3,
-        name: 'Bob Johnson',
-        message: 'What are you up to this weekend?',
-        time: '1:34 PM',
-      ),
-      UserMessage(
-        imagePath: Assets.avatar_4,
-        name: 'Emily Jones',
-        message: 'Hey there! How was your day? I miss you so much :((',
-        time: '5:12 PM',
-        isRead: true,
-      ),
-      UserMessage(
-        imagePath: Assets.avatar_5,
-        name: 'David Kim',
-        message: 'Can you send me the report by tomorrow?',
-        time: '9:07 AM',
-      ),
-      UserMessage(
-        imagePath: Assets.avatar_16,
-        name: 'Karen Lee',
-        message: 'Did you hear about the new project?',
-        time: '12:50 PM',
-      ),
-      UserMessage(
-        imagePath: Assets.avatar_7,
-        name: 'Tom Smith',
-        message: 'I need your help with the presentation',
-        time: '3:23 PM',
-      ),
-      UserMessage(
-        imagePath: Assets.avatar_8,
-        name: 'Amy Chen',
-        message: 'What time is the meeting today?',
-        time: '8:30 AM',
-      ),
-      UserMessage(
-        imagePath: Assets.avatar_9,
-        name: 'Mike Brown',
-        message: 'Can we meet up for lunch tomorrow?',
-        time: '11:56 AM',
-      ),
-      UserMessage(
-        imagePath: Assets.avatar_10,
-        name: 'Sara Patel',
-        message: 'Are you free to chat now?',
-        time: '2:15 PM',
-      ),
-      UserMessage(
-        imagePath: Assets.avatar_11,
-        name: 'Ryan Nguyen',
-        message: 'Do you have any plans for the weekend?',
-        time: '4:48 PM',
-      ),
-      UserMessage(
-        imagePath: Assets.avatar_12,
-        name: 'Lucas Hernandez',
-        message: 'How was your trip?',
-        time: '10:10 AM',
-      ),
-      UserMessage(
-        imagePath: Assets.avatar_13,
-        name: 'Mia Davis',
-        message: 'Can you give me a call later?',
-        time: '1:02 PM',
-      ),
-    ];
+    List<UserMessage> dummy = const [];
     final ChatController _controller = Get.find<ChatController>();
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  print('Xin chao');
+                });
+              },
+              icon: Icon(Icons.refresh))
+        ],
         title: Text(
           AppStrings.chatScreenTitle,
           style: AppTextStyles.roboto20semiBold,
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: dummy,
-        ),
-      ),
+      body: StreamBuilder<dynamic>(
+          stream: stream,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return _emptyChatWidget();
+            } else {
+              final data = List<Map<String, dynamic>>.from(snapshot.data!)
+                  .map((e) => Conversation.fromJson(e))
+                  .toList();
+              return SingleChildScrollView(
+                child: Column(
+                  children:
+                      data.map((e) => UserMessage(conversation: e)).toList(),
+                ),
+              );
+            }
+          }),
     );
   }
 
@@ -134,19 +100,13 @@ class ChatScreen extends StatelessWidget {
 }
 
 class UserMessage extends StatelessWidget {
-  final String imagePath;
-  final String name;
-  final String message;
-  final String time;
   final bool isRead;
+  Conversation conversation;
   final EdgeInsetsGeometry? padding;
 
-  const UserMessage({
+  UserMessage({
     Key? key,
-    required this.imagePath,
-    required this.name,
-    required this.message,
-    required this.time,
+    required this.conversation,
     this.padding,
     this.isRead = false,
   }) : super(key: key);
@@ -156,7 +116,7 @@ class UserMessage extends StatelessWidget {
     return InkWell(
       splashColor: AppColors.secondary,
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context){
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
           return const OnChattingScreen();
         }));
       },
@@ -194,8 +154,8 @@ class UserMessage extends StatelessWidget {
         padding: padding ?? const EdgeInsets.all(10),
         child: Row(
           children: [
-            CircleAvatar(
-              backgroundImage: AssetImage(imagePath),
+            const CircleAvatar(
+              backgroundImage: AssetImage(Assets.avatar_2),
               radius: 30,
             ),
             const SizedBox(width: 10),
@@ -205,12 +165,12 @@ class UserMessage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    name,
+                    conversation.chatWithUser.fullName ?? 'Unknown',
                     style: AppTextStyles.roboto16semiBold,
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    message,
+                    conversation.messages.last.text,
                     style: isRead
                         ? AppTextStyles.roboto14semiBold
                         : AppTextStyles.roboto14regular
@@ -222,7 +182,7 @@ class UserMessage extends StatelessWidget {
             ),
             const SizedBox(height: 5),
             Text(
-              time,
+              DateFormat('hh:mm').format(conversation.messages.last.sentAt),
               style:
                   AppTextStyles.roboto14regular.copyWith(color: AppColors.grey),
             ),

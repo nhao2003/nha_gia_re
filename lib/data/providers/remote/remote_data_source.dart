@@ -29,5 +29,5 @@ abstract class RemoteDataSource {
 
   Future<void> deletedPost(String id);
 
-  Future<dynamic> getConversation(String userId);
+  Future sendMessage(Map<String, dynamic> data);
 }

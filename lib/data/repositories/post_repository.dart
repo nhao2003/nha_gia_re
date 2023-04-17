@@ -1,4 +1,5 @@
 import 'package:http/http.dart';
+import 'package:nha_gia_re/data/models/conversation.dart';
 import 'package:nha_gia_re/data/providers/remote/request/post_request.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -80,4 +81,6 @@ class PostRepository extends BaseRepository {
     response = await remoteDataSourceImpl.getAllPosts(limit: limit);
     return response.map((e) => Post.fromJson(e)).toList();
   }
+
+
 }

@@ -246,12 +246,21 @@ class RemoteDataSourceImpl extends RemoteDataSource {
     return List<Map<String, dynamic>>.from(response).first;
   }
 
+
   @override
-  Future getConversation(String userId) async {
-    final currentUserId = supabaseClient.auth.currentUser!.id;
-    final res = await supabaseClient
-        .from('conservations')
-        .select('*, messages(sender_id, message, sent_at)')
-        .or('user1_id.eq.$currentUserId,user2_id.eq.$currentUserId');
+  Stream<List<Map<String, dynamic>>> getAllConversation() async* {
+    String uid = supabaseClient.auth.currentUser!.id;
+    final res = supabaseClient.from('conservations')
+        .select(
+    '*, user1_info: user_info!conservations_user1_id_fkey(*), user2_info: user_info!conservations_user2_id_fkey(*), messages: messages(*)')
+        .or('user1_id.eq.$uid, user2_id.eq.$uid').asStream();
+    await for(var x in res){
+      yield List<Map<String, dynamic>>.from(x).toList();
+    }
+  }
+
+  @override
+  Future sendMessage(Map<String, dynamic> data) async {
+    await supabaseClient.from('messages').insert(data);
   }
 }
