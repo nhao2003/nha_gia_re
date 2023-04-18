@@ -1,66 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:nha_gia_re/data/enums/property_enums.dart';
-import 'package:nha_gia_re/core/theme/app_colors.dart';
-import 'package:nha_gia_re/core/theme/text_styles.dart';
+import 'package:get/get.dart';
+import 'package:nha_gia_re/core/extensions/integer_ex.dart';
 
-class BottomSheetRadio extends StatefulWidget {
-  const BottomSheetRadio({super.key});
+class BottomSheetRadio extends StatelessWidget {
+  List<String> categorys;
+  RxInt selected;
+  Function onChanged;
 
-  @override
-  State<BottomSheetRadio> createState() => _BottomSheetRadioState();
-}
-
-class _BottomSheetRadioState extends State<BottomSheetRadio> {
-  static List<String> types = ["Căn Hộ chung Cư", "Nhà ở", "Đất", "Văn Phòng"];
-
-  PropertyType selectedType = PropertyType.apartment;
-
-  void onChanged(PropertyType? value) {
-    setState(() {
-      selectedType = value!;
-    });
-  }
+  BottomSheetRadio({
+    required this.categorys,
+    required this.selected,
+    required this.onChanged,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      height: 50.hp,
       padding: const EdgeInsets.only(top: 10),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ListTile(
-            title: Text(types[0]),
-            trailing: Radio(
-              value: PropertyType.apartment,
-              groupValue: selectedType,
-              onChanged: onChanged,
+      child: ListView.builder(
+        itemCount: categorys.length,
+        itemBuilder: (_, i) {
+          return Obx(
+            () => ListTile(
+              title: Text(categorys[i]),
+              trailing: Radio(
+                value: i,
+                groupValue: selected.value,
+                onChanged: (val) => onChanged(val),
+              ),
             ),
-          ),
-          ListTile(
-            title: Text(types[1]),
-            trailing: Radio(
-              value: PropertyType.house,
-              groupValue: selectedType,
-              onChanged: onChanged,
-            ),
-          ),
-          ListTile(
-            title: Text(types[2]),
-            trailing: Radio(
-              value: PropertyType.land,
-              groupValue: selectedType,
-              onChanged: onChanged,
-            ),
-          ),
-          ListTile(
-            title: Text(types[3]),
-            trailing: Radio(
-              value: PropertyType.office,
-              groupValue: selectedType,
-              onChanged: onChanged,
-            ),
-          ),
-        ],
+          );
+        },
       ),
     );
     ;

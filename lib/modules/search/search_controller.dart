@@ -80,6 +80,46 @@ class SearchController extends GetxController {
     //
     print("Delete filter");
   }
+// Category type ==================================
+
+  List<String> categorys = [
+    "Tất cả bất động sản",
+    "Căn Hộ chung Cư",
+    "Nhà ở",
+    "Đất",
+    "Văn Phòng",
+  ];
+
+  RxInt selectedCategory = 0.obs;
+
+  void changeCategory(int? type) {
+    selectedCategory.value = type!;
+    Get.back();
+  }
+
+// sort card ======================================
+  List<String> sortTypes = [
+    "Tin mới trước",
+    "Giá thấp trước",
+  ];
+
+  RxInt selectedSortType = 0.obs;
+
+  void changeSortType(int? type) {
+    selectedSortType.value = type!;
+  }
+
+// posted card ======================================
+  List<String> postedBys = [
+    "Cá nhân",
+    "Môi giới",
+  ];
+
+  RxInt selectedpostedBy = 0.obs;
+
+  void changePostedBy(int? type) {
+    selectedpostedBy.value = type!;
+  }
 
 // Slider ranges ==================================
   // Price range

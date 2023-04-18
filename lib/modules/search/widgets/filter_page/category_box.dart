@@ -1,9 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/modules/search/widgets/filter_page/bottom_sheet_radio.dart';
 
 class CategoryBox extends StatelessWidget {
+  String title;
+  List<String> categorys;
+  RxInt selected;
+  Function onChanged;
+
+  CategoryBox({
+    required this.title,
+    required this.categorys,
+    required this.selected,
+    required this.onChanged,
+    super.key,
+  });
+
   void showBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -14,7 +28,11 @@ class CategoryBox extends StatelessWidget {
         ),
       ),
       builder: (BuildContext context) {
-        return BottomSheetRadio();
+        return BottomSheetRadio(
+          categorys: [...categorys],
+          onChanged: onChanged,
+          selected: selected,
+        );
       },
     );
   }
@@ -49,15 +67,17 @@ class CategoryBox extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Danh mục",
+                  title,
                   style: AppTextStyles.roboto14regular
                       .copyWith(color: AppColors.black),
                 ),
                 const SizedBox(height: 5),
-                Text(
-                  "Tat ca",
-                  style: AppTextStyles.roboto14regular
-                      .copyWith(color: AppColors.primaryColor),
+                Obx(
+                  () => Text(
+                    categorys[selected.value],
+                    style: AppTextStyles.roboto14regular
+                        .copyWith(color: AppColors.primaryColor),
+                  ),
                 ),
               ],
             ),
