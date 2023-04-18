@@ -6,4 +6,12 @@ abstract class AppRoutes {
   // search
   static const search = '/search';
   static const filter = '/search/filter';
+
+  static const post = '/post';
+
+  static const personal = '/personal';
+  //chat
+  static const chat = '/chat';
+  static const register = '/register';
+  static const forgotPass = '/forgotPass';
 }

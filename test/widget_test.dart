@@ -5,26 +5,18 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:supabase/supabase.dart';
+import 'dart:ui';
+enum Pe { A, B }
 
-import 'package:nha_gia_re/main.dart';
-
-void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
-}
+Future<void> main() async {
+  final supabase = SupabaseClient(
+    'https://xyzcompany.supabase.co',
+    'public-anon-key',
+  );
+  if (supabase.auth.currentUser == null) {
+    final auth = await supabase.auth.signInWithPassword(
+        password: '12345678', email: 'haosince2003@gmail.com').then((value) => prints(value.user));
+        }
+    }
