@@ -20,7 +20,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late MySearchDelegate _delegate;
-
+  final HomeController _controller = Get.find<HomeController>();
+  final searchControler = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -29,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void onChangedTextFiled() async {
     FocusScope.of(context).unfocus();
+    searchControler.clear();
     await showSearch<String>(
       context: context,
       delegate: _delegate,
@@ -37,7 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final HomeController _controller = Get.find<HomeController>();
     return Scaffold(
         appBar: AppBar(
           title: Container(
@@ -51,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 hintText: 'Search...'.tr,
                 border: InputBorder.none,
               ),
+              controller: searchControler,
               onTap: onChangedTextFiled,
               onChanged: (value) {
                 onChangedTextFiled();

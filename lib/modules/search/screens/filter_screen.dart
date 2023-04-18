@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nha_gia_re/core/extensions/integer_ex.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/modules/search/widgets/filter_page/card_first.dart';
@@ -29,6 +30,7 @@ class FilterScreen extends StatelessWidget {
           color: AppColors.black,
           onPressed: () {
             searchController.popScreen();
+            searchController.deleteFilter();
           },
         ),
         actions: [
@@ -48,9 +50,43 @@ class FilterScreen extends StatelessWidget {
 // body
       body: Column(
         children: [
-          CardFirst(searchController),
-          CardSortBy(searchController),
-          CardPostedBy(searchController),
+          SizedBox(
+            height: 83.hp,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  CardFirst(searchController),
+                  CardSortBy(searchController),
+                  CardPostedBy(searchController),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: Align(
+              alignment: FractionalOffset.bottomCenter,
+              child: Material(
+                color: AppColors.primaryColor,
+                child: InkWell(
+                  onTap: () {
+                    // Apply filter
+                    searchController.popScreen();
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    color: Colors.transparent,
+                    child: Center(
+                      child: Text(
+                        "ÁP DỤNG",
+                        style: AppTextStyles.roboto15regular
+                            .copyWith(color: AppColors.white),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
