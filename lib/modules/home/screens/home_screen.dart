@@ -1,8 +1,6 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:nha_gia_re/core/extensions/color_ex.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/values/assets_image.dart';
@@ -10,11 +8,33 @@ import 'package:nha_gia_re/global_widgets/infor_card.dart';
 import 'package:nha_gia_re/modules/home/widgets/button.dart';
 import 'package:nha_gia_re/modules/home/widgets/carousel_ad.dart';
 import 'package:nha_gia_re/modules/home/widgets/image_button.dart';
+import '../../search/widgets/my_search_delegate.dart';
 import '../home_controller.dart';
-import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late MySearchDelegate _delegate;
+
+  @override
+  void initState() {
+    super.initState();
+    _delegate = MySearchDelegate();
+  }
+
+  void onChangedTextFiled() async {
+    FocusScope.of(context).unfocus();
+    await showSearch<String>(
+      context: context,
+      delegate: _delegate,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final HomeController _controller = Get.find<HomeController>();
@@ -27,9 +47,14 @@ class HomeScreen extends StatelessWidget {
                 color: Colors.white, borderRadius: BorderRadius.circular(5)),
             child: TextField(
               decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search),
-                  hintText: 'Search...'.tr,
-                  border: InputBorder.none),
+                prefixIcon: const Icon(Icons.search),
+                hintText: 'Search...'.tr,
+                border: InputBorder.none,
+              ),
+              onTap: onChangedTextFiled,
+              onChanged: (value) {
+                onChangedTextFiled();
+              },
             ),
           ),
           actions: [
@@ -72,8 +97,11 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Gần bạn', style: AppTextStyles.roboto20Bold,),
-                  SizedBox(height: 10,),
+                  Text(
+                    'Gần bạn',
+                    style: AppTextStyles.roboto20Bold,
+                  ),
+                  const SizedBox(height: 10),
                   GridView.count(
                     shrinkWrap: true,
                     mainAxisSpacing: 10,
@@ -86,7 +114,8 @@ class HomeScreen extends StatelessWidget {
                       ImageButton(),
                       ImageButton(),
                       ImageButton(),
-                  ],),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -138,10 +167,9 @@ class HomeScreen extends StatelessWidget {
               title: 'Tài khoản',
             ),
           ],
-          onTap: (index){
-            switch(index){
+          onTap: (index) {
+            switch (index) {
               case 0:
-
             }
           },
         ));

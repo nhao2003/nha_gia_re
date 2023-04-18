@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/modules/search/search_controller.dart';
@@ -8,9 +9,10 @@ import 'package:nha_gia_re/modules/search/widgets/suggestion_list.dart';
 // Defines the content of the search page in `showSearch()`.
 // SearchDelegate has a member `query` which is the query string.
 class MySearchDelegate extends SearchDelegate<String> {
-  final SearchController controller;
+  final SearchController controller =
+      Get.put<SearchController>(SearchController());
 
-  MySearchDelegate(this.controller);
+  MySearchDelegate();
 
   void closeDelegate(BuildContext context, String value) {
     // SearchDelegate.close() can return vlaues, similar to Navigator.pop().
