@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nha_gia_re/modules/search/screens/filter_screen.dart';
 
 class SearchController extends GetxController {
   /// instance
@@ -65,6 +65,20 @@ class SearchController extends GetxController {
   /// update suggestions
   void updateSuggestions(String query) async {
     suggestions.value = getSuggestions(query);
+  }
+
+  /// navigator to filter screen
+  void navigateToFilterScreen() {
+    Get.to(FilterScreen());
+  }
+
+  void popScreen() {
+    Get.back();
+  }
+
+  void deleteFilter() {
+    //
+    print("Delete filter");
   }
 
   static List<String> provinces = [

@@ -28,6 +28,12 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    // custom color padding top color
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: AppColors.primaryColor, // status bar color
+      ),
+    );
     return GetMaterialApp(
       title: AppStrings.appName,
       theme: ThemeData(

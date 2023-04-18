@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:nha_gia_re/modules/search/screens/filter_screen.dart';
 import 'package:nha_gia_re/modules/search/screens/search_screen.dart';
 import '../modules/home/home_binding.dart';
 import '../modules/home/screens/home_screen.dart';
@@ -22,6 +23,11 @@ abstract class AppPages {
     GetPage(
       name: AppRoutes.search,
       page: () => const SearchScreen(),
+      binding: SearchBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.filter,
+      page: () => FilterScreen(),
       binding: SearchBinding(),
     ),
   ];
