@@ -20,7 +20,7 @@ class FilterScreen extends StatelessWidget {
         title: Text(
           "Lọc kết quả",
           style:
-              AppTextStyles.roboto20semiBold.copyWith(color: AppColors.black),
+              AppTextStyles.roboto18semiBold.copyWith(color: AppColors.black),
         ),
         leading: IconButton(
           icon: const Icon(Icons.close),
@@ -49,7 +49,27 @@ class FilterScreen extends StatelessWidget {
         child: Column(
           children: [
             CategoryBox(),
-            RangeSliderCustom(),
+            const SizedBox(height: 20),
+            RangeSliderCustom(
+              title: 'Giá từ ',
+              unit: "đ",
+              LOWER: SearchController.LOWER_PRICE,
+              UPPER: SearchController.UPPER_PRICE,
+              lowerValue: searchController.lowerPriceValue,
+              upperValue: searchController.upperPriceValue,
+              stepValue: 1000000,
+              onChangeValue: searchController.changeValuePrice,
+            ),
+            RangeSliderCustom(
+              title: 'Diện tích ',
+              unit: "m2",
+              LOWER: SearchController.LOWER_AREA,
+              UPPER: SearchController.UPPER_AREA,
+              lowerValue: searchController.lowerAreaValue,
+              upperValue: searchController.upperAreaValue,
+              stepValue: 5,
+              onChangeValue: searchController.changeAreaPrice,
+            ),
           ],
         ),
       ),

@@ -43,6 +43,7 @@ class MyApp extends StatelessWidget {
     );
     return GetMaterialApp(
       title: AppStrings.appName,
+      initialRoute: AppRoutes.search,
       theme: ThemeData(
         primarySwatch: AppColors.customColor,
         primaryColor: AppColors.primaryColor,
@@ -58,7 +59,6 @@ class MyApp extends StatelessWidget {
       translations: LocalizationService(),
       builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.login,
       getPages: AppPages.pages,
       defaultTransition: Transition.cupertino,
     );

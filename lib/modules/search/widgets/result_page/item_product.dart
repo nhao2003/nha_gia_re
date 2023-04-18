@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
+
+import '../../../../core/values/app_values.dart';
 
 class ItemProduct extends StatelessWidget {
   String urlImage;
   String title;
-  String size;
-  String money;
+  int size;
+  int money;
   DateTime timeCreated;
   String location;
   bool isFavourited;
@@ -43,8 +46,14 @@ class ItemProduct extends StatelessWidget {
                   child: Image.network(
                     urlImage,
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        "assets/images/default_image.png",
+                        fit: BoxFit.cover,
+                      );
+                    },
                     loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent? loadingProgress) {
+                        ImageChunkEvent? loadingProgress) {
                       if (loadingProgress == null) return child;
                       return Center(
                         child: CircularProgressIndicator(
@@ -72,14 +81,14 @@ class ItemProduct extends StatelessWidget {
                     const SizedBox(height: 5),
                     // size
                     Text(
-                      size,
+                      "${FormatNum.formatter.format(size)} m2",
                       style: AppTextStyles.roboto12regular
                           .copyWith(color: AppColors.grey),
                     ),
                     const SizedBox(height: 5),
                     // money
                     Text(
-                      money,
+                      FormatNum.formatter.format(money),
                       style: AppTextStyles.roboto14semiBold
                           .copyWith(color: AppColors.red),
                     ),
@@ -88,7 +97,8 @@ class ItemProduct extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          "",
+                          DateFormat(FormatDate.numbericDateFormat)
+                              .format(timeCreated),
                           style: AppTextStyles.roboto11regular
                               .copyWith(color: AppColors.grey),
                         ),

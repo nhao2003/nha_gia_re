@@ -81,6 +81,29 @@ class SearchController extends GetxController {
     print("Delete filter");
   }
 
+// Slider ranges ==================================
+  // Price range
+  static const double LOWER_PRICE = 0;
+  static const double UPPER_PRICE = 30000000000;
+  RxDouble lowerPriceValue = 0.0.obs;
+  RxDouble upperPriceValue = 30000000000.0.obs;
+
+  void changeValuePrice(double lower, double upper) {
+    lowerPriceValue.value = lower;
+    upperPriceValue.value = upper;
+  }
+
+  // Area range
+  static const double LOWER_AREA = 0;
+  static const double UPPER_AREA = 10000;
+  RxDouble lowerAreaValue = 0.0.obs;
+  RxDouble upperAreaValue = 10000.0.obs;
+
+  void changeAreaPrice(double lower, double upper) {
+    lowerAreaValue.value = lower;
+    upperAreaValue.value = upper;
+  }
+
   static List<String> provinces = [
     'Toàn Quốc',
     'Hà Nội',

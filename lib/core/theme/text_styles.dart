@@ -57,7 +57,17 @@ class AppTextStyles {
     fontSize: 16,
     fontWeight: FontWeight.w700,
   );
-
+  static TextStyle roboto18regular = TextStyle(
+    fontSize: 18,
+  );
+  static TextStyle roboto18semiBold = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+  );
+  static TextStyle roboto18Bold = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+  );
   static TextStyle roboto20regular = TextStyle(
     fontSize: 20,
   );
