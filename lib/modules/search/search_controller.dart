@@ -70,7 +70,7 @@ class SearchController extends GetxController {
 
   /// navigator to filter screen
   void navigateToFilterScreen() {
-    Get.to(FilterScreen());
+    Get.to(() => FilterScreen());
   }
 
   void popScreen() {
