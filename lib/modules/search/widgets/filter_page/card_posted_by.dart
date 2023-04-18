@@ -33,7 +33,7 @@ class CardPostedBy extends StatelessWidget {
           Obx(() => ListTile(
                 horizontalTitleGap: 2,
                 title: Text(
-                  searchController.postedBys[0],
+                  searchController.radiopostedBy.values[0],
                   style: AppTextStyles.roboto14regular
                       .copyWith(color: AppColors.black),
                 ),
@@ -43,16 +43,17 @@ class CardPostedBy extends StatelessWidget {
                 ),
                 trailing: Radio<int>(
                   value: 0,
-                  groupValue: searchController.selectedpostedBy.value,
+                  groupValue:
+                      searchController.radiopostedBy.selectedValue.value,
                   onChanged: (value) {
-                    searchController.changePostedBy(value);
+                    searchController.radiopostedBy.onChange(value);
                   },
                 ),
               )),
           Obx(() => ListTile(
                 horizontalTitleGap: 2,
                 title: Text(
-                  searchController.postedBys[1],
+                  searchController.radiopostedBy.values[1],
                   style: AppTextStyles.roboto14regular
                       .copyWith(color: AppColors.black),
                 ),
@@ -62,9 +63,10 @@ class CardPostedBy extends StatelessWidget {
                 ),
                 trailing: Radio<int>(
                   value: 1,
-                  groupValue: searchController.selectedpostedBy.value,
+                  groupValue:
+                      searchController.radiopostedBy.selectedValue.value,
                   onChanged: (value) {
-                    searchController.changePostedBy(value);
+                    searchController.radiopostedBy.onChange(value);
                   },
                 ),
               )),

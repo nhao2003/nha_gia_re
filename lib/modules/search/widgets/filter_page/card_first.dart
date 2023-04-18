@@ -19,9 +19,9 @@ class CardFirst extends StatelessWidget {
         children: [
           CategoryBox(
             title: "Danh mục",
-            categorys: searchController.categorys,
-            selected: searchController.selectedCategory,
-            onChanged: searchController.changeCategory,
+            categorys: searchController.radioCategory.values,
+            selected: searchController.radioCategory.selectedValue,
+            onChanged: searchController.radioCategory.onChange,
           ),
           const SizedBox(height: 20),
           RangeSliderCustom(
@@ -42,7 +42,7 @@ class CardFirst extends StatelessWidget {
             lowerValue: searchController.lowerAreaValue,
             upperValue: searchController.upperAreaValue,
             stepValue: 5,
-            onChangeValue: searchController.changeAreaPrice,
+            onChangeValue: searchController.changeAreaValue,
           ),
         ],
       ),

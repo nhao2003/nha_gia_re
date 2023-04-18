@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:nha_gia_re/data/services/radio_service.dart';
 import 'package:nha_gia_re/modules/search/screens/filter_screen.dart';
 
 class SearchController extends GetxController {
@@ -77,50 +78,42 @@ class SearchController extends GetxController {
   }
 
   void deleteFilter() {
-    //
-    print("Delete filter");
+    // reset all
+    radioCategory.selectedValue.value = 0;
+    radioSortType.selectedValue.value = 0;
+    radiopostedBy.selectedValue.value = 0;
+    changeValuePrice(LOWER_PRICE, UPPER_PRICE);
+    changeAreaValue(LOWER_AREA, UPPER_AREA);
   }
+
 // Category type ==================================
-
-  List<String> categorys = [
-    "Tất cả bất động sản",
-    "Căn Hộ chung Cư",
-    "Nhà ở",
-    "Đất",
-    "Văn Phòng",
-  ];
-
-  RxInt selectedCategory = 0.obs;
-
-  void changeCategory(int? type) {
-    selectedCategory.value = type!;
-    Get.back();
-  }
+  RadioService radioCategory = RadioService(
+    values: [
+      "Tất cả bất động sản",
+      "Căn Hộ/chung Cư",
+      "Nhà ở",
+      "Đất",
+      "Văn Phòng, Mặt bằng kinh doanh",
+      "Phòng trọ",
+    ],
+    expendedFunc: () => Get.back(),
+  );
 
 // sort card ======================================
-  List<String> sortTypes = [
-    "Tin mới trước",
-    "Giá thấp trước",
-  ];
-
-  RxInt selectedSortType = 0.obs;
-
-  void changeSortType(int? type) {
-    selectedSortType.value = type!;
-  }
+  RadioService radioSortType = RadioService(
+    values: [
+      "Tin mới trước",
+      "Giá thấp trước",
+    ],
+  );
 
 // posted card ======================================
-  List<String> postedBys = [
-    "Cá nhân",
-    "Môi giới",
-  ];
-
-  RxInt selectedpostedBy = 0.obs;
-
-  void changePostedBy(int? type) {
-    selectedpostedBy.value = type!;
-  }
-
+  RadioService radiopostedBy = RadioService(
+    values: [
+      "Cá nhân",
+      "Môi giới",
+    ],
+  );
 // Slider ranges ==================================
   // Price range
   static const double LOWER_PRICE = 0;
@@ -139,7 +132,7 @@ class SearchController extends GetxController {
   RxDouble lowerAreaValue = 0.0.obs;
   RxDouble upperAreaValue = 10000.0.obs;
 
-  void changeAreaPrice(double lower, double upper) {
+  void changeAreaValue(double lower, double upper) {
     lowerAreaValue.value = lower;
     upperAreaValue.value = upper;
   }

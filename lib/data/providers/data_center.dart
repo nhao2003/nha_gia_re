@@ -25,7 +25,7 @@ class DataCenter {
       postedDate: DateTime(2022, 3, 10),
       expiryDate: DateTime(2022, 9, 30),
       imagesUrl: [
-        "https://example.com/image7.jpg",
+        "https://thietkethicongnhadep.net/wp-content/uploads/2015/10/thiet-ke-phong-tro-20m2.jpg",
         "https://example.com/image8.jpg",
         "https://example.com/image9.jpg",
       ],
@@ -48,7 +48,7 @@ class DataCenter {
       postedDate: DateTime(2022, 4, 1),
       expiryDate: DateTime(2022, 10, 31),
       imagesUrl: [
-        "https://example.com/image10.jpg",
+        "https://pt123.cdn.static123.com/images/thumbs/900x600/fit/2021/11/16/cho-thue-phong-tro-1613975723_1637034014.jpg",
         "https://example.com/image11.jpg",
         "https://example.com/image12.jpg",
       ],
@@ -71,7 +71,7 @@ class DataCenter {
       postedDate: DateTime(2022, 5, 15),
       expiryDate: DateTime(2022, 11, 30),
       imagesUrl: [
-        "https://example.com/image13.jpg",
+        "https://toancanhbatdongsan.com.vn/uploads/images/blog/hoangvy/2022/06/02/cho-thue-phong-tro-1654136735.jpeg",
         "https://example.com/image14.jpg",
         "https://example.com/image15.jpg",
       ],
@@ -94,7 +94,7 @@ class DataCenter {
       postedDate: DateTime(2022, 6, 10),
       expiryDate: DateTime(2022, 12, 31),
       imagesUrl: [
-        "https://example.com/image16.jpg",
+        "https://storage.googleapis.com/digital-platform/hinh_anh_nam_long_kinh_nghiem_thue_phong_tro_danh_cho_sinh_vien_so_1_ec29cfda91/hinh_anh_nam_long_kinh_nghiem_thue_phong_tro_danh_cho_sinh_vien_so_1_ec29cfda91.png",
         "https://example.com/image17.jpg",
         "https://example.com/image18.jpg",
       ],

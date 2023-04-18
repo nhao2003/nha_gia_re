@@ -33,7 +33,7 @@ class CardSortBy extends StatelessWidget {
           Obx(() => ListTile(
                 horizontalTitleGap: 2,
                 title: Text(
-                  searchController.sortTypes[0],
+                  searchController.radioSortType.values[0],
                   style: AppTextStyles.roboto14regular
                       .copyWith(color: AppColors.black),
                 ),
@@ -43,16 +43,17 @@ class CardSortBy extends StatelessWidget {
                 ),
                 trailing: Radio<int>(
                   value: 0,
-                  groupValue: searchController.selectedSortType.value,
+                  groupValue:
+                      searchController.radioSortType.selectedValue.value,
                   onChanged: (value) {
-                    searchController.changeSortType(value);
+                    searchController.radioSortType.onChange(value);
                   },
                 ),
               )),
           Obx(() => ListTile(
                 horizontalTitleGap: 2,
                 title: Text(
-                  searchController.sortTypes[1],
+                  searchController.radioSortType.values[1],
                   style: AppTextStyles.roboto14regular
                       .copyWith(color: AppColors.black),
                 ),
@@ -62,9 +63,10 @@ class CardSortBy extends StatelessWidget {
                 ),
                 trailing: Radio<int>(
                   value: 1,
-                  groupValue: searchController.selectedSortType.value,
+                  groupValue:
+                      searchController.radioSortType.selectedValue.value,
                   onChanged: (value) {
-                    searchController.changeSortType(value);
+                    searchController.radioSortType.onChange(value);
                   },
                 ),
               )),
