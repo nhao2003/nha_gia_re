@@ -74,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () async {
                       final auth = AuthRepository();
                       if (auth.isUserLoggedIn) {
-                        Get.toNamed(AppRoutes.post);
+                        Get.toNamed(AppRoutes.chat);
                       } else {
 
                       }

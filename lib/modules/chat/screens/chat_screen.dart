@@ -27,14 +27,6 @@ class _ChatScreenState extends State<ChatScreen> {
   initState() {
     // TODO: implement initState
     super.initState();
-    final supabaseClient = Supabase.instance.client;
-    String uid = supabaseClient.auth.currentUser!.id;
-    stream = supabaseClient
-        .from('conservations')
-        .select(
-            '*, user1_info: user_info!conservations_user1_id_fkey(*), user2_info: user_info!conservations_user2_id_fkey(*), messages: messages(*)')
-        .or('user1_id.eq.$uid, user2_id.eq.$uid')
-        .asStream();
   }
 
   @override
