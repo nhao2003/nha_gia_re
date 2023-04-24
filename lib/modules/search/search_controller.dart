@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import 'package:nha_gia_re/data/services/radio_service.dart';
 import 'package:nha_gia_re/modules/search/screens/filter_screen.dart';
 
+import '../../core/values/filter_values.dart';
+
 class SearchController extends GetxController {
   /// instance
   static SearchController get i => Get.find();
@@ -25,7 +27,7 @@ class SearchController extends GetxController {
 // data in result screen
 
   /// value in dropdown menu item
-  RxString selectedTypeItem = provinces[0].obs;
+  RxString selectedTypeItem = FilterValues.instance.provinces[0].obs;
 
   /// change new value to selectedTypeItem
   void changeSelectedItem(String newValue) {
@@ -34,7 +36,7 @@ class SearchController extends GetxController {
 
   /// add new query to history
   void addToHistory(String newQuery) {
-    if (newQuery == "") return; // should not be null
+    if (newQuery.trim() == "") return; // should not be null
     // check in history has newQuery, if had => delete and add in the top
     if (checkIsInHistory(newQuery)) deleteHistory(newQuery);
     // add to history
@@ -82,44 +84,32 @@ class SearchController extends GetxController {
     radioCategory.selectedValue.value = 0;
     radioSortType.selectedValue.value = 0;
     radiopostedBy.selectedValue.value = 0;
-    changeValuePrice(LOWER_PRICE, UPPER_PRICE);
-    changeAreaValue(LOWER_AREA, UPPER_AREA);
+    changeValuePrice(
+        FilterValues.instance.LOWER_PRICE, FilterValues.instance.UPPER_PRICE);
+    changeAreaValue(
+        FilterValues.instance.LOWER_AREA, FilterValues.instance.UPPER_AREA);
   }
 
 // Category type ==================================
   RadioService radioCategory = RadioService(
-    values: [
-      "Tất cả bất động sản",
-      "Căn Hộ/chung Cư",
-      "Nhà ở",
-      "Đất",
-      "Văn Phòng, Mặt bằng kinh doanh",
-      "Phòng trọ",
-    ],
+    values: FilterValues.instance.categorys,
     expendedFunc: () => Get.back(),
   );
 
 // sort card ======================================
   RadioService radioSortType = RadioService(
-    values: [
-      "Tin mới trước",
-      "Giá thấp trước",
-    ],
+    values: FilterValues.instance.sortTypes,
   );
 
 // posted card ======================================
   RadioService radiopostedBy = RadioService(
-    values: [
-      "Cá nhân",
-      "Môi giới",
-    ],
+    values: FilterValues.instance.postedBy,
   );
 // Slider ranges ==================================
   // Price range
-  static const double LOWER_PRICE = 0;
-  static const double UPPER_PRICE = 30000000000;
-  RxDouble lowerPriceValue = 0.0.obs;
-  RxDouble upperPriceValue = 30000000000.0.obs;
+
+  RxDouble lowerPriceValue = FilterValues.instance.LOWER_PRICE.obs;
+  RxDouble upperPriceValue = FilterValues.instance.UPPER_PRICE.obs;
 
   void changeValuePrice(double lower, double upper) {
     lowerPriceValue.value = lower;
@@ -127,80 +117,12 @@ class SearchController extends GetxController {
   }
 
   // Area range
-  static const double LOWER_AREA = 0;
-  static const double UPPER_AREA = 10000;
-  RxDouble lowerAreaValue = 0.0.obs;
-  RxDouble upperAreaValue = 10000.0.obs;
+
+  RxDouble lowerAreaValue = FilterValues.instance.LOWER_AREA.obs;
+  RxDouble upperAreaValue = FilterValues.instance.UPPER_AREA.obs;
 
   void changeAreaValue(double lower, double upper) {
     lowerAreaValue.value = lower;
     upperAreaValue.value = upper;
   }
-
-  static List<String> provinces = [
-    'Toàn Quốc',
-    'Hà Nội',
-    'Hà Giang',
-    'Cao Bằng',
-    'Bắc Kạn',
-    'Tuyên Quang',
-    'Lào Cai',
-    'Điện Biên',
-    'Lai Châu',
-    'Sơn La',
-    'Yên Bái',
-    'Hòa Bình',
-    'Thái Nguyên',
-    'Lạng Sơn',
-    'Quảng Ninh',
-    'Bắc Giang',
-    'Phú Thọ',
-    'Vĩnh Phúc',
-    'Bắc Ninh',
-    'Hải Dương',
-    'Hải Phòng',
-    'Hưng Yên',
-    'Thái Bình',
-    'Hà Nam',
-    'Nam Định',
-    'Ninh Bình',
-    'Thanh Hóa',
-    'Nghệ An',
-    'Hà Tĩnh',
-    'Quảng Bình',
-    'Quảng Trị',
-    'Thừa Thiên Huế',
-    'Đà Nẵng',
-    'Quảng Nam',
-    'Quảng Ngãi',
-    'Bình Định',
-    'Phú Yên',
-    'Khánh Hòa',
-    'Ninh Thuận',
-    'Bình Thuận',
-    'Kon Tum',
-    'Gia Lai',
-    'Đắk Lắk',
-    'Đắk Nông',
-    'Lâm Đồng',
-    'Bình Phước',
-    'Tây Ninh',
-    'Bình Dương',
-    'Đồng Nai',
-    'Bà Rịa - Vũng Tàu',
-    'Hồ Chí Minh',
-    'Long An',
-    'Tiền Giang',
-    'Bến Tre',
-    'Trà Vinh',
-    'Vĩnh Long',
-    'Đồng Tháp',
-    'An Giang',
-    'Kiên Giang',
-    'Cần Thơ',
-    'Hậu Giang',
-    'Sóc Trăng',
-    'Bạc Liêu',
-    'Cà Mau'
-  ];
 }

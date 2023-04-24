@@ -40,7 +40,7 @@ class FilterScreen extends StatelessWidget {
               searchController.deleteFilter();
             },
             child: Text(
-              "Bỏ lọc",
+              "Đặt lại",
               style: AppTextStyles.roboto16semiBold
                   .copyWith(color: AppColors.primaryColor),
             ),

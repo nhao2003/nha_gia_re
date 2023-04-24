@@ -3,6 +3,7 @@ import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/modules/search/widgets/filter_page/category_box.dart';
 import 'package:nha_gia_re/modules/search/widgets/filter_page/range_slider_custom.dart';
 
+import '../../../../core/values/filter_values.dart';
 import '../../search_controller.dart';
 
 class CardFirst extends StatelessWidget {
@@ -27,8 +28,8 @@ class CardFirst extends StatelessWidget {
           RangeSliderCustom(
             title: 'Giá từ ',
             unit: "đ",
-            LOWER: SearchController.LOWER_PRICE,
-            UPPER: SearchController.UPPER_PRICE,
+            LOWER: FilterValues.instance.LOWER_PRICE,
+            UPPER: FilterValues.instance.UPPER_PRICE,
             lowerValue: searchController.lowerPriceValue,
             upperValue: searchController.upperPriceValue,
             stepValue: 1000000,
@@ -37,8 +38,8 @@ class CardFirst extends StatelessWidget {
           RangeSliderCustom(
             title: 'Diện tích ',
             unit: "m2",
-            LOWER: SearchController.LOWER_AREA,
-            UPPER: SearchController.UPPER_AREA,
+            LOWER: FilterValues.instance.LOWER_AREA,
+            UPPER: FilterValues.instance.UPPER_AREA,
             lowerValue: searchController.lowerAreaValue,
             upperValue: searchController.upperAreaValue,
             stepValue: 5,
