@@ -35,6 +35,96 @@ class FilterValues {
   double LOWER_AREA = 0;
   double UPPER_AREA = 10000;
 
+// Specifications (Thông số kĩ thuật)
+  // Can ho, chung cu
+  List<String> status = [
+    "Tất cả",
+    "Chưa bàn giao",
+    "Đã bàn giao",
+  ];
+  List<String> apartmentTypes = [
+    "Chung cư",
+    "Duplex",
+    "Penthouse",
+    "Căn hộ dịch vụ, mini",
+    "Tập thể, cư xá",
+    "Officetel",
+  ];
+  List<String> apartmentCharacteristics = [
+    "Tất cả",
+    "Căn góc",
+  ];
+  List<String> bedroomNumber = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "Nhiều hơn 10",
+  ];
+  List<String> mainDirection = [
+    "Đông",
+    "Tây",
+    "Nam",
+    "Bắc",
+    "Đông Bắc",
+    "Đông Nam",
+    "Tây Bắc",
+    "Tây Nam",
+  ];
+  List<String> balconyDirection = [
+    "Đông",
+    "Tây",
+    "Nam",
+    "Bắc",
+    "Đông Bắc",
+    "Đông Nam",
+    "Tây Bắc",
+    "Tây Nam",
+  ];
+  List<String> legalDocuments = [
+    "Đã có sổ",
+    "Đang chờ sổ",
+    "Giấy tờ khác",
+  ];
+  List<String> interiorStatus = [
+    "Tất cả",
+    "Nội thất cao cấp",
+    "Nội thất đầy đủ",
+    "Hoàn thiện cơ bản",
+    "Bàn giao thô",
+  ];
+  // Nha o
+  List<String> residentialTypes = [
+    "Nhà mặt phố, mặt tiền",
+    "Nhà ngõ, hẽm",
+    "Nhà biệt thự",
+    "Nhà phố liền kề",
+  ];
+  List<String> houseCharacteristics = [
+    "Hẽm xe hơi",
+    "Mặt tiền",
+    "Nở hậu",
+  ];
+  // Đất
+  List<String> typeOfLand = [
+    "Đất thổ cư",
+    "Đất nền dự án",
+    "Đất công nghiệp",
+    "Đất nông nghiệp",
+  ];
+  // van phong
+  List<String> officeType = [
+    "Mặt bằng kinh doanh",
+    "Văn phòng",
+    "Shophouse",
+    "Officetel",
+  ];
 // provinces of VietNam
   List<String> provinces = [
     'Toàn Quốc',
