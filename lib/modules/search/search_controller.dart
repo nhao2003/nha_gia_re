@@ -2,8 +2,8 @@ import 'package:get/get.dart';
 import 'package:nha_gia_re/data/services/list_check_service.dart';
 import 'package:nha_gia_re/data/services/radio_service.dart';
 import 'package:nha_gia_re/modules/search/screens/filter_screen.dart';
-
 import '../../core/values/filter_values.dart';
+import '../home/screens/post_details_screen.dart';
 
 class SearchController extends GetxController {
   /// instance
@@ -80,9 +80,17 @@ class SearchController extends GetxController {
     Get.back();
   }
 
+  void navigateToDetailSceen(String title) {
+    Get.to(() => PostDetailsScreen(title: title));
+  }
+
   void deleteFilter() {
     // reset all
-    resetAll();
+    radioCategory.reset();
+    radioSortType.reset();
+    radiopostedBy.reset();
+
+    resetAllCardsOfCategory();
     changeValuePrice(
         FilterValues.instance.LOWER_PRICE, FilterValues.instance.UPPER_PRICE);
     changeAreaValue(
@@ -126,7 +134,7 @@ class SearchController extends GetxController {
   }
 
 // reset radio ==========================================
-  void resetAll() {
+  void resetAllCardsOfCategory() {
     resetApartment();
     resetHouse();
     resetLand();

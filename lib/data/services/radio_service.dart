@@ -12,7 +12,7 @@ class RadioService {
   RxInt selectedValue = 0.obs;
 
   void reset() {
-    selectedValue = 0.obs;
+    selectedValue.value = 0;
   }
 
   void onChange(int? val) {

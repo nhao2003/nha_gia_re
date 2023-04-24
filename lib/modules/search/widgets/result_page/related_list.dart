@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:nha_gia_re/data/providers/data_center.dart';
 import 'package:nha_gia_re/modules/search/widgets/result_page/item_product.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../data/models/properties/post.dart';
+import '../../search_controller.dart';
 
 class RelatedList extends StatelessWidget {
-  const RelatedList({super.key});
-
+  RelatedList({super.key});
+  final SearchController searchController = Get.find<SearchController>();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,6 +25,7 @@ class RelatedList extends StatelessWidget {
             location: "Long An",
             timeCreated: prod.postedDate,
             isFavourited: false,
+            onTap: searchController.navigateToDetailSceen,
           );
         },
       ),
