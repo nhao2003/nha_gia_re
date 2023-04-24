@@ -125,4 +125,79 @@ class SearchController extends GetxController {
     lowerAreaValue.value = lower;
     upperAreaValue.value = upper;
   }
+
+// Can ho chung cu ======================================
+  RadioService apartmentStatus = RadioService(
+    values: FilterValues.instance.status,
+  );
+  RadioService apartmentTypes = RadioService(
+    values: FilterValues.instance.apartmentTypes,
+  );
+  RadioService apartmentCharacteristics = RadioService(
+    values: FilterValues.instance.apartmentCharacteristics,
+  );
+  RadioService apartmentBedroomNumber = RadioService(
+    values: FilterValues.instance.bedroomNumber,
+  );
+  RadioService apartmentMainDirection = RadioService(
+    values: FilterValues.instance.mainDirection,
+  );
+  RadioService apartmentBalconyDirection = RadioService(
+    values: FilterValues.instance.mainDirection,
+  );
+  RadioService apartmentLegalDocuments = RadioService(
+    values: FilterValues.instance.legalDocuments,
+  );
+  RadioService apartmentInteriorStatus = RadioService(
+    values: FilterValues.instance.interiorStatus,
+  );
+// Nha o ================================================
+  RadioService houseTypes = RadioService(
+    values: FilterValues.instance.residentialTypes,
+  );
+  RadioService houseCharacteristics = RadioService(
+    values: FilterValues.instance.houseCharacteristics,
+  );
+  RadioService houseBedroomNumber = RadioService(
+    values: FilterValues.instance.bedroomNumber,
+  );
+  RadioService houseMainDirection = RadioService(
+    values: FilterValues.instance.mainDirection,
+  );
+  RadioService houseLegalDocuments = RadioService(
+    values: FilterValues.instance.legalDocuments,
+  );
+  RadioService houseInteriorStatus = RadioService(
+    values: FilterValues.instance.interiorStatus,
+  );
+// Dat ================================================
+  RadioService landTypes = RadioService(
+    values: FilterValues.instance.typeOfLand,
+  );
+  RadioService landCharacteristics = RadioService(
+    values: FilterValues.instance.houseCharacteristics,
+  );
+  RadioService landDirection = RadioService(
+    values: FilterValues.instance.mainDirection,
+  );
+  RadioService landLegalDocuments = RadioService(
+    values: FilterValues.instance.legalDocuments,
+  );
+// Van phong  ================================================
+  RadioService officeType = RadioService(
+    values: FilterValues.instance.officeType,
+  );
+  RadioService officeDirection = RadioService(
+    values: FilterValues.instance.mainDirection,
+  );
+  RadioService officeLegalDocuments = RadioService(
+    values: FilterValues.instance.legalDocuments,
+  );
+  RadioService officeInteriorStatus = RadioService(
+    values: FilterValues.instance.interiorStatus,
+  );
+// Phong tro  ================================================
+  RadioService rentInteriorStatus = RadioService(
+    values: FilterValues.instance.interiorStatus,
+  );
 }

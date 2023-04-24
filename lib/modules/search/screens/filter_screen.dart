@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:nha_gia_re/core/extensions/integer_ex.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
+import 'package:nha_gia_re/modules/search/widgets/filter_page/card_apartment.dart';
 import 'package:nha_gia_re/modules/search/widgets/filter_page/card_first.dart';
 import 'package:nha_gia_re/modules/search/widgets/filter_page/card_posted_by.dart';
 import 'package:nha_gia_re/modules/search/widgets/filter_page/card_sort_by.dart';
@@ -53,15 +54,21 @@ class FilterScreen extends StatelessWidget {
           SizedBox(
             height: 83.hp,
             child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  CardFirst(searchController),
-                  CardSortBy(searchController),
-                  CardPostedBy(searchController),
-                ],
+              child: Obx(
+                () => Column(
+                  children: [
+                    // cards
+                    CardFirst(searchController),
+                    if (searchController.radioCategory.selectedValue.value == 1)
+                      CardApartment(searchController),
+                    CardSortBy(searchController),
+                    CardPostedBy(searchController),
+                  ],
+                ),
               ),
             ),
           ),
+// apply button
           Expanded(
             child: Align(
               alignment: FractionalOffset.bottomCenter,

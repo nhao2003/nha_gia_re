@@ -77,16 +77,6 @@ class FilterValues {
     "Tây Bắc",
     "Tây Nam",
   ];
-  List<String> balconyDirection = [
-    "Đông",
-    "Tây",
-    "Nam",
-    "Bắc",
-    "Đông Bắc",
-    "Đông Nam",
-    "Tây Bắc",
-    "Tây Nam",
-  ];
   List<String> legalDocuments = [
     "Đã có sổ",
     "Đang chờ sổ",
