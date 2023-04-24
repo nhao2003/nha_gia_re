@@ -5,7 +5,11 @@ import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/modules/search/widgets/filter_page/card_apartment.dart';
 import 'package:nha_gia_re/modules/search/widgets/filter_page/card_first.dart';
+import 'package:nha_gia_re/modules/search/widgets/filter_page/card_house.dart';
+import 'package:nha_gia_re/modules/search/widgets/filter_page/card_land.dart';
+import 'package:nha_gia_re/modules/search/widgets/filter_page/card_office.dart';
 import 'package:nha_gia_re/modules/search/widgets/filter_page/card_posted_by.dart';
+import 'package:nha_gia_re/modules/search/widgets/filter_page/card_rent.dart';
 import 'package:nha_gia_re/modules/search/widgets/filter_page/card_sort_by.dart';
 import '../search_controller.dart';
 
@@ -61,6 +65,14 @@ class FilterScreen extends StatelessWidget {
                     CardFirst(searchController),
                     if (searchController.radioCategory.selectedValue.value == 1)
                       CardApartment(searchController),
+                    if (searchController.radioCategory.selectedValue.value == 2)
+                      CardHouse(searchController),
+                    if (searchController.radioCategory.selectedValue.value == 3)
+                      CardLand(searchController),
+                    if (searchController.radioCategory.selectedValue.value == 4)
+                      CardOffice(searchController),
+                    if (searchController.radioCategory.selectedValue.value == 5)
+                      CardRent(searchController),
                     CardSortBy(searchController),
                     CardPostedBy(searchController),
                   ],

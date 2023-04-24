@@ -230,7 +230,7 @@ class SearchController extends GetxController {
     values: FilterValues.instance.legalDocuments,
   );
 // Van phong  ================================================
-  RadioService officeType = RadioService(
+  ListCheckService officeType = ListCheckService(
     values: FilterValues.instance.officeType,
   );
   ListCheckService officeDirection = ListCheckService(

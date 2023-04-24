@@ -93,6 +93,7 @@ class CardApartment extends StatelessWidget {
             selected: searchController.apartmentInteriorStatus.selectedValue,
             onChanged: searchController.apartmentInteriorStatus.onChange,
           ),
+          const SizedBox(height: 10),
         ],
       ),
     );
