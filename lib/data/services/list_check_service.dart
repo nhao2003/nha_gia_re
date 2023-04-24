@@ -16,7 +16,14 @@ class ListCheckService {
     checkListItems = convertList(values);
   }
 
-  void reset() {}
+  void reset() {
+    // reset false to all item of checklistItems
+    for (var item in checkListItems) {
+      item["value"].value = false;
+    }
+    // multipleSelected = null
+    multipleSelected.value = [];
+  }
 
   void onChange(int i, bool value) {
     // change value

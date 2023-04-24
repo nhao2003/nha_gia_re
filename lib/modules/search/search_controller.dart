@@ -82,9 +82,7 @@ class SearchController extends GetxController {
 
   void deleteFilter() {
     // reset all
-    radioCategory.reset();
-    radioSortType.reset();
-    radiopostedBy.reset();
+    resetAll();
     changeValuePrice(
         FilterValues.instance.LOWER_PRICE, FilterValues.instance.UPPER_PRICE);
     changeAreaValue(
@@ -128,17 +126,52 @@ class SearchController extends GetxController {
   }
 
 // reset radio ==========================================
-  void resetApartment() {
-    apartmentStatus.reset();
+  void resetAll() {
+    resetApartment();
+    resetHouse();
+    resetLand();
+    resetOffice();
+    resetRent();
   }
 
-  void resetHouse() {}
+  void resetApartment() {
+    apartmentStatus.reset();
+    apartmentTypes.reset();
+    apartmentCharacteristics.reset();
+    apartmentBedroomNumber.reset();
+    apartmentMainDirection.reset();
+    apartmentBalconyDirection.reset();
+    apartmentLegalDocuments.reset();
+    apartmentInteriorStatus.reset();
+  }
 
-  void resetLand() {}
+  void resetHouse() {
+    houseTypes.reset();
+    houseCharacteristics.reset();
+    houseBedroomNumber.reset();
+    houseMainDirection.reset();
+    houseLegalDocuments.reset();
+    houseInteriorStatus.reset();
+  }
 
-  void resetOffice() {}
+  void resetLand() {
+    landTypes.reset();
+    landCharacteristics.reset();
+    landDirection.reset();
+    landLegalDocuments.reset();
+  }
 
-  void resetRent() {}
+  void resetOffice() {
+    officeType.reset();
+    officeDirection.reset();
+    officeLegalDocuments.reset();
+    officeInteriorStatus.reset();
+  }
+
+  void resetRent() {
+    rentInteriorStatus.reset();
+  }
+
 // Can ho chung cu ======================================
   RadioService apartmentStatus = RadioService(
     values: FilterValues.instance.status,
@@ -149,61 +182,61 @@ class SearchController extends GetxController {
   RadioService apartmentCharacteristics = RadioService(
     values: FilterValues.instance.apartmentCharacteristics,
   );
-  RadioService apartmentBedroomNumber = RadioService(
+  ListCheckService apartmentBedroomNumber = ListCheckService(
     values: FilterValues.instance.bedroomNumber,
   );
-  RadioService apartmentMainDirection = RadioService(
+  ListCheckService apartmentMainDirection = ListCheckService(
     values: FilterValues.instance.mainDirection,
   );
-  RadioService apartmentBalconyDirection = RadioService(
+  ListCheckService apartmentBalconyDirection = ListCheckService(
     values: FilterValues.instance.mainDirection,
   );
-  RadioService apartmentLegalDocuments = RadioService(
+  ListCheckService apartmentLegalDocuments = ListCheckService(
     values: FilterValues.instance.legalDocuments,
   );
   RadioService apartmentInteriorStatus = RadioService(
     values: FilterValues.instance.interiorStatus,
   );
 // Nha o ================================================
-  RadioService houseTypes = RadioService(
+  ListCheckService houseTypes = ListCheckService(
     values: FilterValues.instance.residentialTypes,
   );
-  RadioService houseCharacteristics = RadioService(
+  ListCheckService houseCharacteristics = ListCheckService(
     values: FilterValues.instance.houseCharacteristics,
   );
-  RadioService houseBedroomNumber = RadioService(
+  ListCheckService houseBedroomNumber = ListCheckService(
     values: FilterValues.instance.bedroomNumber,
   );
-  RadioService houseMainDirection = RadioService(
+  ListCheckService houseMainDirection = ListCheckService(
     values: FilterValues.instance.mainDirection,
   );
-  RadioService houseLegalDocuments = RadioService(
+  ListCheckService houseLegalDocuments = ListCheckService(
     values: FilterValues.instance.legalDocuments,
   );
   RadioService houseInteriorStatus = RadioService(
     values: FilterValues.instance.interiorStatus,
   );
 // Dat ================================================
-  RadioService landTypes = RadioService(
+  ListCheckService landTypes = ListCheckService(
     values: FilterValues.instance.typeOfLand,
   );
-  RadioService landCharacteristics = RadioService(
+  ListCheckService landCharacteristics = ListCheckService(
     values: FilterValues.instance.houseCharacteristics,
   );
-  RadioService landDirection = RadioService(
+  ListCheckService landDirection = ListCheckService(
     values: FilterValues.instance.mainDirection,
   );
-  RadioService landLegalDocuments = RadioService(
+  ListCheckService landLegalDocuments = ListCheckService(
     values: FilterValues.instance.legalDocuments,
   );
 // Van phong  ================================================
   RadioService officeType = RadioService(
     values: FilterValues.instance.officeType,
   );
-  RadioService officeDirection = RadioService(
+  ListCheckService officeDirection = ListCheckService(
     values: FilterValues.instance.mainDirection,
   );
-  RadioService officeLegalDocuments = RadioService(
+  ListCheckService officeLegalDocuments = ListCheckService(
     values: FilterValues.instance.legalDocuments,
   );
   RadioService officeInteriorStatus = RadioService(

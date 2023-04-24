@@ -54,31 +54,36 @@ class CardApartment extends StatelessWidget {
             onChanged: searchController.apartmentCharacteristics.onChange,
           ),
           const SizedBox(height: 10),
-          CategoryBoxRadio(
+          CategoryBoxCheck(
             title: "Số phòng ngủ",
-            categorys: searchController.apartmentBedroomNumber.values,
-            selected: searchController.apartmentBedroomNumber.selectedValue,
+            categorys: searchController.apartmentBedroomNumber.checkListItems,
+            multipleSelected:
+                searchController.apartmentBedroomNumber.multipleSelected,
             onChanged: searchController.apartmentBedroomNumber.onChange,
           ),
           const SizedBox(height: 10),
-          CategoryBoxRadio(
+          CategoryBoxCheck(
             title: "Hướng cửa chính",
-            categorys: searchController.apartmentMainDirection.values,
-            selected: searchController.apartmentMainDirection.selectedValue,
+            categorys: searchController.apartmentMainDirection.checkListItems,
+            multipleSelected:
+                searchController.apartmentMainDirection.multipleSelected,
             onChanged: searchController.apartmentMainDirection.onChange,
           ),
           const SizedBox(height: 10),
-          CategoryBoxRadio(
+          CategoryBoxCheck(
             title: "Hướng ban công",
-            categorys: searchController.apartmentBalconyDirection.values,
-            selected: searchController.apartmentBalconyDirection.selectedValue,
+            categorys:
+                searchController.apartmentBalconyDirection.checkListItems,
+            multipleSelected:
+                searchController.apartmentBalconyDirection.multipleSelected,
             onChanged: searchController.apartmentBalconyDirection.onChange,
           ),
           const SizedBox(height: 10),
-          CategoryBoxRadio(
+          CategoryBoxCheck(
             title: "Giấy tờ pháp lý",
-            categorys: searchController.apartmentLegalDocuments.values,
-            selected: searchController.apartmentLegalDocuments.selectedValue,
+            categorys: searchController.apartmentLegalDocuments.checkListItems,
+            multipleSelected:
+                searchController.apartmentLegalDocuments.multipleSelected,
             onChanged: searchController.apartmentLegalDocuments.onChange,
           ),
           const SizedBox(height: 10),
