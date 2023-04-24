@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:nha_gia_re/data/services/list_check_service.dart';
 import 'package:nha_gia_re/data/services/radio_service.dart';
 import 'package:nha_gia_re/modules/search/screens/filter_screen.dart';
 
@@ -81,9 +82,9 @@ class SearchController extends GetxController {
 
   void deleteFilter() {
     // reset all
-    radioCategory.selectedValue.value = 0;
-    radioSortType.selectedValue.value = 0;
-    radiopostedBy.selectedValue.value = 0;
+    radioCategory.reset();
+    radioSortType.reset();
+    radiopostedBy.reset();
     changeValuePrice(
         FilterValues.instance.LOWER_PRICE, FilterValues.instance.UPPER_PRICE);
     changeAreaValue(
@@ -126,11 +127,23 @@ class SearchController extends GetxController {
     upperAreaValue.value = upper;
   }
 
+// reset radio ==========================================
+  void resetApartment() {
+    apartmentStatus.reset();
+  }
+
+  void resetHouse() {}
+
+  void resetLand() {}
+
+  void resetOffice() {}
+
+  void resetRent() {}
 // Can ho chung cu ======================================
   RadioService apartmentStatus = RadioService(
     values: FilterValues.instance.status,
   );
-  RadioService apartmentTypes = RadioService(
+  ListCheckService apartmentTypes = ListCheckService(
     values: FilterValues.instance.apartmentTypes,
   );
   RadioService apartmentCharacteristics = RadioService(

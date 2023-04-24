@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
-import 'package:nha_gia_re/modules/search/widgets/filter_page/bottom_sheet_radio.dart';
+import 'bottom_sheet_check_box.dart';
 
-class CategoryBox extends StatelessWidget {
+// ignore: must_be_immutable
+class CategoryBoxCheck extends StatelessWidget {
   String title;
-  List<String> categorys;
-  RxInt selected;
+  List categorys;
+  RxList<String> multipleSelected;
   Function onChanged;
 
-  CategoryBox({
+  CategoryBoxCheck({
     required this.title,
     required this.categorys,
-    required this.selected,
+    required this.multipleSelected,
     required this.onChanged,
     super.key,
   });
@@ -28,13 +29,17 @@ class CategoryBox extends StatelessWidget {
         ),
       ),
       builder: (BuildContext context) {
-        return BottomSheetRadio(
-          categorys: [...categorys],
+        return BottomSheetCheckBox(
+          checkListItems: [...categorys],
           onChanged: onChanged,
-          selected: selected,
         );
       },
     );
+  }
+
+  String getTextSelecteds(List<String> selecteds) {
+    if (selecteds.isEmpty) return "Tất cả";
+    return selecteds.join(", ");
   }
 
   @override
@@ -62,24 +67,30 @@ class CategoryBox extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppTextStyles.roboto14regular
-                      .copyWith(color: AppColors.black),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.only(right: 13.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: AppTextStyles.roboto14regular
+                          .copyWith(color: AppColors.black),
+                    ),
+                    const SizedBox(height: 5),
+                    Obx(
+                      () => Text(
+                        getTextSelecteds(multipleSelected),
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.roboto14regular
+                            .copyWith(color: AppColors.primaryColor),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 5),
-                Obx(
-                  () => Text(
-                    categorys[selected.value],
-                    style: AppTextStyles.roboto14regular
-                        .copyWith(color: AppColors.primaryColor),
-                  ),
-                ),
-              ],
+              ),
             ),
             SizedBox(
               child: Icon(

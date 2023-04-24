@@ -1,8 +1,10 @@
+import 'package:nha_gia_re/modules/search/widgets/filter_page/category_box_check.dart';
+
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/text_styles.dart';
 import '../../search_controller.dart';
 import 'package:flutter/material.dart';
-import 'category_box.dart';
+import 'category_box_radio.dart';
 
 class CardApartment extends StatelessWidget {
   final SearchController searchController;
@@ -31,56 +33,56 @@ class CardApartment extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          CategoryBox(
+          CategoryBoxRadio(
             title: "Tình trạng",
             categorys: searchController.apartmentStatus.values,
             selected: searchController.apartmentStatus.selectedValue,
             onChanged: searchController.apartmentStatus.onChange,
           ),
           const SizedBox(height: 10),
-          CategoryBox(
+          CategoryBoxCheck(
             title: "Loại hình căn hộ",
-            categorys: searchController.apartmentTypes.values,
-            selected: searchController.apartmentTypes.selectedValue,
+            categorys: searchController.apartmentTypes.checkListItems,
+            multipleSelected: searchController.apartmentTypes.multipleSelected,
             onChanged: searchController.apartmentTypes.onChange,
           ),
           const SizedBox(height: 10),
-          CategoryBox(
+          CategoryBoxRadio(
             title: "Đặc điểm căn hộ",
             categorys: searchController.apartmentCharacteristics.values,
             selected: searchController.apartmentCharacteristics.selectedValue,
             onChanged: searchController.apartmentCharacteristics.onChange,
           ),
           const SizedBox(height: 10),
-          CategoryBox(
+          CategoryBoxRadio(
             title: "Số phòng ngủ",
             categorys: searchController.apartmentBedroomNumber.values,
             selected: searchController.apartmentBedroomNumber.selectedValue,
             onChanged: searchController.apartmentBedroomNumber.onChange,
           ),
           const SizedBox(height: 10),
-          CategoryBox(
+          CategoryBoxRadio(
             title: "Hướng cửa chính",
             categorys: searchController.apartmentMainDirection.values,
             selected: searchController.apartmentMainDirection.selectedValue,
             onChanged: searchController.apartmentMainDirection.onChange,
           ),
           const SizedBox(height: 10),
-          CategoryBox(
+          CategoryBoxRadio(
             title: "Hướng ban công",
             categorys: searchController.apartmentBalconyDirection.values,
             selected: searchController.apartmentBalconyDirection.selectedValue,
             onChanged: searchController.apartmentBalconyDirection.onChange,
           ),
           const SizedBox(height: 10),
-          CategoryBox(
+          CategoryBoxRadio(
             title: "Giấy tờ pháp lý",
             categorys: searchController.apartmentLegalDocuments.values,
             selected: searchController.apartmentLegalDocuments.selectedValue,
             onChanged: searchController.apartmentLegalDocuments.onChange,
           ),
           const SizedBox(height: 10),
-          CategoryBox(
+          CategoryBoxRadio(
             title: "Tình trạng nội thất",
             categorys: searchController.apartmentInteriorStatus.values,
             selected: searchController.apartmentInteriorStatus.selectedValue,

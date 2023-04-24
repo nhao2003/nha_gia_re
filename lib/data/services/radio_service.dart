@@ -11,6 +11,10 @@ class RadioService {
 
   RxInt selectedValue = 0.obs;
 
+  void reset() {
+    selectedValue = 0.obs;
+  }
+
   void onChange(int? val) {
     selectedValue.value = val!;
     if (expendedFunc != null) expendedFunc!();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
-import 'package:nha_gia_re/modules/search/widgets/filter_page/category_box.dart';
+import 'package:nha_gia_re/modules/search/widgets/filter_page/category_box_radio.dart';
 import 'package:nha_gia_re/modules/search/widgets/filter_page/range_slider_custom.dart';
 
 import '../../../../core/values/filter_values.dart';
@@ -18,7 +18,7 @@ class CardFirst extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CategoryBox(
+          CategoryBoxRadio(
             title: "Danh mục",
             categorys: searchController.radioCategory.values,
             selected: searchController.radioCategory.selectedValue,

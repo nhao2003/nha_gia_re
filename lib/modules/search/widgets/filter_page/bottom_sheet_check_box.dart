@@ -3,14 +3,12 @@ import 'package:get/get.dart';
 import 'package:nha_gia_re/core/extensions/integer_ex.dart';
 
 // ignore: must_be_immutable
-class BottomSheetRadio extends StatelessWidget {
-  List<String> categorys;
-  RxInt selected;
+class BottomSheetCheckBox extends StatelessWidget {
+  List checkListItems;
   Function onChanged;
 
-  BottomSheetRadio({
-    required this.categorys,
-    required this.selected,
+  BottomSheetCheckBox({
+    required this.checkListItems,
     required this.onChanged,
     super.key,
   });
@@ -21,15 +19,14 @@ class BottomSheetRadio extends StatelessWidget {
       height: 50.hp,
       padding: const EdgeInsets.only(top: 10),
       child: ListView.builder(
-        itemCount: categorys.length,
+        itemCount: checkListItems.length,
         itemBuilder: (_, i) {
           return Obx(
             () => ListTile(
-              title: Text(categorys[i]),
-              trailing: Radio(
-                value: i,
-                groupValue: selected.value,
-                onChanged: (val) => onChanged(val),
+              title: Text(checkListItems[i]["title"]),
+              trailing: Checkbox(
+                onChanged: (value) => onChanged(i, value),
+                value: checkListItems[i]["value"].value,
               ),
             ),
           );
