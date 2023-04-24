@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       } else {
 
                       }
-
+                      Get.offAllNamed(AppRoutes.dashboard);
                     },
                     onLongPress: () async {
                       SupabaseClient client = Supabase.instance.client;

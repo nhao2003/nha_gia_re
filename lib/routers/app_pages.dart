@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
+import 'package:nha_gia_re/modules/dashboard/screens/dashboard_screen.dart';
 import 'package:nha_gia_re/modules/search/screens/search_screen.dart';
 import '../modules/chat/chat_binding.dart';
 import '../modules/chat/screens/chat_screen.dart';
+import '../modules/dashboard/dashboard_binding.dart';
 import '../modules/home/home_binding.dart';
 import '../modules/home/screens/home_screen.dart';
 import '../modules/login/login_binding.dart';
@@ -42,9 +44,11 @@ abstract class AppPages {
       page: () => const MyCustomForm(),
       binding: PostBinding(),
     ),
+    GetPage(name: AppRoutes.dashboard, page: () => DashboardPage(), binding: DashboardBinding()),
     GetPage(
-        name: AppRoutes.personal,
-        page: ()=> const PersonalScreen(),
-        binding: PersonalBinding(), )
+      name: AppRoutes.personal,
+      page: () => const PersonalScreen(),
+      binding: PersonalBinding(),
+    )
   ];
 }

@@ -34,7 +34,7 @@ class HomeScreen extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: _controller.NavToChat,
               icon: Image.asset(Assets.messCircle, width: 24),
               padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
               constraints: const BoxConstraints(),
@@ -95,55 +95,6 @@ class HomeScreen extends StatelessWidget {
             const InforCardList(title: 'Nhà cho thuê', list: []),
           ],
         )),
-        bottomNavigationBar: ConvexAppBar(
-          backgroundColor: AppColors.white,
-          color: AppColors.black,
-          activeColor: AppColors.primaryColor,
-          style: TabStyle.fixedCircle,
-          curveSize: 75,
-          top: -22,
-          height: 55,
-          items: [
-            TabItem(
-              icon: Image.asset(Assets.home),
-              activeIcon:
-                  Image.asset(Assets.home, color: AppColors.primaryColor),
-              title: 'Trang chủ',
-            ),
-            TabItem(
-              icon: Image.asset(Assets.post),
-              activeIcon:
-                  Image.asset(Assets.post, color: AppColors.primaryColor),
-              title: 'Quản lý tin',
-            ),
-            TabItem(
-              icon: CircleAvatar(
-                backgroundColor: AppColors.primaryColor,
-                child: Image.asset(
-                  Assets.edit,
-                  width: 40,
-                ),
-              ),
-            ),
-            TabItem(
-              icon: Image.asset(Assets.bell),
-              activeIcon:
-                  Image.asset(Assets.bell, color: AppColors.primaryColor),
-              title: 'Thông báo',
-            ),
-            TabItem(
-              icon: Image.asset(Assets.person),
-              activeIcon:
-                  Image.asset(Assets.person, color: AppColors.primaryColor),
-              title: 'Tài khoản',
-            ),
-          ],
-          onTap: (index){
-            switch(index){
-              case 0:
-
-            }
-          },
-        ));
+      );
   }
 }
