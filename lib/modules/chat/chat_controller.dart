@@ -16,10 +16,18 @@ class ChatController extends GetxController {
   late final String _myUserId;
   late final List<UserInfo> _newUsers;
   List<Conversation> _conversations = [];
-  StreamSubscription<List<Map<String, dynamic>>>? _rawRoomsSubscription;
+  late final Stream rawRoomsSubscription;
   bool _haveCalledGetRooms = false;
+  final Stream stream = Supabase.instance.client
+      .from('conversations')
+      .stream(primaryKey: ['id'])
+      .eq('user1_id', '8c222079-d67e-4ca6-b18c-639ed3128181')
+      .map((event) => event.map((e) {
+            print(e.toString());
+            return Conversation.fromJson(e);
+          }));
 
-  Future<void> initializeRooms(BuildContext context) async {
+  void initializeRooms() {
     if (_haveCalledGetRooms) {
       return;
     }
@@ -29,17 +37,16 @@ class ChatController extends GetxController {
     final List<String> listUserID = [];
 
     /// Get realtime updates on rooms that the user is in
-    _rawRoomsSubscription = supabase.from('conversations').stream(
+    rawRoomsSubscription = supabase.from('conversations').stream(
       primaryKey: ['conversation_id'],
-    ).listen((conversation) async {
+    ).map((conversation) {
       if (conversation.isEmpty) {
         return;
       }
+      print(conversation);
       _conversations = conversation.map((json) {
         return Conversation.fromJson(json);
       }).toList();
-    }, onError: (error) {
-      print(error);
     });
   }
 
@@ -56,26 +63,26 @@ class ChatController extends GetxController {
         .limit(1)
         .map<Message?>(
           (data) => data.isEmpty ? null : Message.fromJson(data.first),
-    )
+        )
         .listen((message) {
-      // final index = _rooms.indexWhere((room) => room.id == roomId);
-      // _rooms[index] = _rooms[index].copyWith(lastMessage: message);
-      // _rooms.sort((a, b) {
-      //   /// Sort according to the last message
-      //   /// Use the room createdAt when last message is not available
-      //   final aTimeStamp =
-      //   a.lastMessage != null ? a.lastMessage!.createdAt : a.createdAt;
-      //   final bTimeStamp =
-      //   b.lastMessage != null ? b.lastMessage!.createdAt : b.createdAt;
-      //   return bTimeStamp.compareTo(aTimeStamp);
-      // });
-      // if (!isClosed) {
-      //   emit(RoomsLoaded(
-      //     newUsers: _newUsers,
-      //     rooms: _rooms,
-      //   ));
-      // }
-    });
+          // final index = _rooms.indexWhere((room) => room.id == roomId);
+          // _rooms[index] = _rooms[index].copyWith(lastMessage: message);
+          // _rooms.sort((a, b) {
+          //   /// Sort according to the last message
+          //   /// Use the room createdAt when last message is not available
+          //   final aTimeStamp =
+          //   a.lastMessage != null ? a.lastMessage!.createdAt : a.createdAt;
+          //   final bTimeStamp =
+          //   b.lastMessage != null ? b.lastMessage!.createdAt : b.createdAt;
+          //   return bTimeStamp.compareTo(aTimeStamp);
+          // });
+          // if (!isClosed) {
+          //   emit(RoomsLoaded(
+          //     newUsers: _newUsers,
+          //     rooms: _rooms,
+          //   ));
+          // }
+        });
   }
 
   /// Creates or returns an existing roomID of both participants
@@ -86,7 +93,5 @@ class ChatController extends GetxController {
     return data as String;
   }
 
-  Future<void> close() async {
-    _rawRoomsSubscription?.cancel();
-  }
+  Future<void> close() async {}
 }

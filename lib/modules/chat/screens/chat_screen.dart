@@ -20,52 +20,59 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final repo = ChatRepository();
-  late final stream;
-
+  late ChatController _chatController;
   @override
   initState() {
-    // TODO: implement initState
-    super.initState();
+    _chatController = Get.find<ChatController>();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<UserMessage> dummy = const [];
-    final ChatController _controller = Get.find<ChatController>();
     return Scaffold(
       appBar: AppBar(
         actions: [
           IconButton(
-              onPressed: () {
+              onPressed: () async {
                 setState(() {
                   print('Xin chao');
                 });
               },
-              icon: Icon(Icons.refresh))
+              icon: const Icon(Icons.refresh))
         ],
         title: Text(
           AppStrings.chatScreenTitle,
           style: AppTextStyles.roboto20semiBold,
         ),
       ),
-      body: StreamBuilder<dynamic>(
-          stream: stream,
+      body: StreamBuilder(
+          stream: _chatController.stream,
           builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return _emptyChatWidget();
-            } else {
-              final data = List<Map<String, dynamic>>.from(snapshot.data!)
-                  .map((e) => Conversation.fromJson(e))
-                  .toList();
-              return SingleChildScrollView(
-                child: Column(
-                  children:
-                      data.map((e) => UserMessage(conversation: e)).toList(),
-                ),
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
               );
             }
+            if (snapshot.data.length != 0) {
+              print("Screen: ${snapshot.data}");
+              final data = snapshot.data!;
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: List<UserMessage>.from(
+                      data.map((e) => UserMessage(conversation: e)).toList()),
+                ),
+              );
+            } else {
+              print("No data");
+              return _emptyChatWidget();
+            }
           }),
+    );
+  }
+
+  _hasDataWidget() {
+    return Center(
+      child: Text("Has Data"),
     );
   }
 
@@ -109,7 +116,7 @@ class UserMessage extends StatelessWidget {
       splashColor: AppColors.secondary,
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return const OnChattingScreen();
+          return OnChattingScreen(conversation);
         }));
       },
       onLongPress: () {
@@ -142,9 +149,12 @@ class UserMessage extends StatelessWidget {
           ),
         ));
       },
-      child: Padding(
+      child: Container(
+        height: 100,
+        width: double.infinity,
         padding: padding ?? const EdgeInsets.all(10),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const CircleAvatar(
               backgroundImage: AssetImage(Assets.avatar_2),
@@ -157,12 +167,13 @@ class UserMessage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    conversation.chatWithUser.fullName ?? 'Unknown',
+                    conversation.chatWithUser,
                     style: AppTextStyles.roboto16semiBold,
+                    maxLines: 1,
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    conversation.messages.last.text,
+                    conversation.lastMessage ?? "Start the conversation!",
                     style: isRead
                         ? AppTextStyles.roboto14semiBold
                         : AppTextStyles.roboto14regular
@@ -174,9 +185,10 @@ class UserMessage extends StatelessWidget {
             ),
             const SizedBox(height: 5),
             Text(
-              DateFormat('hh:mm').format(conversation.messages.last.sentAt),
+              '2m',
               style:
                   AppTextStyles.roboto14regular.copyWith(color: AppColors.grey),
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),

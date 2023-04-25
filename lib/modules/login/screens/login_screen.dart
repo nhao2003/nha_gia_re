@@ -76,9 +76,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (auth.isUserLoggedIn) {
                         Get.toNamed(AppRoutes.chat);
                       } else {
-
+                        auth.signIn(
+                            email: 'haobi2k3@gmail.com', password: '12345678');
                       }
-
                     },
                     onLongPress: () async {
                       SupabaseClient client = Supabase.instance.client;

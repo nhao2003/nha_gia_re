@@ -4,6 +4,7 @@ import 'package:nha_gia_re/core/extensions/double_ex.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../data/models/message.dart';
 import '../screens/onChattingScreen.dart';
 
 class MessageRow extends StatelessWidget {
@@ -13,20 +14,24 @@ class MessageRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isMe = message.senderID == "user1";
+    print(message.isMine);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Row(
-            mainAxisAlignment:
-                isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+            mainAxisAlignment: message.isMine
+                ? MainAxisAlignment.end
+                : MainAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 decoration: BoxDecoration(
-                  color: isMe ? AppColors.primaryColor : Colors.grey[300],
+                  color: message.isMine
+                      ? AppColors.primaryColor
+                      : Colors.grey[300],
                   borderRadius: BorderRadius.circular(16),
                 ),
                 constraints: BoxConstraints(maxWidth: 75.0.wp),
@@ -35,12 +40,12 @@ class MessageRow extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      message.content,
+                      message.text,
                       style: AppTextStyles.roboto16regular,
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      DateFormat('HH:mm').format(message.time),
+                      DateFormat('HH:mm').format(message.sentAt),
                       style: TextStyle(fontSize: 12, color: AppColors.grey),
                     ),
                   ],
@@ -48,10 +53,15 @@ class MessageRow extends StatelessWidget {
               ),
             ],
           ),
-          if (isMe && isError) Padding(
-            padding: const EdgeInsets.only(top: 3),
-            child: Text("Lỗi khi gửi tin nhắn!", style: AppTextStyles.roboto12regular.copyWith(color: AppColors.red),),
-          )
+          if (message.isMine && isError)
+            Padding(
+              padding: const EdgeInsets.only(top: 3),
+              child: Text(
+                "Lỗi khi gửi tin nhắn!",
+                style: AppTextStyles.roboto12regular
+                    .copyWith(color: AppColors.red),
+              ),
+            )
         ],
       ),
     );
