@@ -20,7 +20,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     super.initState();
-    _delegate = MySearchDelegate(searchController);
+    _delegate = MySearchDelegate();
   }
 
   @override

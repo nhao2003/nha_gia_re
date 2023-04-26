@@ -35,8 +35,15 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    // custom color padding top color
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: AppColors.primaryColor, // status bar color
+      ),
+    );
     return GetMaterialApp(
       title: AppStrings.appName,
+      initialRoute: AppRoutes.home,
       theme: ThemeData(
         primarySwatch: AppColors.customColor,
         primaryColor: AppColors.primaryColor,
@@ -52,7 +59,6 @@ class MyApp extends StatelessWidget {
       translations: LocalizationService(),
       builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.login,
       getPages: AppPages.pages,
       defaultTransition: Transition.cupertino,
     );

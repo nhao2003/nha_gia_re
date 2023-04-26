@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:nha_gia_re/modules/search/screens/filter_screen.dart';
 import 'package:nha_gia_re/modules/search/screens/search_screen.dart';
 import '../modules/chat/chat_binding.dart';
 import '../modules/chat/screens/chat_screen.dart';
@@ -36,15 +37,24 @@ abstract class AppPages {
       page: () => const SearchScreen(),
       binding: SearchBinding(),
     ),
-    GetPage(name: AppRoutes.register, page: () => const RegisterScreen()),
+    GetPage(
+      name: AppRoutes.register,
+      page: () => const RegisterScreen(),
+    ),
     GetPage(
       name: AppRoutes.post,
       page: () => const MyCustomForm(),
       binding: PostBinding(),
     ),
     GetPage(
-        name: AppRoutes.personal,
-        page: ()=> const PersonalScreen(),
-        binding: PersonalBinding(), )
+      name: AppRoutes.personal,
+      page: () => const PersonalScreen(),
+      binding: PersonalBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.filter,
+      page: () => FilterScreen(),
+      binding: SearchBinding(),
+    ),
   ];
 }

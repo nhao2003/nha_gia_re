@@ -1,5 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nha_gia_re/data/services/list_check_service.dart';
+import 'package:nha_gia_re/data/services/radio_service.dart';
+import 'package:nha_gia_re/modules/search/screens/filter_screen.dart';
+import '../../core/values/filter_values.dart';
+import '../home/screens/post_details_screen.dart';
 
 class SearchController extends GetxController {
   /// instance
@@ -24,7 +28,7 @@ class SearchController extends GetxController {
 // data in result screen
 
   /// value in dropdown menu item
-  RxString selectedTypeItem = provinces[0].obs;
+  RxString selectedTypeItem = FilterValues.instance.provinces[0].obs;
 
   /// change new value to selectedTypeItem
   void changeSelectedItem(String newValue) {
@@ -33,7 +37,7 @@ class SearchController extends GetxController {
 
   /// add new query to history
   void addToHistory(String newQuery) {
-    if (newQuery == "") return; // should not be null
+    if (newQuery.trim() == "") return; // should not be null
     // check in history has newQuery, if had => delete and add in the top
     if (checkIsInHistory(newQuery)) deleteHistory(newQuery);
     // add to history
@@ -67,70 +71,187 @@ class SearchController extends GetxController {
     suggestions.value = getSuggestions(query);
   }
 
-  static List<String> provinces = [
-    'Toàn Quốc',
-    'Hà Nội',
-    'Hà Giang',
-    'Cao Bằng',
-    'Bắc Kạn',
-    'Tuyên Quang',
-    'Lào Cai',
-    'Điện Biên',
-    'Lai Châu',
-    'Sơn La',
-    'Yên Bái',
-    'Hòa Bình',
-    'Thái Nguyên',
-    'Lạng Sơn',
-    'Quảng Ninh',
-    'Bắc Giang',
-    'Phú Thọ',
-    'Vĩnh Phúc',
-    'Bắc Ninh',
-    'Hải Dương',
-    'Hải Phòng',
-    'Hưng Yên',
-    'Thái Bình',
-    'Hà Nam',
-    'Nam Định',
-    'Ninh Bình',
-    'Thanh Hóa',
-    'Nghệ An',
-    'Hà Tĩnh',
-    'Quảng Bình',
-    'Quảng Trị',
-    'Thừa Thiên Huế',
-    'Đà Nẵng',
-    'Quảng Nam',
-    'Quảng Ngãi',
-    'Bình Định',
-    'Phú Yên',
-    'Khánh Hòa',
-    'Ninh Thuận',
-    'Bình Thuận',
-    'Kon Tum',
-    'Gia Lai',
-    'Đắk Lắk',
-    'Đắk Nông',
-    'Lâm Đồng',
-    'Bình Phước',
-    'Tây Ninh',
-    'Bình Dương',
-    'Đồng Nai',
-    'Bà Rịa - Vũng Tàu',
-    'Hồ Chí Minh',
-    'Long An',
-    'Tiền Giang',
-    'Bến Tre',
-    'Trà Vinh',
-    'Vĩnh Long',
-    'Đồng Tháp',
-    'An Giang',
-    'Kiên Giang',
-    'Cần Thơ',
-    'Hậu Giang',
-    'Sóc Trăng',
-    'Bạc Liêu',
-    'Cà Mau'
-  ];
+  /// navigator to filter screen
+  void navigateToFilterScreen() {
+    Get.to(() => FilterScreen());
+  }
+
+  void popScreen() {
+    Get.back();
+  }
+
+  void navigateToDetailSceen(String title) {
+    Get.to(() => PostDetailsScreen(title: title));
+  }
+
+  void deleteFilter() {
+    // reset all
+    radioCategory.reset();
+    radioSortType.reset();
+    radiopostedBy.reset();
+
+    resetAllCardsOfCategory();
+    changeValuePrice(
+        FilterValues.instance.LOWER_PRICE, FilterValues.instance.UPPER_PRICE);
+    changeAreaValue(
+        FilterValues.instance.LOWER_AREA, FilterValues.instance.UPPER_AREA);
+  }
+
+// Category type ==================================
+  RadioService radioCategory = RadioService(
+    values: FilterValues.instance.categorys,
+    expendedFunc: () => Get.back(),
+  );
+
+// sort card ======================================
+  RadioService radioSortType = RadioService(
+    values: FilterValues.instance.sortTypes,
+  );
+
+// posted card ======================================
+  RadioService radiopostedBy = RadioService(
+    values: FilterValues.instance.postedBy,
+  );
+// Slider ranges ==================================
+  // Price range
+
+  RxDouble lowerPriceValue = FilterValues.instance.LOWER_PRICE.obs;
+  RxDouble upperPriceValue = FilterValues.instance.UPPER_PRICE.obs;
+
+  void changeValuePrice(double lower, double upper) {
+    lowerPriceValue.value = lower;
+    upperPriceValue.value = upper;
+  }
+
+  // Area range
+
+  RxDouble lowerAreaValue = FilterValues.instance.LOWER_AREA.obs;
+  RxDouble upperAreaValue = FilterValues.instance.UPPER_AREA.obs;
+
+  void changeAreaValue(double lower, double upper) {
+    lowerAreaValue.value = lower;
+    upperAreaValue.value = upper;
+  }
+
+// reset radio ==========================================
+  void resetAllCardsOfCategory() {
+    resetApartment();
+    resetHouse();
+    resetLand();
+    resetOffice();
+    resetRent();
+  }
+
+  void resetApartment() {
+    apartmentStatus.reset();
+    apartmentTypes.reset();
+    apartmentCharacteristics.reset();
+    apartmentBedroomNumber.reset();
+    apartmentMainDirection.reset();
+    apartmentBalconyDirection.reset();
+    apartmentLegalDocuments.reset();
+    apartmentInteriorStatus.reset();
+  }
+
+  void resetHouse() {
+    houseTypes.reset();
+    houseCharacteristics.reset();
+    houseBedroomNumber.reset();
+    houseMainDirection.reset();
+    houseLegalDocuments.reset();
+    houseInteriorStatus.reset();
+  }
+
+  void resetLand() {
+    landTypes.reset();
+    landCharacteristics.reset();
+    landDirection.reset();
+    landLegalDocuments.reset();
+  }
+
+  void resetOffice() {
+    officeType.reset();
+    officeDirection.reset();
+    officeLegalDocuments.reset();
+    officeInteriorStatus.reset();
+  }
+
+  void resetRent() {
+    rentInteriorStatus.reset();
+  }
+
+// Can ho chung cu ======================================
+  RadioService apartmentStatus = RadioService(
+    values: FilterValues.instance.status,
+  );
+  ListCheckService apartmentTypes = ListCheckService(
+    values: FilterValues.instance.apartmentTypes,
+  );
+  RadioService apartmentCharacteristics = RadioService(
+    values: FilterValues.instance.apartmentCharacteristics,
+  );
+  ListCheckService apartmentBedroomNumber = ListCheckService(
+    values: FilterValues.instance.bedroomNumber,
+  );
+  ListCheckService apartmentMainDirection = ListCheckService(
+    values: FilterValues.instance.mainDirection,
+  );
+  ListCheckService apartmentBalconyDirection = ListCheckService(
+    values: FilterValues.instance.mainDirection,
+  );
+  ListCheckService apartmentLegalDocuments = ListCheckService(
+    values: FilterValues.instance.legalDocuments,
+  );
+  RadioService apartmentInteriorStatus = RadioService(
+    values: FilterValues.instance.interiorStatus,
+  );
+// Nha o ================================================
+  ListCheckService houseTypes = ListCheckService(
+    values: FilterValues.instance.residentialTypes,
+  );
+  ListCheckService houseCharacteristics = ListCheckService(
+    values: FilterValues.instance.houseCharacteristics,
+  );
+  ListCheckService houseBedroomNumber = ListCheckService(
+    values: FilterValues.instance.bedroomNumber,
+  );
+  ListCheckService houseMainDirection = ListCheckService(
+    values: FilterValues.instance.mainDirection,
+  );
+  ListCheckService houseLegalDocuments = ListCheckService(
+    values: FilterValues.instance.legalDocuments,
+  );
+  RadioService houseInteriorStatus = RadioService(
+    values: FilterValues.instance.interiorStatus,
+  );
+// Dat ================================================
+  ListCheckService landTypes = ListCheckService(
+    values: FilterValues.instance.typeOfLand,
+  );
+  ListCheckService landCharacteristics = ListCheckService(
+    values: FilterValues.instance.houseCharacteristics,
+  );
+  ListCheckService landDirection = ListCheckService(
+    values: FilterValues.instance.mainDirection,
+  );
+  ListCheckService landLegalDocuments = ListCheckService(
+    values: FilterValues.instance.legalDocuments,
+  );
+// Van phong  ================================================
+  ListCheckService officeType = ListCheckService(
+    values: FilterValues.instance.officeType,
+  );
+  ListCheckService officeDirection = ListCheckService(
+    values: FilterValues.instance.mainDirection,
+  );
+  ListCheckService officeLegalDocuments = ListCheckService(
+    values: FilterValues.instance.legalDocuments,
+  );
+  RadioService officeInteriorStatus = RadioService(
+    values: FilterValues.instance.interiorStatus,
+  );
+// Phong tro  ================================================
+  RadioService rentInteriorStatus = RadioService(
+    values: FilterValues.instance.interiorStatus,
+  );
 }

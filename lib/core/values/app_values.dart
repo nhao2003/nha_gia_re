@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 import 'app_strings.dart';
 
 class AppValue {
@@ -6,7 +8,7 @@ class AppValue {
   static DateTime maxDateTime = DateTime.utc(275760, 09, 13);
 }
 
-class FormatValue {
+class FormatDate {
   static const fullDateFormat = 'dd MMMM, yyyy';
   static const monthReducedDateFormat = 'dd MMM, yyyy';
   static const numbericDateFormat = 'dd/MM/yyyy';
@@ -17,4 +19,8 @@ class FormatValue {
   static const dayInMonthFormat = 'dd/MM';
   static const yearFormat = 'yyyy';
   static const monthNDayFormat = 'MMMM, yyyy, EEEE';
+}
+
+class FormatNum {
+  static var formatter = NumberFormat('#,###');
 }

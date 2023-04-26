@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
+
+import '../../../../core/values/app_values.dart';
 
 class ItemProduct extends StatelessWidget {
   String urlImage;
   String title;
-  String size;
-  String money;
-  String timeCreated;
+  int size;
+  int money;
+  DateTime timeCreated;
   String location;
   bool isFavourited;
+  Function onTap;
 
   ItemProduct({
     super.key,
@@ -20,18 +24,24 @@ class ItemProduct extends StatelessWidget {
     required this.timeCreated,
     required this.location,
     required this.isFavourited,
+    required this.onTap,
   });
 
   double sizeImage = 100;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Stack(
-          children: [
-            Row(
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      margin: const EdgeInsets.only(bottom: 8),
+      color: AppColors.white,
+      child: Stack(
+        children: [
+          InkWell(
+            onTap: () {
+              onTap(title);
+            },
+            child: Row(
               children: [
                 // image
                 SizedBox(
@@ -42,6 +52,24 @@ class ItemProduct extends StatelessWidget {
                     child: Image.network(
                       urlImage,
                       fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          "assets/images/default_image.png",
+                          fit: BoxFit.cover,
+                        );
+                      },
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -59,14 +87,14 @@ class ItemProduct extends StatelessWidget {
                       const SizedBox(height: 5),
                       // size
                       Text(
-                        size,
+                        "${FormatNum.formatter.format(size)} m2",
                         style: AppTextStyles.roboto12regular
                             .copyWith(color: AppColors.grey),
                       ),
                       const SizedBox(height: 5),
                       // money
                       Text(
-                        money,
+                        FormatNum.formatter.format(money),
                         style: AppTextStyles.roboto14semiBold
                             .copyWith(color: AppColors.red),
                       ),
@@ -75,7 +103,8 @@ class ItemProduct extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            timeCreated,
+                            DateFormat(FormatDate.numbericDateFormat)
+                                .format(timeCreated),
                             style: AppTextStyles.roboto11regular
                                 .copyWith(color: AppColors.grey),
                           ),
@@ -98,22 +127,22 @@ class ItemProduct extends StatelessWidget {
                 ),
               ],
             ),
+          ),
 
-            // heart
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: SizedBox(
-                child: isFavourited
-                    ? Icon(
-                        Icons.favorite_sharp,
-                        color: AppColors.red,
-                      )
-                    : const Icon(Icons.favorite_border_rounded),
-              ),
+          // heart
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: SizedBox(
+              child: isFavourited
+                  ? Icon(
+                      Icons.favorite_sharp,
+                      color: AppColors.red,
+                    )
+                  : const Icon(Icons.favorite_border_rounded),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

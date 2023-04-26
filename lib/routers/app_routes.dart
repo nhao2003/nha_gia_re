@@ -5,6 +5,7 @@ abstract class AppRoutes {
   static const login = '/login';
   // search
   static const search = '/search';
+  static const filter = '/search/filter';
 
   static const post = '/post';
 
