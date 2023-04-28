@@ -250,10 +250,9 @@ enum OrderBy {
   priceDesc,
   createdAtAsc,
   createdAtDesc;
+
   String get filterString =>
-      (this == priceAsc || this == priceDesc)
-          ? 'price'
-          : 'posted_date';
+      (this == priceAsc || this == priceDesc) ? 'price' : 'posted_date';
 
   bool get isAsc => this == priceAsc || this == createdAtAsc;
 }
@@ -261,6 +260,4 @@ enum OrderBy {
 enum PostedBy {
   proSeller,
   individual;
-
-
 }

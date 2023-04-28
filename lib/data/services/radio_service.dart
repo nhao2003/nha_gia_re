@@ -19,4 +19,8 @@ class RadioService {
     selectedValue.value = val!;
     if (expendedFunc != null) expendedFunc!();
   }
+
+  bool isEqualValue(int index) {
+    return selectedValue.value == index;
+  }
 }

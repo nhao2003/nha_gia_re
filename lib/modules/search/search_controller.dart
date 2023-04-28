@@ -3,6 +3,8 @@ import 'package:nha_gia_re/data/services/list_check_service.dart';
 import 'package:nha_gia_re/data/services/radio_service.dart';
 import 'package:nha_gia_re/modules/search/screens/filter_screen.dart';
 import '../../core/values/filter_values.dart';
+import '../../data/models/properties/post.dart';
+import '../../data/repositories/post_repository.dart';
 import '../home/screens/post_details_screen.dart';
 
 class SearchController extends GetxController {
@@ -10,6 +12,13 @@ class SearchController extends GetxController {
   static SearchController get i => Get.find();
 
 // data in search screen
+  /// query of search bar
+  String _query = "";
+
+  void changeQuery(String newQuery) {
+    _query = newQuery;
+  }
+
   /// list dummy data
   final List<String> dummydata = ["nha 3 tang", "nha lau", "nha tro"];
 
@@ -95,6 +104,49 @@ class SearchController extends GetxController {
         FilterValues.instance.LOWER_PRICE, FilterValues.instance.UPPER_PRICE);
     changeAreaValue(
         FilterValues.instance.LOWER_AREA, FilterValues.instance.UPPER_AREA);
+  }
+
+  // filter function ===============================
+  /// this function use to filter post in search
+  PostRepository repository = PostRepository();
+  int indexStartPost = 0;
+  int rangeGetPosts = 10;
+
+  void applyFilter() async {
+    final List<Post> datas = await repository.getAllPosts(
+        textSearch: _query,
+        orderBy: getOrderBy(),
+        from: indexStartPost,
+        to: indexStartPost + rangeGetPosts,
+        minPrice: lowerPriceValue.value.toInt(),
+        maxPrice: upperPriceValue.value.toInt(),
+        minArea: lowerAreaValue.value.toInt(),
+        maxArea: upperAreaValue.value.toInt(),
+        postedBy: getPostBy());
+    print(datas.length);
+    print(datas.map((e) => e.title).toList().toString());
+    // pop screen when done
+    popScreen();
+  }
+
+  OrderBy getOrderBy() {
+    if (radioSortType.isEqualValue(0)) {
+      // Tin mới trước
+      return OrderBy.createdAtAsc;
+    } else {
+      // Giá thấp trước
+      return OrderBy.priceAsc;
+    }
+  }
+
+  PostedBy getPostBy() {
+    if (radiopostedBy.isEqualValue(0)) {
+      // ca nhan
+      return PostedBy.individual;
+    } else {
+      // moi gioi
+      return PostedBy.proSeller;
+    }
   }
 
 // Category type ==================================
