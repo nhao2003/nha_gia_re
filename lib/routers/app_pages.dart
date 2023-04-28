@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
 import 'package:nha_gia_re/modules/search/screens/filter_screen.dart';
+import 'package:nha_gia_re/modules/chat/chat_binding.dart';
+import 'package:nha_gia_re/modules/chat/screens/chat_screen.dart';
 import 'package:nha_gia_re/modules/search/screens/search_screen.dart';
-import '../modules/chat/chat_binding.dart';
-import '../modules/chat/screens/chat_screen.dart';
+import '../modules/conversations/conversation_binding.dart';
+import '../modules/conversations/screens/conversation_screen.dart';
 import '../modules/home/home_binding.dart';
 import '../modules/home/screens/home_screen.dart';
 import '../modules/login/login_binding.dart';
@@ -28,8 +30,13 @@ abstract class AppPages {
       binding: LoginBinding(),
     ),
     GetPage(
+      name: AppRoutes.conversation,
+      page: () => const ConversationScreen(),
+      binding: ConversationBinding(),
+    ),
+    GetPage(
       name: AppRoutes.chat,
-      page: () => const ChatScreen(),
+      page: () => ChatScreen(),
       binding: ChatBinding(),
     ),
     GetPage(
@@ -56,5 +63,9 @@ abstract class AppPages {
       page: () => FilterScreen(),
       binding: SearchBinding(),
     ),
+      name: AppRoutes.personal,
+      page: () => const PersonalScreen(),
+      binding: PersonalBinding(),
+    )
   ];
 }

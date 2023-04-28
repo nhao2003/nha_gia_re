@@ -153,27 +153,48 @@ CREATE OR REPLACE TRIGGER unfollow_trigger
     FOR EACH ROW
 EXECUTE FUNCTION handle_unfollow();
 
-
-CREATE TABLE conservations
+CREATE TABLE conversations
 (
     id       uuid not null primary key default uuid_generate_v4(),
     user1_id uuid NOT NULL,
     user2_id uuid NOT NULL,
+    last_message TEXT,
+    last_message_sent_at TIMESTAMP NOT NULL  DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
     CHECK (user1_id != user2_id),
     FOREIGN KEY (user1_id) REFERENCES public.user_info (uid) ON DELETE CASCADE,
     FOREIGN KEY (user2_id) REFERENCES public.user_info (uid) ON DELETE CASCADE
 );
-alter publication supabase_realtime add table public.conservations;
+
+alter publication supabase_realtime add table public.conversations;
 CREATE TABLE messages
 (
     id        uuid      not null primary key default uuid_generate_v4(),
-    conservation_id uuid references public.rooms(id) on delete cascade not null;
+    conversation_id uuid references public.conversations(id) on delete cascade not null,
     sender_id uuid      NOT NULL,
     message   TEXT      NOT NULL,
-    sent_at   TIMESTAMP NOT NULL             DEFAULT NOW(),
+    sent_at   TIMESTAMP NOT NULL  DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
     FOREIGN KEY (sender_id) REFERENCES public.user_info (uid) ON DELETE CASCADE
 );
 alter publication supabase_realtime add table public.messages;
+
+CREATE OR REPLACE FUNCTION update_last_message()
+  RETURNS TRIGGER AS $$
+BEGIN
+    set timezone = 'Asia/Ho_Chi_Minh';
+  UPDATE conversations
+  SET last_message = NEW.message,
+  last_message_sent_at = NEW.sent_at
+  WHERE id = NEW.conversation_id;
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_conversation_last_message
+AFTER INSERT ON messages
+FOR EACH ROW
+EXECUTE FUNCTION update_last_message();
+
 
 CREATE OR REPLACE FUNCTION get_or_create_conservation(user_info_id uuid)
   RETURNS uuid AS
@@ -199,6 +220,25 @@ END;
 $$
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION get_or_create_conversation(
+    user_info_id uuid
+) RETURNS conversations AS $$
+DECLARE
+    conversation conversations;
+BEGIN
+    SELECT * INTO conversation FROM conversations
+     WHERE (user1_id = auth.uid() and user2_id = user_info_id) OR (user2_id = auth.uid() and user1_id = user_info_id)
+    LIMIT 1;
+
+    IF conversation IS NULL THEN
+        INSERT INTO conversations (user1_id, user2_id, last_message_sent_at)
+        VALUES (auth.uid(), user_info_id, timezone('Asia/Ho_Chi_Minh', now()))
+        RETURNING * INTO conversation;
+    END IF;
+
+    RETURN conversation;
+END;
+$$ LANGUAGE plpgsql;
 
 
 ALTER publication supabase_realtime add table public.messages;
