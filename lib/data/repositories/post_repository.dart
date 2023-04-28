@@ -1,3 +1,4 @@
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 import 'package:nha_gia_re/data/models/conversation.dart';
 import 'package:nha_gia_re/data/providers/remote/request/post_request.dart';
@@ -76,11 +77,22 @@ class PostRepository extends BaseRepository {
     }
   }
 
-  Future<List<Post>> getAllPosts({int? limit}) async {
+  Future<List<Post>> getAllPosts({
+    required String textSearch,
+    required OrderBy orderBy,
+    required int from,
+    required int to,
+    required int minPrice,
+    required int maxPrice,
+    required int minArea,
+    required int maxArea,
+    required PostedBy postedBy,
+  }) async {
+    throwIf(textSearch.trim().isEmpty, Exception("Text Search is empty"));
     final List<Map<String, dynamic>> response;
-    response = await remoteDataSourceImpl.getAllPosts(limit: limit);
+    response = await remoteDataSourceImpl.getAllPosts(
+        textSearch,
+        orderBy, from, to, minPrice, maxPrice, minArea, maxArea, postedBy);
     return response.map((e) => Post.fromJson(e)).toList();
   }
-
-
 }

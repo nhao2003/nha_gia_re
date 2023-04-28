@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/modules/search/widgets/result_page/dropdownbutton_cities.dart';
 import 'package:nha_gia_re/modules/search/widgets/result_page/tab_result.dart';
 
+import '../search_controller.dart';
+
 class ResultPage extends StatelessWidget {
-  const ResultPage({super.key});
+  ResultPage({super.key});
+  final SearchController searchController = Get.find<SearchController>();
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +43,7 @@ class ResultPage extends StatelessWidget {
               OutlinedButton.icon(
                 onPressed: () {
                   // filter here
+                  searchController.navigateToFilterScreen();
                 },
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.all(8),

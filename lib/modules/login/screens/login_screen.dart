@@ -10,7 +10,7 @@ import 'package:nha_gia_re/data/providers/remote/request/post_request.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/data/repositories/chat_repository.dart';
 import 'package:nha_gia_re/data/repositories/post_repository.dart';
-import 'package:nha_gia_re/modules/chat/screens/onChattingScreen.dart';
+import 'package:nha_gia_re/modules/chat/screens/chat_screen.dart';
 import 'package:nha_gia_re/modules/login/screens/register_screen.dart';
 import 'package:nha_gia_re/routers/app_pages.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';

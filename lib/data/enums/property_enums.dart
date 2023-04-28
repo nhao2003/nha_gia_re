@@ -244,3 +244,20 @@ enum FurnitureStatus {
     }
   }
 }
+
+enum OrderBy {
+  priceAsc,
+  priceDesc,
+  createdAtAsc,
+  createdAtDesc;
+
+  String get filterString =>
+      (this == priceAsc || this == priceDesc) ? 'price' : 'posted_date';
+
+  bool get isAsc => this == priceAsc || this == createdAtAsc;
+}
+
+enum PostedBy {
+  proSeller,
+  individual;
+}
