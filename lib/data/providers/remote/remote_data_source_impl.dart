@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:nha_gia_re/data/enums/property_enums.dart';
 import 'package:nha_gia_re/data/models/message.dart';
 import 'package:nha_gia_re/data/providers/remote/remote_data_source.dart';
@@ -251,7 +252,6 @@ class RemoteDataSourceImpl extends RemoteDataSource {
       return List<Map<String, dynamic>>.from(data);
     } catch (e) {
       print(e.toString());
-      return [];
       rethrow;
     }
   }
