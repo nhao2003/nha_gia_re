@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:nha_gia_re/data/enums/property_enums.dart';
+import 'package:nha_gia_re/data/models/message.dart';
 import 'package:nha_gia_re/data/providers/remote/remote_data_source.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -246,15 +249,16 @@ class RemoteDataSourceImpl extends RemoteDataSource {
     return List<Map<String, dynamic>>.from(response).first;
   }
 
-
   @override
   Stream<List<Map<String, dynamic>>> getAllConversation() async* {
     String uid = supabaseClient.auth.currentUser!.id;
-    final res = supabaseClient.from('conservations')
+    final res = supabaseClient
+        .from('conservations')
         .select(
-    '*, user1_info: user_info!conservations_user1_id_fkey(*), user2_info: user_info!conservations_user2_id_fkey(*), messages: messages(*)')
-        .or('user1_id.eq.$uid, user2_id.eq.$uid').asStream();
-    await for(var x in res){
+            '*, user1_info: user_info!conservations_user1_id_fkey(*), user2_info: user_info!conservations_user2_id_fkey(*), messages: messages(*)')
+        .or('user1_id.eq.$uid, user2_id.eq.$uid')
+        .asStream();
+    await for (var x in res) {
       yield List<Map<String, dynamic>>.from(x).toList();
     }
   }
@@ -262,5 +266,24 @@ class RemoteDataSourceImpl extends RemoteDataSource {
   @override
   Future sendMessage(Map<String, dynamic> data) async {
     await supabaseClient.from('messages').insert(data);
+  }
+
+  @override
+  Stream<List<Message>> getMessages(String conversationId) {
+    return supabaseClient
+        .from('messages')
+        .stream(primaryKey: ['id'])
+        .order('sent_at')
+        .eq('conversation_id', conversationId)
+        .map((event) => event.map((e) => Message.fromJson(e)).toList());
+  }
+
+  /// Creates or returns an existing roomID of both participants
+  @override
+  Future<Map<String, dynamic>> getOrCreateConversation(
+      String otherUserId) async {
+    final data = await supabaseClient.rpc('get_or_create_conversation',
+        params: {'user_info_id': otherUserId});
+    return data;
   }
 }

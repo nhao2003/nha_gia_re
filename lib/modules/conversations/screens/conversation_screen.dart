@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nha_gia_re/core/extensions/date_ex.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/values/assets_image.dart';
@@ -23,6 +24,12 @@ class _ConversationScreenState extends State<ConversationScreen> {
   initState() {
     _chatController = Get.find<ConversationController>();
     _chatController.initializeConversations();
+  }
+
+  @override
+  void dispose() {
+    _chatController.close();
+    super.dispose();
   }
 
   @override
@@ -51,7 +58,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
                 child: CircularProgressIndicator(),
               );
             }
-            print("Screen: ${snapshot.data}");
             if (snapshot.hasData && snapshot.data!.isNotEmpty) {
               final List<Conversation> data = snapshot.data!;
               return SingleChildScrollView(
@@ -68,7 +74,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                 userInfo: snapshot.data!,
                               );
                             } else {
-                              return const CircularProgressIndicator();
+                              return const Center(
+                                  child: CircularProgressIndicator());
                             }
                           }))
                       .toList()),
@@ -202,7 +209,7 @@ class UserMessage extends StatelessWidget {
             ),
             const SizedBox(height: 5),
             Text(
-              conversation.lastMessageSentAt.toString(),
+              conversation.lastMessageSentAt.getTimeAgo(),
               style:
                   AppTextStyles.roboto14regular.copyWith(color: AppColors.grey),
               overflow: TextOverflow.ellipsis,

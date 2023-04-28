@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:nha_gia_re/data/enums/property_enums.dart';
+import 'package:nha_gia_re/data/models/message.dart';
 import 'package:supabase/supabase.dart';
 
 import '../../models/user_info.dart';
@@ -19,15 +22,25 @@ abstract class RemoteDataSource {
   Future<Map<String, dynamic>> postMotel(Map<String, dynamic> data);
   Future<Map<String, dynamic>> postLand(Map<String, dynamic> data);
 
-  Future<Map<String, dynamic> > editPostApartment(String postId, Map<String, dynamic> data);
-  Future<Map<String, dynamic> > editPostHouse(String postId, Map<String, dynamic> data);
-  Future<Map<String, dynamic> > editPostOffice(String postId, Map<String, dynamic> data);
-  Future<Map<String, dynamic>> editPostMotel(String postId, Map<String, dynamic> data);
-  Future<Map<String, dynamic>> editPostLand(String postId, Map<String, dynamic> data);
+  Future<Map<String, dynamic>> editPostApartment(
+      String postId, Map<String, dynamic> data);
+  Future<Map<String, dynamic>> editPostHouse(
+      String postId, Map<String, dynamic> data);
+  Future<Map<String, dynamic>> editPostOffice(
+      String postId, Map<String, dynamic> data);
+  Future<Map<String, dynamic>> editPostMotel(
+      String postId, Map<String, dynamic> data);
+  Future<Map<String, dynamic>> editPostLand(
+      String postId, Map<String, dynamic> data);
   Future<List<Map<String, dynamic>>> getAllPosts({int? limit});
-  Future<Map<String, dynamic>> getPostDetails(String postId, PropertyType propertyType);
+  Future<Map<String, dynamic>> getPostDetails(
+      String postId, PropertyType propertyType);
 
   Future<void> deletedPost(String id);
 
+  Stream<List<Message>> getMessages(String conversationId);
   Future sendMessage(Map<String, dynamic> data);
+
+  /// Creates or returns an existing roomID of both participants
+  Future<Map<String, dynamic>> getOrCreateConversation(String otherUserId);
 }

@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/models/conversation.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
+import 'package:nha_gia_re/data/providers/remote/request/messsage_request.dart';
 import 'package:nha_gia_re/data/repositories/chat_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -12,86 +14,58 @@ import '../../data/models/message.dart';
 class ChatController extends GetxController {
   final repo = ChatRepository();
   final supabase = Supabase.instance.client;
-  final Map<String, StreamSubscription<Message?>> _messageSubscriptions = {};
-  late final String _myUserId;
-  late final List<UserInfo> _newUsers;
-  List<Conversation> _conversations = [];
-  late final Stream rawRoomsSubscription;
-  bool _haveCalledGetRooms = false;
-  final Stream stream = Supabase.instance.client
-      .from('conversations')
-      .stream(primaryKey: ['id'])
-      .eq('user1_id', '8c222079-d67e-4ca6-b18c-639ed3128181')
-      .map((event) => event.map((e) {
-            print(e.toString());
-            return Conversation.fromJson(e);
-          }));
+  late StreamSubscription<List<Message>> streamSubscription;
+  StreamController<List<Message>> _controller = StreamController();
 
-  void initializeRooms() {
-    if (_haveCalledGetRooms) {
-      return;
-    }
-    _haveCalledGetRooms = true;
+  Stream<List<Message>> get stream => _controller.stream;
+  late Conversation conversation;
+  TextEditingController textEditingController = TextEditingController();
+  final StreamController<bool> _allowSendingMessageController =
+      StreamController();
 
-    _myUserId = supabase.auth.currentUser!.id;
-    final List<String> listUserID = [];
-
-    /// Get realtime updates on rooms that the user is in
-    rawRoomsSubscription = supabase.from('conversations').stream(
-      primaryKey: ['conversation_id'],
-    ).map((conversation) {
-      if (conversation.isEmpty) {
-        return;
+  Stream<bool> get isAllowSendMessage => _allowSendingMessageController.stream;
+  final ChatRepository _chatRepository = ChatRepository();
+  Future<void> initializeMessages(dynamic arg) async {
+    if (arg is Conversation) {
+      conversation = arg;
+    } else if (arg is UserInfo) {
+      try {
+        conversation = await repo.getOrCreateConversation(arg.uid);
+        print('Goto chat by userInfo');
+      } catch (e) {
+        print(e.toString());
+        rethrow;
       }
-      print(conversation);
-      _conversations = conversation.map((json) {
-        return Conversation.fromJson(json);
-      }).toList();
+    } else {
+      throw Exception("Invalid arg. Arg is UserInfo or Conversation");
+    }
+    streamSubscription =
+        _chatRepository.getMessages(conversation.id).listen((event) {
+      _controller.sink.add(event);
     });
   }
 
-  // Setup listeners to listen to the most recent message in each room
-  void _getNewestMessage({
-    required BuildContext context,
-    required String roomId,
-  }) {
-    _messageSubscriptions[roomId] = supabase
-        .from('messages')
-        .stream(primaryKey: ['id'])
-        .eq('room_id', roomId)
-        .order('created_at')
-        .limit(1)
-        .map<Message?>(
-          (data) => data.isEmpty ? null : Message.fromJson(data.first),
-        )
-        .listen((message) {
-          // final index = _rooms.indexWhere((room) => room.id == roomId);
-          // _rooms[index] = _rooms[index].copyWith(lastMessage: message);
-          // _rooms.sort((a, b) {
-          //   /// Sort according to the last message
-          //   /// Use the room createdAt when last message is not available
-          //   final aTimeStamp =
-          //   a.lastMessage != null ? a.lastMessage!.createdAt : a.createdAt;
-          //   final bTimeStamp =
-          //   b.lastMessage != null ? b.lastMessage!.createdAt : b.createdAt;
-          //   return bTimeStamp.compareTo(aTimeStamp);
-          // });
-          // if (!isClosed) {
-          //   emit(RoomsLoaded(
-          //     newUsers: _newUsers,
-          //     rooms: _rooms,
-          //   ));
-          // }
-        });
+  Future<void> sendMessage() async {
+    if (textEditingController.text.trim().isNotEmpty) {
+      try {
+        _allowSendingMessageController.sink.add(false);
+        final txt = textEditingController.text;
+        textEditingController.clear();
+        await _chatRepository.sendMessage(MessageRequest(
+            conservationId: conversation.id, content: txt.trim()));
+      } catch (e) {
+        print(e.toString());
+        Get.snackbar(
+          "Lỗi",
+          "Đã xảy ra lỗi khi gửi tin nhắn. Vui lòng thử lại",
+        );
+      } finally {
+        _allowSendingMessageController.sink.add(true);
+      }
+    }
   }
 
-  /// Creates or returns an existing roomID of both participants
-  Future<String> createRoom(String otherUserId) async {
-    final data = await supabase
-        .rpc('create_new_room', params: {'other_user_id': otherUserId});
-    //emit(RoomsLoaded(rooms: _rooms, newUsers: _newUsers));
-    return data as String;
+  Future close() async {
+    streamSubscription.cancel();
   }
-
-  Future<void> close() async {}
 }
