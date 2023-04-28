@@ -74,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () async {
                       final auth = AuthRepository();
                       if (auth.isUserLoggedIn) {
-                        Get.toNamed(AppRoutes.conversation);
+                        Get.offAndToNamed(AppRoutes.test);
                       } else {
                         auth.signIn(
                             email: 'haosince2003@gmail.com',

@@ -521,3 +521,7 @@ CREATE TRIGGER unlike_trigger
     ON user_like
     FOR EACH ROW
 EXECUTE FUNCTION handle_unlike();
+
+create function title_description(post) returns text as $$
+select unaccent($1.title) || ' ' || unaccent($1.description);
+$$ language sql immutable;

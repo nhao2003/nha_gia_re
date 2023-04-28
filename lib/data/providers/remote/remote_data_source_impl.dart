@@ -206,17 +206,52 @@ class RemoteDataSourceImpl extends RemoteDataSource {
     }
   }
 
-  @override
-  Future<List<Map<String, dynamic>>> getAllPosts({int? limit}) async {
+  String _noAccentVietnamese(String s) {
+    s = s.replaceAll(RegExp(r'[àáạảãâầấậẩẫăằắặẳẵ]'), 'a');
+    s = s.replaceAll(RegExp(r'[ÀÁẠẢÃĂẰẮẶẲẴÂẦẤẬẨẪ]'), 'A');
+    s = s.replaceAll(RegExp(r'[èéẹẻẽêềếệểễ]'), 'e');
+    s = s.replaceAll(RegExp(r'[ÈÉẸẺẼÊỀẾỆỂỄ]'), 'E');
+    s = s.replaceAll(RegExp(r'[òóọỏõôồốộổỗơờớợởỡ]'), 'o');
+    s = s.replaceAll(RegExp(r'[ÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠ]'), 'O');
+    s = s.replaceAll(RegExp(r'[ìíịỉĩ]'), 'i');
+    s = s.replaceAll(RegExp(r'[ÌÍỊỈĨ]'), 'I');
+    s = s.replaceAll(RegExp(r'[ùúụủũưừứựửữ]'), 'u');
+    s = s.replaceAll(RegExp(r'[ƯỪỨỰỬỮÙÚỤỦŨ]'), 'U');
+    s = s.replaceAll(RegExp(r'[ỳýỵỷỹ]'), 'y');
+    s = s.replaceAll(RegExp(r'[ỲÝỴỶỸ]'), 'Y');
+    s = s.replaceAll(RegExp(r'[Đ]'), 'D');
+    s = s.replaceAll(RegExp(r'[đ]'), 'd');
+    return s;
+  }
+
+  Future<List<Map<String, dynamic>>> getAllPosts(
+      String textSearch,
+      OrderBy orderBy,
+      int from,
+      int to,
+      int minPrice,
+      int maxPrice,
+      int minArea,
+      int maxArea,
+      PostedBy postedBy) async {
     try {
-      if (limit != null) {
-        final response = await supabaseClient.from('post').select();
-        return List<Map<String, dynamic>>.from(response);
-      } else {
-        final response = await supabaseClient.from('post').select();
-        return List<Map<String, dynamic>>.from(response);
-      }
+      textSearch = _noAccentVietnamese(textSearch);
+      final data = await supabaseClient
+          .from('post')
+          .select()
+          .textSearch('title_description', textSearch,
+              type: TextSearchType.plain)
+          .lte('expiry_date', DateTime.now().toIso8601String())
+          .gte('price', minPrice)
+          .lte('price', maxPrice)
+          .gte('price', minPrice)
+          .eq('is_pro_seller', postedBy == PostedBy.proSeller)
+          .order(orderBy.filterString, ascending: orderBy.isAsc)
+          .range(from, to);
+      return List<Map<String, dynamic>>.from(data);
     } catch (e) {
+      print(e.toString());
+      return [];
       rethrow;
     }
   }
