@@ -73,6 +73,9 @@ class MySearchDelegate extends SearchDelegate<String> {
 
   @override
   void showResults(BuildContext context) {
+    /// change query
+    controller.changeQuery(query.trim());
+
     /// add the query to history
     controller.addToHistory(query.trim());
     super.showResults(context);

@@ -89,7 +89,7 @@ class FilterScreen extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     // Apply filter
-                    searchController.popScreen();
+                    searchController.applyFilter();
                   },
                   child: Container(
                     width: double.infinity,

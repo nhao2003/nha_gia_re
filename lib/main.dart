@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
     );
     return GetMaterialApp(
       title: AppStrings.appName,
-      initialRoute: AppRoutes.login,
+      initialRoute: AppRoutes.home,
       theme: ThemeData(
         primarySwatch: AppColors.customColor,
         primaryColor: AppColors.primaryColor,
