@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
       translations: LocalizationService(),
       builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
-      initialRoute: (auth.isUserLoggedIn) ? AppRoutes.home : AppRoutes.login,
+      initialRoute: (auth.isUserLoggedIn) ? AppRoutes.dashboard : AppRoutes.login,
       getPages: AppPages.pages,
       defaultTransition: Transition.cupertino,
     );

@@ -32,7 +32,7 @@ class LoginController extends GetxController {
       {
         isLoading.value = true;
         final res = await auth.signIn(email: loginEmail.text, password: loginPassword.text)
-        .then((value) => Get.toNamed(AppRoutes.home));
+        .then((value) => Get.toNamed(AppRoutes.dashboard));
       }
       on AuthException catch (e)
       {
