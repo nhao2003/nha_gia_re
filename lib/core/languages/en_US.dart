@@ -4,6 +4,8 @@ const Map<String, String> enLanguagePackage = {
   // login
   'Login': 'Login',
   'Forgot password?': 'Forgot password?',
+  'Invalid login credentials': 'Invalid login credentials',
+  'Email not confirmed' : 'Email not confirmed',
   'Register': 'Register',
   'Register now': 'Register now',
   'Enter your password': 'Enter your password',
@@ -21,7 +23,7 @@ const Map<String, String> enLanguagePackage = {
       'Must contain at least one upper case',
   'Must contain at least one lower case':
       'Must contain at least one lower case',
-
+  'A user with this email address has already been registered' : 'A user with this email address has already been registered',
   // home
   'ago': 'ago',
   'year': 'year',

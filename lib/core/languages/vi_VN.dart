@@ -4,6 +4,8 @@ const Map<String, String> viLanguagePackage = {
   // login
   'Login': 'Đăng nhập',
   'Forgot password?': 'Quên mật khẩu',
+  'Invalid login credentials': 'Tài khoản hoặc mật khẩu không chính xác',
+  'Email not confirmed' : 'Chưa xác nhận email',
   'Register': 'Đăng ký',
   'Register now': 'Đăng ký ngay',
   'Enter your password': 'Nhập mật khẩu',
@@ -21,6 +23,8 @@ const Map<String, String> viLanguagePackage = {
       'Mật khẩu phải bao gồm ít nhất 1 ký tự hoa',
   'Must contain at least one lower case':
       'Mật khẩu phải bao gồm ít nhất 1 ký tự thường',
+  'A user with this email address has already been registered' : 'Email này đã được đăng ký.',
+
   // home
   'ago': 'trước',
   'year': 'năm',
