@@ -10,6 +10,8 @@ import 'package:nha_gia_re/modules/home/widgets/carousel_ad.dart';
 import 'package:nha_gia_re/modules/home/widgets/image_button.dart';
 import 'package:nha_gia_re/routers/app_pages.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
+import 'package:supabase/supabase.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../search/widgets/my_search_delegate.dart';
 import '../home_controller.dart';
 
@@ -63,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           actions: [
             IconButton(
-              onPressed: _controller.NavToChat,
+              onPressed: _controller.NavToConversation,
               icon: Image.asset(Assets.messCircle, width: 24),
               padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
               constraints: const BoxConstraints(),
@@ -86,13 +88,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   CustomButton(
                     icon: Image.asset(Assets.thunder),
                     title: 'Mua bán',
+                    onPressed: () async {
+                        SupabaseClient client = Supabase.instance.client;
+                        await client.auth.signOut();
+                      },
                   ),
                   CustomButton(
                     icon: Image.asset(Assets.arrow),
                     title: 'Cho thuê',
+                    onPressed: (){},
                   ),
                   CustomButton(
-                      icon: Image.asset(Assets.edit_color), title: 'Đăng bài'),
+                      icon: Image.asset(Assets.edit_color), 
+                      title: 'Đăng bài', 
+                      onPressed: (){},
+                  ),
                 ],
               ),
             ),

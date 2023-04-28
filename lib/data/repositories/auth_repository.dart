@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/providers/remote/request/update_profile_request.dart';
 import 'package:nha_gia_re/data/repositories/base_repository.dart';
-import 'package:nha_gia_re/modules/chat/screens/onChattingScreen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthRepository extends BaseRepository {

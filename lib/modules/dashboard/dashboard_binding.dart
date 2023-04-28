@@ -19,7 +19,6 @@ class DashboardBinding implements Bindings {
     Get.lazyPut<ApartmentController>(()=> ApartmentController());
     Get.lazyPut<OfficeController>(()=> OfficeController());
     Get.lazyPut<PropertyController>(() => PropertyController());
-    Get.lazyPut<SearchController>(() => SearchController());
     Get.lazyPut<PersonalController>(() => PersonalController());
   }
 }
