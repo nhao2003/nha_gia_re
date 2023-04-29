@@ -4,6 +4,7 @@ import 'post.dart';
 class House extends Post {
   bool hasWideAlley;
   bool isFacade;
+  bool isWidensTowardsTheBack;
   double? areaUsed;
   HouseType? houseType;
   double? width;
@@ -22,6 +23,7 @@ class House extends Post {
     required String? projectName,
     required this.hasWideAlley,
     required this.isFacade,
+    required this.isWidensTowardsTheBack,
     required this.areaUsed,
     required this.width,
     required this.length,
@@ -89,8 +91,10 @@ class House extends Post {
       numOfLikes: json['num_of_likes'],
       hasWideAlley: json['has_wide_alley'],
       isFacade: json['is_facade'],
-      houseType:
-          json['house_type']  != null ? HouseType.parse(json['house_type']) : null,
+      isWidensTowardsTheBack: json['is_widens_towards_the_back'],
+      houseType: json['house_type'] != null
+          ? HouseType.parse(json['house_type'])
+          : null,
       mainDoorDirection: json['main_door_direction'] != null
           ? Direction.parse(json['main_door_direction'])
           : null,

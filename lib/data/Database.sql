@@ -373,6 +373,7 @@ CREATE TABLE houses
     furniture_status      VARCHAR(255),
     has_wide_alley        BOOLEAN NOT NULL,
     is_facade             BOOLEAN NOT NULL,
+    is_widens_towards_the_back BOOLEAN NOT NULL,
     area_used             NUMERIC,
     width                 DOUBLE PRECISION,
     length                DOUBLE PRECISION,

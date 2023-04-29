@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
 import 'package:nha_gia_re/data/services/list_check_service.dart';
 import 'package:nha_gia_re/data/services/radio_service.dart';
 import 'package:nha_gia_re/modules/search/screens/filter_screen.dart';
@@ -113,7 +114,7 @@ class SearchController extends GetxController {
   int rangeGetPosts = 10;
 
   void applyFilter() async {
-    final List<Post> datas = await repository.getAllPosts(
+    final List<Post> datas = await repository.getAllPosts(PostFilter(
         textSearch: _query,
         orderBy: getOrderBy(),
         from: indexStartPost,
@@ -122,7 +123,7 @@ class SearchController extends GetxController {
         maxPrice: upperPriceValue.value.toInt(),
         minArea: lowerAreaValue.value.toInt(),
         maxArea: upperAreaValue.value.toInt(),
-        postedBy: getPostBy());
+        postedBy: getPostBy()));
     print(datas.length);
     print(datas.map((e) => e.title).toList().toString());
     // pop screen when done

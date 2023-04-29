@@ -1,7 +1,7 @@
-import '../../enums/property_enums.dart';
+import '../../enums/enums.dart';
 import '../address.dart';
 
-export '../../enums/property_enums.dart';
+export '../../enums/enums.dart';
 export 'package:nha_gia_re/data/models/properties/office.dart';
 export 'package:nha_gia_re/data/models/properties/apartment.dart';
 export 'package:nha_gia_re/data/models/properties/post.dart';

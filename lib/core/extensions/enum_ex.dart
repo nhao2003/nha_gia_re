@@ -1,4 +1,4 @@
-import 'package:nha_gia_re/data/enums/property_enums.dart';
+import 'package:nha_gia_re/data/enums/enums.dart';
 
 extension StringToValue on PropertyType {
   PropertyType? stringToValue(String? value) {

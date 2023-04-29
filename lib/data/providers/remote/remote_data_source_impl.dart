@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
-import 'package:nha_gia_re/data/enums/property_enums.dart';
+import 'package:get/get.dart';
+import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/models/message.dart';
+import 'package:nha_gia_re/data/models/properties/motel.dart';
 import 'package:nha_gia_re/data/providers/remote/remote_data_source.dart';
+import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class RemoteDataSourceImpl extends RemoteDataSource {
@@ -225,30 +228,223 @@ class RemoteDataSourceImpl extends RemoteDataSource {
     return s;
   }
 
-  Future<List<Map<String, dynamic>>> getAllPosts(
-      String textSearch,
-      OrderBy orderBy,
-      int from,
-      int to,
-      int minPrice,
-      int maxPrice,
-      int minArea,
-      int maxArea,
-      PostedBy postedBy) async {
+  PostgrestFilterBuilder<dynamic> _defaultFilter(
+    String propertyTable,
+    PostFilter filter,
+  ) {
+    var query = supabaseClient.from(propertyTable).select();
+    if (filter.textSearch?.isNotEmpty != null) {
+      filter.textSearch = _noAccentVietnamese(filter.textSearch!);
+      query = query.textSearch('title_description', filter.textSearch!,
+          type: TextSearchType.plain);
+    }
+    query = query
+        .lte('expiry_date', DateTime.now().toIso8601String())
+        .gte('price', filter.minPrice)
+        .lte('price', filter.maxPrice)
+        .gte('area', filter.minArea)
+        .lte('area', filter.maxArea);
+    if (filter.postedBy != PostedBy.all) {
+      query = query.eq('is_pro_seller', filter.postedBy == PostedBy.proSeller);
+    }
+    return query;
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getAllPosts(PostFilter filter) async {
     try {
-      textSearch = _noAccentVietnamese(textSearch);
-      final data = await supabaseClient
-          .from('post')
-          .select()
-          .textSearch('title_description', textSearch,
-              type: TextSearchType.plain)
-          .lte('expiry_date', DateTime.now().toIso8601String())
-          .gte('price', minPrice)
-          .lte('price', maxPrice)
-          .gte('price', minPrice)
-          .eq('is_pro_seller', postedBy == PostedBy.proSeller)
-          .order(orderBy.filterString, ascending: orderBy.isAsc)
-          .range(from, to);
+      var data = await _defaultFilter('post', filter)
+          .order(filter.orderBy.filterString, ascending: filter.orderBy.isAsc)
+          .range(filter.from, filter.to);
+      return List<Map<String, dynamic>>.from(data);
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getAllApartments(
+      ApartmentFilter filter) async {
+    try {
+      var query = _defaultFilter('apartments', filter);
+      if (filter.isHandedOver != null) {
+        query = query.eq('is_hand_over', filter.isHandedOver);
+      }
+      if (filter.apartmentTypes.isNotEmpty) {
+        query = query.in_('apartment_type',
+            filter.apartmentTypes.map((e) => e.toString()).toList());
+      }
+      if (filter.isCorner != null) {
+        query = query.eq('is_hand_over', filter.isCorner);
+      }
+      if (filter.numOfBedrooms.isNotEmpty) {
+        final list = filter.numOfBedrooms.where((element) => element <= 10);
+        if (list.isNotEmpty) {
+          final str1 = 'num_of_bedrooms.in.(${list.join(',')})';
+          const str2 = 'num_of_bedrooms.gt.10';
+          final filterStr =
+              filter.numOfBedrooms.contains(11) ? str1 : '$str1,$str2';
+          query.or(filterStr);
+        } else {
+          query.or('num_of_bedrooms.gt.10');
+        }
+      }
+      if (filter.mainDoorDirections.isNotEmpty) {
+        query.in_('main_door_direction',
+            filter.mainDoorDirections.map((e) => e.toString()).toList());
+      }
+      if (filter.balconyDirections.isNotEmpty) {
+        query.in_('balcony_direction',
+            filter.balconyDirections.map((e) => e.toString()).toList());
+      }
+      if (filter.legalStatus.isNotEmpty) {
+        query.in_('legal_document_status',
+            filter.legalStatus.map((e) => e.toString()).toList());
+      }
+      if (filter.furnitureStatus.isNotEmpty) {
+        query.in_('furniture_status',
+            filter.furnitureStatus.map((e) => e.toString()).toList());
+      }
+      final data = await query
+          .order(filter.orderBy.filterString, ascending: filter.orderBy.isAsc)
+          .range(filter.from, filter.to);
+      return List<Map<String, dynamic>>.from(data);
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getAllHouses(HouseFilter filter) async {
+    try {
+      var query = _defaultFilter('apartments', filter);
+      if (filter.isFacade != null) {
+        query = query.eq('is_face', filter.isFacade);
+      }
+      if (filter.isWidensTowardsTheBack != null) {
+        query = query.eq(
+            'is_widens_towards_the_back', filter.isWidensTowardsTheBack);
+      }
+      if (filter.isFacade != null) {
+        query = query.eq('has_wide_alley', filter.hasWideAlley);
+      }
+      if (filter.houseTypes.isNotEmpty) {
+        query = query.in_(
+            'house_type', filter.houseTypes.map((e) => e.toString()).toList());
+      }
+      if (filter.numOfBedrooms.isNotEmpty) {
+        final list = filter.numOfBedrooms.where((element) => element <= 10);
+        if (list.isNotEmpty) {
+          final str1 = 'num_of_bedrooms.in.(${list.join(',')})';
+          const str2 = 'num_of_bedrooms.gt.10';
+          final filterStr =
+              filter.numOfBedrooms.contains(11) ? str1 : '$str1,$str2';
+          query.or(filterStr);
+        } else {
+          query.or('num_of_bedrooms.gt.10');
+        }
+      }
+      if (filter.mainDoorDirections.isNotEmpty) {
+        query.in_('main_door_direction',
+            filter.mainDoorDirections.map((e) => e.toString()).toList());
+      }
+      if (filter.legalStatus.isNotEmpty) {
+        query.in_('legal_document_status',
+            filter.legalStatus.map((e) => e.toString()).toList());
+      }
+      if (filter.furnitureStatus.isNotEmpty) {
+        query.in_('furniture_status',
+            filter.furnitureStatus.map((e) => e.toString()).toList());
+      }
+      final data = await query
+          .order(filter.orderBy.filterString, ascending: filter.orderBy.isAsc)
+          .range(filter.from, filter.to);
+      return List<Map<String, dynamic>>.from(data);
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getAllLands(LandFilter filter) async {
+    try {
+      var query = _defaultFilter('apartments', filter);
+      if (filter.isFacade != null) {
+        query = query.eq('is_face', filter.isFacade);
+      }
+      if (filter.isWidensTowardsTheBack != null) {
+        query = query.eq(
+            'is_widens_towards_the_back', filter.isWidensTowardsTheBack);
+      }
+      if (filter.isFacade != null) {
+        query = query.eq('has_wide_alley', filter.hasWideAlley);
+      }
+      if (filter.landTypes.isNotEmpty) {
+        query = query.in_(
+            'land_type', filter.landTypes.map((e) => e.toString()).toList());
+      }
+      if (filter.landDirections.isNotEmpty) {
+        query.in_('land_direction',
+            filter.landDirections.map((e) => e.toString()).toList());
+      }
+      if (filter.legalStatus.isNotEmpty) {
+        query.in_('legal_document_status',
+            filter.legalStatus.map((e) => e.toString()).toList());
+      }
+      final data = await query
+          .order(filter.orderBy.filterString, ascending: filter.orderBy.isAsc)
+          .range(filter.from, filter.to);
+      return List<Map<String, dynamic>>.from(data);
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getAllOffices(OfficeFilter filter) async {
+    try {
+      var query = _defaultFilter('apartments', filter);
+      if (filter.officeTypes.isNotEmpty) {
+        query = query.in_('office_type',
+            filter.officeTypes.map((e) => e.toString()).toList());
+      }
+      if (filter.mainDoorDirections.isNotEmpty) {
+        query.in_('main_door_direction',
+            filter.mainDoorDirections.map((e) => e.toString()).toList());
+      }
+      if (filter.legalStatus.isNotEmpty) {
+        query.in_('legal_document_status',
+            filter.legalStatus.map((e) => e.toString()).toList());
+      }
+      if (filter.furnitureStatus.isNotEmpty) {
+        query.in_('furniture_status',
+            filter.furnitureStatus.map((e) => e.toString()).toList());
+      }
+      final data = await query
+          .order(filter.orderBy.filterString, ascending: filter.orderBy.isAsc)
+          .range(filter.from, filter.to);
+      return List<Map<String, dynamic>>.from(data);
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getAllMotels(MotelFilter filter) async {
+    try {
+      var query = _defaultFilter('apartments', filter);
+      if (filter.furnitureStatus.isNotEmpty) {
+        query.in_('furniture_status',
+            filter.furnitureStatus.map((e) => e.toString()).toList());
+      }
+      final data = await query
+          .order(filter.orderBy.filterString, ascending: filter.orderBy.isAsc)
+          .range(filter.from, filter.to);
       return List<Map<String, dynamic>>.from(data);
     } catch (e) {
       print(e.toString());

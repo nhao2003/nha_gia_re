@@ -1,6 +1,6 @@
 import 'package:nha_gia_re/data/providers/remote/request/post_request.dart';
 
-import '../../../enums/property_enums.dart';
+import '../../../enums/enums.dart';
 import '../../../models/address.dart';
 
 class ApartmentRequest extends PostRequest {

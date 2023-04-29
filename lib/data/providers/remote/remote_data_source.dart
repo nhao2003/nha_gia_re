@@ -1,7 +1,8 @@
 import 'dart:async';
 
-import 'package:nha_gia_re/data/enums/property_enums.dart';
+import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/models/message.dart';
+import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
 import 'package:supabase/supabase.dart';
 
 import '../../models/user_info.dart';
@@ -46,19 +47,20 @@ abstract class RemoteDataSource {
   Future<Map<String, dynamic>> editPostLand(
       String postId, Map<String, dynamic> data);
 
-  Future<List<Map<String, dynamic>>> getAllPosts(
-      String textSearch,
-      OrderBy orderBy,
-      int from,
-      int to,
-      int minPrice,
-      int maxPrice,
-      int minArea,
-      int maxArea,
-      PostedBy postedBy);
+  Future<List<Map<String, dynamic>>> getAllPosts(PostFilter filter);
+
+  Future<List<Map<String, dynamic>>> getAllApartments(ApartmentFilter filter);
+
+  Future<List<Map<String, dynamic>>> getAllHouses(HouseFilter filter);
+
+  Future<List<Map<String, dynamic>>> getAllLands(LandFilter filter);
 
   Future<Map<String, dynamic>> getPostDetails(
       String postId, PropertyType propertyType);
+
+  Future<List<Map<String, dynamic>>> getAllOffices(OfficeFilter filter);
+
+  Future<List<Map<String, dynamic>>> getAllMotels(MotelFilter filter);
 
   Future<void> deletedPost(String id);
 

@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 import 'package:nha_gia_re/data/models/conversation.dart';
+import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
 import 'package:nha_gia_re/data/providers/remote/request/post_request.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -77,22 +78,29 @@ class PostRepository extends BaseRepository {
     }
   }
 
-  Future<List<Post>> getAllPosts({
-    required String textSearch,
-    required OrderBy orderBy,
-    required int from,
-    required int to,
-    required int minPrice,
-    required int maxPrice,
-    required int minArea,
-    required int maxArea,
-    required PostedBy postedBy,
-  }) async {
-    throwIf(textSearch.trim().isEmpty, Exception("Text Search is empty"));
+  Future<List<Post>> getAllPosts(PostFilter filter) async {
     final List<Map<String, dynamic>> response;
-    response = await remoteDataSourceImpl.getAllPosts(
-        textSearch,
-        orderBy, from, to, minPrice, maxPrice, minArea, maxArea, postedBy);
+    response = await remoteDataSourceImpl.getAllPosts(filter);
     return response.map((e) => Post.fromJson(e)).toList();
+  }
+  Future<List<Apartment>> getAllApartments(ApartmentFilter filter) async {
+    final List<Map<String, dynamic>> response;
+    response = await remoteDataSourceImpl.getAllApartments(filter);
+    return response.map((e) => Apartment.fromJson(e)).toList();
+  }
+  Future<List<House>> getAllHouses(HouseFilter filter) async {
+    final List<Map<String, dynamic>> response;
+    response = await remoteDataSourceImpl.getAllHouses(filter);
+    return response.map((e) => House.fromJson(e)).toList();
+  }
+  Future<List<Office>> getAllOffices(OfficeFilter filter) async {
+    final List<Map<String, dynamic>> response;
+    response = await remoteDataSourceImpl.getAllOffices(filter);
+    return response.map((e) => Office.fromJson(e)).toList();
+  }
+  Future<List<Motel>> getAllMotels(MotelFilter filter) async {
+    final List<Map<String, dynamic>> response;
+    response = await remoteDataSourceImpl.getAllMotels(filter);
+    return response.map((e) => Motel.fromJson(e)).toList();
   }
 }
