@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/values/assets_image.dart';
+import 'package:nha_gia_re/data/services/onesignal_service.dart';
 import 'package:nha_gia_re/global_widgets/infor_card.dart';
 import 'package:nha_gia_re/modules/home/widgets/button.dart';
 import 'package:nha_gia_re/modules/home/widgets/carousel_ad.dart';
@@ -91,6 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () async {
                         SupabaseClient client = Supabase.instance.client;
                         await client.auth.signOut();
+                        OneSignalService.removeExternalId();
                       },
                   ),
                   CustomButton(

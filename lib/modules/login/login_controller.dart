@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
+import 'package:nha_gia_re/data/services/onesignal_service.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -31,7 +32,10 @@ class LoginController extends GetxController {
       {
         isLoading.value = true;
         final res = await auth.signIn(email: loginEmail.text, password: loginPassword.text)
-        .then((value) => Get.offAllNamed(AppRoutes.dashboard));
+        .then((value) {
+          Get.offAllNamed(AppRoutes.dashboard);
+          OneSignalService.addExternalId(value.uid);
+          });
       }
       on AuthException catch (e)
       {
