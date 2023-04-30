@@ -2,21 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:nha_gia_re/modules/post/post_controller.dart';
 
 import '../property_controller.dart';
 
 class DropDownButtonFormFieldCustom extends StatefulWidget {
-  final List<String> items;
+  final Map items;
   final String hint;
-  final Function(String) onSave;
-  String fieldValue;
+  final Function onSave;
+  final fieldValue;
   final String? error;
+  final bool isCompulsory;
   DropDownButtonFormFieldCustom({Key? key,
     required this.hint,
     required this.items,
     required this.onSave,
-    this.fieldValue ="",
+    required this.fieldValue,
+    this.isCompulsory = true,
     this.error = "Vui lòng chọn thông tin"
   }) : super(key: key);
 
@@ -25,14 +26,15 @@ class DropDownButtonFormFieldCustom extends StatefulWidget {
 }
 
 class _DropDownButtonFormFieldCustomState extends State<DropDownButtonFormFieldCustom> {
+
   @override
   Widget build(BuildContext context) {
-     if(widget.items.indexOf(widget.fieldValue) > 0) {
+     if(widget.fieldValue != null) {
        return DropdownButtonFormField(
          value: widget.fieldValue,
          validator: (value) {
-           if (widget.hint.contains("Không bắt buộc")) return null;
-           if (value == null || value!.isEmpty) {
+           if (widget.isCompulsory == false) return null;
+           if (value == null) {
              return widget.error;
            }
            return null;
@@ -44,24 +46,23 @@ class _DropDownButtonFormFieldCustomState extends State<DropDownButtonFormFieldC
            ),
          ),
          hint: Text(widget.hint),
-         items: widget.items.map((value) {
-           return DropdownMenuItem<String>(value: value, child: Text(value),);
+         items: widget.items.entries.map((entry) {
+           return DropdownMenuItem(value: entry.key, child: Text(entry.value),);
          }).toList(),
          onChanged: (value) {
-           print(value);
          },
          onSaved: (value) {
-           if (value == null || value!.isEmpty) return;
-             widget.onSave(value!);
-           print("Save DropDown Fied" + value.toString());
+           if (value == null) return;
+             widget.onSave(value);
+           //print("Save DropDown Fied" + value.toString());
          },
        );
      }
      else {
        return DropdownButtonFormField(
          validator: (value) {
-           if (widget.hint.contains("Không bắt buộc")) return null;
-           if (value == null || value!.isEmpty) {
+           if (widget.isCompulsory == false) return null;
+           if (value == null) {
              return widget.error;
            }
            return null;
@@ -73,16 +74,15 @@ class _DropDownButtonFormFieldCustomState extends State<DropDownButtonFormFieldC
            ),
          ),
          hint: Text(widget.hint),
-         items: widget.items.map((value) {
-           return DropdownMenuItem<String>(value: value, child: Text(value),);
+         items: widget.items.entries.map((entry) {
+           return DropdownMenuItem(value: entry.key, child: Text(entry.value),);
          }).toList(),
          onChanged: (value) {
-           print(value);
          },
          onSaved: (value) {
-           if (value == null || value!.isEmpty) return;
-             widget.onSave(value!);
-           print("Save DropDown Fied" + value.toString());
+           if (value == null) return;
+             widget.onSave(value);
+           //print("Save DropDown Fied" + value.toString());
          },
        );
      }

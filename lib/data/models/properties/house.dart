@@ -108,4 +108,27 @@ class House extends Post {
       numOfFloors: json['nums_of_floors'],
     );
   }
+  @override
+  String toString() {
+    return 'House{'
+        'id: $id, '
+        'furnitureStatus: $furnitureStatus, '
+        'area: $area, '
+        'price: $price'
+        'projectName: $projectName, '
+        'hasWideAlley: $hasWideAlley, '
+        'isFacade: $isFacade, '
+        'areaUsed: $areaUsed, '
+        'width: $width, '
+        'length: $length, '
+        'houseType: $houseType, '
+        'numOfBedRooms: $numOfBedRooms, '
+        'numOfToilets: $numOfToilets, '
+        'numOfFloors: $numOfFloors, '
+        'mainDoorDirection: $mainDoorDirection, '
+        'legalDocumentStatus: $legalDocumentStatus, '
+        'address: $address, '
+        '${super.toString()}'
+        '}';
+  }
 }

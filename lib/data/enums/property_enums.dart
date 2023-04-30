@@ -1,6 +1,6 @@
 import 'package:nha_gia_re/core/values/app_strings.dart';
 
-enum PropertyType {
+ enum PropertyType {
   apartment,
   land,
   office,

@@ -82,5 +82,4 @@ class PostRepository extends BaseRepository {
     return response.map((e) => Post.fromJson(e)).toList();
   }
 
-
 }

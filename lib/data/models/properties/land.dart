@@ -97,4 +97,35 @@ class Land extends Post {
       isWidensTowardsTheBack: json['is_widens_towards_the_back'],
     );
   }
+  @override
+  String toString() {
+    return 'Land{'
+        'id: $id, '
+        'area: $area, '
+        'projectName: $projectName, '
+        'type: $type, '
+        'address: $address, '
+        'userID: $userID, '
+        'price: $price, '
+        'deposit: $deposit, '
+        'isLease: $isLease, '
+        'title: $title, '
+        'description: $description, '
+        'postedDate: $postedDate, '
+        'expiryDate: $expiryDate, '
+        'numOfLikes: $numOfLikes, '
+        'imagesUrl: $imagesUrl, '
+        'isProSeller: $isProSeller, '
+        'landLotCode: $landLotCode, '
+        'subdivisionName: $subdivisionName, '
+        'landType: $landType, '
+        'width: $width, '
+        'length: $length, '
+        'landDirection: $landDirection, '
+        'legalDocumentStatus: $legalDocumentStatus, '
+        'isFacade: $isFacade, '
+        'isWidensTowardsTheBack: $isWidensTowardsTheBack, '
+        'hasWideAlley: $hasWideAlley'
+        '}';
+  }
 }

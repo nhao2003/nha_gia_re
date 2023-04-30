@@ -74,4 +74,25 @@ class Post {
       numOfLikes: json['num_of_likes'],
     );
   }
+  @override
+  String toString() {
+    return 'Post{'
+        'id: $id, '
+        'area: $area, '
+        'projectName: $projectName, '
+        'type: $type, '
+        'address: $address, '
+        'userID: $userID, '
+        'price: $price, '
+        'deposit: $deposit, '
+        'isLease: $isLease, '
+        'title: $title, '
+        'description: $description, '
+        'postedDate: $postedDate, '
+        'expiryDate: $expiryDate, '
+        'numOfLikes: $numOfLikes, '
+        'imagesUrl: $imagesUrl, '
+        'isProSeller: $isProSeller'
+        '}';
+  }
   }

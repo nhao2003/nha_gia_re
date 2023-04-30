@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
       translations: LocalizationService(),
       builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.login,
+      initialRoute: AppRoutes.post,
       getPages: AppPages.pages,
       defaultTransition: Transition.cupertino,
     );
