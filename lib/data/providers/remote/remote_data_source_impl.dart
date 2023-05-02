@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:nha_gia_re/data/enums/property_enums.dart';
 import 'package:nha_gia_re/data/providers/remote/remote_data_source.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -38,11 +40,14 @@ class RemoteDataSourceImpl extends RemoteDataSource {
   @override
   Future<Map<String, dynamic>> updateUser(Map<String, dynamic> data) async {
     try {
+      print(supabaseClient.auth.currentUser!.id);
+      print(data);
       final res = await supabaseClient
           .from('user_info')
           .update(data)
           .eq('uid', supabaseClient.auth.currentUser!.id)
           .select();
+      inspect(res);
       return List<Map<String, dynamic>>.from(res).first;
     } catch (e) {
       rethrow;

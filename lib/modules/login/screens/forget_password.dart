@@ -41,7 +41,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                 children: [
                   Image.asset(Assets.forgetPass, width: MediaQuery.of(context).size.width * 0.65,),
                   const SizedBox(height: 20,),
-                   TextFormField(
+                  TextFormField(
                     controller: _controller.forgotPassEmail,
                     decoration: InputDecoration(
                         hintText: 'example@email.com',

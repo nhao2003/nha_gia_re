@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:nha_gia_re/modules/search/screens/search_screen.dart';
+import 'package:nha_gia_re/modules/user_profile/screens/user_profile_screen.dart';
+import 'package:nha_gia_re/modules/user_profile/user_profile_binding.dart';
 import '../modules/chat/chat_binding.dart';
 import '../modules/chat/screens/chat_screen.dart';
 import '../modules/home/home_binding.dart';
@@ -45,6 +47,7 @@ abstract class AppPages {
     GetPage(
         name: AppRoutes.personal,
         page: ()=> const PersonalScreen(),
-        binding: PersonalBinding(), )
+        binding: PersonalBinding(), ),
+    GetPage(name: AppRoutes.user_profile, page: () => const UserProfileScreen(), binding: UserProfileBinding())
   ];
 }

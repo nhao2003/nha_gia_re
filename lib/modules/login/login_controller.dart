@@ -32,7 +32,16 @@ class LoginController extends GetxController {
       {
         isLoading.value = true;
         final res = await auth.signIn(email: loginEmail.text, password: loginPassword.text)
-        .then((value) => Get.toNamed(AppRoutes.home));
+        .then((value) {
+          if(value.updatedDate == null)
+          {
+            Get.toNamed(AppRoutes.user_profile);
+          }
+          else
+          {
+            Get.toNamed(AppRoutes.home);
+          }
+        });
       }
       on AuthException catch (e)
       {
@@ -68,8 +77,7 @@ class LoginController extends GetxController {
       try{
         isLoading.value = true;
         print(registerEmail.text + ' ' + registerPassword.text);
-        var user = await auth.signUp(email: registerEmail.text, password: registerPassword.text);
-        //print(res);
+        var user = await auth.signUp(email: registerEmail.text, password: registerPassword.text);        //print(res);
       }
       on AuthException catch (e)
       {
@@ -91,7 +99,7 @@ class LoginController extends GetxController {
     final auth = AuthRepository();
     if(forgotPassFormGlobalKey.currentState!.validate())
     {
-      try
+      try 
       {
         isLoading.value = true;
         print(forgotPassEmail.text);

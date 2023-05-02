@@ -12,6 +12,7 @@ class UserInfo {
   String? description;
   DateTime lastActivityAt;
   DateTime? updatedDate;
+  DateTime? createdDate;
   int numOfFollowers;
   int numOfFollowings;
 
@@ -27,6 +28,7 @@ class UserInfo {
     required this.avatarUrl,
     required this.lastActivityAt,
     required this.updatedDate,
+    required this.createdDate,
     required this.numOfFollowings,
     required this.numOfFollowers,
   })  : assert(uid.isNotEmpty),
@@ -39,7 +41,7 @@ class UserInfo {
   UserInfo.fromJson(Map<String, dynamic> json)
       : uid = json['uid'],
         address =
-            json['address'] != null ? Address.fromJson(json['address']) : null,
+        json['address'] != null ? Address.fromJson(json['address']) : null,
         isMale = json['is_male'],
         avatarUrl = json['avatar_url'],
         fullName = json['full_name'],
@@ -50,10 +52,11 @@ class UserInfo {
         numOfFollowers = json['num_of_followers'],
         numOfFollowings = json['num_of_following'],
         lastActivityAt = DateTime.parse(json['last_activity_at']),
-        updatedDate =json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null;
+        updatedDate =json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null,
+        createdDate =json['created_at'] != null ? DateTime.parse(json['created_at']) : null;
 
   @override
   String toString() {
-    return 'UserInfo{uid: $uid, address: $address, isMale: $isMale, avatarUrl: $avatarUrl, fullName: $fullName, phoneNumber: $phoneNumber, email: $email, dob: $dob, description: $description, lastActivityAt: $lastActivityAt, updatedDate: $updatedDate}';
+    return 'UserInfo{uid: $uid, address: $address, isMale: $isMale, avatarUrl: $avatarUrl, fullName: $fullName, phoneNumber: $phoneNumber, email: $email, dob: $dob, description: $description, lastActivityAt: $lastActivityAt, updatedDate: $updatedDate, createdDate: $createdDate}';
   }
 }
