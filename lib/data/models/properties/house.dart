@@ -1,3 +1,4 @@
+import '../../enums/enums.dart';
 import '../address.dart';
 import 'post.dart';
 

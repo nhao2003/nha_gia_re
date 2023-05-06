@@ -1,4 +1,5 @@
 import 'package:nha_gia_re/data/models/address.dart';
+import '../enums/enums.dart';
 import '../models/properties/post.dart';
 
 class DataCenter {

@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
-import 'package:nha_gia_re/data/enums/property_enums.dart';
 import 'package:nha_gia_re/data/services/validate_service.dart';
 import 'package:nha_gia_re/modules/post/property_controller.dart';
 import 'package:nha_gia_re/modules/post/screens/post_address.dart';
@@ -15,6 +14,8 @@ import 'package:nha_gia_re/modules/post/widgets/check_field.dart';
 import 'package:nha_gia_re/modules/post/widgets/dropdownfied.dart';
 import 'package:nha_gia_re/modules/post/widgets/seperator.dart';
 import 'package:nha_gia_re/modules/post/widgets/textformfield.dart';
+
+import '../../../data/enums/enums.dart';
 
 // Define a custom Form widget.
 class MyCustomForm extends StatefulWidget {

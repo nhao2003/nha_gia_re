@@ -1,5 +1,6 @@
 import 'package:nha_gia_re/data/models/address.dart';
 
+import '../../enums/enums.dart';
 import 'post.dart';
 
 class Land extends Post {

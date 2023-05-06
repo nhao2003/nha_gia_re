@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:nha_gia_re/data/models/address.dart';
 import 'package:nha_gia_re/data/models/province.dart';
 import 'dart:developer';
-import '../../data/enums/enum.dart';
+import '../../data/enums/enums.dart';
 import '../../data/models/properties/post.dart';
 
 class PropertyController extends GetxController{
@@ -287,7 +287,9 @@ class PropertyController extends GetxController{
             imagesUrl: [],
             isProSeller: !isPersonal,
             deposit: deposit,
-            numOfLikes: 0);
+            numOfLikes: 0,
+            //TODO: ADD [isWidensTowardsTheBack]
+            isWidensTowardsTheBack: false);
         print(post.toString());
         break;
       case PropertyType.apartment:

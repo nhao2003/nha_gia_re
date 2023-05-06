@@ -4,6 +4,7 @@ import 'package:nha_gia_re/data/services/list_check_service.dart';
 import 'package:nha_gia_re/data/services/radio_service.dart';
 import 'package:nha_gia_re/modules/search/screens/filter_screen.dart';
 import '../../core/values/filter_values.dart';
+import '../../data/enums/enums.dart';
 import '../../data/models/properties/post.dart';
 import '../../data/repositories/post_repository.dart';
 import '../home/screens/post_details_screen.dart';
