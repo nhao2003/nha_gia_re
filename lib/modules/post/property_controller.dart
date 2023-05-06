@@ -7,14 +7,19 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:nha_gia_re/data/models/address.dart';
 import 'package:nha_gia_re/data/models/province.dart';
+import 'package:nha_gia_re/data/providers/remote/request/house_request.dart';
+import 'package:nha_gia_re/data/providers/remote/request/post_request.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
+import 'package:nha_gia_re/data/repositories/post_repository.dart';
 import 'dart:developer';
 import '../../data/enums/enums.dart';
 import '../../data/models/properties/post.dart';
+import '../../data/providers/remote/request/office_request.dart';
 
 class PropertyController extends GetxController{
   PropertyController();
   final authRepository = AuthRepository();
+  final postRepository = PostRepository();
   Future<void> getProvince() async{
     final response = await http.get(Uri.parse('https://provinces.open-api.vn/api/?depth=3'));
     print(response.statusCode);
@@ -59,6 +64,7 @@ class PropertyController extends GetxController{
     photo.addAll(pickedImages);
     update();
   }
+
   Future imgFromCamera() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
@@ -67,6 +73,11 @@ class PropertyController extends GetxController{
       update();
     }
   }
+  List<String> imageUrls = [
+    'https://cdn.chotot.com/anAdm6N2zHhMfbXZZsubfp-7mwhmYUpLZW8SceXS5IY/preset:view/plain/da0d49f0a1c267c8ce15a7074e18f2c2-2824246476756169141.jpg',
+    "https://cdn.chotot.com/YcT9_B1NOr1-jjveVZoLB2cuFTyOYIUvRLW1dqMVV5o/preset:view/plain/b7cb37b6facd4163bc976f37b8cdf1e8-2811332062328596281.jpg",
+    "https://cdn.chotot.com/CfGsMoWBJT1DyHpnZ8-HewH4yU-fqpXGe-DMTFVI0EE/preset:view/plain/4d0ed210a1790ea9a6b1695d78643010-2824246234360911779.jpg"
+  ];
   PageController pageController = PageController(viewportFraction: 0.85);
   List<Province> provinceList = [];
   List<Districts> districtsList = [];
@@ -99,6 +110,7 @@ class PropertyController extends GetxController{
   double  width = 0;
   int? electricPrice;
   int? waterPrice;
+  int modelDeposit = 0;
   PropertyType? selectedPropertyType;
   bool isFacade = false;
   bool isWidensTowardsTheBack = false;
@@ -204,40 +216,44 @@ class PropertyController extends GetxController{
     isSale = value;
     update();
   }
-  void addPost(){
+  Future<void> addPost() async {
     if(authRepository.userID == null) return;
-    Post post;
+    print("user ton tai");
+    PostRequest post;
     DateTime now = DateTime.now();
     switch (selectedPropertyType){
       case PropertyType.office:
-        post = Office(
+        post = OfficeRequest(
             furnitureStatus: furnitureStatus ,
-            id: now.toString(),
             area: area,
-            type: PropertyType.office,
             address: address,
             userID: authRepository.userID!,
             isLease: !isSale,
             price: price,
             title: title,
             description: description,
-            postedDate: now,
-            expiryDate: now.add(const Duration(days: 14)),
-            imagesUrl: [],
+            imagesUrl: imageUrls,
             isProSeller: !isPersonal,
             projectName: projectName,
             deposit: deposit,
-            numOfLikes: 0);
+            hasWideAlley: hasWideAlley,
+            isFacade: isFacade,
+            officeType: officeType,
+            mainDoorDirection: directionDoor,
+            legalDocumentStatus: legalStatus,
+            );
         print(post.toString());
+        await postRepository.createPost(post);
 
         break;
       case PropertyType.land:
         print("Create Land");
-        post = Land(id: now.toString(),
+        print(landCode);
+        post = LandRequest(
             area: area,
             projectName: projectName,
-            landLotCode:  landCode,
-            subdivisionName: subdivisionName,
+            landLotCode:  landCode?.trim() == ""? null: landCode,
+            subdivisionName: subdivisionName?.trim() == ""? null: subdivisionName,
             landType: landType,
             width:  width,
             length: height,
@@ -247,23 +263,21 @@ class PropertyController extends GetxController{
             isWidensTowardsTheBack: isWidensTowardsTheBack,
             hasWideAlley: hasWideAlley,
             address: address,
-            type: PropertyType.land,
             userID: authRepository.userID!,
             isLease: !isSale,
             price: price,
             title: title,
             description: description,
-            postedDate: now,
-            expiryDate: now.add( const Duration(days: 14)) ,
-            imagesUrl: [],
+            imagesUrl: imageUrls,
             isProSeller: !isPersonal,
             deposit: deposit,
-            numOfLikes: 0);
+        );
         print(post.toString());
-          break;
+        await postRepository.createPost(post);
+
+        break;
       case PropertyType.house:
-        post = House(
-            id: now.toString(),
+        post = HouseRequest(
             furnitureStatus: furnitureStatus,
             area: (area),
             projectName: projectName,
@@ -279,24 +293,21 @@ class PropertyController extends GetxController{
             mainDoorDirection: directionDoor,
             legalDocumentStatus: legalStatus,
             address: address, 
-            type: PropertyType.house,
             userID: authRepository.userID!,
             isLease: !isSale,
             price: (price),
             title: title, 
             description: description,
-            postedDate: now,
-            expiryDate: now.add(Duration(days: 14)),
-            imagesUrl: [],
+            imagesUrl: imageUrls,
             isProSeller: !isPersonal,
             deposit: deposit,
-            numOfLikes: 0,
             isWidensTowardsTheBack: isWidensTowardsTheBack);
         print(post.toString());
+        await postRepository.createPost(post);
+
         break;
       case PropertyType.apartment:
-        post = Apartment(
-            id: now.toString(),
+        post = ApartmentRequest(
             furnitureStatus: furnitureStatus,
             area: (area),
             projectName: projectName,
@@ -311,42 +322,37 @@ class PropertyController extends GetxController{
             legalDocumentStatus: legalStatus, 
             floor: (floor),
             address: address,
-            type: PropertyType.apartment,
             userID: authRepository.userID!,
             isLease: !isSale,
             price:(price),
             title: title, 
             description: description,
-            postedDate: now,
-            expiryDate: now.add(Duration(days: 14)),
-            imagesUrl: [],
+            imagesUrl: imageUrls,
             isProSeller: !isPersonal,
             deposit: deposit,
-            numOfLikes: 0);
+            );
+        await postRepository.createPost(post);
+
         print(post.toString());
         break;
       case PropertyType.motel:
-        post = Motel(
-            id: now.toString(),
+        post = MotelRequest(
             furnitureStatus: furnitureStatus,
             area: (area),
             projectName: projectName,
             electricPrice: electricPrice,
             waterPrice: waterPrice,
             address: address,
-            type: PropertyType.motel,
             userID: authRepository.userID!,
-            isLease: !isSale,
             price: price,
             title: title,
             description: description,
-            postedDate: now,
-            expiryDate: now.add(Duration(days: 14)),
-            imagesUrl: [],
+            imagesUrl: imageUrls,
             isProSeller: !isPersonal,
-            deposit: deposit,
-            numOfLikes: 0);
-        print(post.toString());
+            deposit: modelDeposit,
+            );
+        await postRepository.createPost(post);
+
         break;
       case null: break;
     }

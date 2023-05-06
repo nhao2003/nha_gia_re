@@ -16,8 +16,8 @@ class LandRequest extends PostRequest {
   LandRequest({
     required double area,
     required String? projectName,
-    required this.landLotCode,
-    required this.subdivisionName,
+    this.landLotCode,
+    this.subdivisionName,
     required this.landType,
     required this.width,
     required this.length,
@@ -35,9 +35,9 @@ class LandRequest extends PostRequest {
     required List<String> imagesUrl,
     required bool isProSeller,
     required int? deposit,
-  })  : assert(landLotCode?.trim().isNotEmpty ?? true),
+  })  : assert(landLotCode == null || landLotCode.isNotEmpty),
         assert(width * length > 0),
-        assert(subdivisionName?.trim().isNotEmpty ?? true),
+        assert(subdivisionName == null || subdivisionName.isNotEmpty),
         super(
         area: area,
         type: PropertyType.land,
