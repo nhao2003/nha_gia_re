@@ -12,12 +12,15 @@ import 'package:nha_gia_re/core/values/app_values.dart';
 import 'package:nha_gia_re/core/values/assets_image.dart';
 import 'package:nha_gia_re/modules/home/screens/post_details_screen.dart';
 
+import '../data/models/properties/post.dart';
+
 class InforCardProps {
   String title;
   String price;
   String address;
   DateTime postTime;
   String imageUrl;
+
   InforCardProps(
       {required this.title,
       required this.price,
@@ -27,29 +30,29 @@ class InforCardProps {
 }
 
 class InforCard extends StatelessWidget {
-  InforCard({super.key, required this.props});
+  InforCard({super.key, required this.post});
 
-  final InforCardProps props;
+  final Post post;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       splashColor: AppColors.secondary,
-      child: Container(
+      child: SizedBox(
         width: 180,
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           ClipRRect(
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(10), topRight: Radius.circular(10)),
             child: Image.network(
-              props.imageUrl + Random().nextInt(20).toString(),
+              post.imagesUrl.first,
               fit: BoxFit.fill,
               height: 110,
               width: 180,
             ),
           ),
           Text(
-            props.title,
+            post.title,
             style: AppTextStyles.roboto16semiBold,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -58,7 +61,7 @@ class InforCard extends StatelessWidget {
             height: 8,
           ),
           Text(
-            props.price,
+            post.price.toString(),
             style:
                 AppTextStyles.roboto16semiBold.copyWith(color: AppColors.red),
           ),
@@ -66,7 +69,7 @@ class InforCard extends StatelessWidget {
             height: 8,
           ),
           Text(
-            props.address,
+            post.address.toString(),
             style: AppTextStyles.roboto12semiBold.copyWith(
                 color: AppColors.grey, overflow: TextOverflow.ellipsis),
           ),
@@ -74,7 +77,7 @@ class InforCard extends StatelessWidget {
             height: 8,
           ),
           Text(
-            props.postTime.getTimeAgo(),
+            post.postedDate.getTimeAgo(),
             style:
                 AppTextStyles.roboto12semiBold.copyWith(color: AppColors.grey),
           )
@@ -86,19 +89,20 @@ class InforCard extends StatelessWidget {
 
 class InforCardList extends StatefulWidget {
   const InforCardList({super.key, required this.title, required this.list});
+
   final String title;
-  final List<InforCardProps> list;
+  final List<Post> list;
 
   @override
   State<InforCardList> createState() => _InforCardListState();
 }
 
-InforCardProps props = InforCardProps(
-    title: 'Testing testing',
-    address: '131/2 tay son quy nhon',
-    price: '1.6000.000/căn',
-    postTime: DateTime(2023, 3, 23, 15, 36),
-    imageUrl: 'https://picsum.photos/110/180?random=');
+// InforCardProps props = InforCardProps(
+//     title: 'Testing testing',
+//     address: '131/2 tay son quy nhon',
+//     price: '1.6000.000/căn',
+//     postTime: DateTime(2023, 3, 23, 15, 36),
+//     imageUrl: 'https://picsum.photos/110/180?random=');
 
 class _InforCardListState extends State<InforCardList> {
   @override
@@ -117,19 +121,20 @@ class _InforCardListState extends State<InforCardList> {
           height: 210,
           child: ListView.separated(
               shrinkWrap: true,
-              itemCount: 10,
+              itemCount: widget.list.length,
               scrollDirection: Axis.horizontal,
               separatorBuilder: (BuildContext context, int index) =>
-                const SizedBox(
-                  width: 10,
-                ),
+                  const SizedBox(
+                    width: 10,
+                  ),
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
-                  child: InforCard(props: props),
+                  child: InforCard(key: UniqueKey(), post: widget.list[index]),
                   onTap: () {
-                    Get.to(PostDetailsScreen(title: props.title));
+                    //TODO: Handle detail screen
+                    //Get.to(PostDetailsScreen(title: props.title));
                   },
-                  );
+                );
               }),
         ),
         const Divider(
@@ -145,10 +150,10 @@ class _InforCardListState extends State<InforCardList> {
             InkWell(
               child: Text(
                 'Xem thêm 12.345 mẫu tin khác',
-                style:
-                    AppTextStyles.roboto16regular.copyWith(color: AppColors.blue),
+                style: AppTextStyles.roboto16regular
+                    .copyWith(color: AppColors.blue),
               ),
-              onTap: (){},
+              onTap: () {},
             ),
           ],
         )

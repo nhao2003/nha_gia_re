@@ -25,7 +25,7 @@ class Post {
   List<String> imagesUrl;
   bool isProSeller;
   PostStatus status;
-  String rejectedInfo;
+  String? rejectedInfo;
   Post({
     required this.id,
     required this.area,

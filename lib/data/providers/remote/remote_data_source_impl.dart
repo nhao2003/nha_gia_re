@@ -238,6 +238,7 @@ class RemoteDataSourceImpl extends RemoteDataSource {
   ) {
     var query = supabaseClient.from(propertyTable).select();
     if (filter.textSearch?.isNotEmpty != null) {
+      print("Search: $query");
       filter.textSearch = _noAccentVietnamese(filter.textSearch!);
       query = query.textSearch('title_description', filter.textSearch!,
           type: TextSearchType.plain);
@@ -248,8 +249,12 @@ class RemoteDataSourceImpl extends RemoteDataSource {
         .lte('price', filter.maxPrice)
         .gte('area', filter.minArea)
         .lte('area', filter.maxArea)
-        .eq('status', PostStatus.approved.toString())
-        .eq('is_hide', false);
+        // .eq('status', PostStatus.approved.toString())
+        .eq('is_hide', false)
+    ;
+    if(filter.isLease != null){
+      query = query.eq('is_lease', filter.isLease);
+    }
     if (filter.postedBy != PostedBy.all) {
       query = query.eq('is_pro_seller', filter.postedBy == PostedBy.proSeller);
     }
