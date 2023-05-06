@@ -13,6 +13,7 @@ import 'core/languages/localization_service.dart';
 import 'core/values/api_values.dart';
 import 'core/languages/localization_service.dart';
 import 'core/values/app_strings.dart';
+import 'data/repositories/auth_repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,12 +22,12 @@ Future<void> main() async {
     anonKey: SUPABASE_ANON_KEY,
   );
   await Hive.initFlutter();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+  MyApp({super.key});
+  var auth = AuthRepository();
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -59,6 +60,7 @@ class MyApp extends StatelessWidget {
       translations: LocalizationService(),
       builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
+      initialRoute: (auth.isUserLoggedIn) ? AppRoutes.home : AppRoutes.login,
       getPages: AppPages.pages,
       defaultTransition: Transition.cupertino,
     );

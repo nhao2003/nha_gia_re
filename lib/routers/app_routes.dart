@@ -16,4 +16,5 @@ abstract class AppRoutes {
   static const register = '/register';
   static const forgotPass = '/forgotPass';
   static const test = '/test';
+  static const user_profile = '/user_profile';
 }

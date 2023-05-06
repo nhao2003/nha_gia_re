@@ -1,23 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:nha_gia_re/data/repositories/auth_repository.dart';
+import 'package:nha_gia_re/modules/chat/screens/onChattingScreen.dart';
+import 'package:nha_gia_re/routers/app_routes.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginController extends GetxController {
 
-  var email;
-  var password;
+  var loginEmail = TextEditingController();
+  var loginPassword = TextEditingController();
+  var forgotPassEmail = TextEditingController();
+  var registerEmail = TextEditingController();
+  var registerPassword = TextEditingController();
 
-  String? validateEmail(String? value) {
-    const pattern = r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'"
-        r'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-'
-        r'\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*'
-        r'[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4]'
-        r'[0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9]'
-        r'[0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\'
-        r'x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])';
-    final regex = RegExp(pattern);
-    return (value!.isEmpty  || (value.isNotEmpty && !regex.hasMatch(value)))
-        ? 'Invalid email address'.tr
-        : null;
+  final registerFormGlobalKey = GlobalKey<FormState>();
+  final loginFormGlobalKey = GlobalKey<FormState>();  
+  final forgotPassFormGlobalKey = GlobalKey<FormState>();
+
+  RxString loginError = RxString('');
+  RxString registerError = RxString('');
+  RxBool isLoading = false.obs;
+
+  Future<void> handleLogin()
+  async {
+    final auth = AuthRepository();
+    if(loginFormGlobalKey.currentState!.validate())
+    {
+      print(loginEmail.text + ' ' + loginPassword.text);
+      try 
+      {
+        isLoading.value = true;
+        final res = await auth.signIn(email: loginEmail.text, password: loginPassword.text)
+        .then((value) {
+          if(value.updatedDate == null)
+          {
+            Get.toNamed(AppRoutes.user_profile);
+          }
+          else
+          {
+            Get.toNamed(AppRoutes.home);
+          }
+        });
+      }
+      on AuthException catch (e)
+      {
+        loginError.value = e.message.tr;
+        print(e.message.tr);
+      }
+      catch (e)
+      {
+        print(e);
+      }
+      finally
+      {
+        isLoading.value = false;
+      }
+    }
   }
   String? validatePassword(String? value)
   {
@@ -29,5 +68,51 @@ class LoginController extends GetxController {
     regex = RegExp(r"(?=.*[a-z])");
     if(!regex.hasMatch(value)) return 'Must contain at least one lower case'.tr;
     return null;
+  }
+  Future<void> handleRegister()
+  async {
+    final auth = AuthRepository();
+    if(registerFormGlobalKey.currentState!.validate())
+    {
+      try{
+        isLoading.value = true;
+        print(registerEmail.text + ' ' + registerPassword.text);
+        var user = await auth.signUp(email: registerEmail.text, password: registerPassword.text);        //print(res);
+      }
+      on AuthException catch (e)
+      {
+        registerError.value = e.message.tr;
+        print(e.message);
+      }
+      catch(e)
+      {
+        print(e);
+      }
+      finally
+      {
+        isLoading.value = false;
+      }
+    }
+  }
+  Future<void> handleForgotPass()
+  async {
+    final auth = AuthRepository();
+    if(forgotPassFormGlobalKey.currentState!.validate())
+    {
+      try 
+      {
+        isLoading.value = true;
+        print(forgotPassEmail.text);
+        await auth.recoveryPassword(forgotPassEmail.text);
+      }
+      catch (e)
+      {
+        print(e);
+      }
+      finally
+      {
+        isLoading.value = false;
+      }
+    }
   }
 }

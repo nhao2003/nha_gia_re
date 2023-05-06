@@ -6,6 +6,10 @@ import 'package:nha_gia_re/modules/search/screens/search_screen.dart';
 import 'package:nha_gia_re/modules/test/screens/test.dart';
 import '../modules/conversations/conversation_binding.dart';
 import '../modules/conversations/screens/conversation_screen.dart';
+import 'package:nha_gia_re/modules/user_profile/screens/user_profile_screen.dart';
+import 'package:nha_gia_re/modules/user_profile/user_profile_binding.dart';
+import '../modules/chat/chat_binding.dart';
+import '../modules/chat/screens/chat_screen.dart';
 import '../modules/home/home_binding.dart';
 import '../modules/home/screens/home_screen.dart';
 import '../modules/login/login_binding.dart';
@@ -74,6 +78,11 @@ abstract class AppPages {
       name: AppRoutes.test,
       page: () => const TestScreen(),
       binding: TestBinding(),
-    )
+    ),
+    GetPage(
+        name: AppRoutes.personal,
+        page: ()=> const PersonalScreen(),
+        binding: PersonalBinding(), ),
+    GetPage(name: AppRoutes.user_profile, page: () => const UserProfileScreen(), binding: UserProfileBinding())
   ];
 }
