@@ -44,7 +44,6 @@ class MyApp extends StatelessWidget {
     );
     return GetMaterialApp(
       title: AppStrings.appName,
-      initialRoute: AppRoutes.search,
       theme: ThemeData(
         primarySwatch: AppColors.customColor,
         primaryColor: AppColors.primaryColor,

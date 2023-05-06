@@ -1,6 +1,4 @@
 import 'dart:developer';
-
-import 'package:nha_gia_re/data/enums/property_enums.dart';
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
