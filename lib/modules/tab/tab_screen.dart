@@ -2,6 +2,7 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nha_gia_re/modules/home/screens/home_screen.dart';
+import 'package:nha_gia_re/modules/notification/screens/notification_screen.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/values/assets_image.dart';
 import '../post/screens/post_screen.dart';
@@ -18,9 +19,9 @@ class TabScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     _pages = [
       const HomeScreen(),
-      const PostManagementScreen(),
+      PostManagementScreen(),
       const Scaffold(),
-      const Scaffold(),
+      const NotificationScreen(),
       const Scaffold(),
     ];
     _tab = [

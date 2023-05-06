@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:nha_gia_re/modules/notification/notification_binding.dart';
+import 'package:nha_gia_re/modules/notification/screens/notification_screen.dart';
 import 'package:nha_gia_re/modules/tab/tab_binding.dart';
 import 'package:nha_gia_re/modules/tab/tab_screen.dart';
 import 'package:nha_gia_re/modules/post_management/screens/post_management_screen.dart';
@@ -36,7 +38,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.home,
-      page: () => HomeScreen(),
+      page: () => const HomeScreen(),
       binding: HomeBinding(),
     ),
     GetPage(
@@ -99,8 +101,13 @@ abstract class AppPages {
         binding: UserProfileBinding()),
     GetPage(
       name: AppRoutes.post_management,
-      page: () => const PostManagementScreen(),
+      page: () => PostManagementScreen(),
       binding: PostManagementBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.notification,
+      page: () => NotificationScreen(),
+      binding: NotificationBinding(),
     ),
   ];
 }

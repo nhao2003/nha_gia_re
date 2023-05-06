@@ -21,4 +21,6 @@ abstract class AppRoutes {
   static const user_profile = '/user_profile';
   // post management
   static const post_management = '/post_management';
+  // noti
+  static const notification = '/notification';
 }
