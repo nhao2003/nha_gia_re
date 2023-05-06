@@ -115,16 +115,7 @@ class SearchController extends GetxController {
   int rangeGetPosts = 10;
 
   void applyFilter() async {
-    final List<Post> datas = await repository.getAllPosts(PostFilter(
-        textSearch: _query,
-        orderBy: getOrderBy(),
-        from: indexStartPost,
-        to: indexStartPost + rangeGetPosts,
-        minPrice: lowerPriceValue.value.toInt(),
-        maxPrice: upperPriceValue.value.toInt(),
-        minArea: lowerAreaValue.value.toInt(),
-        maxArea: upperAreaValue.value.toInt(),
-        postedBy: getPostBy()));
+    final List<Post> datas = await repository.getAllPosts(getPostFilter());
     print(datas.length);
     print(datas.map((e) => e.title).toList().toString());
     // pop screen when done
@@ -150,6 +141,27 @@ class SearchController extends GetxController {
       return PostedBy.proSeller;
     }
   }
+
+  // get post filter
+  // all
+  PostFilter getPostFilter() {
+    return PostFilter(
+      textSearch: _query,
+      orderBy: getOrderBy(),
+      from: indexStartPost,
+      to: indexStartPost + rangeGetPosts,
+      minPrice: lowerPriceValue.value.toInt(),
+      maxPrice: upperPriceValue.value.toInt(),
+      minArea: lowerAreaValue.value.toInt(),
+      maxArea: upperAreaValue.value.toInt(),
+      postedBy: getPostBy(),
+    );
+  }
+  // ApartmentFilter
+  // HouseFilter
+  // LandFilter
+  // OfficeFilter
+  // MotelFilter
 
 // Category type ==================================
   RadioService radioCategory = RadioService(
