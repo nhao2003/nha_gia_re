@@ -22,7 +22,12 @@ class SearchController extends GetxController {
   }
 
   /// list dummy data
-  final List<String> dummydata = ["nha 3 tang", "nha lau", "nha tro"];
+  final List<String> dummydata = [
+    "nha 3 tang",
+    "nha lau",
+    "nha tro",
+    "Dat nong nghiep",
+  ];
 
   /// data in search delegate
   final List<String> history = <String>['apple', 'hello', 'world', 'flutter'];
@@ -114,8 +119,27 @@ class SearchController extends GetxController {
   int indexStartPost = 0;
   int rangeGetPosts = 10;
 
-  void applyFilter() async {
-    final List<Post> datas = await repository.getAllPosts(getPostFilter());
+  Future<void> applyFilter() async {
+    final List<Post> datas;
+    if (radioCategory.isEqualValue(0)) {
+      // Tất cả bất động sản
+      datas = await repository.getAllPosts(getPostFilter());
+    } else if (radioCategory.isEqualValue(1)) {
+      // Căn Hộ/chung Cư
+      datas = await repository.getAllApartments(getApartmentFilter());
+    } else if (radioCategory.isEqualValue(2)) {
+      // Nhà ở
+      datas = await repository.getAllHouses(getHouseFilter());
+    } else if (radioCategory.isEqualValue(3)) {
+      // Đất
+      datas = await repository.getAllLands(getLandFilter());
+    } else if (radioCategory.isEqualValue(4)) {
+      // Văn Phòng, Mặt bằng kinh doanh
+      datas = await repository.getAllOffices(getOfficeFilter());
+    } else {
+      // Phòng trọ
+      datas = await repository.getAllMotels(getMotelFilter());
+    }
     print(datas.length);
     print(datas.map((e) => e.title).toList().toString());
     // pop screen when done
@@ -157,11 +181,173 @@ class SearchController extends GetxController {
       postedBy: getPostBy(),
     );
   }
+
   // ApartmentFilter
+  ApartmentFilter getApartmentFilter() {
+    return ApartmentFilter(
+        textSearch: _query,
+        orderBy: getOrderBy(),
+        from: indexStartPost,
+        to: indexStartPost + rangeGetPosts,
+        minPrice: lowerPriceValue.value.toInt(),
+        maxPrice: upperPriceValue.value.toInt(),
+        minArea: lowerAreaValue.value.toInt(),
+        maxArea: upperAreaValue.value.toInt(),
+        postedBy: getPostBy(),
+        isHandedOver: apartmentStatus.isEqualValue(0)
+            ? null
+            : apartmentStatus.isEqualValue(1)
+                ? false
+                : true,
+        apartmentTypes: apartmentTypes
+            .getListSelected()
+            .map((e) => ApartmentType.parse(e))
+            .toList(),
+        isCorner: apartmentCharacteristics.isEqualValue(0) ? null : true,
+        numOfBedrooms: apartmentBedroomNumber.getListSelected().map(
+          (e) {
+            if (e == "Nhiều hơn 10") {
+              return 11;
+            } else {
+              return int.parse(e);
+            }
+          },
+        ).toList(),
+        mainDoorDirections: apartmentMainDirection
+            .getListSelected()
+            .map((e) => Direction.parse(e))
+            .toList(),
+        balconyDirections: apartmentBalconyDirection
+            .getListSelected()
+            .map((e) => Direction.parse(e))
+            .toList(),
+        legalStatus: apartmentLegalDocuments
+            .getListSelected()
+            .map((e) => LegalDocumentStatus.parse(e))
+            .toList(),
+        furnitureStatus: apartmentInteriorStatus
+            .getListSelected()
+            .map((e) => FurnitureStatus.parse(e))
+            .toList());
+  }
+
   // HouseFilter
+  HouseFilter getHouseFilter() {
+    return HouseFilter(
+        textSearch: _query,
+        orderBy: getOrderBy(),
+        from: indexStartPost,
+        to: indexStartPost + rangeGetPosts,
+        minPrice: lowerPriceValue.value.toInt(),
+        maxPrice: upperPriceValue.value.toInt(),
+        minArea: lowerAreaValue.value.toInt(),
+        maxArea: upperAreaValue.value.toInt(),
+        postedBy: getPostBy(),
+        houseTypes: houseTypes
+            .getListSelected()
+            .map((e) => HouseType.parse(e))
+            .toList(),
+        hasWideAlley: houseCharacteristics.isEqualValue(0),
+        isFacade: houseCharacteristics.isEqualValue(1),
+        isWidensTowardsTheBack: houseCharacteristics.isEqualValue(2),
+        numOfBedrooms: houseBedroomNumber.getListSelected().map(
+          (e) {
+            if (e == "Nhiều hơn 10") {
+              return 11;
+            } else {
+              return int.parse(e);
+            }
+          },
+        ).toList(),
+        mainDoorDirections: houseMainDirection
+            .getListSelected()
+            .map((e) => Direction.parse(e))
+            .toList(),
+        legalStatus: houseLegalDocuments
+            .getListSelected()
+            .map((e) => LegalDocumentStatus.parse(e))
+            .toList(),
+        furnitureStatus: houseInteriorStatus
+            .getListSelected()
+            .map((e) => FurnitureStatus.parse(e))
+            .toList());
+  }
+
   // LandFilter
+  LandFilter getLandFilter() {
+    return LandFilter(
+      textSearch: _query,
+      orderBy: getOrderBy(),
+      from: indexStartPost,
+      to: indexStartPost + rangeGetPosts,
+      minPrice: lowerPriceValue.value.toInt(),
+      maxPrice: upperPriceValue.value.toInt(),
+      minArea: lowerAreaValue.value.toInt(),
+      maxArea: upperAreaValue.value.toInt(),
+      postedBy: getPostBy(),
+      landTypes:
+          landTypes.getListSelected().map((e) => LandType.parse(e)).toList(),
+      hasWideAlley: landCharacteristics.isEqualValue(0),
+      isFacade: landCharacteristics.isEqualValue(1),
+      isWidensTowardsTheBack: landCharacteristics.isEqualValue(2),
+      landDirections: landDirection
+          .getListSelected()
+          .map((e) => Direction.parse(e))
+          .toList(),
+      legalStatus: landLegalDocuments
+          .getListSelected()
+          .map((e) => LegalDocumentStatus.parse(e))
+          .toList(),
+    );
+  }
+
   // OfficeFilter
+  OfficeFilter getOfficeFilter() {
+    return OfficeFilter(
+      textSearch: _query,
+      orderBy: getOrderBy(),
+      from: indexStartPost,
+      to: indexStartPost + rangeGetPosts,
+      minPrice: lowerPriceValue.value.toInt(),
+      maxPrice: upperPriceValue.value.toInt(),
+      minArea: lowerAreaValue.value.toInt(),
+      maxArea: upperAreaValue.value.toInt(),
+      postedBy: getPostBy(),
+      officeTypes:
+          officeType.getListSelected().map((e) => OfficeType.parse(e)).toList(),
+      mainDoorDirections: officeDirection
+          .getListSelected()
+          .map((e) => Direction.parse(e))
+          .toList(),
+      legalStatus: landLegalDocuments
+          .getListSelected()
+          .map((e) => LegalDocumentStatus.parse(e))
+          .toList(),
+      furnitureStatus: officeInteriorStatus
+          .getListSelected()
+          .map((e) => FurnitureStatus.parse(e))
+          .toList(),
+    );
+  }
+
   // MotelFilter
+  MotelFilter getMotelFilter() {
+    return MotelFilter(
+      textSearch: _query,
+      orderBy: getOrderBy(),
+      from: indexStartPost,
+      to: indexStartPost + rangeGetPosts,
+      minPrice: lowerPriceValue.value.toInt(),
+      maxPrice: upperPriceValue.value.toInt(),
+      minArea: lowerAreaValue.value.toInt(),
+      maxArea: upperAreaValue.value.toInt(),
+      postedBy: getPostBy(),
+      furnitureStatus: rentInteriorStatus
+          .getListSelected()
+          .map((e) => FurnitureStatus.parse(e))
+          .toList(),
+    );
+  }
 
 // Category type ==================================
   RadioService radioCategory = RadioService(
@@ -268,7 +454,7 @@ class SearchController extends GetxController {
   ListCheckService apartmentLegalDocuments = ListCheckService(
     values: FilterValues.instance.legalDocuments,
   );
-  RadioService apartmentInteriorStatus = RadioService(
+  ListCheckService apartmentInteriorStatus = ListCheckService(
     values: FilterValues.instance.interiorStatus,
   );
 // Nha o ================================================
@@ -287,7 +473,7 @@ class SearchController extends GetxController {
   ListCheckService houseLegalDocuments = ListCheckService(
     values: FilterValues.instance.legalDocuments,
   );
-  RadioService houseInteriorStatus = RadioService(
+  ListCheckService houseInteriorStatus = ListCheckService(
     values: FilterValues.instance.interiorStatus,
   );
 // Dat ================================================
@@ -313,11 +499,11 @@ class SearchController extends GetxController {
   ListCheckService officeLegalDocuments = ListCheckService(
     values: FilterValues.instance.legalDocuments,
   );
-  RadioService officeInteriorStatus = RadioService(
+  ListCheckService officeInteriorStatus = ListCheckService(
     values: FilterValues.instance.interiorStatus,
   );
 // Phong tro  ================================================
-  RadioService rentInteriorStatus = RadioService(
+  ListCheckService rentInteriorStatus = ListCheckService(
     values: FilterValues.instance.interiorStatus,
   );
 }

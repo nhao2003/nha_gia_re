@@ -2,6 +2,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/text_styles.dart';
 import '../../search_controller.dart';
 import 'package:flutter/material.dart';
+import 'category_box_check.dart';
 import 'category_box_radio.dart';
 
 class CardRent extends StatelessWidget {
@@ -31,10 +32,11 @@ class CardRent extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          CategoryBoxRadio(
+          CategoryBoxCheck(
             title: "Tình trạng nội thất",
-            categorys: searchController.rentInteriorStatus.values,
-            selected: searchController.rentInteriorStatus.selectedValue,
+            categorys: searchController.rentInteriorStatus.checkListItems,
+            multipleSelected:
+                searchController.rentInteriorStatus.multipleSelected,
             onChanged: searchController.rentInteriorStatus.onChange,
           ),
           const SizedBox(height: 10),
