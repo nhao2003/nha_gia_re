@@ -591,17 +591,27 @@ class MyCustomFormState extends State<MyCustomForm> {
                                                   child: TextFormCustom(label: "Tiền điện", hint: "(Không bắt buộc)", onSave: (v){controller.waterPrice = v !=null? int.tryParse(v): null;}, keyBoardType: TextInputType.number, onValidate: validateCount,),
                                                 )
                                               ],),
+                                            SizedBox(height: 10.h,),
+
                                           ],
                                         )),
-                                    SizedBox(height: 10.h,),
                                     Visibility(
-                                        visible: controller.isSale! == false,
+                                        visible: controller.isSale! == false && controller.selectedPropertyType != PropertyType.motel,
                                         child: Column(
                                           children: [
-                                            TextFormCustom(label: "Số tiền cọc", hint: "(Không bắt buộc)", onSave: (v){controller.deposit = v!= null? int.tryParse(v) : null;}, keyBoardType: TextInputType.number, onValidate: validatePositiveDouble,),
+                                            TextFormCustom(label: "Số tiền cọc", hint:  "(Không bắt buộc)", onSave: (v){controller.deposit = v!= null? int.tryParse(v) : null;}, keyBoardType: TextInputType.number, onValidate: validatePositiveDouble,),
                                             SizedBox(height: 10.h,),
                                           ],
                                         )),
+                                    Visibility(
+                                        visible:  controller.selectedPropertyType == PropertyType.motel,
+                                        child: Column(
+                                          children: [
+                                            TextFormCustom(label: "Số tiền cọc", hint:  "(Số tiền cọc)", onSave: (v){controller.modelDeposit = int.parse(v!);}, keyBoardType: TextInputType.number, onValidate: validatePositiveDouble,),
+                                            SizedBox(height: 10.h,),
+                                          ],
+                                        )),
+
                                   ],
                                 ),
                               ),
@@ -662,6 +672,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                                 mainAxisAlignment: MainAxisAlignment.start,
                                                 children: [
                                                   CheckFormField(name: "Mặt tiền", onChange: (v){controller.isFacade = v;}, initialValue: controller.isFacade,),
+                                                  CheckFormField(name:"Nở hậu", onChange: (v){controller.isWidensTowardsTheBack = v;}, initialValue: controller.isWidensTowardsTheBack,),
                                                   CheckFormField(name: "Hẻm xe hơi", onChange: (v){controller.hasWideAlley = v;}, initialValue: controller.hasWideAlley,),
                                                 ],
                                               ):Container(height: 0,),
@@ -678,10 +689,10 @@ class MyCustomFormState extends State<MyCustomForm> {
                                 ),
                               ),
                               GestureDetector(
-                                onTap: (){
+                                onTap: () async{
                                   if(_formKey.currentState!.validate()){
                                     _formKey.currentState!.save();
-                                    controller.addPost();
+                                    await controller.addPost();
                                     final snackBar = SnackBar(
                                       content: Text('Đăng tin thành công!', ),
                                     );

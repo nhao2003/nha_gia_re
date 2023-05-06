@@ -152,6 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: 'Quản lý tin',
             ),
             TabItem(
+
               icon: CircleAvatar(
                 backgroundColor: AppColors.primaryColor,
                 child: Image.asset(
@@ -175,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
           onTap: (index) {
             switch (index) {
-              case 0:
+              case 2: Get.toNamed(AppRoutes.post);
             }
           },
         ));
