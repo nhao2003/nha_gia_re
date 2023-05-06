@@ -7,12 +7,14 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:nha_gia_re/data/models/address.dart';
 import 'package:nha_gia_re/data/models/province.dart';
+import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'dart:developer';
 import '../../data/enums/enums.dart';
 import '../../data/models/properties/post.dart';
 
 class PropertyController extends GetxController{
   PropertyController();
+  final authRepository = AuthRepository();
   Future<void> getProvince() async{
     final response = await http.get(Uri.parse('https://provinces.open-api.vn/api/?depth=3'));
     print(response.statusCode);
@@ -203,6 +205,7 @@ class PropertyController extends GetxController{
     update();
   }
   void addPost(){
+    if(authRepository.userID == null) return;
     Post post;
     DateTime now = DateTime.now();
     switch (selectedPropertyType){
@@ -213,7 +216,7 @@ class PropertyController extends GetxController{
             area: area,
             type: PropertyType.office,
             address: address,
-            userID: "1",
+            userID: authRepository.userID!,
             isLease: !isSale,
             price: price,
             title: title,
@@ -245,7 +248,7 @@ class PropertyController extends GetxController{
             hasWideAlley: hasWideAlley,
             address: address,
             type: PropertyType.land,
-            userID: "1",
+            userID: authRepository.userID!,
             isLease: !isSale,
             price: price,
             title: title,
@@ -277,7 +280,7 @@ class PropertyController extends GetxController{
             legalDocumentStatus: legalStatus,
             address: address, 
             type: PropertyType.house,
-            userID: "1",
+            userID: authRepository.userID!,
             isLease: !isSale,
             price: (price),
             title: title, 
@@ -288,8 +291,7 @@ class PropertyController extends GetxController{
             isProSeller: !isPersonal,
             deposit: deposit,
             numOfLikes: 0,
-            //TODO: ADD [isWidensTowardsTheBack]
-            isWidensTowardsTheBack: false);
+            isWidensTowardsTheBack: isWidensTowardsTheBack);
         print(post.toString());
         break;
       case PropertyType.apartment:
@@ -310,7 +312,7 @@ class PropertyController extends GetxController{
             floor: (floor),
             address: address,
             type: PropertyType.apartment,
-            userID: "1",
+            userID: authRepository.userID!,
             isLease: !isSale,
             price:(price),
             title: title, 
@@ -333,7 +335,7 @@ class PropertyController extends GetxController{
             waterPrice: waterPrice,
             address: address,
             type: PropertyType.motel,
-            userID: "1",
+            userID: authRepository.userID!,
             isLease: !isSale,
             price: price,
             title: title,

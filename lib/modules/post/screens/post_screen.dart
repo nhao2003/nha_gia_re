@@ -662,6 +662,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                                 mainAxisAlignment: MainAxisAlignment.start,
                                                 children: [
                                                   CheckFormField(name: "Mặt tiền", onChange: (v){controller.isFacade = v;}, initialValue: controller.isFacade,),
+                                                  CheckFormField(name:"Nở hậu", onChange: (v){controller.isWidensTowardsTheBack = v;}, initialValue: controller.isWidensTowardsTheBack,),
                                                   CheckFormField(name: "Hẻm xe hơi", onChange: (v){controller.hasWideAlley = v;}, initialValue: controller.hasWideAlley,),
                                                 ],
                                               ):Container(height: 0,),
