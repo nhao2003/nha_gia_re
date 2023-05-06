@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 
 import '../../../core/extensions/color_ex.dart';
 import '../../../core/theme/text_styles.dart';
@@ -22,7 +23,7 @@ class _CustomButtonState extends State<CustomButton> {
                 width: 64,
                 height: 64,
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){ AuthRepository().signOut(); },
                   style: ButtonStyle(
                     backgroundColor: MaterialStatePropertyAll(HexColor.fromHex('F5F5F5')),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(

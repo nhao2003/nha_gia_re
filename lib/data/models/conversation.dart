@@ -1,33 +1,29 @@
-import 'package:nha_gia_re/data/models/message.dart';
-import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Conversation {
   String id;
-  UserInfo chatWithUser;
-  List<Message> messages;
+  String chatWithUser;
+  String? lastMessage;
+  DateTime lastMessageSentAt;
 
   Conversation({
     required this.id,
     required this.chatWithUser,
-    required this.messages,
-  });
+    required this.lastMessage,
+    required this.lastMessageSentAt,
+  }) : assert(id.isNotEmpty && chatWithUser.isNotEmpty);
+
   @override
   String toString() {
-    return 'Conversation(id: $id, chatWithUser: $chatWithUser, messages: $messages)';
+    return 'Conversation(id: $id, chatWithUser: $chatWithUser)';
   }
-  factory Conversation.fromJson(Map<String, dynamic> json) {
-    final uid = Supabase.instance.client.auth.currentUser!.id;
-    return Conversation(
-      id: json['id'],
-      chatWithUser: json['user1_id'] == uid
-          ? UserInfo.fromJson(json['user2_info'])
-          : UserInfo.fromJson(json['user1_info']),
-      messages: List<Message>.from(json['messages']
-          .map(
-            (e) => Message.fromJson(e),
-      )
-          .toList()), // Since it's not possible to deserialize a Stream, we'll set it to null here
-    );
-  }
+
+  Conversation.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        chatWithUser =
+            json['user1_id'] == Supabase.instance.client.auth.currentUser!.id
+                ? json['user2_id']
+                : json['user1_id'],
+        lastMessage = json['last_message'],
+        lastMessageSentAt = DateTime.parse(json['last_message_sent_at']);
 }

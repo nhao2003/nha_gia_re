@@ -1,6 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class MessageRequest{
+class MessageRequest {
   String conservationId;
   String content;
 
@@ -8,7 +8,7 @@ class MessageRequest{
 
   Map<String, dynamic> toJson() {
     return {
-      'conservation_id': conservationId,
+      'conversation_id': conservationId,
       'sender_id': Supabase.instance.client.auth.currentUser!.id,
       'message': content,
     };

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nha_gia_re/data/providers/remote/remote_data_source_impl.dart';
+import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/modules/login/screens/forget_password.dart';
 import 'package:nha_gia_re/modules/login/screens/login_screen.dart';
+import 'package:nha_gia_re/routers/app_routes.dart';
 
 import '../../../core/theme/text_styles.dart';
 import '../login_controller.dart';
@@ -17,9 +19,6 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
 
   final LoginController _controller = Get.find<LoginController>();
-  final registerFormGlobalKey = GlobalKey<FormState>();
-  final TextEditingController _user = TextEditingController();
-  final TextEditingController _pass = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -27,26 +26,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: Container(
           padding: const EdgeInsets.all(30),
           child: Form(
-            key: registerFormGlobalKey,
+            key: _controller.registerFormGlobalKey,
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text("LOGO", style: TextStyle(color: Colors.black, fontSize: 64)),
                   const SizedBox(height: 50,),
-                  TextFormField(
-                    controller: _user,
+                  Obx( () => TextFormField(
+                    controller: _controller.registerEmail,
                     decoration: InputDecoration(
                         hintText: 'Email'.tr,
                         labelText: 'Email',
+                        errorText: (_controller.registerError.value == '')
+                          ? null
+                          : _controller.registerError.value,
                         border: const OutlineInputBorder()),
-                    validator: _controller.validateEmail,
-                  ),
+                    validator: (value) => (value!.isEmail) ? null : 'Invalid email address'.tr,
+                  )),
                   const SizedBox(
                     height: 15,
                   ),
                   TextFormField(
-                    controller: _pass,
+                    controller: _controller.registerPassword,
                     obscureText: true,
                     autocorrect: false,
                     enableSuggestions: false,
@@ -69,7 +71,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         labelText: 'Repeat your password'.tr,
                         border: const OutlineInputBorder()),
                     validator: (value) {
-                      if(value != _pass.text) {
+                      if(value != _controller.registerPassword.text) {
                         return "Password doesn't match".tr;
                       }
                       return null;
@@ -78,15 +80,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  ElevatedButton(
-                      onPressed: () async {
-                        if (registerFormGlobalKey.currentState!.validate()) {
-                          print(_user.text + "/"+ _pass.text);
-                          RemoteDataSourceImpl remote = RemoteDataSourceImpl();
-                          await remote.signUp(email: _user.text, password: _pass.text);
-                        }
-                      },
-                      child: Text('Register'.tr)),
+                  Obx( () => ElevatedButton(
+                      onPressed: _controller.handleRegister,
+                      child: _controller.isLoading.value
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.black,
+                                strokeWidth: 2,
+                              ))
+                          : Text('Register'.tr))),
                   Row(
                     children: [
                       TextButton(

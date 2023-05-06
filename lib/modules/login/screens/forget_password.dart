@@ -16,7 +16,6 @@ class ForgetPasswordPage extends StatefulWidget {
 class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   
   final LoginController _controller = Get.find<LoginController>();
-  final forgotPassFormGlobalKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -36,27 +35,34 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
       body: Container(
           padding: const EdgeInsets.all(35),
           child: Form(
-            key: forgotPassFormGlobalKey,
+            key: _controller.forgotPassFormGlobalKey,
             child: Center(
               child: Column(
                 children: [
                   Image.asset(Assets.forgetPass, width: MediaQuery.of(context).size.width * 0.65,),
                   const SizedBox(height: 20,),
-                   TextFormField(
-                  decoration: InputDecoration(
-                      hintText: 'example@email.com',
-                      labelText: 'Enter your email'.tr,
-                      border: const OutlineInputBorder()),
-                  validator: _controller.validateEmail,
+                  TextFormField(
+                    controller: _controller.forgotPassEmail,
+                    decoration: InputDecoration(
+                        hintText: 'example@email.com',
+                        labelText: 'Enter your email'.tr,
+                        border: const OutlineInputBorder()),
+                    validator: (value) => (value!.isEmail) ? null : 'Invalid email address'.tr,
                   ),
                   const SizedBox(height: 20,),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
-                        if (forgotPassFormGlobalKey.currentState!.validate()) {}
-                      }, 
-                      child: Text('Reset password'.tr),),
+                      onPressed: _controller.handleForgotPass, 
+                      child: _controller.isLoading.value
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.black,
+                                strokeWidth: 2,
+                              ))
+                          : Text('Reset password'.tr),),
                     ),
               ]),
             ),

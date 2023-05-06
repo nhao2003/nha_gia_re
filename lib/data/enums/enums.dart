@@ -32,6 +32,7 @@ enum PropertyType {
 }
 
 enum ApartmentType {
+  apartment,
   duplex,
   penhouse,
   service,
@@ -49,6 +50,8 @@ enum ApartmentType {
   @override
   String toString() {
     switch (this) {
+      case ApartmentType.apartment:
+        return AppStrings.propertyTypeApartment;
       case ApartmentType.duplex:
         return AppStrings.apartmentTypeDuplex;
       case ApartmentType.penhouse:
@@ -243,4 +246,45 @@ enum FurnitureStatus {
         return AppStrings.furnitureStatusHighEnd;
     }
   }
+}
+
+enum OrderBy {
+  priceAsc,
+  priceDesc,
+  createdAtAsc,
+  createdAtDesc;
+
+  String get filterString =>
+      (this == priceAsc || this == priceDesc) ? 'price' : 'posted_date';
+
+  bool get isAsc => this == priceAsc || this == createdAtAsc;
+}
+
+enum PostedBy {
+  all,
+  proSeller,
+  individual;
+
+  List<bool> toFilterList() {
+    switch (this) {
+      case PostedBy.all:
+        return [true, false];
+      case PostedBy.proSeller:
+        return [true];
+      case PostedBy.individual:
+        return [false];
+    }
+  }
+}
+
+enum HandOverFilter {
+  all,
+  completed,
+  pending,
+}
+
+enum HouseAndLandFeatureFilter {
+  all,
+  hasWideAlley,
+  isFacade,
 }

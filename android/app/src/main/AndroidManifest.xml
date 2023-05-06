@@ -3,6 +3,7 @@
    <application
         android:label="Nha gia re"
         android:name="${applicationName}"
+        android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

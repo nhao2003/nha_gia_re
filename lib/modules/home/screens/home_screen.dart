@@ -8,6 +8,8 @@ import 'package:nha_gia_re/global_widgets/infor_card.dart';
 import 'package:nha_gia_re/modules/home/widgets/button.dart';
 import 'package:nha_gia_re/modules/home/widgets/carousel_ad.dart';
 import 'package:nha_gia_re/modules/home/widgets/image_button.dart';
+import 'package:nha_gia_re/routers/app_pages.dart';
+import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../search/widgets/my_search_delegate.dart';
 import '../home_controller.dart';
 
@@ -61,7 +63,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.toNamed(AppRoutes.conversation);
+              },
               icon: Image.asset(Assets.messCircle, width: 24),
               padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
               constraints: const BoxConstraints(),

@@ -1,6 +1,13 @@
 import 'package:get/get.dart';
 import 'package:nha_gia_re/modules/search/screens/filter_screen.dart';
+import 'package:nha_gia_re/modules/chat/chat_binding.dart';
+import 'package:nha_gia_re/modules/chat/screens/chat_screen.dart';
 import 'package:nha_gia_re/modules/search/screens/search_screen.dart';
+import 'package:nha_gia_re/modules/test/screens/test.dart';
+import '../modules/conversations/conversation_binding.dart';
+import '../modules/conversations/screens/conversation_screen.dart';
+import 'package:nha_gia_re/modules/user_profile/screens/user_profile_screen.dart';
+import 'package:nha_gia_re/modules/user_profile/user_profile_binding.dart';
 import '../modules/chat/chat_binding.dart';
 import '../modules/chat/screens/chat_screen.dart';
 import '../modules/home/home_binding.dart';
@@ -13,6 +20,7 @@ import '../modules/personal/screens/personal_screen.dart';
 import '../modules/post/post_binding.dart';
 import '../modules/post/screens/post_screen.dart';
 import '../modules/search/search_binding.dart';
+import '../modules/test/test_binding.dart';
 import 'app_routes.dart';
 
 abstract class AppPages {
@@ -28,8 +36,13 @@ abstract class AppPages {
       binding: LoginBinding(),
     ),
     GetPage(
+      name: AppRoutes.conversation,
+      page: () => const ConversationScreen(),
+      binding: ConversationBinding(),
+    ),
+    GetPage(
       name: AppRoutes.chat,
-      page: () => const ChatScreen(),
+      page: () => ChatScreen(),
       binding: ChatBinding(),
     ),
     GetPage(
@@ -56,5 +69,20 @@ abstract class AppPages {
       page: () => FilterScreen(),
       binding: SearchBinding(),
     ),
+    GetPage(
+      name: AppRoutes.personal,
+      page: () => const PersonalScreen(),
+      binding: PersonalBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.test,
+      page: () => const TestScreen(),
+      binding: TestBinding(),
+    ),
+    GetPage(
+        name: AppRoutes.personal,
+        page: ()=> const PersonalScreen(),
+        binding: PersonalBinding(), ),
+    GetPage(name: AppRoutes.user_profile, page: () => const UserProfileScreen(), binding: UserProfileBinding())
   ];
 }

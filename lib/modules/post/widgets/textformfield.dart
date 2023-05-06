@@ -5,7 +5,7 @@ class TextFormCustom extends StatelessWidget {
   final String label;
   final String error;
   String fieldValue;
-  Function(String) onSave;
+  Function(String?) onSave;
   Function(String?)? onValidate;
   final TextInputType keyBoardType;
    TextFormCustom({Key? key,
@@ -23,17 +23,29 @@ class TextFormCustom extends StatelessWidget {
       initialValue: fieldValue,
       keyboardType: keyBoardType,
       validator:(value){
-        if(hint.contains("(Không bắt buộc)")) return null;
-        if (value == null || value.isEmpty) {
-          return error;
-        }
-        else{
-          if(onValidate != null){
-            onValidate!(value);
+        if(hint.contains("(Không bắt buộc)")) {
+          if (value == null || value.isEmpty) {
+            return null;
+          } else {
+            if (onValidate != null) {
+               return  onValidate!(value);
+            }
           }
+          return null;
         }
-        return null;
-      },
+        else {
+          if (value == null || value.isEmpty) {
+            return error;
+          }
+          else{
+            if(onValidate != null){
+             return onValidate!(value);
+            }
+          }
+          return null;
+        }
+      }
+      ,
       decoration: InputDecoration(
         hintText: hint,
         labelText: label,
@@ -43,7 +55,7 @@ class TextFormCustom extends StatelessWidget {
         ),
       ),
       onSaved: (value){
-        if(value == null || value.isEmpty) return;
+        //if(value == null || value.isEmpty) return;
         onSave(value);
       },
     );

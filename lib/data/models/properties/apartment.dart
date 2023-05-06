@@ -1,3 +1,4 @@
+import '../../enums/enums.dart';
 import '../address.dart';
 import 'post.dart';
 
@@ -103,5 +104,35 @@ class Apartment extends Post {
           ? LegalDocumentStatus.parse(json['legal_document_status'])
           : null,
     );
+  }
+  @override
+  String toString() {
+    return 'Apartment{'
+        'id: $id, '
+        'area: $area, '
+        'projectName: $projectName, '
+        'type: $type, '
+        'address: $address, '
+        'userID: $userID, '
+        'price: $price, '
+        'deposit: $deposit, '
+        'isLease: $isLease, '
+        'title: $title, '
+        'description: $description, '
+        'postedDate: $postedDate, '
+        'expiryDate: $expiryDate, '
+        'numOfLikes: $numOfLikes, '
+        'imagesUrl: $imagesUrl, '
+        'isProSeller: $isProSeller, '
+        'apartmentType: $apartmentType, '
+        'isCorner: $isCorner, '
+        'isHandOver: $isHandOver, '
+        'numOfBedRooms" $numOfBedRooms, '
+        'balconyDirection: $balconyDirection, '
+        'mainDoorDirection: $mainDoorDirection, '
+        'numOfToilets: $numOfToilets, '
+        'block: $block, '
+        'floor: $floor, '
+        'legalDocumentStatus: $legalDocumentStatus';
   }
 }

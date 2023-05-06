@@ -87,9 +87,10 @@ class FilterScreen extends StatelessWidget {
               child: Material(
                 color: AppColors.primaryColor,
                 child: InkWell(
-                  onTap: () {
+                  onTap: () async {
                     // Apply filter
-                    searchController.popScreen();
+                    //print("hafkjsfhasldfhak;asdasd");
+                    await searchController.applyFilter();
                   },
                   child: Container(
                     width: double.infinity,
