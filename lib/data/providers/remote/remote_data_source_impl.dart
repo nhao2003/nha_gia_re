@@ -247,7 +247,9 @@ class RemoteDataSourceImpl extends RemoteDataSource {
         .gte('price', filter.minPrice)
         .lte('price', filter.maxPrice)
         .gte('area', filter.minArea)
-        .lte('area', filter.maxArea);
+        .lte('area', filter.maxArea)
+        .eq('status', PostStatus.approved.toString())
+        .eq('is_hide', false);
     if (filter.postedBy != PostedBy.all) {
       query = query.eq('is_pro_seller', filter.postedBy == PostedBy.proSeller);
     }
@@ -521,4 +523,27 @@ class RemoteDataSourceImpl extends RemoteDataSource {
         params: {'user_info_id': otherUserId});
     return data;
   }
+
+  @override
+  Future<List<Map<String, dynamic>>> getMyPosts() async {
+    final data = await supabaseClient
+        .from('post').select().eq('user_id', supabaseClient.auth.currentUser!.id);
+    return List<Map<String, dynamic>>.from(data);
+  }
+
+  @override
+  Future<void> extendPost(String id) async {
+    await supabaseClient.rpc('extend_post_expiry_date', params:{
+      'id': id
+    });
+  }
+
+  @override
+  Future<void> hideOrUnHidePost(String id, bool isHide) async {
+    await supabaseClient
+        .from('post').update({
+      'is_hide':isHide,
+    });
+  }
+
 }
