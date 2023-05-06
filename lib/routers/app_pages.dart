@@ -1,4 +1,8 @@
 import 'package:get/get.dart';
+import 'package:nha_gia_re/modules/tab/tab_binding.dart';
+import 'package:nha_gia_re/modules/tab/tab_screen.dart';
+import 'package:nha_gia_re/modules/post_management/screens/post_management_screen.dart';
+import 'package:nha_gia_re/modules/post_management/post_management_binding.dart';
 import 'package:nha_gia_re/modules/search/screens/filter_screen.dart';
 import 'package:nha_gia_re/modules/chat/chat_binding.dart';
 import 'package:nha_gia_re/modules/chat/screens/chat_screen.dart';
@@ -25,6 +29,11 @@ import 'app_routes.dart';
 
 abstract class AppPages {
   static final List<GetPage> pages = [
+    GetPage(
+      name: AppRoutes.tab_screen,
+      page: () => TabScreen(),
+      binding: TabBinding(),
+    ),
     GetPage(
       name: AppRoutes.home,
       page: () => HomeScreen(),
@@ -80,9 +89,18 @@ abstract class AppPages {
       binding: TestBinding(),
     ),
     GetPage(
-        name: AppRoutes.personal,
-        page: ()=> const PersonalScreen(),
-        binding: PersonalBinding(), ),
-    GetPage(name: AppRoutes.user_profile, page: () => const UserProfileScreen(), binding: UserProfileBinding())
+      name: AppRoutes.personal,
+      page: () => const PersonalScreen(),
+      binding: PersonalBinding(),
+    ),
+    GetPage(
+        name: AppRoutes.user_profile,
+        page: () => const UserProfileScreen(),
+        binding: UserProfileBinding()),
+    GetPage(
+      name: AppRoutes.post_management,
+      page: () => const PostManagementScreen(),
+      binding: PostManagementBinding(),
+    ),
   ];
 }

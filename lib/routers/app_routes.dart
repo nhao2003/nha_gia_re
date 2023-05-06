@@ -1,4 +1,6 @@
 abstract class AppRoutes {
+  // tabScreens
+  static const tab_screen = '/tab';
   // home route
   static const home = '/home';
   // login
@@ -17,4 +19,6 @@ abstract class AppRoutes {
   static const forgotPass = '/forgotPass';
   static const test = '/test';
   static const user_profile = '/user_profile';
+  // post management
+  static const post_management = '/post_management';
 }
