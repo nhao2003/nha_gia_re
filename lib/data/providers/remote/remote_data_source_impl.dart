@@ -323,15 +323,15 @@ class RemoteDataSourceImpl extends RemoteDataSource {
   @override
   Future<List<Map<String, dynamic>>> getAllHouses(HouseFilter filter) async {
     try {
-      var query = _defaultFilter('apartments', filter);
+      var query = _defaultFilter('houses', filter);
       if (filter.isFacade != null) {
-        query = query.eq('is_face', filter.isFacade);
+        query = query.eq('is_facade', filter.isFacade);
       }
       if (filter.isWidensTowardsTheBack != null) {
         query = query.eq(
             'is_widens_towards_the_back', filter.isWidensTowardsTheBack);
       }
-      if (filter.isFacade != null) {
+      if (filter.hasWideAlley != null) {
         query = query.eq('has_wide_alley', filter.hasWideAlley);
       }
       if (filter.houseTypes.isNotEmpty) {
@@ -375,15 +375,15 @@ class RemoteDataSourceImpl extends RemoteDataSource {
   @override
   Future<List<Map<String, dynamic>>> getAllLands(LandFilter filter) async {
     try {
-      var query = _defaultFilter('apartments', filter);
+      var query = _defaultFilter('lands', filter);
       if (filter.isFacade != null) {
-        query = query.eq('is_face', filter.isFacade);
+        query = query.eq('is_facade', filter.isFacade);
       }
       if (filter.isWidensTowardsTheBack != null) {
         query = query.eq(
             'is_widens_towards_the_back', filter.isWidensTowardsTheBack);
       }
-      if (filter.isFacade != null) {
+      if (filter.hasWideAlley != null) {
         query = query.eq('has_wide_alley', filter.hasWideAlley);
       }
       if (filter.landTypes.isNotEmpty) {
@@ -411,7 +411,7 @@ class RemoteDataSourceImpl extends RemoteDataSource {
   @override
   Future<List<Map<String, dynamic>>> getAllOffices(OfficeFilter filter) async {
     try {
-      var query = _defaultFilter('apartments', filter);
+      var query = _defaultFilter('offices', filter);
       if (filter.officeTypes.isNotEmpty) {
         query = query.in_('office_type',
             filter.officeTypes.map((e) => e.toString()).toList());
@@ -441,7 +441,7 @@ class RemoteDataSourceImpl extends RemoteDataSource {
   @override
   Future<List<Map<String, dynamic>>> getAllMotels(MotelFilter filter) async {
     try {
-      var query = _defaultFilter('apartments', filter);
+      var query = _defaultFilter('motels', filter);
       if (filter.furnitureStatus.isNotEmpty) {
         query.in_('furniture_status',
             filter.furnitureStatus.map((e) => e.toString()).toList());
@@ -483,7 +483,6 @@ class RemoteDataSourceImpl extends RemoteDataSource {
     }
     return List<Map<String, dynamic>>.from(response).first;
   }
-
 
   @override
   Stream<List<Map<String, dynamic>>> getAllConversation() async* {

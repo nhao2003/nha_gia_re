@@ -16,6 +16,10 @@ class ListCheckService {
     checkListItems = convertList(values);
   }
 
+  List<String> getListSelected() {
+    return <String>[...multipleSelected];
+  }
+
   void reset() {
     // reset false to all item of checklistItems
     for (var item in checkListItems) {
@@ -53,5 +57,9 @@ class ListCheckService {
     }).toList();
 
     return checkListItems;
+  }
+
+  bool isEqualValue(int index) {
+    return getListSelected().contains(values[index]);
   }
 }

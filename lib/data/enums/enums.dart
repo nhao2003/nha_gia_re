@@ -1,6 +1,6 @@
 import 'package:nha_gia_re/core/values/app_strings.dart';
 
- enum PropertyType {
+enum PropertyType {
   apartment,
   land,
   office,
@@ -32,6 +32,7 @@ import 'package:nha_gia_re/core/values/app_strings.dart';
 }
 
 enum ApartmentType {
+  apartment,
   duplex,
   penhouse,
   service,
@@ -49,6 +50,8 @@ enum ApartmentType {
   @override
   String toString() {
     switch (this) {
+      case ApartmentType.apartment:
+        return AppStrings.propertyTypeApartment;
       case ApartmentType.duplex:
         return AppStrings.apartmentTypeDuplex;
       case ApartmentType.penhouse:
@@ -261,6 +264,7 @@ enum PostedBy {
   all,
   proSeller,
   individual;
+
   List<bool> toFilterList() {
     switch (this) {
       case PostedBy.all:
@@ -272,11 +276,13 @@ enum PostedBy {
     }
   }
 }
+
 enum HandOverFilter {
   all,
   completed,
   pending,
 }
+
 enum HouseAndLandFeatureFilter {
   all,
   hasWideAlley,
@@ -310,3 +316,4 @@ enum PostStatus {
     }
 
 }
+
