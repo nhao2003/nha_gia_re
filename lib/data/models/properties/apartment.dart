@@ -43,6 +43,8 @@ class Apartment extends Post {
     required bool isProSeller,
     required int? deposit,
     required int numOfLikes,
+    required PostStatus status,
+    required String rejectedInfo,
   })  : assert(numOfBedRooms == null || numOfBedRooms >= 0),
         assert(numOfToilets == null || numOfToilets >= 0),
         assert(block == null || block.trim().isNotEmpty),
@@ -64,6 +66,8 @@ class Apartment extends Post {
           projectName: projectName,
           deposit: deposit,
           numOfLikes: numOfLikes,
+          status: status,
+          rejectedInfo: rejectedInfo,
         );
 
   factory Apartment.fromJson(Map<String, dynamic> json) {
@@ -103,8 +107,11 @@ class Apartment extends Post {
       legalDocumentStatus: json['legal_document_status'] != null
           ? LegalDocumentStatus.parse(json['legal_document_status'])
           : null,
+      status: PostStatus.parse(json['status']),
+      rejectedInfo: json['rejected_info'],
     );
   }
+
   @override
   String toString() {
     return 'Apartment{'

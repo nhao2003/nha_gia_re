@@ -39,8 +39,8 @@ Future<List<String>> uploadPostImages(List<File> images) async {
     final uuid = Uuid();
     images.map((image) {
       var uid = Supabase.instance.client.auth.currentUser!.id;
-      String fileName = "${uuid.v4()}.${image.path.split('/').last}";
-      fileName = fileName.split('.').last;
+      String fileName = image.path.split('/').last;
+      fileName = "${uuid.v4()}.${fileName.split('.').last}";
       var path = '$uid/$fileName';
       print('path $path');
       futures.add(uploadFileToSupabaseStorage(image, 'post_images', path));

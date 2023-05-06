@@ -282,3 +282,31 @@ enum HouseAndLandFeatureFilter {
   hasWideAlley,
   isFacade,
 }
+enum PostStatus {
+  pending, // đang chờ duyệt
+  approved, // đã được duyệt
+  rejected;
+
+  @override
+  String toString() {
+    switch (this) {
+
+      case PostStatus.pending:
+        return "pending";
+      case PostStatus.approved:
+        return "approved";
+      case PostStatus.rejected:
+        return "rejected";
+    }
+
+  }
+  static PostStatus parse(String value){
+    for (PostStatus status in PostStatus.values){
+        if(status.toString() == value) {
+          return status;
+        }
+      }
+    throw Exception("Can't parse PostStatus! Your input value is \"$value\"");
+    }
+
+}

@@ -29,6 +29,8 @@ class Office extends Post {
     required String? projectName,
     required int? deposit,
     required int numOfLikes,
+    required PostStatus status,
+    required String rejectedInfo,
     this.hasWideAlley = false,
     this.isFacade = false,
     this.officeType,
@@ -52,6 +54,8 @@ class Office extends Post {
           projectName: projectName,
           deposit: deposit,
           numOfLikes: numOfLikes,
+        status: status,
+        rejectedInfo: rejectedInfo,
         );
 
   factory Office.fromJson(Map<String, dynamic> json) {
@@ -85,6 +89,8 @@ class Office extends Post {
       furnitureStatus: json['furniture_status'] != null
           ? FurnitureStatus.parse(json['furniture_status'])
           : null,
+      status: PostStatus.parse(json['status']),
+      rejectedInfo: json['rejected_info'],
     );
   }
   @override
