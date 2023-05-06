@@ -436,7 +436,9 @@ CREATE TABLE apartments
     floor                 INTEGER NOT NULL,
     legal_document_status VARCHAR(255),
     CHECK (apartment_type IS NULL
-        OR apartment_type IN ('Duplex',
+        OR apartment_type IN (
+                              'Apartment',
+                              'Duplex',
                               'Penhouse',
                               'Service',
                               'Dormitory',
