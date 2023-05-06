@@ -13,18 +13,41 @@ class NotificationScreen extends StatelessWidget {
         backgroundColor: AppColors.primaryColor,
         title: const Text("Thông báo"),
       ),
-      body: ListView.builder(
-        itemCount: 6,
-        itemBuilder: (context, index) {
-          return ItemNoti(
-            colorStatus: const Color(0xff49454F),
-            status: "Hiển thị đến 12:23 9/9/2023",
+      body: ListView(
+        children: [
+          ItemNoti(
+            colorStatus: AppColors.grey,
+            status: "Có thể bạn quan tâm",
             title: "Trọ Quận Tân Bình",
             address: "449/58 Trường Chinh P14 Tân Bình HCM",
             urlImage:
                 "https://globalcastingresources.com/wp-content/uploads/2022/10/1664482232_How-much-does-the-anime-streaming-service-cost.jpg",
-          );
-        },
+          ),
+          ItemNoti(
+            colorStatus: AppColors.primaryColor,
+            status: "Tin của bạn sẽ hết hạn sau 1 ngày nữa",
+            title: "Trọ Quận Tân Bình",
+            address: "449/58 Trường Chinh P14 Tân Bình HCM",
+            urlImage:
+                "https://globalcastingresources.com/wp-content/uploads/2022/10/1664482232_How-much-does-the-anime-streaming-service-cost.jpg",
+          ),
+          ItemNoti(
+            colorStatus: AppColors.red,
+            status: "Bị từ chối",
+            title: "Trọ Quận Tân Bình",
+            address: "449/58 Trường Chinh P14 Tân Bình HCM",
+            urlImage:
+                "https://globalcastingresources.com/wp-content/uploads/2022/10/1664482232_How-much-does-the-anime-streaming-service-cost.jpg",
+          ),
+          ItemNoti(
+            colorStatus: AppColors.green,
+            status: "Đã được duyệt",
+            title: "Trọ Quận Tân Bình",
+            address: "449/58 Trường Chinh P14 Tân Bình HCM",
+            urlImage:
+                "https://globalcastingresources.com/wp-content/uploads/2022/10/1664482232_How-much-does-the-anime-streaming-service-cost.jpg",
+          ),
+        ],
       ),
     );
   }
