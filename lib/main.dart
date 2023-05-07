@@ -27,7 +27,9 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
+
   var auth = AuthRepository();
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -59,7 +61,8 @@ class MyApp extends StatelessWidget {
       translations: LocalizationService(),
       builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.home,
+      initialRoute:
+          auth.isUserLoggedIn ? AppRoutes.tab_screen : AppRoutes.login,
       getPages: AppPages.pages,
       defaultTransition: Transition.cupertino,
     );

@@ -77,7 +77,11 @@ class PostRepository extends BaseRepository {
       rethrow;
     }
   }
-
+  Future<List<Post>> getMyPosts() async {
+    final List<Map<String, dynamic>> response;
+    response = await remoteDataSourceImpl.getMyPosts();
+    return response.map((e) => Post.fromJson(e)).toList();
+  }
   Future<List<Post>> getAllPosts(PostFilter filter) async {
     final List<Map<String, dynamic>> response;
     response = await remoteDataSourceImpl.getAllPosts(filter);
@@ -108,5 +112,10 @@ class PostRepository extends BaseRepository {
     response = await remoteDataSourceImpl.getAllMotels(filter);
     return response.map((e) => Motel.fromJson(e)).toList();
   }
-
+  Future<void> hideOrUnHidePost(String postId, bool isHide) async{
+    await remoteDataSourceImpl.hideOrUnHidePost(postId, isHide);
+  }
+  Future<void> extendPostExpiryDate(String postId, bool isHide) async{
+    await remoteDataSourceImpl.extendPost(postId);
+  }
 }

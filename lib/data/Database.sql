@@ -263,6 +263,9 @@ CREATE TABLE post
     images_url    TEXT[]       NOT NULL,
     is_pro_seller BOOLEAN      NOT NULL,
     num_of_likes  INT          NOT NULL             DEFAULT 0,
+    is_hide BOOLEAN NOT NULL DEFAULT FALSE,
+    status VARCHAR default 'pending',
+    rejected_info VARCHAR,
     FOREIGN KEY (user_id) REFERENCES public.user_info (uid) on delete cascade,
     CHECK (area > 0),
     CHECK (property_type IN ('Apartment',
@@ -436,7 +439,9 @@ CREATE TABLE apartments
     floor                 INTEGER NOT NULL,
     legal_document_status VARCHAR(255),
     CHECK (apartment_type IS NULL
-        OR apartment_type IN ('Duplex',
+        OR apartment_type IN (
+                              'Apartment',
+                              'Duplex',
                               'Penhouse',
                               'Service',
                               'Dormitory',
@@ -474,6 +479,25 @@ CREATE TABLE apartments
                                      'Other documents')),
     CHECK (floor >= 0)
 ) INHERITS (post);
+
+--
+--Gia hạn bài post
+CREATE OR REPLACE FUNCTION extend_post_expiry_date(post_id uuid) RETURNS void AS $$
+DECLARE
+now_time TIMESTAMP := NOW();
+    expiry_time TIMESTAMP;
+BEGIN
+SELECT expiry_date INTO expiry_time FROM post WHERE id = post_id;
+
+IF expiry_time < now_time THEN
+        expiry_time := now_time + INTERVAL '14 days';
+ELSE
+        expiry_time := expiry_time + INTERVAL '14 days';
+END IF;
+
+UPDATE post SET expiry_date = expiry_time WHERE id = post_id;
+END;
+$$ LANGUAGE plpgsql;
 
 --
 
