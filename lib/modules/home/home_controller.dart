@@ -21,31 +21,20 @@ class HomeController extends GetxController {
 
   Future<List<List<Post>>> init() async {
     final List<List<Post>> data = await Future.wait([getLeasePosts(), getSellPosts()]);
+    print("Data Length: ${data.length}");
     return data;
   }
   Future<List<Post>> getLeasePosts() async  {
     return await repository.getAllPosts(PostFilter(
-      //isLease: true,
+      isLease: true,
       orderBy: OrderBy.createdAtDesc,
-      from: 0,
-      to: 100,
-      minPrice: 0,
-      maxPrice: 30000000000,
-      minArea: 0,
-      maxArea: 10000,
       postedBy: PostedBy.all,
     ));
   }
   Future<List<Post>> getSellPosts() async  {
     return await repository.getAllPosts(PostFilter(
-      //isLease: false,
+      isLease: false,
       orderBy: OrderBy.createdAtDesc,
-      from: 0,
-      to: 100,
-      minPrice: 0,
-      maxPrice: 30000000000,
-      minArea: 0,
-      maxArea: 100000,
       postedBy: PostedBy.all,
     ));
   }

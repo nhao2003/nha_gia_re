@@ -4,26 +4,26 @@ class PostFilter {
   String? textSearch;
   OrderBy orderBy;
   bool? isLease;
-  int from;
-  int to;
-  int minPrice;
-  int maxPrice;
-  int minArea;
-  int maxArea;
+  int? from;
+  int? to;
+  int? minPrice;
+  int? maxPrice;
+  int? minArea;
+  int? maxArea;
   PostedBy postedBy;
 
   PostFilter({
     this.textSearch,
     this.isLease,
     required this.orderBy,
-    required this.from,
-    required this.to,
-    required this.minPrice,
-    required this.maxPrice,
-    required this.minArea,
-    required this.maxArea,
+    this.from,
+    this.to,
+    this.minPrice,
+    this.maxPrice,
+    this.minArea,
+    this.maxArea,
     required this.postedBy,
-  });
+  }) : assert((from != null && to != null && from < to)||(from == null && to == null) );
 }
 
 class ApartmentFilter extends PostFilter {

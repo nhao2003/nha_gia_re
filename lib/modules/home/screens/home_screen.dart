@@ -140,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 InforCardList(title: 'Nhà bán', list: data.first),
                  InforCardList(title: 'Nhà cho thuê', list: data.last),
               ],
-            ),1
+            ),
           );
         }
       }),

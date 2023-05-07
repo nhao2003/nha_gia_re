@@ -236,23 +236,32 @@ class RemoteDataSourceImpl extends RemoteDataSource {
     String propertyTable,
     PostFilter filter,
   ) {
-    var query = supabaseClient.from(propertyTable).select();
+    var query = supabaseClient
+        .from(propertyTable)
+        .select()
+        .gte('expiry_date', DateTime.now().toIso8601String())
+        .eq('status', PostStatus.approved.toString())
+        .eq('is_hide', false);
     if (filter.textSearch?.isNotEmpty != null) {
       print("Search: $query");
       filter.textSearch = _noAccentVietnamese(filter.textSearch!);
       query = query.textSearch('title_description', filter.textSearch!,
           type: TextSearchType.plain);
     }
-    query = query
-        .lte('expiry_date', DateTime.now().toIso8601String())
-        .gte('price', filter.minPrice)
-        .lte('price', filter.maxPrice)
-        .gte('area', filter.minArea)
-        .lte('area', filter.maxArea)
-        // .eq('status', PostStatus.approved.toString())
-        .eq('is_hide', false)
-    ;
-    if(filter.isLease != null){
+    if (filter.minPrice != null) {
+      query = query.gte('price', filter.minPrice);
+    }
+    if (filter.maxPrice != null) {
+      query = query.lte('price', filter.maxPrice);
+    }
+    if (filter.minArea != null) {
+      query = query.gte('area', filter.minArea);
+    }
+    if (filter.maxArea != null) {
+      query = query.lte('area', filter.maxArea);
+    }
+    if (filter.isLease != null) {
+      print("Filter is_lease: ${filter.isLease}");
       query = query.eq('is_lease', filter.isLease);
     }
     if (filter.postedBy != PostedBy.all) {
@@ -264,9 +273,12 @@ class RemoteDataSourceImpl extends RemoteDataSource {
   @override
   Future<List<Map<String, dynamic>>> getAllPosts(PostFilter filter) async {
     try {
-      var data = await _defaultFilter('post', filter)
-          .order(filter.orderBy.filterString, ascending: filter.orderBy.isAsc)
-          .range(filter.from, filter.to);
+      var query = _defaultFilter('post', filter)
+          .order(filter.orderBy.filterString, ascending: filter.orderBy.isAsc);
+      if (filter.from != null && filter.to != null) {
+        query = query.range(filter.from!, filter.to!);
+      }
+      final data = await query;
       return List<Map<String, dynamic>>.from(data);
     } catch (e) {
       print(e.toString());
@@ -317,9 +329,14 @@ class RemoteDataSourceImpl extends RemoteDataSource {
         query.in_('furniture_status',
             filter.furnitureStatus.map((e) => e.toString()).toList());
       }
-      final data = await query
-          .order(filter.orderBy.filterString, ascending: filter.orderBy.isAsc)
-          .range(filter.from, filter.to);
+      PostgrestTransformBuilder queryOrder = query
+          .order(filter.orderBy.filterString, ascending: filter.orderBy.isAsc);
+
+      if (filter.from != null && filter.to != null) {
+        queryOrder = queryOrder.range(filter.from!, filter.to!);
+      }
+      final data = await queryOrder;
+
       return List<Map<String, dynamic>>.from(data);
     } catch (e) {
       print(e.toString());
@@ -369,9 +386,15 @@ class RemoteDataSourceImpl extends RemoteDataSource {
         query.in_('furniture_status',
             filter.furnitureStatus.map((e) => e.toString()).toList());
       }
-      final data = await query
-          .order(filter.orderBy.filterString, ascending: filter.orderBy.isAsc)
-          .range(filter.from, filter.to);
+
+      PostgrestTransformBuilder queryOrder = query
+          .order(filter.orderBy.filterString, ascending: filter.orderBy.isAsc);
+
+      if (filter.from != null && filter.to != null) {
+        queryOrder = queryOrder.range(filter.from!, filter.to!);
+      }
+      final data = await queryOrder;
+
       return List<Map<String, dynamic>>.from(data);
     } catch (e) {
       print(e.toString());
@@ -405,9 +428,15 @@ class RemoteDataSourceImpl extends RemoteDataSource {
         query.in_('legal_document_status',
             filter.legalStatus.map((e) => e.toString()).toList());
       }
-      final data = await query
-          .order(filter.orderBy.filterString, ascending: filter.orderBy.isAsc)
-          .range(filter.from, filter.to);
+
+      PostgrestTransformBuilder queryOrder = query
+          .order(filter.orderBy.filterString, ascending: filter.orderBy.isAsc);
+
+      if (filter.from != null && filter.to != null) {
+        queryOrder = queryOrder.range(filter.from!, filter.to!);
+      }
+      final data = await queryOrder;
+
       return List<Map<String, dynamic>>.from(data);
     } catch (e) {
       print(e.toString());
@@ -435,9 +464,15 @@ class RemoteDataSourceImpl extends RemoteDataSource {
         query.in_('furniture_status',
             filter.furnitureStatus.map((e) => e.toString()).toList());
       }
-      final data = await query
-          .order(filter.orderBy.filterString, ascending: filter.orderBy.isAsc)
-          .range(filter.from, filter.to);
+
+      PostgrestTransformBuilder queryOrder = query
+          .order(filter.orderBy.filterString, ascending: filter.orderBy.isAsc);
+
+      if (filter.from != null && filter.to != null) {
+        queryOrder = queryOrder.range(filter.from!, filter.to!);
+      }
+      final data = await queryOrder;
+
       return List<Map<String, dynamic>>.from(data);
     } catch (e) {
       print(e.toString());
@@ -453,9 +488,15 @@ class RemoteDataSourceImpl extends RemoteDataSource {
         query.in_('furniture_status',
             filter.furnitureStatus.map((e) => e.toString()).toList());
       }
-      final data = await query
-          .order(filter.orderBy.filterString, ascending: filter.orderBy.isAsc)
-          .range(filter.from, filter.to);
+
+      PostgrestTransformBuilder queryOrder = query
+          .order(filter.orderBy.filterString, ascending: filter.orderBy.isAsc);
+
+      if (filter.from != null && filter.to != null) {
+        queryOrder = queryOrder.range(filter.from!, filter.to!);
+      }
+      final data = await queryOrder;
+
       return List<Map<String, dynamic>>.from(data);
     } catch (e) {
       print(e.toString());
@@ -532,23 +573,21 @@ class RemoteDataSourceImpl extends RemoteDataSource {
   @override
   Future<List<Map<String, dynamic>>> getMyPosts() async {
     final data = await supabaseClient
-        .from('post').select().eq('user_id', supabaseClient.auth.currentUser!.id);
+        .from('post')
+        .select()
+        .eq('user_id', supabaseClient.auth.currentUser!.id);
     return List<Map<String, dynamic>>.from(data);
   }
 
   @override
   Future<void> extendPost(String id) async {
-    await supabaseClient.rpc('extend_post_expiry_date', params:{
-      'id': id
-    });
+    await supabaseClient.rpc('extend_post_expiry_date', params: {'id': id});
   }
 
   @override
   Future<void> hideOrUnHidePost(String id, bool isHide) async {
-    await supabaseClient
-        .from('post').update({
-      'is_hide':isHide,
+    await supabaseClient.from('post').update({
+      'is_hide': isHide,
     });
   }
-
 }
