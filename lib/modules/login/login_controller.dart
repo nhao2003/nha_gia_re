@@ -34,7 +34,7 @@ class LoginController extends GetxController {
         .then((value) {
           if(value.updatedDate == null)
           {
-            Get.toNamed(AppRoutes.user_profile);
+            Get.toNamed(AppRoutes.userProfile);
           }
           else
           {

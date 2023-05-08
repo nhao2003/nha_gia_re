@@ -77,6 +77,21 @@ class PostRepository extends BaseRepository {
       rethrow;
     }
   }
+  Future<Post> getPostDetail(Post post) async {
+    final data = await remoteDataSourceImpl.getPostDetails(post.id, post.type);
+    switch (post.type){
+      case PropertyType.apartment:
+        return Apartment.fromJson(data);
+      case PropertyType.land:
+        return Land.fromJson(data);
+      case PropertyType.office:
+        return Office.fromJson(data);
+      case PropertyType.motel:
+        return Motel.fromJson(data);
+      case PropertyType.house:
+        return House.fromJson(data);
+    }
+  }
   Future<List<Post>> getMyPosts() async {
     final List<Map<String, dynamic>> response;
     response = await remoteDataSourceImpl.getMyPosts();

@@ -36,7 +36,7 @@ Future<void> uploadAvatar(File avatar) async {
 Future<List<String>> uploadPostImages(List<File> images) async {
   try {
     final List<Future<String>> futures = [];
-    final uuid = Uuid();
+    const uuid = Uuid();
     images.map((image) {
       var uid = Supabase.instance.client.auth.currentUser!.id;
       String fileName = image.path.split('/').last;

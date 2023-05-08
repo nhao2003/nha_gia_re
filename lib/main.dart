@@ -61,8 +61,7 @@ class MyApp extends StatelessWidget {
       translations: LocalizationService(),
       builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
-      initialRoute:
-          auth.isUserLoggedIn ? AppRoutes.tab_screen : AppRoutes.login,
+      initialRoute:AppRoutes.splashScreen,
       getPages: AppPages.pages,
       defaultTransition: Transition.cupertino,
     );

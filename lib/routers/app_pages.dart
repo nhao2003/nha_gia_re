@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:nha_gia_re/modules/notification/notification_binding.dart';
 import 'package:nha_gia_re/modules/notification/screens/notification_screen.dart';
+import 'package:nha_gia_re/modules/splash/screens/spash_screen.dart';
+import 'package:nha_gia_re/modules/splash/splash_binding.dart';
 import 'package:nha_gia_re/modules/tab/tab_binding.dart';
 import 'package:nha_gia_re/modules/tab/tab_screen.dart';
 import 'package:nha_gia_re/modules/post_management/screens/post_management_screen.dart';
@@ -32,7 +34,7 @@ import 'app_routes.dart';
 abstract class AppPages {
   static final List<GetPage> pages = [
     GetPage(
-      name: AppRoutes.tab_screen,
+      name: AppRoutes.tabScreen,
       page: () => TabScreen(),
       binding: TabBinding(),
     ),
@@ -96,11 +98,11 @@ abstract class AppPages {
       binding: PersonalBinding(),
     ),
     GetPage(
-        name: AppRoutes.user_profile,
+        name: AppRoutes.userProfile,
         page: () => const UserProfileScreen(),
         binding: UserProfileBinding()),
     GetPage(
-      name: AppRoutes.post_management,
+      name: AppRoutes.postManagement,
       page: () => PostManagementScreen(),
       binding: PostManagementBinding(),
     ),
@@ -108,6 +110,11 @@ abstract class AppPages {
       name: AppRoutes.notification,
       page: () => NotificationScreen(),
       binding: NotificationBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.splashScreen,
+      page: () => SplashScreen(),
+      binding: SplashBinding(),
     ),
   ];
 }
