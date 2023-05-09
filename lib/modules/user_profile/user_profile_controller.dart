@@ -69,7 +69,7 @@ class UserProfileController extends GetxController {
       if(auth.isUserLoggedIn)
       {
         UpdateProfileRequest request = UpdateProfileRequest.name(
-          address: Address(cityCode: 1,districtCode: 1,wardCode: 1), 
+          address: Address(cityCode: 1, cityName: '1',districtCode: 1, districtName: '1',wardCode: 1, wardName: '1'), 
           isMale: (gender.value == 'male'), 
           avatarUrl: "avatarUrl", 
           fullName: fullNameTextController.text,
