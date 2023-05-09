@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
 import 'package:nha_gia_re/data/repositories/post_repository.dart';
+import 'package:nha_gia_re/routers/app_routes.dart';
 
 import '../../data/models/properties/post.dart';
 
@@ -18,6 +19,11 @@ class HomeController extends GetxController {
   ];
 
   PostRepository repository = PostRepository();
+
+  void navToPost()
+  {
+    Get.toNamed(AppRoutes.post);
+  }
 
   Future<List<List<Post>>> init() async {
     final List<List<Post>> data = await Future.wait([getLeasePosts(), getSellPosts()]);

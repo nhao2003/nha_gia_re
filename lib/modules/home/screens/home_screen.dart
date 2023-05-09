@@ -98,14 +98,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       CustomButton(
                         icon: Image.asset(Assets.thunder),
                         title: 'Mua bán',
+                        onPressed: (){},
                       ),
                       CustomButton(
                         icon: Image.asset(Assets.arrow),
                         title: 'Cho thuê',
+                        onPressed: (){},
                       ),
                       CustomButton(
                           icon: Image.asset(Assets.edit_color),
-                          title: 'Đăng bài'),
+                          title: 'Đăng bài',
+                          onPressed: _controller.navToPost,
+                        ),
                     ],
                   ),
                 ),
@@ -121,6 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(height: 10),
                       GridView.count(
                         shrinkWrap: true,
+                        primary: false,
                         mainAxisSpacing: 10,
                         crossAxisSpacing: 10,
                         crossAxisCount: 3,
@@ -138,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 InforCardList(title: 'Gần bạn', list:[]),
                 InforCardList(title: 'Nhà bán', list: data.first),
-                 InforCardList(title: 'Nhà cho thuê', list: data.last),
+                InforCardList(title: 'Nhà cho thuê', list: data.last),
               ],
             ),
           );

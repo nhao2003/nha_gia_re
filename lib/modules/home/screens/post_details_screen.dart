@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:nha_gia_re/core/extensions/date_ex.dart';
+import 'package:nha_gia_re/core/extensions/integer_ex.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/values/assets_image.dart';
+import 'package:nha_gia_re/data/models/properties/post.dart';
 import 'package:nha_gia_re/global_widgets/infor_card.dart';
 import 'package:nha_gia_re/modules/home/widgets/carousel_ad.dart';
 import 'package:nha_gia_re/modules/home/widgets/expandable_container.dart';
 
-final List<String> imgList = [
-  'https://picsum.photos/412/240?random=1',
-  'https://picsum.photos/412/240?random=13',
-  'https://picsum.photos/412/240?random=11',
-  'https://picsum.photos/412/240?random=12',
-  'https://picsum.photos/412/240?random=3',
-];
-
 class PostDetailsScreen extends StatefulWidget {
-  const PostDetailsScreen({super.key, required this.title});
-  final String title;
+  const PostDetailsScreen({super.key, required this.post});
+  final Post post;
 
   @override
   _PostDetailsScreenState createState() => _PostDetailsScreenState();
@@ -29,30 +23,30 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.post.title),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
         ],
       ),
       body: SingleChildScrollView(
         child: Column(children: [
-          CarouselAd(imgList: imgList, aspectRatio: 1.72, indicatorSize: 8),
+          CarouselAd(imgList: widget.post.imagesUrl, aspectRatio: 1.72, indicatorSize: 8),
           Container(
             padding: EdgeInsets.all(10),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(
-                widget.title,
+                widget.post.title,
                 style: AppTextStyles.roboto20semiBold,
               ),
               Row(
                 children: [
                   Text(
-                    '4,3 triệu/tháng',
+                    widget.post.price.toFormattedMoney(isLease: widget.post.isLease),
                     style: AppTextStyles.roboto20semiBold
                         .copyWith(color: AppColors.red),
                   ),
-                  Text(' - 30m2', style: AppTextStyles.roboto20regular),
+                  Text(' - ${widget.post.area}m2', style: AppTextStyles.roboto20regular),
                   Spacer(),
                   IconButton(
                       onPressed: () {},
@@ -73,7 +67,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                   SizedBox(
                       width: 320,
                       child: Text(
-                        'Cầu Tỉnh Lộ 9, Xã Mỹ Hạnh Nam, Huyện Đức Hòa, Long An',
+                        widget.post.address.toString(),
                         maxLines: 2,
                         style: AppTextStyles.roboto16regular,
                         overflow: TextOverflow.ellipsis,
@@ -93,7 +87,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                     width: 5,
                   ),
                   Text(
-                    DateTime(2021, 12, 4, 5).getTimeAgo(),
+                    widget.post.postedDate.getTimeAgo(),
                     style: AppTextStyles.roboto16regular,
                   )
                 ],
@@ -117,7 +111,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                           style: AppTextStyles.roboto16semiBold,
                         ),
                         Text(
-                          'Cá nhân',
+                          (widget.post.isProSeller) ? "Môi giới": "Cá nhân",
                           style: AppTextStyles.roboto14regular,
                         ),
                       ],
@@ -146,6 +140,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
             child: Container(
               padding: EdgeInsets.only(left: 20),
               child: GridView.count(
+                physics: NeverScrollableScrollPhysics(),
                 childAspectRatio: 3,
                 crossAxisCount: 2,
                 shrinkWrap: true,
@@ -221,7 +216,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
             child: SingleChildScrollView(
               physics: NeverScrollableScrollPhysics(),
               child: Text(
-                'Chính chủ bán nhà sổ hồng riêng đã hoàn công Đường Giồng Lớn, Mỹ Hạnh Nam, Đức Hoà Long An. Cách chợ và UBND 300m, về Quận 12, Hóc Môn rất gần Diện tích: 5x15 có sân 3m Nhà 1 trệt 1 lầu, 2 phòng ngủ, 2 wc, phòng khách và bếp rất rộng, tủ bếp trên dưới, có ban công. Nhà hoàn thiện đầy đủ nội thất bằng gỗ tự nhiên, chỉ xách vali vào ở Đặc Biệt SỔ HỒNG RIÊNG ĐÃ HOÀN CÔNG, cam kết không quy hoạch, bao kiểm tra thoải mái. Xe oto vào tận nơi Giá 1,5 tỷ còn thương lượng',
+                widget.post.description,
                 style: AppTextStyles.roboto16regular,
               ),
             ),

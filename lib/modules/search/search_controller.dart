@@ -96,8 +96,8 @@ class SearchController extends GetxController {
     Get.back();
   }
 
-  void navigateToDetailSceen(String title) {
-    Get.to(() => PostDetailsScreen(title: title));
+  void navigateToDetailSceen(Post post) {
+    Get.to(() => PostDetailsScreen(post: post));
   }
 
   void deleteFilter() {

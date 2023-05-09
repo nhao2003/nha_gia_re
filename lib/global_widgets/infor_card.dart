@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/get_core.dart';
 import 'package:intl/intl.dart';
 import 'package:nha_gia_re/core/extensions/date_ex.dart';
+import 'package:nha_gia_re/core/extensions/integer_ex.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/values/app_values.dart';
@@ -61,7 +62,7 @@ class InforCard extends StatelessWidget {
             height: 8,
           ),
           Text(
-            post.price.toString(),
+            1010000000.toFormattedMoney(isLease: post.isLease),
             style:
                 AppTextStyles.roboto16semiBold.copyWith(color: AppColors.red),
           ),
@@ -132,7 +133,7 @@ class _InforCardListState extends State<InforCardList> {
                   child: InforCard(key: UniqueKey(), post: widget.list[index]),
                   onTap: () {
                     //TODO: Handle detail screen
-                    //Get.to(PostDetailsScreen(title: props.title));
+                    Get.to(PostDetailsScreen(post: widget.list[index]));
                   },
                 );
               }),

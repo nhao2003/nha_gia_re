@@ -8,6 +8,19 @@ extension StringX on String {
     return this;
   }
 
+  double removeTrailingZerosAndNumberfy(String n) {
+    if(n.contains('.')){
+      return double.parse(
+        n.replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "") //remove all trailing 0's and extra decimals at end if any
+      );
+    }
+    else{
+      return double.parse(
+        n
+      );
+    }
+  }
+
   /// Parse string sang double (trả về default value thay vì throw lỗi)
   double parseDouble([double defaultValue = 0.0]) {
     return double.tryParse(replaceAll(RegExp(r'[^0-9\.]'), '')) ?? defaultValue;
