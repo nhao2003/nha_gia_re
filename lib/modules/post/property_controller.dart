@@ -187,7 +187,7 @@ class PropertyController extends GetxController{
 
   void setAddress(){
     addressController.text = selectedProvince!.name.toString() + " " + selectedDistricts!.name.toString() + " " + selectedWards!.name.toString();
-    address = Address(cityCode: (selectedProvince!.code!), districtCode: (selectedDistricts!.code!) , wardCode: (selectedWards!.code!) ,);
+    address = Address(cityCode: (selectedProvince!.code!),cityName: (selectedProvince!.name!) , districtCode: (selectedDistricts!.code!), districtName: (selectedDistricts!.name!), wardCode: (selectedWards!.code!) ,wardName: (selectedWards!.name!));
     update();
   }
   void initBody(){
