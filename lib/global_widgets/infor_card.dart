@@ -11,7 +11,8 @@ import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/values/app_values.dart';
 import 'package:nha_gia_re/core/values/assets_image.dart';
-import 'package:nha_gia_re/modules/home/screens/post_details_screen.dart';
+import 'package:nha_gia_re/modules/post_details/screen/post_details_screen.dart';
+import 'package:nha_gia_re/routers/app_routes.dart';
 
 import '../data/models/properties/post.dart';
 
@@ -133,7 +134,7 @@ class _InforCardListState extends State<InforCardList> {
                   child: InforCard(key: UniqueKey(), post: widget.list[index]),
                   onTap: () {
                     //TODO: Handle detail screen
-                    Get.to(PostDetailsScreen(post: widget.list[index]));
+                    Get.toNamed(AppRoutes.post_detail, arguments: widget.list[index]);
                   },
                 );
               }),

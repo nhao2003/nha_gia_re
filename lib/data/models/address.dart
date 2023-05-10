@@ -2,11 +2,11 @@ import 'package:http/http.dart' as http;
 
 class Address {
   late int cityCode;
-  late String cityName;
+  late String? cityName;
   late int districtCode;
-  late String districtName;
+  late String? districtName;
   late int wardCode;
-  late String wardName;
+  late String? wardName;
   late String? detail;
   late double? latitude;
   late double? longitude;

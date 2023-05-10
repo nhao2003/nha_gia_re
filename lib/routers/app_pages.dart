@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:nha_gia_re/modules/post_details/post_detail_binding.dart';
+import 'package:nha_gia_re/modules/post_details/screen/post_details_screen.dart';
 import 'package:nha_gia_re/modules/notification/notification_binding.dart';
 import 'package:nha_gia_re/modules/notification/screens/notification_screen.dart';
 import 'package:nha_gia_re/modules/splash/screens/spash_screen.dart';
@@ -116,5 +118,9 @@ abstract class AppPages {
       page: () => SplashScreen(),
       binding: SplashBinding(),
     ),
+    GetPage(
+        name: AppRoutes.post_detail,
+        page: () => const PostDetailsScreen(),
+        binding: PostDetailBinding()),
   ];
 }

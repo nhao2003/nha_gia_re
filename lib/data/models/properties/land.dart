@@ -43,7 +43,7 @@ class Land extends Post {
     required int? deposit,
     required int numOfLikes,
     required PostStatus status,
-    required String rejectedInfo,
+    required String? rejectedInfo,
   })  : assert(landLotCode?.trim().isNotEmpty ?? true),
         assert(width * length > 0),
         assert(subdivisionName?.trim().isNotEmpty ?? true),

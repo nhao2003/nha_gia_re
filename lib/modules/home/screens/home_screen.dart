@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/values/assets_image.dart';
+import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/global_widgets/infor_card.dart';
 import 'package:nha_gia_re/modules/home/widgets/button.dart';
-import 'package:nha_gia_re/modules/home/widgets/carousel_ad.dart';
+import 'package:nha_gia_re/global_widgets/carousel_ad.dart';
 import 'package:nha_gia_re/modules/home/widgets/image_button.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../../data/models/properties/post.dart';
@@ -98,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       CustomButton(
                         icon: Image.asset(Assets.thunder),
                         title: 'Mua bán',
-                        onPressed: (){},
+                        onPressed: (){AuthRepository auth = AuthRepository(); auth.signOut();},
                       ),
                       CustomButton(
                         icon: Image.asset(Assets.arrow),
