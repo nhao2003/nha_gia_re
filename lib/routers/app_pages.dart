@@ -75,19 +75,9 @@ abstract class AppPages {
       binding: PostBinding(),
     ),
     GetPage(
-      name: AppRoutes.personal,
-      page: () => const PersonalScreen(),
-      binding: PersonalBinding(),
-    ),
-    GetPage(
       name: AppRoutes.filter,
       page: () => FilterScreen(),
       binding: SearchBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.personal,
-      page: () => const PersonalScreen(),
-      binding: PersonalBinding(),
     ),
     GetPage(
       name: AppRoutes.test,
@@ -96,7 +86,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.personal,
-      page: () => const PersonalScreen(),
+      page: () => PersonalScreen(),
       binding: PersonalBinding(),
     ),
     GetPage(

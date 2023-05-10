@@ -571,11 +571,11 @@ class RemoteDataSourceImpl extends RemoteDataSource {
   }
 
   @override
-  Future<List<Map<String, dynamic>>> getMyPosts() async {
+  Future<List<Map<String, dynamic>>> getUserPosts(String uid) async {
     final data = await supabaseClient
         .from('post')
         .select()
-        .eq('user_id', supabaseClient.auth.currentUser!.id);
+        .eq('user_id', uid);
     return List<Map<String, dynamic>>.from(data);
   }
 

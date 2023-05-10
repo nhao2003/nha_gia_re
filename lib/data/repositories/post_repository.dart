@@ -92,9 +92,9 @@ class PostRepository extends BaseRepository {
         return House.fromJson(data);
     }
   }
-  Future<List<Post>> getMyPosts() async {
+  Future<List<Post>> getUserPosts(String uid) async {
     final List<Map<String, dynamic>> response;
-    response = await remoteDataSourceImpl.getMyPosts();
+    response = await remoteDataSourceImpl.getUserPosts(uid);
     return response.map((e) => Post.fromJson(e)).toList();
   }
   Future<List<Post>> getAllPosts(PostFilter filter) async {

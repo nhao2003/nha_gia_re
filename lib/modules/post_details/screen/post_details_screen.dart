@@ -26,7 +26,6 @@ class PostDetailsScreen extends StatefulWidget {
 class _PostDetailsScreenState extends State<PostDetailsScreen> {
   final PostDetailController _controller = Get.find<PostDetailController>();
   @override
-  @override
   void initState() {
     super.initState();
     print(Get.arguments);
@@ -318,7 +317,9 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
           }
         },
       ),
-      bottomNavigationBar: BottomAppBar(
+      
+      bottomNavigationBar: (!_controller.isYourPost) ?
+       BottomAppBar(
           child: SizedBox(
         height: 80,
         child: Row(children: [
@@ -375,7 +376,8 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                         )
                       ])))
         ]),
-      )),
+      ))
+      : null,
     );
   }
 }

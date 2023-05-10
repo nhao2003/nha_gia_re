@@ -55,6 +55,7 @@ class Assets {
   static const String paper= '$iconPath/paper.png';
   static const String room_num= '$iconPath/room_num.png';
   static const String width= '$iconPath/width.png';
+  static const String delete = '$iconPath/delete.png';
 
   // image
   static const String forgetPass = '$imagePath/rafiki.png';

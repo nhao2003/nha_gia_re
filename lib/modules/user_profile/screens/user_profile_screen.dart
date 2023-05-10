@@ -12,6 +12,7 @@ class UserProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserProfileController _controller = Get.find<UserProfileController>();
+    _controller.init(Get.arguments);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Cập nhật thông tin"),
@@ -20,11 +21,12 @@ class UserProfileScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Form(
-            key:_controller.userProfileFormKey,
+            key: _controller.userProfileFormKey,
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Obx(() => UserImagePicker(_controller.handelUploadAvatar,_controller.isUploadAvatar.value)),
+                  Obx(() => UserImagePicker(_controller.handelUploadAvatar,
+                      _controller.isUploadAvatar.value, _controller.avatarUrl)),
                   const SizedBox(
                     height: 25,
                   ),
@@ -86,15 +88,14 @@ class UserProfileScreen extends StatelessWidget {
                     ],
                   ),
                   TextFormField(
-                    controller: _controller.birthDayTextController,
-                    readOnly: true,
-                    decoration: const InputDecoration(
-                        hintText: 'Ngày sinh',
-                        labelText: 'Ngày sinh',
-                        border: OutlineInputBorder()),
-                    validator: _controller.validateTextField,
-                    onTap: _controller.handleDatePicker
-                  ),
+                      controller: _controller.birthDayTextController,
+                      readOnly: true,
+                      decoration: const InputDecoration(
+                          hintText: 'Ngày sinh',
+                          labelText: 'Ngày sinh',
+                          border: OutlineInputBorder()),
+                      validator: _controller.validateTextField,
+                      onTap: _controller.handleDatePicker),
                   const SizedBox(
                     height: 20,
                   ),

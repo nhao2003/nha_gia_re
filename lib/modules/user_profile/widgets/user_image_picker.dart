@@ -8,8 +8,9 @@ import 'package:nha_gia_re/modules/post/widgets/seperator.dart';
 class UserImagePicker extends StatefulWidget {
   final void Function(File pickedImage) imagePickFn;
   final bool isUploading;
+  final String url;
 
-  const UserImagePicker(this.imagePickFn, this.isUploading);
+  const UserImagePicker(this.imagePickFn, this.isUploading, this.url);
 
   @override
   State<UserImagePicker> createState() => _UserImagePickerState();
@@ -90,7 +91,7 @@ class _UserImagePickerState extends State<UserImagePicker> {
             onTap: _pickImage,
             child: CircleAvatar(
               backgroundImage:
-                  _pickedImage != null ? FileImage(_pickedImage!) : null,
+                  _pickedImage != null ? FileImage(_pickedImage!) : NetworkImage(widget.url) as ImageProvider,
               radius: 60,
             ),
           ),

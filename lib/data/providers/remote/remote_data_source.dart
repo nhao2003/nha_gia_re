@@ -51,7 +51,7 @@ abstract class RemoteDataSource {
   Future<void> hideOrUnHidePost(String id, bool isHide);
   Future<void> extendPost(String id);
 
-  Future<List<Map<String, dynamic>>> getMyPosts();
+  Future<List<Map<String, dynamic>>> getUserPosts(String uid);
 
   Future<List<Map<String, dynamic>>> getAllPosts(PostFilter filter);
 

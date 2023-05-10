@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
+import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/data/repositories/chat_repository.dart';
 import 'package:nha_gia_re/data/repositories/post_repository.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
@@ -14,11 +15,18 @@ class PostDetailController extends GetxController {
   // define variable and function
   late Post post;
   late UserInfo userInfo;
+
+  late bool isYourPost = false;
   void initArg(dynamic arg)
   {
     if(arg is Post)
     {
       post = arg;
+      var auth = AuthRepository();
+      if(post.userID == auth.userID)
+      {
+        isYourPost = true;
+      }
     }
   }
 
@@ -36,7 +44,7 @@ class PostDetailController extends GetxController {
   }
   void navToUserProfile()
   {
-    Get.toNamed(AppRoutes.personal);
+    Get.toNamed(AppRoutes.personal,arguments: userInfo);
   }
   void launchPhone()
   {
