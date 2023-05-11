@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
-
+import '../../../data/enums/enums.dart';
 import 'item_post.dart';
 
 class ListPostsPendding extends StatelessWidget {
@@ -12,7 +12,7 @@ class ListPostsPendding extends StatelessWidget {
       itemCount: 6,
       itemBuilder: (context, index) {
         return ItemPost(
-          colorStatus: AppColors.grey,
+          statusCode: PostStatusMana.pending,
           status: "Đang chờ duyệt",
           title: "Trọ Quận Tân Bình",
           address: "449/58 Trường Chinh P14 Tân Bình HCM",

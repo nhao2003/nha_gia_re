@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nha_gia_re/modules/post_management/widgets/item_post.dart';
+import '../../../data/enums/enums.dart';
 
 class ListPostsPosted extends StatelessWidget {
   const ListPostsPosted({super.key});
@@ -10,7 +11,7 @@ class ListPostsPosted extends StatelessWidget {
       itemCount: 6,
       itemBuilder: (context, index) {
         return ItemPost(
-          colorStatus: const Color(0xff49454F),
+          statusCode: PostStatusMana.approved,
           status: "Hiển thị đến 12:23 9/9/2023",
           title: "Trọ Quận Tân Bình",
           address: "449/58 Trường Chinh P14 Tân Bình HCM",

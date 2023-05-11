@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'item_post.dart';
+import '../../../data/enums/enums.dart';
 
 class ListPostsHided extends StatelessWidget {
   const ListPostsHided({super.key});
@@ -11,7 +12,7 @@ class ListPostsHided extends StatelessWidget {
       itemCount: 6,
       itemBuilder: (context, index) {
         return ItemPost(
-          colorStatus: AppColors.grey,
+          statusCode: PostStatusMana.hided,
           status: "Đã ẩn tin. Hết hạn sau 12:23 9/9/2023",
           title: "Trọ Quận Tân Bình",
           address: "449/58 Trường Chinh P14 Tân Bình HCM",

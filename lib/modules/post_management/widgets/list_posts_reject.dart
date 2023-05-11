@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
-
+import '../../../data/enums/enums.dart';
 import 'item_post.dart';
 
 class ListPostsReject extends StatelessWidget {
@@ -12,7 +12,7 @@ class ListPostsReject extends StatelessWidget {
       itemCount: 6,
       itemBuilder: (context, index) {
         return ItemPost(
-          colorStatus: AppColors.red,
+          statusCode: PostStatusMana.rejected,
           status: "Ảnh không phù hợp",
           title: "Trọ Quận Tân Bình",
           address: "449/58 Trường Chinh P14 Tân Bình HCM",

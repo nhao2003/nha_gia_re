@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'item_post.dart';
+import '../../../data/enums/enums.dart';
 
 class ListPostsExpried extends StatelessWidget {
   const ListPostsExpried({super.key});
@@ -11,7 +12,7 @@ class ListPostsExpried extends StatelessWidget {
       itemCount: 6,
       itemBuilder: (context, index) {
         return ItemPost(
-          colorStatus: AppColors.primaryColor,
+          statusCode: PostStatusMana.expired,
           status: "Hiển thị đến 12:23 9/9/2023",
           title: "Tin đã hết hạn",
           address: "449/58 Trường Chinh P14 Tân Bình HCM",

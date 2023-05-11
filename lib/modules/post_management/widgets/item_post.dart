@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/text_styles.dart';
+import '../../../data/enums/enums.dart';
 
 class ItemPost extends StatefulWidget {
-  Color colorStatus;
+  PostStatusMana statusCode;
   String status;
   String title;
   String address;
@@ -13,7 +14,7 @@ class ItemPost extends StatefulWidget {
   List<IconData> iconFuncs;
 
   ItemPost({
-    required this.colorStatus,
+    required this.statusCode,
     required this.status,
     required this.title,
     required this.address,
@@ -31,6 +32,20 @@ class _ItemPostState extends State<ItemPost> {
   double sizeImage = 80;
 
   int selectedMenu = 0;
+  Color getColorStatus() {
+    switch (widget.statusCode) {
+      case PostStatusMana.approved:
+        return const Color(0xff49454F);
+      case PostStatusMana.pending:
+        return AppColors.grey;
+      case PostStatusMana.rejected:
+        return AppColors.red;
+      case PostStatusMana.hided:
+        return AppColors.grey;
+      case PostStatusMana.expired:
+        return AppColors.primaryColor;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +99,7 @@ class _ItemPostState extends State<ItemPost> {
                       Text(
                         widget.status,
                         style: AppTextStyles.roboto12semiBold
-                            .copyWith(color: widget.colorStatus),
+                            .copyWith(color: getColorStatus()),
                       ),
                       const SizedBox(height: 5),
                       Text(
