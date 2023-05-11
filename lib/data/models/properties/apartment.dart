@@ -44,7 +44,7 @@ class Apartment extends Post {
     required int? deposit,
     required int numOfLikes,
     required PostStatus status,
-    required String rejectedInfo,
+    required String? rejectedInfo,
   })  : assert(numOfBedRooms == null || numOfBedRooms >= 0),
         assert(numOfToilets == null || numOfToilets >= 0),
         assert(block == null || block.trim().isNotEmpty),

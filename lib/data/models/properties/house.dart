@@ -48,7 +48,7 @@ class House extends Post {
     required int? deposit,
     required int numOfLikes,
     required PostStatus status,
-    required String rejectedInfo,
+    required String? rejectedInfo,
   })  : assert(areaUsed == null || areaUsed > 0),
         assert((width == null && length == null) ||
             (width != null && length != null && width * length > 0)),

@@ -30,7 +30,7 @@ class Office extends Post {
     required int? deposit,
     required int numOfLikes,
     required PostStatus status,
-    required String rejectedInfo,
+    required String? rejectedInfo,
     this.hasWideAlley = false,
     this.isFacade = false,
     this.officeType,

@@ -29,7 +29,7 @@ class Motel extends Post {
     required int? deposit,
     required int numOfLikes,
     required PostStatus status,
-    required String rejectedInfo,
+    required String? rejectedInfo,
   })  : assert(electricPrice == null || electricPrice > 0),
         assert(waterPrice == null || waterPrice > 0),
         super(

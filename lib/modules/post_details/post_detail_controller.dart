@@ -1,9 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/data/repositories/chat_repository.dart';
 import 'package:nha_gia_re/data/repositories/post_repository.dart';
+import 'package:nha_gia_re/modules/post_details/widget/apartment_details.dart';
+import 'package:nha_gia_re/modules/post_details/widget/house_detail.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -28,6 +31,18 @@ class PostDetailController extends GetxController {
         isYourPost = true;
       }
     }
+  }
+
+  Widget postDetail(Post post)
+  {
+    if(post is Apartment) {
+      return ApartmentDetails(apartment: post);
+    } else if(post is House)
+    {
+      return HouseDetails(house: post);
+    }
+    else
+      return SizedBox();
   }
 
   Future<List<dynamic>> init() async
