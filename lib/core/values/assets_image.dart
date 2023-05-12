@@ -57,6 +57,7 @@ class Assets {
   static const String width= '$iconPath/width.png';
   static const String length= '$iconPath/length.png';
   static const String delete = '$iconPath/delete.png';
+  static const String deposit = '$iconPath/deposit.png';
   static const String balconyDirection = '$iconPath/balconydirection.png';
   static const String block = '$iconPath/block.png';
   static const String commercial_type = '$iconPath/commercial_type.png';
@@ -64,11 +65,13 @@ class Assets {
   static const String floornumber = '$iconPath/floornumber.png';
   static const String furnishing_sell = '$iconPath/furnishing_sell.png';
   static const String price_m2 = '$iconPath/price_m2.png';
-  static const String property_status = '$iconPath/balconydirection.png';
+  static const String property_status = '$iconPath/property_status.png';
   static const String toilets = '$iconPath/toilets.png';
   static const String ad_type = '$iconPath/ad_type.png';
-
-
+  static const String electric = '$iconPath/electric.png';
+  static const String water = '$iconPath/water.png';
+  static const String land_type = '$iconPath/land_type.png';
+  static const String apartment_feature = '$iconPath/apartment_feature.png';
   // image
   static const String forgetPass = '$imagePath/rafiki.png';
   static const String nha = '$imagePath/nha.jpg';
