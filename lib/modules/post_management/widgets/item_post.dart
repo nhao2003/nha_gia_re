@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nha_gia_re/data/models/properties/post.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/text_styles.dart';
@@ -7,20 +8,18 @@ import '../../../data/enums/enums.dart';
 class ItemPost extends StatefulWidget {
   PostStatusMana statusCode;
   String status;
-  String title;
-  String address;
-  String urlImage;
+  Post post;
   List<String> funcs;
   List<IconData> iconFuncs;
+  Function onSelectedMenu;
 
   ItemPost({
     required this.statusCode,
     required this.status,
-    required this.title,
-    required this.address,
-    required this.urlImage,
+    required this.post,
     required this.funcs,
     required this.iconFuncs,
+    required this.onSelectedMenu,
     super.key,
   });
 
@@ -68,7 +67,7 @@ class _ItemPostState extends State<ItemPost> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.network(
-                      widget.urlImage,
+                      widget.post.imagesUrl[0],
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return Image.asset(
@@ -103,11 +102,11 @@ class _ItemPostState extends State<ItemPost> {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        widget.title,
+                        widget.post.title,
                         style: AppTextStyles.roboto16regular,
                       ),
                       const SizedBox(height: 5),
-                      Text(widget.address,
+                      Text(widget.post.address.toString(),
                           style: AppTextStyles.roboto14regular.copyWith(
                             color: const Color(0xff49454F),
                           )),
@@ -126,6 +125,7 @@ class _ItemPostState extends State<ItemPost> {
             onSelected: (int item) {
               setState(() {
                 selectedMenu = item;
+                widget.onSelectedMenu(item);
               });
             },
             itemBuilder: (BuildContext context) =>

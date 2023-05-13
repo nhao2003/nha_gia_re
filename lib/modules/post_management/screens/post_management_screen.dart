@@ -21,7 +21,7 @@ class _PostManagementScreenState extends State<PostManagementScreen> {
 
   @override
   void initState() {
-    controller.getAllPosts();
+    controller.getPostsInit();
     super.initState();
   }
 
@@ -54,7 +54,7 @@ class _PostManagementScreenState extends State<PostManagementScreen> {
                       }).toList()),
                 )),
           ),
-          body: const TabBarView(
+          body: TabBarView(
             children: <Widget>[
               ListPostsPosted(),
               ListPostsPendding(),
