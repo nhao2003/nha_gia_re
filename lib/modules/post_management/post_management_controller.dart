@@ -36,6 +36,8 @@ class PostManagementController extends GetxController {
       switch (post.status) {
         case PostStatus.approved:
           if (post.expiryDate.isBefore(DateTime.now())) {
+            expiredPosts.add(post);
+          } else if (post.isHide) {
             hidedPosts.add(post);
           } else {
             approvedPosts.add(post);
