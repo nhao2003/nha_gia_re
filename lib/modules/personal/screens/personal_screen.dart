@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:nha_gia_re/core/extensions/integer_ex.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/values/assets_image.dart';
 import 'package:nha_gia_re/data/models/properties/post.dart';
@@ -11,19 +10,30 @@ import 'package:nha_gia_re/modules/personal/personal_controller.dart';
 
 import '../../../core/theme/app_colors.dart';
 
-class PersonalScreen extends StatelessWidget {
+class PersonalScreen extends StatefulWidget {
   PersonalScreen({Key? key}) : super(key: key);
+
+  @override
+  State<PersonalScreen> createState() => _PersonalScreenState();
+}
+
+class _PersonalScreenState extends State<PersonalScreen> {
   final PersonalController _controller = Get.find<PersonalController>();
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     _controller.init(Get.arguments);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     ScreenUtil.init(context, designSize: const Size(411, 683));
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,
-        title: Text(_controller.userInfo.fullName!),
+        title: Text(_controller.userInfo!.fullName!),
       ),
       body: Container(
         //padding: EdgeInsets.symmetric(vertical: 15.h),
@@ -41,7 +51,7 @@ class PersonalScreen extends StatelessWidget {
                       height: 100.w,
                       child: CircleAvatar(
                         backgroundImage:
-                            NetworkImage(_controller.userInfo.avatarUrl!),
+                            NetworkImage(_controller.userInfo!.avatarUrl!),
                       ),
                     ),
                     SizedBox(
@@ -51,7 +61,7 @@ class PersonalScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          _controller.userInfo.fullName!,
+                          _controller.userInfo!.fullName!,
                           style: AppTextStyles.roboto20semiBold,
                         ),
                         SizedBox(
@@ -60,14 +70,14 @@ class PersonalScreen extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              "${_controller.userInfo.numOfFollowers} Người theo dõi",
+                              "${_controller.userInfo!.numOfFollowers} Người theo dõi",
                               style: AppTextStyles.roboto12semiBold,
                             ),
                             SizedBox(
                               width: 20.w,
                             ),
                             Text(
-                              "${_controller.userInfo.numOfFollowings} Đang theo dõi",
+                              "${_controller.userInfo!.numOfFollowings} Đang theo dõi",
                               style: AppTextStyles.roboto12semiBold,
                             ),
                           ],
@@ -152,16 +162,21 @@ class PersonalScreen extends StatelessWidget {
                           else
                             ElevatedButton(
                                 style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(AppColors.grey),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        AppColors.grey),
                                     shape: MaterialStateProperty.all<
                                             RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
-                                ))),
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ))),
                                 onPressed: () {},
                                 child: Row(
                                   children: [
-                                    const ImageIcon(AssetImage(Assets.delete),color: Colors.white,size: 20,),
+                                    const ImageIcon(
+                                      AssetImage(Assets.delete),
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
                                     const SizedBox(
                                       width: 6,
                                     ),
@@ -229,7 +244,7 @@ class PersonalScreen extends StatelessWidget {
                       width: 5.w,
                     ),
                     Text(
-                      _controller.userInfo.address.toString(),
+                      _controller.userInfo!.address.toString(),
                       style: AppTextStyles.roboto14regular,
                     ),
                   ],
@@ -250,7 +265,7 @@ class PersonalScreen extends StatelessWidget {
                       width: 5.w,
                     ),
                     Text(
-                      "Ngày tham gia: ${DateFormat('dd-MM-yyyy').format(_controller.userInfo.createdDate!)}",
+                      "Ngày tham gia: ${DateFormat('dd-MM-yyyy').format(_controller.userInfo!.createdDate!)}",
                       style: AppTextStyles.roboto14regular,
                     ),
                   ],

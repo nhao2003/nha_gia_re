@@ -58,7 +58,7 @@ class Post {
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
       id: json['id'],
-      area: json['area'],
+      area: json['area'] as double,
       type: PropertyType.parse(json['property_type']),
       address: Address.fromJson(json['address']),
       userID: json['user_id'],
@@ -100,4 +100,4 @@ class Post {
         'rejectedInfo: $rejectedInfo'
         '}';
   }
-  }
+}

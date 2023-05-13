@@ -3,6 +3,7 @@ import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import '../../data/models/properties/post.dart';
 import '../../data/repositories/post_repository.dart';
+import '../../routers/app_routes.dart';
 
 class PostManagementController extends GetxController {
   List<Post> allPosts = [];
@@ -48,6 +49,10 @@ class PostManagementController extends GetxController {
           break;
       }
     }
+  }
+
+  void navigateToDetailSceen(Post post) {
+    Get.toNamed(AppRoutes.post_detail, arguments: post);
   }
 
   void showPost() {

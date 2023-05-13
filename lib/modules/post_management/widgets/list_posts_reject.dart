@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/text_styles.dart';
 import '../../../data/enums/enums.dart';
+import '../../../data/models/properties/post.dart';
 import '../post_management_controller.dart';
 import 'item_post.dart';
 
@@ -42,6 +43,7 @@ class ListPostsReject extends StatelessWidget {
                   Icons.delete_outline,
                 ],
                 onSelectedMenu: onSelectedMenu,
+                onTap: (Post post) {},
               );
             },
           ));

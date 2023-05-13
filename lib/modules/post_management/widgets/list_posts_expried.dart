@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nha_gia_re/data/models/properties/post.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/text_styles.dart';
 import '../post_management_controller.dart';
@@ -45,6 +46,7 @@ class ListPostsExpried extends StatelessWidget {
                   Icons.timer_outlined,
                 ],
                 onSelectedMenu: onSelectedMenu,
+                onTap: (Post post) {},
               );
             },
           ));

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:nha_gia_re/data/models/properties/post.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -12,6 +13,7 @@ class ItemPost extends StatefulWidget {
   List<String> funcs;
   List<IconData> iconFuncs;
   Function onSelectedMenu;
+  Function onTap;
 
   ItemPost({
     required this.statusCode,
@@ -20,6 +22,7 @@ class ItemPost extends StatefulWidget {
     required this.funcs,
     required this.iconFuncs,
     required this.onSelectedMenu,
+    required this.onTap,
     super.key,
   });
 
@@ -48,105 +51,110 @@ class _ItemPostState extends State<ItemPost> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      margin: const EdgeInsets.only(bottom: 8),
-      color: AppColors.white,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Flexible(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // image
-                SizedBox(
-                  height: sizeImage,
-                  width: sizeImage,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      widget.post.imagesUrl[0],
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Image.asset(
-                          "assets/images/default_image.png",
-                          fit: BoxFit.cover,
-                        );
-                      },
-                      loadingBuilder: (BuildContext context, Widget child,
-                          ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
-                          ),
-                        );
-                      },
+    return InkWell(
+      onTap: () {
+        widget.onTap(widget.post);
+      },
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        margin: const EdgeInsets.only(bottom: 8),
+        color: AppColors.white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Flexible(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // image
+                  SizedBox(
+                    height: sizeImage,
+                    width: sizeImage,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        widget.post.imagesUrl[0],
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                            "assets/images/default_image.png",
+                            fit: BoxFit.cover,
+                          );
+                        },
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes!
+                                  : null,
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 5),
-                Flexible(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.status,
-                        style: AppTextStyles.roboto12semiBold
-                            .copyWith(color: getColorStatus()),
-                      ),
-                      const SizedBox(height: 5),
-                      Text(
-                        widget.post.title,
-                        style: AppTextStyles.roboto16regular,
-                      ),
-                      const SizedBox(height: 5),
-                      Text(widget.post.address.toString(),
-                          style: AppTextStyles.roboto14regular.copyWith(
-                            color: const Color(0xff49454F),
-                          )),
-                    ],
+                  const SizedBox(width: 5),
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.status,
+                          style: AppTextStyles.roboto12semiBold
+                              .copyWith(color: getColorStatus()),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          widget.post.title,
+                          style: AppTextStyles.roboto16regular,
+                        ),
+                        const SizedBox(height: 5),
+                        Text(widget.post.address.toString(),
+                            style: AppTextStyles.roboto14regular.copyWith(
+                              color: const Color(0xff49454F),
+                            )),
+                      ],
+                    ),
                   ),
-                ),
-                // column text
-                const SizedBox(width: 8),
-              ],
+                  // column text
+                  const SizedBox(width: 8),
+                ],
+              ),
             ),
-          ),
-          // more icon
-          PopupMenuButton<int>(
-            initialValue: selectedMenu,
-            // Callback that sets the selected popup menu item.
-            onSelected: (int item) {
-              setState(() {
-                selectedMenu = item;
-                widget.onSelectedMenu(item);
-              });
-            },
-            itemBuilder: (BuildContext context) =>
-                widget.funcs.asMap().entries.map(
-              (e) {
-                int i = e.key;
-                String val = e.value;
-                return PopupMenuItem<int>(
-                  value: i,
-                  child: Row(
-                    children: [
-                      Icon(widget.iconFuncs[i]),
-                      const SizedBox(width: 15),
-                      Text(val),
-                    ],
-                  ),
-                );
+            // more icon
+            PopupMenuButton<int>(
+              initialValue: selectedMenu,
+              // Callback that sets the selected popup menu item.
+              onSelected: (int item) {
+                setState(() {
+                  selectedMenu = item;
+                  widget.onSelectedMenu(item);
+                });
               },
-            ).toList(),
-          ),
-        ],
+              itemBuilder: (BuildContext context) =>
+                  widget.funcs.asMap().entries.map(
+                (e) {
+                  int i = e.key;
+                  String val = e.value;
+                  return PopupMenuItem<int>(
+                    value: i,
+                    child: Row(
+                      children: [
+                        Icon(widget.iconFuncs[i]),
+                        const SizedBox(width: 15),
+                        Text(val),
+                      ],
+                    ),
+                  );
+                },
+              ).toList(),
+            ),
+          ],
+        ),
       ),
     );
   }

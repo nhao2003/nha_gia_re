@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:nha_gia_re/core/extensions/date_ex.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
+import '../../../data/models/properties/post.dart';
 import '../post_management_controller.dart';
 import 'item_post.dart';
 import '../../../data/enums/enums.dart';
@@ -51,6 +52,7 @@ class ListPostsHided extends StatelessWidget {
                   Icons.delete_outline,
                 ],
                 onSelectedMenu: onSelectedMenu,
+                onTap: (Post post) {},
               );
             },
           ));

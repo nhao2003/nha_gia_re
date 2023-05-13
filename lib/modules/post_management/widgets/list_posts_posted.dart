@@ -55,6 +55,7 @@ class ListPostsPosted extends StatelessWidget {
                   Icons.timer_outlined,
                 ],
                 onSelectedMenu: onSelectedMenu,
+                onTap: controller.navigateToDetailSceen,
               );
             },
           ));
