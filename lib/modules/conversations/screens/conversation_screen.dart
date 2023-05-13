@@ -20,6 +20,7 @@ class ConversationScreen extends StatefulWidget {
 
 class _ConversationScreenState extends State<ConversationScreen> {
   late ConversationController _chatController;
+
   @override
   initState() {
     _chatController = Get.find<ConversationController>();
@@ -188,16 +189,16 @@ class UserMessage extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     userInfo.fullName!,
                     style: AppTextStyles.roboto16semiBold,
                     maxLines: 1,
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 10),
                   Text(
-                    conversation.lastMessage ?? "Start the conversation!",
+                    conversation.lastMessage?.replaceAll('\n', ' ') ?? "Start the conversation!",
                     style: isRead
                         ? AppTextStyles.roboto14semiBold
                         : AppTextStyles.roboto14regular

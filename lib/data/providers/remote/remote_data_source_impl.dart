@@ -248,6 +248,9 @@ class RemoteDataSourceImpl extends RemoteDataSource {
       query = query.textSearch('title_description', filter.textSearch!,
           type: TextSearchType.plain);
     }
+    if (filter.postedByUserID?.trim() != null) {
+      query = query.eq('user_id', filter.postedByUserID);
+    }
     if (filter.minPrice != null) {
       query = query.gte('price', filter.minPrice);
     }

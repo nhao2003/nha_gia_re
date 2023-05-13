@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/models/conversation.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/providers/remote/request/messsage_request.dart';
+import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/data/repositories/chat_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -26,14 +27,20 @@ class ChatController extends GetxController {
   Stream<bool> get isAllowSendMessage => _allowSendingMessageController.stream;
   final ChatRepository _chatRepository = ChatRepository();
   Future<void> initializeMessages(dynamic arg) async {
+    AuthRepository authRepository = AuthRepository();
     if (arg is Conversation) {
       conversation = arg;
     } else if (arg is UserInfo) {
       try {
+        throwIf(arg.uid == authRepository.userID!, Exception("UserInfo has UID equal current user Id!"));
         conversation = await repo.getOrCreateConversation(arg.uid);
         print('Goto chat by userInfo');
       } catch (e) {
-        print(e.toString());
+        Get.back();
+        Get.showSnackbar(GetSnackBar(
+          title: "Lỗi",
+          message: "Đã xảy ra lỗi",
+        ));
         rethrow;
       }
     } else {
