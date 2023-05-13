@@ -45,6 +45,7 @@ class Apartment extends Post {
     required int numOfLikes,
     required PostStatus status,
     required String? rejectedInfo,
+    required bool isHide,
   })  : assert(numOfBedRooms == null || numOfBedRooms >= 0),
         assert(numOfToilets == null || numOfToilets >= 0),
         assert(block == null || block.trim().isNotEmpty),
@@ -68,6 +69,7 @@ class Apartment extends Post {
           numOfLikes: numOfLikes,
           status: status,
           rejectedInfo: rejectedInfo,
+        isHide: isHide,
         );
 
   factory Apartment.fromJson(Map<String, dynamic> json) {
@@ -109,6 +111,7 @@ class Apartment extends Post {
           : null,
       status: PostStatus.parse(json['status']),
       rejectedInfo: json['rejected_info'],
+      isHide: json['is_hide'],
     );
   }
 
@@ -140,6 +143,9 @@ class Apartment extends Post {
         'numOfToilets: $numOfToilets, '
         'block: $block, '
         'floor: $floor, '
-        'legalDocumentStatus: $legalDocumentStatus';
+        'legalDocumentStatus: $legalDocumentStatus'
+        'status: $status'
+        'rejectedInfo: $rejectedInfo'
+        'isHide: $isHide';
   }
 }
