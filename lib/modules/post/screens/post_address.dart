@@ -22,126 +22,141 @@ class _PostAddressScreenState extends State<PostAddressScreen> {
   void initState() {
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     final _formkey = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBar(
-        title: Text("Chọn địa chỉ", style: AppTextStyles.roboto16regular,),
+        title: Text(
+          "Chọn địa chỉ",
+          style: AppTextStyles.roboto16regular,
+        ),
         backgroundColor: AppColors.primaryColor,
       ),
-      body: GetBuilder<PropertyController>(builder: (controller){
-        return Container(
-          margin: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-          child: Form(
-            key: _formkey,
-            child: Column(
-              children: [
-                DropdownButtonFormField(
-                  value: controller.selectedProvince,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5.r)),
-                        borderSide:const BorderSide(color: Colors.black)
+      body: GetBuilder<PropertyController>(
+        builder: (controller) {
+          return Container(
+            margin: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+            child: Form(
+              key: _formkey,
+              child: Column(
+                children: [
+                  DropdownButtonFormField(
+                    value: controller.selectedProvince,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                          borderSide: const BorderSide(color: Colors.black)),
                     ),
+                    hint: Text("Tỉnh/ thành phố"),
+                    items: controller.provinceList.map((province) {
+                      return DropdownMenuItem<Province>(
+                        value: province, // ensure this is unique
+                        child: Text(province.name.toString()),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      controller.setProvince(value!);
+                    },
+                    validator: (value) {
+                      if (value == null) {
+                        return "Vui lòng chọn tỉnh, thành phố";
+                      }
+                      return null;
+                    },
                   ),
-                  hint: Text("Tỉnh/ thành phố"),
-                  items: controller.provinceList.map((province) {
-                    return DropdownMenuItem<Province>(
-                      value: province,  // ensure this is unique
-                      child: Text(province.name.toString() ?? ''),
-                    );
-                  }).toList(),
-                  onChanged:(value){
-                    controller.setProvince(value!);
-                  },
-                  validator: (value){
-                    if(value == null){
-                      return "Vui lòng chọn tỉnh, thành phố";
-                    }
-                    return null;
-                  },
-                ),
-
-                SizedBox(height: 10.h,),
-                DropdownButtonFormField(
-                  value: controller.selectedDistricts,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5.r)),
-                        borderSide:const BorderSide(color: Colors.black)
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  DropdownButtonFormField(
+                    value: controller.selectedDistricts,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                          borderSide: const BorderSide(color: Colors.black)),
                     ),
-                  ),
-                  hint: Text("Quận/ huyện"),
-                  items: controller.districtsList.map((value){
-                    return DropdownMenuItem<Districts>(value: value, child: Text(value.name.toString()),);
-                  }).toList(),
-                  onChanged:(value){
+                    hint: Text("Quận/ huyện"),
+                    items: controller.districtsList.map((value) {
+                      return DropdownMenuItem<Districts>(
+                        value: value,
+                        child: Text(value.name.toString()),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
                       controller.setDistrict(value!);
-                  },
-                  validator: (value){
-                    if(value == null){
-                      return "Vui lòng chọn quận, huyện";
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 10.h,),
-                DropdownButtonFormField(
-                  value: controller.selectedWards,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5.r)),
-                        borderSide:const BorderSide(color: Colors.black)
-                    ),
+                    },
+                    validator: (value) {
+                      if (value == null) {
+                        return "Vui lòng chọn quận, huyện";
+                      }
+                      return null;
+                    },
                   ),
-                  hint: Text("Phường/ xã"),
-                  items: controller.wardsList.map((value){
-                    return DropdownMenuItem<Wards>(value: value, child: Text(value.name.toString()),);
-                  }).toList(),
-                  onChanged:(value){
-                    controller.setWards(value!);
-                  },
-                  validator: (value){
-                    if(value == null){
-                      return "Vui lòng chọn phường, xã";
-                    }
-                    return null;
-                  },
-                ),
-                GestureDetector(
-                  onTap: (){
-                    if(_formkey.currentState!.validate()){
-                      print("Press on submit address");
-                      controller.setAddress();
-                      Get.back();
-                    }
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical:5.h),
-                    margin: EdgeInsets.symmetric( vertical: 10.h),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.h),
-                      color: AppColors.primaryColor,
-                      boxShadow: [
-                        BoxShadow( spreadRadius: 1, blurRadius: 2.3, color: AppColors.backgroundColor)
-                      ]
-                    ),
-                    child: SizedBox(width: double.maxFinite,
-                        height: 30.h,
-                        child: Center(child: Text("Hoàn thành", style: AppTextStyles.roboto20semiBold.copyWith(color: Colors.white),))
-                    ),
+                  SizedBox(
+                    height: 10.h,
                   ),
-                )
-              ],
+                  DropdownButtonFormField(
+                    value: controller.selectedWards,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                          borderSide: const BorderSide(color: Colors.black)),
+                    ),
+                    hint: Text("Phường/ xã"),
+                    items: controller.wardsList.map((value) {
+                      return DropdownMenuItem<Wards>(
+                        value: value,
+                        child: Text(value.name.toString()),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      controller.setWards(value!);
+                    },
+                    validator: (value) {
+                      if (value == null) {
+                        return "Vui lòng chọn phường, xã";
+                      }
+                      return null;
+                    },
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      if (_formkey.currentState!.validate()) {
+                        print("Press on submit address");
+                        controller.setAddress();
+                        Get.back();
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 5.h),
+                      margin: EdgeInsets.symmetric(vertical: 10.h),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8.h),
+                          color: AppColors.primaryColor,
+                          boxShadow: [
+                            BoxShadow(
+                                spreadRadius: 1,
+                                blurRadius: 2.3,
+                                color: AppColors.backgroundColor)
+                          ]),
+                      child: SizedBox(
+                          width: double.maxFinite,
+                          height: 30.h,
+                          child: Center(
+                              child: Text(
+                            "Hoàn thành",
+                            style: AppTextStyles.roboto20semiBold
+                                .copyWith(color: Colors.white),
+                          ))),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
       ),
     );
-
   }
 }
-
-
