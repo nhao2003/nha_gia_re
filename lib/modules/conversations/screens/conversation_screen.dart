@@ -10,6 +10,7 @@ import 'package:nha_gia_re/modules/chat/screens/chat_screen.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../../core/values/app_strings.dart';
 import '../conversation_controller.dart';
+import '../widgets/conversation_row.dart';
 
 class ConversationScreen extends StatefulWidget {
   const ConversationScreen({super.key});
@@ -68,7 +69,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                           future: _chatController.getUserInfo(e.chatWithUser),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
-                              return UserMessage(
+                              return ConversationRow(
                                 key: UniqueKey(),
                                 conversation: e,
                                 userInfo: snapshot.data!,
@@ -117,106 +118,3 @@ class _ConversationScreenState extends State<ConversationScreen> {
   }
 }
 
-class UserMessage extends StatelessWidget {
-  final bool isRead;
-  Conversation conversation;
-  UserInfo userInfo;
-  final EdgeInsetsGeometry? padding;
-
-  UserMessage({
-    Key? key,
-    required this.conversation,
-    required this.userInfo,
-    this.padding,
-    this.isRead = false,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      splashColor: AppColors.secondary,
-      onTap: () {
-        Get.toNamed(AppRoutes.chat, arguments: conversation);
-      },
-      onLongPress: () {
-        Get.dialog(Dialog(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              TextButton(
-                onPressed: () {
-                  Get.back();
-                },
-                child: Text(
-                  "Đánh dấu đã đọc",
-                  style: AppTextStyles.roboto16regular
-                      .copyWith(color: AppColors.black),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Get.back();
-                },
-                child: Text(
-                  "Xoá tin nhắn",
-                  style: AppTextStyles.roboto16regular
-                      .copyWith(color: AppColors.black),
-                ),
-              ),
-            ],
-          ),
-        ));
-      },
-      child: Container(
-        height: 100,
-        width: double.infinity,
-        padding: padding ?? const EdgeInsets.all(10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            userInfo.avatarUrl != null
-                ? CircleAvatar(
-                    backgroundImage: NetworkImage(userInfo.avatarUrl!),
-                    radius: 30,
-                  )
-                : const CircleAvatar(
-                    backgroundImage: AssetImage(Assets.avatar_2),
-                    radius: 30,
-                  ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    userInfo.fullName!,
-                    style: AppTextStyles.roboto16semiBold,
-                    maxLines: 1,
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    conversation.lastMessage ?? "Start the conversation!",
-                    style: isRead
-                        ? AppTextStyles.roboto14semiBold
-                        : AppTextStyles.roboto14regular
-                            .copyWith(color: AppColors.grey),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 5),
-            Text(
-              conversation.lastMessageSentAt.getTimeAgo(),
-              style:
-                  AppTextStyles.roboto14regular.copyWith(color: AppColors.grey),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

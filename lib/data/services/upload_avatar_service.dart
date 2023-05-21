@@ -45,8 +45,25 @@ Future<List<String>> uploadPostImages(List<File> images) async {
       print('path $path');
       futures.add(uploadFileToSupabaseStorage(image, 'post_images', path));
     });
-    final urls =  await Future.wait(futures);
+    final urls = await Future.wait(futures);
     return List<String>.from(urls);
+  } catch (e) {
+    rethrow;
+  }
+}
+
+Future<List<String>> uploadMessageMedia(
+    List<File> medias, String conversationID) async {
+  try {
+    final List<String> urls = [];
+    const uuid = Uuid();
+    for (final image in medias) {
+      final fileName = "${uuid.v4()}.${image.path.split('.').last}";
+      final path = '$conversationID/$fileName';
+      final url = await uploadFileToSupabaseStorage(image, 'media_message', path);
+      urls.add(url);
+    }
+    return urls;
   } catch (e) {
     rethrow;
   }

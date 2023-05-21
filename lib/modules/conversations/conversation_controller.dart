@@ -32,7 +32,10 @@ class ConversationController extends GetxController {
       final conversation = event
           .where((element) =>
               element['user1_id'] == uid || element['user2_id'] == uid)
-          .map((e) => Conversation.fromJson(e))
+          .map((e) {
+            print(e.toString());
+        return Conversation.fromJson(e);
+      })
           .cast<Conversation>()
           .toList();
       _streamController.sink.add(conversation);
