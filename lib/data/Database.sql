@@ -20,63 +20,98 @@ DROP FUNCTION IF EXISTS handle_updated_user();
 SET TIME ZONE 'Asia/Ho_Chi_Minh';
 CREATE TABLE IF NOT EXISTS user_info
 (
-    uid              uuid REFERENCES auth.users ON DELETE CASCADE NOT NULL PRIMARY KEY,
-    email            TEXT,
-    phone            TEXT,
-    address          JSONB,
-    is_male          BOOLEAN,
-    avatar_url       TEXT,
-    full_name        varchar(255),
-    dob              timestamp,
+    uid
+    uuid
+    REFERENCES
+    auth
+    .
+    users
+    ON
+    DELETE
+    CASCADE
+    NOT
+    NULL
+    PRIMARY
+    KEY,
+    email
+    TEXT,
+    phone
+    TEXT,
+    address
+    JSONB,
+    is_male
+    BOOLEAN,
+    avatar_url
+    TEXT,
+    full_name
+    varchar
+(
+    255
+),
+    dob timestamp,
     last_activity_at timestamp,
-    description      TEXT,
-    updated_at       timestamp,
+    description TEXT,
+    updated_at timestamp,
     --Số người theo dõi bạn
     num_of_followers int DEFAULT 0,
     --Số người bạn theo dõi
     num_of_following int DEFAULT 0,
-    CHECK (num_of_followers >= 0),
-    CHECK (num_of_following >= 0)
-);
+    CHECK
+(
+    num_of_followers >= 0
+),
+    CHECK
+(
+    num_of_following >= 0
+)
+    );
 
 -- Trigger to call `handle_new_user` when new user signs up
-create or replace function handle_new_user() returns trigger as
+create
+or replace function handle_new_user() returns trigger as
 $$
 begin
-    set timezone = 'Asia/Ho_Chi_Minh';
-    insert into public.user_info(uid, email, last_activity_at)
-    values (new.id, new.email, now());
-    return new;
+    set
+timezone = 'Asia/Ho_Chi_Minh';
+insert into public.user_info(uid, email, last_activity_at)
+values (new.id, new.email, now());
+return new;
 end;
-$$ language plpgsql security definer;
+$$
+language plpgsql security definer;
 
 create trigger on_auth_user_created
     after
         insert
     on auth.users
     for each row
-execute function handle_new_user();
+    execute function handle_new_user();
 
 
-create or replace function handle_updated_user() returns trigger as
+create
+or replace function handle_updated_user() returns trigger as
 $$
 begin
-    set timezone = 'Asia/Ho_Chi_Minh';
-    UPDATE public.user_info
-    SET updated_at       = now(),
-        last_activity_at = now()
-    WHERE uid = new.uid;
-    return new;
+    set
+timezone = 'Asia/Ho_Chi_Minh';
+UPDATE public.user_info
+SET updated_at       = now(),
+    last_activity_at = now()
+WHERE uid = new.uid;
+return new;
 end
-$$ language plpgsql security definer;
+$$
+language plpgsql security definer;
 
 -- Trigger to call `handle_updated_user` when new user update data
 
-create or replace trigger on_auth_user_updated
-    AFTER UPDATE OF phone, is_male, avatar_url, full_name, dob, description
-    on public.user_info
+create
+or replace trigger on_auth_user_updated
+    AFTER
+UPDATE OF phone, is_male, avatar_url, full_name, dob, description
+on public.user_info
     for each row
-execute function handle_updated_user();
+    execute function handle_updated_user();
 
 --Table Follow
 
@@ -92,8 +127,8 @@ CREATE TABLE user_follow
 
 insert into user_follow (follower_id, followed_id)
 values ('de23a0b3-262b-4982-aa55-084dcb08961a'::uuid, 'f8a68af6-f0d7-45c8-8b9f-666f6e4f1314'::uuid)
-
-insert into user_follow (follower_id, followed_id)
+    insert
+into user_follow (follower_id, followed_id)
 values ('f7f7631f-667b-4b38-924f-4a6d9e9db182'::uuid, '3ec257e0-0670-474d-bb8c-beb5178acd8c'::uuid)
 
 
@@ -105,117 +140,160 @@ delete
 from user_info
 where uid = '99785dd5-7516-4d5c-8310-d791a90256fc' ::uuid
 --follow trigger;
-CREATE OR REPLACE FUNCTION handle_follow()
+CREATE
+OR REPLACE FUNCTION handle_follow()
     RETURNS TRIGGER AS
 $$
 BEGIN
-    UPDATE user_info
-    SET num_of_followers = COALESCE((SELECT COUNT(*) FROM user_follow WHERE user_follow.followed_id = user_info.uid),
-                                    0)
-    WHERE user_info.uid = NEW.followed_id;
+UPDATE user_info
+SET num_of_followers = COALESCE((SELECT COUNT(*) FROM user_follow WHERE user_follow.followed_id = user_info.uid),
+                                0)
+WHERE user_info.uid = NEW.followed_id;
 
-    UPDATE user_info
-    SET num_of_following = COALESCE((SELECT COUNT(*) FROM user_follow WHERE user_follow.follower_id = user_info.uid),
-                                    0)
-    WHERE user_info.uid = NEW.follower_id;
-    RETURN NEW;
+UPDATE user_info
+SET num_of_following = COALESCE((SELECT COUNT(*) FROM user_follow WHERE user_follow.follower_id = user_info.uid),
+                                0)
+WHERE user_info.uid = NEW.follower_id;
+RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$
+LANGUAGE plpgsql;
 
-CREATE OR REPLACE TRIGGER follow_trigger
+CREATE
+OR REPLACE TRIGGER follow_trigger
     AFTER INSERT OR DELETE
-    ON user_follow
+ON user_follow
     FOR EACH ROW
 EXECUTE FUNCTION handle_follow();
 
 
 --Unfollow trigger
-CREATE OR REPLACE FUNCTION handle_unfollow()
+CREATE
+OR REPLACE FUNCTION handle_unfollow()
     RETURNS TRIGGER AS
 $$
 BEGIN
-    UPDATE user_info
-    SET num_of_followers = COALESCE((SELECT COUNT(*) FROM user_follow WHERE user_follow.followed_id = user_info.uid),
-                                    0)
-    WHERE user_info.uid = old.followed_id;
+UPDATE user_info
+SET num_of_followers = COALESCE((SELECT COUNT(*) FROM user_follow WHERE user_follow.followed_id = user_info.uid),
+                                0)
+WHERE user_info.uid = old.followed_id;
 
-    UPDATE user_info
-    SET num_of_following = COALESCE((SELECT COUNT(*) FROM user_follow WHERE user_follow.follower_id = user_info.uid),
-                                    0)
-    WHERE user_info.uid = old.follower_id;
-    RETURN old;
+UPDATE user_info
+SET num_of_following = COALESCE((SELECT COUNT(*) FROM user_follow WHERE user_follow.follower_id = user_info.uid),
+                                0)
+WHERE user_info.uid = old.follower_id;
+RETURN old;
 END;
-$$ LANGUAGE plpgsql;
+$$
+LANGUAGE plpgsql;
 
-CREATE OR REPLACE TRIGGER unfollow_trigger
+CREATE
+OR REPLACE TRIGGER unfollow_trigger
     AFTER INSERT OR DELETE
-    ON user_follow
+ON user_follow
     FOR EACH ROW
 EXECUTE FUNCTION handle_unfollow();
 
 CREATE TABLE conversations
 (
-    id       uuid not null primary key default uuid_generate_v4(),
-    user1_id uuid NOT NULL,
-    user2_id uuid NOT NULL,
-    last_message TEXT,
-    last_message_sent_at TIMESTAMP NOT NULL  DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
-    CHECK (user1_id != user2_id),
+    id                              uuid      not null primary key default uuid_generate_v4(),
+    user1_id                        uuid      NOT NULL,
+    user2_id                        uuid      NOT NULL,
+    last_message                    TEXT,
+    last_message_sent_at            TIMESTAMP NOT NULL             DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
+    user1_joined_at                 TIMESTAMP                      DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
+    user2_joined_at                 TIMESTAMP                      DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
+    num_Of_unread_messages_of_user1 int       NOT NULL             DEFAULT 0,
+    num_Of_unread_messages_of_user2 int       NOT NULL             DEFAULT 0,
+    CHECK (user1_id != user2_id
+) ,
     FOREIGN KEY (user1_id) REFERENCES public.user_info (uid) ON DELETE CASCADE,
     FOREIGN KEY (user2_id) REFERENCES public.user_info (uid) ON DELETE CASCADE
 );
 
-alter publication supabase_realtime add table public.conversations;
+alter
+publication supabase_realtime add table public.conversations;
 CREATE TABLE messages
 (
-    id        uuid      not null primary key default uuid_generate_v4(),
-    conversation_id uuid references public.conversations(id) on delete cascade not null,
-    sender_id uuid      NOT NULL,
-    message   TEXT      NOT NULL,
-    sent_at   TIMESTAMP NOT NULL  DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
+    id               uuid                                                        not null primary key default uuid_generate_v4(),
+    conversation_id  uuid references public.conversations (id) on delete cascade not null,
+    sender_id        uuid                                                        NOT NULL,
+    message          TEXT,
+    images           TEXT[],
+    post_id          uuid,
+    sent_at          TIMESTAMP                                                   NOT NULL             DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
+    is_receiver_read BOOLEAN                                                                          DEFAULT FALSE,
+    CHECK (message IS NOT NULL OR cardinality(images) > 0),
+    FOREIGN KEY (post_id) REFERENCES public.post (id),
     FOREIGN KEY (sender_id) REFERENCES public.user_info (uid) ON DELETE CASCADE
 );
-alter publication supabase_realtime add table public.messages;
+ALTER
+publication supabase_realtime add table public.messages;
 
-CREATE OR REPLACE FUNCTION update_last_message()
+CREATE
+OR REPLACE FUNCTION update_last_message()
   RETURNS TRIGGER AS $$
 BEGIN
-    set timezone = 'Asia/Ho_Chi_Minh';
-  UPDATE conversations
-  SET last_message = NEW.message,
-  last_message_sent_at = NEW.sent_at
+    set
+timezone = 'Asia/Ho_Chi_Minh';
+UPDATE conversations
+SET last_message                    = NEW.message,
+    last_message_sent_at            = NEW.sent_at,
+    user1_joined_at                 = CASE
+                                          WHEN user1_joined_at IS NULL THEN timezone('Asia/Ho_Chi_Minh', now())
+                                          ELSE user1_joined_at END,
+    user2_joined_at                 = CASE
+                                          WHEN user2_joined_at IS NULL THEN timezone('Asia/Ho_Chi_Minh', now())
+                                          ELSE user2_joined_at END,
+    num_Of_unread_messages_of_user1 = CASE
+                                          WHEN user1_id = new.sender_id THEN 0
+                                          ELSE (SELECT COUNT(*)
+                                                FROM messages
+                                                WHERE messages.conversation_id = new.conversation_id
+                                                  AND messages.sender_id != new.sender_id AND
+                                      messages.is_receiver_read = false )
+END,
+  num_Of_unread_messages_of_user2 = CASE WHEN user2_id = new.sender_id THEN 0 ELSE (
+    SELECT COUNT(*) FROM messages
+    WHERE messages.conversation_id = new.conversation_id AND messages.sender_id != new.sender_id AND messages.is_receiver_read = false
+  )
+END,
   WHERE id = NEW.conversation_id;
-
-  RETURN NEW;
+RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$
+LANGUAGE plpgsql;
 
 CREATE TRIGGER update_conversation_last_message
-AFTER INSERT ON messages
-FOR EACH ROW
-EXECUTE FUNCTION update_last_message();
+    AFTER INSERT
+    ON messages
+    FOR EACH ROW
+    EXECUTE FUNCTION update_last_message();
 
 
-CREATE OR REPLACE FUNCTION get_or_create_conservation(user_info_id uuid)
+CREATE
+OR REPLACE FUNCTION get_or_create_conservation(user_info_id uuid)
   RETURNS uuid AS
 $$
 DECLARE
-  conv_id uuid;
+conv_id uuid;
 BEGIN
   -- Tìm conservation chứa user_info_id
-  SELECT id INTO conv_id
-  FROM conservations
-  WHERE (user1_id = auth.uid() and user2_id = user_info_id) OR (user2_id = auth.uid() and user1_id = user_info_id)
-  LIMIT 1;
+SELECT id
+INTO conv_id
+FROM conservations
+WHERE (user1_id = auth.uid() and user2_id = user_info_id)
+   OR (user2_id = auth.uid() and user1_id = user_info_id) LIMIT 1;
 
-  -- Nếu không tìm thấy, tạo mới conservation
-  IF conv_id IS NULL THEN
+-- Nếu không tìm thấy, tạo mới conservation
+IF
+conv_id IS NULL THEN
     INSERT INTO conservations(user1_id, user2_id)
     VALUES(auth.uid(), user_info_id)
     RETURNING id INTO conv_id;
-  END IF;
+END IF;
 
-  RETURN conv_id;
+RETURN conv_id;
 END;
 $$
 LANGUAGE plpgsql;
@@ -241,7 +319,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-ALTER publication supabase_realtime add table public.messages;
+
 
 --Model
 
@@ -253,18 +331,18 @@ CREATE TABLE post
     property_type VARCHAR(255) NOT NULL,
     address       JSONB        NOT NULL,
     user_id       uuid         NOT NULL,
-    price         NUMERIC          NOT NULL,
+    price         NUMERIC      NOT NULL,
     deposit       NUMERIC,
     is_lease      BOOLEAN      NOT NULL,
     title         VARCHAR(255) NOT NULL,
     description   TEXT         NOT NULL,
     posted_date   TIMESTAMP    NOT NULL             DEFAULT NOW(),
     expiry_date   TIMESTAMP    NOT NULL,
-    images_url    TEXT[]       NOT NULL,
+    images_url    TEXT[] NOT NULL,
     is_pro_seller BOOLEAN      NOT NULL,
     num_of_likes  INT          NOT NULL             DEFAULT 0,
-    is_hide BOOLEAN NOT NULL DEFAULT FALSE,
-    status VARCHAR default 'pending',
+    is_hide       BOOLEAN      NOT NULL             DEFAULT FALSE,
+    status        VARCHAR                           default 'pending',
     rejected_info VARCHAR,
     FOREIGN KEY (user_id) REFERENCES public.user_info (uid) on delete cascade,
     CHECK (area > 0),
@@ -274,7 +352,8 @@ CREATE TABLE post
                              'Motel',
                              'House')),
     CHECK (property_type != 'Motel'
-        OR is_lease = true),
+        OR is_lease = true
+) ,
     CHECK (price > 0),
     CHECK (deposit IS NULL
         OR deposit > 0),
@@ -373,19 +452,19 @@ CREATE TABLE lands
 
 CREATE TABLE houses
 (
-    furniture_status      VARCHAR(255),
-    has_wide_alley        BOOLEAN NOT NULL,
-    is_facade             BOOLEAN NOT NULL,
+    furniture_status           VARCHAR(255),
+    has_wide_alley             BOOLEAN NOT NULL,
+    is_facade                  BOOLEAN NOT NULL,
     is_widens_towards_the_back BOOLEAN NOT NULL,
-    area_used             NUMERIC,
-    width                 DOUBLE PRECISION,
-    length                DOUBLE PRECISION,
-    house_type            VARCHAR(255),
-    num_of_bedrooms       INT,
-    num_of_toilets        INT,
-    num_of_floors         INT,
-    main_door_direction   VARCHAR(255),
-    legal_document_status VARCHAR(255),
+    area_used                  NUMERIC,
+    width                      DOUBLE PRECISION,
+    length                     DOUBLE PRECISION,
+    house_type                 VARCHAR(255),
+    num_of_bedrooms            INT,
+    num_of_toilets             INT,
+    num_of_floors              INT,
+    main_door_direction        VARCHAR(255),
+    legal_document_status      VARCHAR(255),
     CHECK (house_type IS NULL
         OR house_type IN ('Front house',
                           'Town house',
@@ -482,22 +561,31 @@ CREATE TABLE apartments
 
 --
 --Gia hạn bài post
-CREATE OR REPLACE FUNCTION extend_post_expiry_date(post_id uuid) RETURNS void AS $$
+CREATE
+OR REPLACE FUNCTION extend_post_expiry_date(post_id uuid) RETURNS void AS $$
 DECLARE
 now_time TIMESTAMP := NOW();
-    expiry_time TIMESTAMP;
+    expiry_time
+TIMESTAMP;
 BEGIN
-SELECT expiry_date INTO expiry_time FROM post WHERE id = post_id;
+SELECT expiry_date
+INTO expiry_time
+FROM post
+WHERE id = post_id;
 
-IF expiry_time < now_time THEN
+IF
+expiry_time < now_time THEN
         expiry_time := now_time + INTERVAL '14 days';
 ELSE
         expiry_time := expiry_time + INTERVAL '14 days';
 END IF;
 
-UPDATE post SET expiry_date = expiry_time WHERE id = post_id;
+UPDATE post
+SET expiry_date = expiry_time
+WHERE id = post_id;
 END;
-$$ LANGUAGE plpgsql;
+$$
+LANGUAGE plpgsql;
 
 --
 
@@ -512,41 +600,46 @@ CREATE TABLE user_like
 );
 
 -- Like Trigger
-CREATE OR REPLACE FUNCTION handle_like()
+CREATE
+OR REPLACE FUNCTION handle_like()
     RETURNS TRIGGER AS
 $$
 BEGIN
-    UPDATE post
-    SET num_of_likes = num_of_likes + 1
-    WHERE id = NEW.post_id;
-    RETURN NEW;
+UPDATE post
+SET num_of_likes = num_of_likes + 1
+WHERE id = NEW.post_id;
+RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$
+LANGUAGE plpgsql;
 
 CREATE TRIGGER like_trigger
     AFTER INSERT
     ON user_like
     FOR EACH ROW
-EXECUTE FUNCTION handle_like();
+    EXECUTE FUNCTION handle_like();
 
 --Unlike trigger
-CREATE OR REPLACE FUNCTION handle_unlike()
+CREATE
+OR REPLACE FUNCTION handle_unlike()
     RETURNS TRIGGER AS
 $$
 BEGIN
-    UPDATE post
-    SET num_of_likes = num_of_likes - 1
-    WHERE id = NEW.post_id;
-    RETURN NEW;
+UPDATE post
+SET num_of_likes = num_of_likes - 1
+WHERE id = NEW.post_id;
+RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$
+LANGUAGE plpgsql;
 
 CREATE TRIGGER unlike_trigger
     AFTER DELETE
     ON user_like
     FOR EACH ROW
-EXECUTE FUNCTION handle_unlike();
+    EXECUTE FUNCTION handle_unlike();
 
 create function title_description(post) returns text as $$
 select unaccent($1.title) || ' ' || unaccent($1.description);
-$$ language sql immutable;
+$$
+language sql immutable;
