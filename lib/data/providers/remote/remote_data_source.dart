@@ -22,6 +22,7 @@ abstract class RemoteDataSource {
 
   Future<void> recoveryPassword(String email);
 
+
   Future<Map<String, dynamic>> postApartment(Map<String, dynamic> data);
 
   Future<Map<String, dynamic>> postHouse(Map<String, dynamic> data);
@@ -46,6 +47,11 @@ abstract class RemoteDataSource {
 
   Future<Map<String, dynamic>> editPostLand(
       String postId, Map<String, dynamic> data);
+
+  Future<void> hideOrUnHidePost(String id, bool isHide);
+  Future<void> extendPost(String id);
+
+  Future<List<Map<String, dynamic>>> getUserPosts(String uid);
 
   Future<List<Map<String, dynamic>>> getAllPosts(PostFilter filter);
 

@@ -47,6 +47,9 @@ class House extends Post {
     required bool isProSeller,
     required int? deposit,
     required int numOfLikes,
+    required PostStatus status,
+    required String? rejectedInfo,
+    required bool isHide,
   })  : assert(areaUsed == null || areaUsed > 0),
         assert((width == null && length == null) ||
             (width != null && length != null && width * length > 0)),
@@ -70,6 +73,9 @@ class House extends Post {
           projectName: projectName,
           deposit: deposit,
           numOfLikes: numOfLikes,
+        status: status,
+        rejectedInfo: rejectedInfo,
+        isHide: isHide,
         );
 
   factory House.fromJson(Map<String, dynamic> json) {
@@ -111,6 +117,9 @@ class House extends Post {
       numOfBedRooms: json['nums_of_bed_rooms'],
       numOfToilets: json['nums_of_toilets'],
       numOfFloors: json['nums_of_floors'],
+      status: PostStatus.parse(json['status']),
+      rejectedInfo: json['rejected_info'],
+      isHide: json['is_hide'],
     );
   }
   @override
@@ -133,7 +142,9 @@ class House extends Post {
         'mainDoorDirection: $mainDoorDirection, '
         'legalDocumentStatus: $legalDocumentStatus, '
         'address: $address, '
-        '${super.toString()}'
+        'status: $status'
+        'rejectedInfo: $rejectedInfo'
+        'isHide: $isHide'
         '}';
   }
 }

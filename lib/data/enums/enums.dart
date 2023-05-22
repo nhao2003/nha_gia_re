@@ -1,6 +1,6 @@
 import 'package:nha_gia_re/core/values/app_strings.dart';
 
- enum PropertyType {
+enum PropertyType {
   apartment,
   land,
   office,
@@ -32,6 +32,7 @@ import 'package:nha_gia_re/core/values/app_strings.dart';
 }
 
 enum ApartmentType {
+  apartment,
   duplex,
   penhouse,
   service,
@@ -49,6 +50,8 @@ enum ApartmentType {
   @override
   String toString() {
     switch (this) {
+      case ApartmentType.apartment:
+        return AppStrings.propertyTypeApartment;
       case ApartmentType.duplex:
         return AppStrings.apartmentTypeDuplex;
       case ApartmentType.penhouse:
@@ -261,6 +264,7 @@ enum PostedBy {
   all,
   proSeller,
   individual;
+
   List<bool> toFilterList() {
     switch (this) {
       case PostedBy.all:
@@ -272,13 +276,75 @@ enum PostedBy {
     }
   }
 }
+
 enum HandOverFilter {
   all,
   completed,
   pending,
 }
+
 enum HouseAndLandFeatureFilter {
   all,
   hasWideAlley,
   isFacade,
+}
+
+enum PostStatus {
+  pending, // đang chờ duyệt
+  approved, // đã được duyệt
+  rejected;
+
+  @override
+  String toString() {
+    switch (this) {
+      case PostStatus.pending:
+        return "pending";
+      case PostStatus.approved:
+        return "approved";
+      case PostStatus.rejected:
+        return "rejected";
+    }
+  }
+
+  static PostStatus parse(String value) {
+    for (PostStatus status in PostStatus.values) {
+      if (status.toString() == value) {
+        return status;
+      }
+    }
+    throw Exception("Can't parse PostStatus! Your input value is \"$value\"");
+  }
+}
+
+enum PostStatusMana {
+  pending, // đang chờ duyệt
+  approved, // đã được duyệt
+  rejected,
+  hided,
+  expired;
+
+  @override
+  String toString() {
+    switch (this) {
+      case PostStatusMana.pending:
+        return "pending";
+      case PostStatusMana.approved:
+        return "approved";
+      case PostStatusMana.rejected:
+        return "rejected";
+      case PostStatusMana.hided:
+        return "hided";
+      case PostStatusMana.expired:
+        return "expired";
+    }
+  }
+
+  static PostStatus parse(String value) {
+    for (PostStatus status in PostStatus.values) {
+      if (status.toString() == value) {
+        return status;
+      }
+    }
+    throw Exception("Can't parse PostStatus! Your input value is \"$value\"");
+  }
 }

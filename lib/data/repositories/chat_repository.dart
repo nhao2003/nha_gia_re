@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:nha_gia_re/data/models/message.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/providers/remote/remote_data_source_impl.dart';
+import 'package:nha_gia_re/data/services/upload_avatar_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/conversation.dart';
@@ -37,7 +40,12 @@ class ChatRepository {
   }
 
   Future sendMessage(MessageRequest request) async {
-    await remoteDataSourceImpl.sendMessage(request.toJson());
+    List<String>? urls;
+    if(request.images != null || request.images!.isNotEmpty){
+      print("OKKKK ${List<File>.from(request.images!)}");
+      urls = await uploadMessageMedia(List<File>.from(request.images!), request.conservationId);
+    }
+    await remoteDataSourceImpl.sendMessage(request.toJson(urls));
   }
 
   Stream<List<Message>> getMessages(String conversationId) {

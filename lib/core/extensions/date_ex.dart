@@ -2,6 +2,11 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 extension DateTimeX on DateTime {
+  String toHMDMYString() {
+    var outputFormat = DateFormat('HH:mm dd/MM/yyyy');
+    return outputFormat.format(this);
+  }
+
   /// get num of date between dateFrom to DateTo
   int daysBetween(DateTime from, DateTime to) {
     from = DateTime(from.year, from.month, from.day);

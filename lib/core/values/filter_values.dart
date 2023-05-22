@@ -1,3 +1,5 @@
+import 'package:nha_gia_re/data/enums/enums.dart';
+
 class FilterValues {
   // sigleton
   static final FilterValues instance = FilterValues._internal();
@@ -42,14 +44,10 @@ class FilterValues {
     "Chưa bàn giao",
     "Đã bàn giao",
   ];
-  List<String> apartmentTypes = [
-    "Chung cư",
-    "Duplex",
-    "Penthouse",
-    "Căn hộ dịch vụ, mini",
-    "Tập thể, cư xá",
-    "Officetel",
-  ];
+
+  List<String> apartmentTypes =
+      ApartmentType.values.map((e) => e.toString()).toList();
+
   List<String> apartmentCharacteristics = [
     "Tất cả",
     "Căn góc",
@@ -67,54 +65,25 @@ class FilterValues {
     "10",
     "Nhiều hơn 10",
   ];
-  List<String> mainDirection = [
-    "Đông",
-    "Tây",
-    "Nam",
-    "Bắc",
-    "Đông Bắc",
-    "Đông Nam",
-    "Tây Bắc",
-    "Tây Nam",
-  ];
-  List<String> legalDocuments = [
-    "Đã có sổ",
-    "Đang chờ sổ",
-    "Giấy tờ khác",
-  ];
-  List<String> interiorStatus = [
-    "Tất cả",
-    "Nội thất cao cấp",
-    "Nội thất đầy đủ",
-    "Hoàn thiện cơ bản",
-    "Bàn giao thô",
-  ];
+  List<String> mainDirection =
+      Direction.values.map((e) => e.toString()).toList();
+  List<String> legalDocuments =
+      LegalDocumentStatus.values.map((e) => e.toString()).toList();
+  List<String> interiorStatus =
+      FurnitureStatus.values.map((e) => e.toString()).toList();
   // Nha o
-  List<String> residentialTypes = [
-    "Nhà mặt phố, mặt tiền",
-    "Nhà ngõ, hẽm",
-    "Nhà biệt thự",
-    "Nhà phố liền kề",
-  ];
+  List<String> residentialTypes =
+      HouseType.values.map((e) => e.toString()).toList();
+
   List<String> houseCharacteristics = [
     "Hẽm xe hơi",
     "Mặt tiền",
     "Nở hậu",
   ];
   // Đất
-  List<String> typeOfLand = [
-    "Đất thổ cư",
-    "Đất nền dự án",
-    "Đất công nghiệp",
-    "Đất nông nghiệp",
-  ];
+  List<String> typeOfLand = LandType.values.map((e) => e.toString()).toList();
   // van phong
-  List<String> officeType = [
-    "Mặt bằng kinh doanh",
-    "Văn phòng",
-    "Shophouse",
-    "Officetel",
-  ];
+  List<String> officeType = OfficeType.values.map((e) => e.toString()).toList();
 // provinces of VietNam
   List<String> provinces = [
     'Toàn Quốc',

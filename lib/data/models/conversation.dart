@@ -4,6 +4,7 @@ class Conversation {
   String id;
   String chatWithUser;
   String? lastMessage;
+  int numOfUnReadMessage;
   DateTime lastMessageSentAt;
 
   Conversation({
@@ -11,6 +12,7 @@ class Conversation {
     required this.chatWithUser,
     required this.lastMessage,
     required this.lastMessageSentAt,
+    required this.numOfUnReadMessage,
   }) : assert(id.isNotEmpty && chatWithUser.isNotEmpty);
 
   @override
@@ -24,6 +26,10 @@ class Conversation {
             json['user1_id'] == Supabase.instance.client.auth.currentUser!.id
                 ? json['user2_id']
                 : json['user1_id'],
+        numOfUnReadMessage =
+            json['user1_id'] == Supabase.instance.client.auth.currentUser!.id
+                ? json['num_of_unread_messages_of_user1']
+                : json['num_of_unread_messages_of_user1'],
         lastMessage = json['last_message'],
         lastMessageSentAt = DateTime.parse(json['last_message_sent_at']);
 }

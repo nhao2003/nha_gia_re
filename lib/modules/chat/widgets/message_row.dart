@@ -5,7 +5,7 @@ import 'package:nha_gia_re/core/theme/text_styles.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../data/models/message.dart';
-import '../../chat/screens/chat_screen.dart';
+import '../screens/chat_screen.dart';
 
 class MessageRow extends StatelessWidget {
   Message message;
@@ -40,9 +40,28 @@ class MessageRow extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      message.text,
+                      message.text??"NULL",
                       style: AppTextStyles.roboto16regular,
                     ),
+                    const SizedBox(height: 4),
+                    if(message.images != null)
+                      Wrap(
+                        spacing: 5,
+                        runSpacing: 5,
+                        children: List.generate(message.images!.length, (index) {
+                          return SizedBox(
+                            width: 100,
+                            height: 100,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(
+                                message.images![index],
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          );
+                        }),
+                      ),
                     const SizedBox(height: 4),
                     Text(
                       DateFormat('HH:mm').format(message.sentAt),

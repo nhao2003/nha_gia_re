@@ -3,25 +3,27 @@ import '../../../enums/enums.dart';
 class PostFilter {
   String? textSearch;
   OrderBy orderBy;
-  int from;
-  int to;
-  int minPrice;
-  int maxPrice;
-  int minArea;
-  int maxArea;
+  bool? isLease;
+  int? from;
+  int? to;
+  int? minPrice;
+  int? maxPrice;
+  int? minArea;
+  int? maxArea;
   PostedBy postedBy;
 
   PostFilter({
     this.textSearch,
+    this.isLease,
     required this.orderBy,
-    required this.from,
-    required this.to,
-    required this.minPrice,
-    required this.maxPrice,
-    required this.minArea,
-    required this.maxArea,
+    this.from,
+    this.to,
+    this.minPrice,
+    this.maxPrice,
+    this.minArea,
+    this.maxArea,
     required this.postedBy,
-  });
+  }) : assert((from != null && to != null && from < to)||(from == null && to == null) );
 }
 
 class ApartmentFilter extends PostFilter {
@@ -36,6 +38,7 @@ class ApartmentFilter extends PostFilter {
 
   ApartmentFilter({
     String? textSearch,
+    bool? isLease,
     required OrderBy orderBy,
     required int from,
     required int to,
@@ -77,6 +80,7 @@ class HouseFilter extends PostFilter {
 
   HouseFilter({
     String? textSearch,
+    bool? isLease,
     required OrderBy orderBy,
     required int from,
     required int to,
@@ -116,6 +120,7 @@ class LandFilter extends PostFilter {
 
   LandFilter({
     String? textSearch,
+    bool? isLease,
     required OrderBy orderBy,
     required int from,
     required int to,
@@ -151,6 +156,7 @@ class OfficeFilter extends PostFilter {
 
   OfficeFilter({
     String? textSearch,
+    bool? isLease,
     required OrderBy orderBy,
     required int from,
     required int to,
@@ -181,6 +187,7 @@ class MotelFilter extends PostFilter {
 
   MotelFilter({
     String? textSearch,
+    bool? isLease,
     required OrderBy orderBy,
     required int from,
     required int to,

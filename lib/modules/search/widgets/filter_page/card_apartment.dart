@@ -87,10 +87,11 @@ class CardApartment extends StatelessWidget {
             onChanged: searchController.apartmentLegalDocuments.onChange,
           ),
           const SizedBox(height: 10),
-          CategoryBoxRadio(
+          CategoryBoxCheck(
             title: "Tình trạng nội thất",
-            categorys: searchController.apartmentInteriorStatus.values,
-            selected: searchController.apartmentInteriorStatus.selectedValue,
+            categorys: searchController.apartmentInteriorStatus.checkListItems,
+            multipleSelected:
+                searchController.apartmentInteriorStatus.multipleSelected,
             onChanged: searchController.apartmentInteriorStatus.onChange,
           ),
           const SizedBox(height: 10),

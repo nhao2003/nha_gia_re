@@ -24,6 +24,9 @@ class Post {
   int numOfLikes;
   List<String> imagesUrl;
   bool isProSeller;
+  PostStatus status;
+  String? rejectedInfo;
+  bool isHide;
 
   Post({
     required this.id,
@@ -42,6 +45,9 @@ class Post {
     required this.projectName,
     required this.deposit,
     required this.numOfLikes,
+    required this.status,
+    required this.rejectedInfo,
+    required this.isHide,
   })  : assert(id.trim().isNotEmpty),
         assert(area >= 0),
         assert(projectName?.trim().isNotEmpty ?? true),
@@ -55,7 +61,7 @@ class Post {
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
       id: json['id'],
-      area: json['area'],
+      area: json['area'].toDouble(),
       type: PropertyType.parse(json['property_type']),
       address: Address.fromJson(json['address']),
       userID: json['user_id'],
@@ -70,8 +76,12 @@ class Post {
       projectName: json['project_name'],
       deposit: json['deposit'],
       numOfLikes: json['num_of_likes'],
+      status: PostStatus.parse(json['status']),
+      rejectedInfo: json['rejected_info'],
+      isHide: json['is_hide'],
     );
   }
+
   @override
   String toString() {
     return 'Post{'
@@ -91,6 +101,9 @@ class Post {
         'numOfLikes: $numOfLikes, '
         'imagesUrl: $imagesUrl, '
         'isProSeller: $isProSeller'
+        'status: $status'
+        'rejectedInfo: $rejectedInfo'
+        'isHide: $isHide'
         '}';
   }
-  }
+}

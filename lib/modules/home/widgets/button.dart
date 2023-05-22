@@ -5,10 +5,11 @@ import '../../../core/extensions/color_ex.dart';
 import '../../../core/theme/text_styles.dart';
 
 class CustomButton extends StatefulWidget {
-  const CustomButton({super.key, this.icon, required this.title});
+  const CustomButton({super.key, this.icon, required this.title, required this.onPressed});
 
   final Widget? icon;
   final String title;
+  final VoidCallback onPressed;
 
   @override
   State<CustomButton> createState() => _CustomButtonState();
@@ -23,7 +24,7 @@ class _CustomButtonState extends State<CustomButton> {
                 width: 64,
                 height: 64,
                 child: ElevatedButton(
-                  onPressed: (){ AuthRepository().signOut(); },
+                  onPressed: widget.onPressed,
                   style: ButtonStyle(
                     backgroundColor: MaterialStatePropertyAll(HexColor.fromHex('F5F5F5')),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(

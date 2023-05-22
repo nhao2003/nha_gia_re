@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:nha_gia_re/data/models/address.dart';
+import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/providers/remote/request/update_profile_request.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
@@ -13,6 +14,7 @@ import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../data/services/upload_avatar_service.dart';
 
 class UserProfileController extends GetxController {
+  late String avatarUrl; 
   var gender = "male".obs;
   var userProfileFormKey = GlobalKey<FormState>();
   var birthDayTextController = TextEditingController();
@@ -21,6 +23,19 @@ class UserProfileController extends GetxController {
   var bioTextController = TextEditingController();
   var birthday = DateTime.now();
   var isUploadAvatar = false.obs;
+
+  void init(dynamic arg)
+  {
+    if(arg is UserInfo)
+    {
+      avatarUrl = arg.avatarUrl!;
+      fullNameTextController.text = arg.fullName!;
+      phoneNumberTextController.text = arg.phoneNumber!;
+      gender.value = (arg.isMale!) ? 'male' : 'female';
+      birthDayTextController.text = DateFormat('dd/MM/yyyy').format(arg.dob!);
+      bioTextController.text = arg.description!;
+    }
+  }
 
   Future<void> handelUploadAvatar(File file) async {
     isUploadAvatar.value = true;
@@ -69,7 +84,7 @@ class UserProfileController extends GetxController {
       if(auth.isUserLoggedIn)
       {
         UpdateProfileRequest request = UpdateProfileRequest.name(
-          address: Address(cityCode: 1,districtCode: 1,wardCode: 1), 
+          address: Address(cityCode: 1, cityName: '1',districtCode: 1, districtName: '1',wardCode: 1, wardName: '1'), 
           isMale: (gender.value == 'male'), 
           avatarUrl: "avatarUrl", 
           fullName: fullNameTextController.text,
