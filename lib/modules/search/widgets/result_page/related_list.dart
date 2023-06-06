@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/providers/data_center.dart';
 import 'package:nha_gia_re/modules/search/widgets/result_page/item_product.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -8,7 +9,8 @@ import '../../../../data/models/properties/post.dart';
 import '../../search_controller.dart';
 
 class RelatedList extends StatefulWidget {
-  RelatedList({super.key});
+  OrderBy orderBy;
+  RelatedList(this.orderBy, {super.key});
 
   @override
   State<RelatedList> createState() => _RelatedListState();
@@ -19,7 +21,7 @@ class _RelatedListState extends State<RelatedList> {
 
   @override
   void initState() {
-    searchController.initPosts();
+    searchController.initPosts(widget.orderBy);
     super.initState();
   }
 

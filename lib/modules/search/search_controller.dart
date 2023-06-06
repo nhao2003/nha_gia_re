@@ -50,10 +50,10 @@ class SearchController extends GetxController {
     return datas;
   }
 
-  Future<void> initPosts() async {
+  Future<void> initPosts(OrderBy orderby) async {
     PostFilter filter = PostFilter(
       textSearch: _query,
-      orderBy: OrderBy.priceAsc,
+      orderBy: orderby,
       postedBy: PostedBy.all,
     );
     searchPosts.value = await repository.getAllPosts(filter);
