@@ -29,11 +29,14 @@ class _PersonalScreenState extends State<PersonalScreen> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, designSize: const Size(411, 683));
+    if(_controller.userInfo == null)
+      return Center(child: Text("Null"),);
+
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,
-        title: Text(_controller.userInfo!.fullName!),
+        title: Text(_controller.userInfo!.fullName??"NULL"),
       ),
       body: Container(
         //padding: EdgeInsets.symmetric(vertical: 15.h),
