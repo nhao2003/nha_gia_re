@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class MediaGrid extends StatelessWidget {
     late List<String> medias;
-   MediaGrid(medias, {Key? key}) : super(key: key);
+   MediaGrid(this.medias, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
