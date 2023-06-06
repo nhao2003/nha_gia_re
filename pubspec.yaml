@@ -46,6 +46,7 @@ dependencies:
   dropdown_button2: ^2.0.0
   supabase_flutter: ^1.6.2
   image_gallery_saver: ^1.7.1
+  flutter_pw_validator: ^1.6.0
   image_picker: ^0.8.6+4
   permission_handler: ^10.2.0
   path_provider: ^2.0.11
