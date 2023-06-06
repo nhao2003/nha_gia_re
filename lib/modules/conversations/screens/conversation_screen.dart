@@ -21,6 +21,7 @@ class ConversationScreen extends StatefulWidget {
 
 class _ConversationScreenState extends State<ConversationScreen> {
   late ConversationController _chatController;
+
   @override
   initState() {
     _chatController = Get.find<ConversationController>();
@@ -73,6 +74,40 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                 key: UniqueKey(),
                                 conversation: e,
                                 userInfo: snapshot.data!,
+                                onTap: () {
+                                  Get.toNamed(AppRoutes.chat, arguments: e);
+                                },
+                                onLongPress: () {
+                                  Get.dialog(Dialog(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Get.back();
+                                          },
+                                          child: Text(
+                                            "Đánh dấu đã đọc",
+                                            style: AppTextStyles.roboto16regular
+                                                .copyWith(
+                                                    color: AppColors.black),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () => _chatController.deleteConversation(e),
+                                          child: Text(
+                                            "Xoá tin nhắn",
+                                            style: AppTextStyles.roboto16regular
+                                                .copyWith(
+                                                    color: AppColors.black),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ));
+                                },
                               );
                             } else {
                               return const Center(
@@ -90,11 +125,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
     );
   }
 
-  _hasDataWidget() {
-    return Center(
-      child: Text("Has Data"),
-    );
-  }
 
   _emptyChatWidget() {
     return Center(
@@ -117,4 +147,3 @@ class _ConversationScreenState extends State<ConversationScreen> {
     );
   }
 }
-
