@@ -31,6 +31,24 @@ extension StringX on String {
     return double.tryParse(this) != null;
   }
 
+  String noAccentVietnamese(String s) {
+    s = s.replaceAll(RegExp(r'[àáạảãâầấậẩẫăằắặẳẵ]'), 'a');
+    s = s.replaceAll(RegExp(r'[ÀÁẠẢÃĂẰẮẶẲẴÂẦẤẬẨẪ]'), 'A');
+    s = s.replaceAll(RegExp(r'[èéẹẻẽêềếệểễ]'), 'e');
+    s = s.replaceAll(RegExp(r'[ÈÉẸẺẼÊỀẾỆỂỄ]'), 'E');
+    s = s.replaceAll(RegExp(r'[òóọỏõôồốộổỗơờớợởỡ]'), 'o');
+    s = s.replaceAll(RegExp(r'[ÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠ]'), 'O');
+    s = s.replaceAll(RegExp(r'[ìíịỉĩ]'), 'i');
+    s = s.replaceAll(RegExp(r'[ÌÍỊỈĨ]'), 'I');
+    s = s.replaceAll(RegExp(r'[ùúụủũưừứựửữ]'), 'u');
+    s = s.replaceAll(RegExp(r'[ƯỪỨỰỬỮÙÚỤỦŨ]'), 'U');
+    s = s.replaceAll(RegExp(r'[ỳýỵỷỹ]'), 'y');
+    s = s.replaceAll(RegExp(r'[ỲÝỴỶỸ]'), 'Y');
+    s = s.replaceAll(RegExp(r'[Đ]'), 'D');
+    s = s.replaceAll(RegExp(r'[đ]'), 'd');
+    return s;
+  }
+
   /// chuyen tieng viet co dau thanh khong dau
   String removeVietnameseAccents() {
     var vietnameseAccents = {

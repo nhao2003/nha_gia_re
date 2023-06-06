@@ -199,6 +199,7 @@ CREATE TABLE conversations
     id                              uuid      not null primary key default uuid_generate_v4(),
     user1_id                        uuid      NOT NULL,
     user2_id                        uuid      NOT NULL,
+    last_message_type VARCHAR DEFAULT NULL,
     last_message                    TEXT,
     last_message_sent_at            TIMESTAMP NOT NULL             DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
     user1_joined_at                 TIMESTAMP                      DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
@@ -218,6 +219,7 @@ CREATE TABLE messages
     id               uuid                                                        not null primary key default uuid_generate_v4(),
     conversation_id  uuid references public.conversations (id) on delete cascade not null,
     sender_id        uuid                                                        NOT NULL,
+    message_type VARCHAR NOT NULL,
     message          TEXT,
     images           TEXT[],
     post_id          uuid,
@@ -238,6 +240,7 @@ BEGIN
 timezone = 'Asia/Ho_Chi_Minh';
 UPDATE conversations
 SET last_message                    = NEW.message,
+    last_message_type               = NEW.message_type,
     last_message_sent_at            = NEW.sent_at,
     user1_joined_at                 = CASE
                                           WHEN user1_joined_at IS NULL THEN timezone('Asia/Ho_Chi_Minh', now())
@@ -257,7 +260,7 @@ END,
     SELECT COUNT(*) FROM messages
     WHERE messages.conversation_id = new.conversation_id AND messages.sender_id != new.sender_id AND messages.is_receiver_read = false
   )
-END,
+END
   WHERE id = NEW.conversation_id;
 RETURN NEW;
 END;
@@ -269,34 +272,6 @@ CREATE TRIGGER update_conversation_last_message
     ON messages
     FOR EACH ROW
     EXECUTE FUNCTION update_last_message();
-
-
-CREATE
-OR REPLACE FUNCTION get_or_create_conservation(user_info_id uuid)
-  RETURNS uuid AS
-$$
-DECLARE
-conv_id uuid;
-BEGIN
-  -- Tìm conservation chứa user_info_id
-SELECT id
-INTO conv_id
-FROM conservations
-WHERE (user1_id = auth.uid() and user2_id = user_info_id)
-   OR (user2_id = auth.uid() and user1_id = user_info_id) LIMIT 1;
-
--- Nếu không tìm thấy, tạo mới conservation
-IF
-conv_id IS NULL THEN
-    INSERT INTO conservations(user1_id, user2_id)
-    VALUES(auth.uid(), user_info_id)
-    RETURNING id INTO conv_id;
-END IF;
-
-RETURN conv_id;
-END;
-$$
-LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION get_or_create_conversation(
     user_info_id uuid
@@ -312,11 +287,46 @@ BEGIN
         INSERT INTO conversations (user1_id, user2_id, last_message_sent_at)
         VALUES (auth.uid(), user_info_id, timezone('Asia/Ho_Chi_Minh', now()))
         RETURNING * INTO conversation;
+    ELSE
+        UPDATE conversations
+        SET user1_joined_at = CASE WHEN user1_joined_at IS NULL THEN timezone('Asia/Ho_Chi_Minh', now()) ELSE user1_joined_at END,
+            user2_joined_at = CASE WHEN user2_joined_at IS NULL THEN timezone('Asia/Ho_Chi_Minh', now()) ELSE user2_joined_at END
+        WHERE id = conversation.id;
+        SELECT * INTO conversation FROM conversations
+        WHERE id = conversation.id;
     END IF;
-
     RETURN conversation;
 END;
 $$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION delete_conversation(p_user_id uuid, p_conversation_id uuid)
+    RETURNS void AS $$
+DECLARE
+    conversation conversations;
+BEGIN
+    UPDATE conversations
+    SET
+        user1_joined_at = CASE WHEN user1_id = p_user_id THEN NULL ELSE user1_joined_at END,
+        user2_joined_at = CASE WHEN user2_id = p_user_id THEN NULL ELSE user2_joined_at END,
+        num_Of_unread_messages_of_user1 = CASE WHEN user1_id = p_user_id THEN 0 ELSE num_Of_unread_messages_of_user1 END,
+        num_Of_unread_messages_of_user2 = CASE WHEN user2_id = p_user_id THEN 0 ELSE num_Of_unread_messages_of_user2 END
+    WHERE id = p_conversation_id;
+
+    SELECT INTO conversation *
+    FROM conversations
+    WHERE id = p_conversation_id;
+
+    IF conversation.user1_joined_at IS NULL AND conversation.user2_joined_at IS NULL THEN
+        BEGIN
+            DELETE FROM storage.objects
+            WHERE name LIKE p_conversation_id || '%';
+            DELETE FROM conversations WHERE id = p_conversation_id;
+        END;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
 
 
 

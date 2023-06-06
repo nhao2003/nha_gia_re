@@ -348,3 +348,25 @@ enum PostStatusMana {
     throw Exception("Can't parse PostStatus! Your input value is \"$value\"");
   }
 }
+
+enum MessageType {
+  text,
+  images,
+  post,
+  location;
+
+  @override
+  String toString() {
+    super.toString();
+    return super.toString().split('.').last;
+  }
+
+  static MessageType parse(String value) {
+    for (MessageType type in MessageType.values) {
+      if (type.toString() == value) {
+        return type;
+      }
+    }
+    throw Exception("Can't parse MessageType! Your input value is \"$value\"");
+  }
+}

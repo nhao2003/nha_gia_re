@@ -72,7 +72,7 @@ class PostRepository extends BaseRepository {
 
   Future<void> deletePost(String postId) async {
     try {
-      return await remoteDataSourceImpl.deletedPost(postId);
+      return await remoteDataSourceImpl.deletePost(postId);
     } catch (e) {
       rethrow;
     }

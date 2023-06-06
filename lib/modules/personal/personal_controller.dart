@@ -24,9 +24,9 @@ class PersonalController extends GetxController {
   }
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
+    await getAuthUserInfo();
     super.onInit();
-    getAuthUserInfo();
   }
 
   Future<void> getAuthUserInfo() async {

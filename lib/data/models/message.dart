@@ -1,3 +1,5 @@
+import 'package:nha_gia_re/data/enums/enums.dart';
+import 'package:nha_gia_re/data/models/address.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Message {
@@ -9,6 +11,8 @@ class Message {
   DateTime sentAt;
   bool isMine;
   bool isRead;
+  Address? location;
+  MessageType type;
 
   Message({
     required this.id,
@@ -19,9 +23,10 @@ class Message {
     required this.sentAt,
     required this.isMine,
     required this.isRead,
+    required this.type,
+    required this.location,
   })  : assert(id.trim().isNotEmpty),
-        assert(senderID.trim().isNotEmpty),
-        assert(text == null || text.trim().isNotEmpty);
+        assert(senderID.trim().isNotEmpty);
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
@@ -34,7 +39,11 @@ class Message {
         sentAt: DateTime.parse(json['sent_at']),
         isMine:
             Supabase.instance.client.auth.currentUser!.id == json['sender_id'],
-        isRead: json['is_receiver_read']);
+        isRead: json['is_receiver_read'],
+        type: MessageType.parse(json['message_type']),
+        location: json['location_message'] != null
+            ? Address.fromJson(json['location_message'])
+            : null);
   }
 
   @override

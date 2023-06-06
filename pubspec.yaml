@@ -59,6 +59,7 @@ dependencies:
   flutter_screenutil: ^5.7.0
   flutter_xlider: ^3.5.0
   uuid: ^3.0.7
+  cached_network_image: ^3.2.3
 
 dev_dependencies:
   flutter_test:

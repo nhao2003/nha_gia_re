@@ -13,7 +13,6 @@ import 'package:nha_gia_re/modules/search/screens/filter_screen.dart';
 import 'package:nha_gia_re/modules/chat/chat_binding.dart';
 import 'package:nha_gia_re/modules/chat/screens/chat_screen.dart';
 import 'package:nha_gia_re/modules/search/screens/search_screen.dart';
-import 'package:nha_gia_re/modules/test/screens/test.dart';
 import '../modules/conversations/conversation_binding.dart';
 import '../modules/conversations/screens/conversation_screen.dart';
 import 'package:nha_gia_re/modules/user_profile/screens/user_profile_screen.dart';
@@ -78,11 +77,6 @@ abstract class AppPages {
       name: AppRoutes.filter,
       page: () => FilterScreen(),
       binding: SearchBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.test,
-      page: () => const TestScreen(),
-      binding: TestBinding(),
     ),
     GetPage(
       name: AppRoutes.personal,
