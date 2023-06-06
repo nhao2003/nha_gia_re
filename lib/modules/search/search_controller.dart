@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:nha_gia_re/core/extensions/string_ex.dart';
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
 import 'package:nha_gia_re/data/services/list_check_service.dart';
 import 'package:nha_gia_re/data/services/radio_service.dart';
@@ -29,6 +30,18 @@ class SearchController extends GetxController {
     "nha tro",
     "Dat nong nghiep",
   ];
+
+  final RxList<String> searchStrings = <String>[].obs;
+
+  Future<RxList<String>> getSearchString() async {
+    List<Post> datas = await repository.getUserPosts(AuthRepository().userID!);
+    searchStrings.clear();
+    for (var data in datas) {
+      searchStrings.add(data.title);
+      print(data.title);
+    }
+    return searchStrings;
+  }
 
   RxList<Post> searchPosts = <Post>[].obs;
 
@@ -89,9 +102,21 @@ class SearchController extends GetxController {
 
   /// get list Suggestions
   List<String> getSuggestions(String query) {
-    return query.isEmpty
-        ? [...history]
-        : dummydata.where((word) => word.startsWith(query)).toList();
+    // xu ly in hoa, in thuong, co dau, khong dau
+    List<String> results = [];
+    if (query.isEmpty)
+      results = [...history];
+    else {
+      for (String value in searchStrings) {
+        if (value
+            .removeVietnameseAccents()
+            .toLowerCase()
+            .startsWith(query.removeVietnameseAccents().toLowerCase())) {
+          results.add(value);
+        }
+      }
+    }
+    return results;
   }
 
   /// update suggestions
