@@ -245,7 +245,7 @@ class RemoteDataSource {
 
   Future<List<Map<String, dynamic>>> getAllPosts(PostFilter filter) async {
     try {
-      var query = _defaultFilter('post', filter)
+      var query = _defaultFilter(tablePost, filter)
           .order(filter.orderBy.filterString, ascending: filter.orderBy.isAsc);
       if (filter.from != null && filter.to != null) {
         query = query.range(filter.from!, filter.to!);
