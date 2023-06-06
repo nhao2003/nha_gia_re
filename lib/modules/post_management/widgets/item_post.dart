@@ -132,7 +132,7 @@ class _ItemPostState extends State<ItemPost> {
               onSelected: (int item) {
                 setState(() {
                   selectedMenu = item;
-                  widget.onSelectedMenu(item);
+                  widget.onSelectedMenu(item, widget.post);
                 });
               },
               itemBuilder: (BuildContext context) =>

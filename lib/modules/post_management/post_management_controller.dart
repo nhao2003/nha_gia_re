@@ -57,23 +57,23 @@ class PostManagementController extends GetxController {
     Get.toNamed(AppRoutes.post_detail, arguments: post);
   }
 
-  void showPost() {
+  void showPost(Post post) {
     print("Hien tin");
   }
 
-  void hidePost() {
+  void hidePost(Post post) {
     print("hide post");
   }
 
-  void editPost() {
+  void editPost(Post post) {
     print("edit post");
   }
 
-  void deletePost() {
+  void deletePost(Post post) {
     print("delete post");
   }
 
-  void extensionPost() {
+  void extensionPost(Post post) {
     print("gia han");
   }
 }

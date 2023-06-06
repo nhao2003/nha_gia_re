@@ -13,13 +13,13 @@ class ListPostsHided extends StatelessWidget {
   final PostManagementController controller =
       Get.find<PostManagementController>();
 
-  void onSelectedMenu(int i) {
+  void onSelectedMenu(int i, Post post) {
     if (i == 0) {
-      controller.showPost();
+      controller.showPost(post);
     } else if (i == 1) {
-      controller.editPost();
+      controller.editPost(post);
     } else if (i == 2) {
-      controller.deletePost();
+      controller.deletePost(post);
     }
   }
 
