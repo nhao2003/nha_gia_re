@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:nha_gia_re/data/providers/remote/remote_data_source_impl.dart';
+import 'package:nha_gia_re/data/providers/remote/remote_data_source.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/modules/login/screens/forget_password.dart';
 import 'package:nha_gia_re/modules/login/screens/login_screen.dart';

@@ -7,8 +7,8 @@ import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../core/values/filter_values.dart';
 import '../../data/enums/enums.dart';
 import '../../data/models/properties/post.dart';
+import '../../data/repositories/auth_repository.dart';
 import '../../data/repositories/post_repository.dart';
-import '../post_details/screen/post_details_screen.dart';
 
 class SearchController extends GetxController {
   /// instance
@@ -29,6 +29,17 @@ class SearchController extends GetxController {
     "nha tro",
     "Dat nong nghiep",
   ];
+
+  RxList<Post> searchPosts = <Post>[].obs;
+
+  Future<List<Post>> getAllPosts() async {
+    List<Post> datas = await repository.getUserPosts(AuthRepository().userID!);
+    return datas;
+  }
+
+  Future<void> initPosts() async {
+    searchPosts.value = await getAllPosts();
+  }
 
   /// data in search delegate
   final List<String> history = <String>['apple', 'hello', 'world', 'flutter'];
@@ -141,8 +152,7 @@ class SearchController extends GetxController {
       // Phòng trọ
       datas = await repository.getAllMotels(getMotelFilter());
     }
-    print(datas.length);
-    print(datas.map((e) => e.title).toList().toString());
+    searchPosts.value = datas;
     // pop screen when done
     popScreen();
   }
