@@ -79,6 +79,20 @@ class SearchController extends GetxController {
   /// change new value to selectedTypeItem
   void changeSelectedItem(String newValue) {
     selectedTypeItem.value = newValue;
+    // add filter
+    if (newValue == FilterValues.instance.provinces[0]) {
+      initPosts(OrderBy.priceAsc);
+    } else {
+      List<Post> filterPosts = <Post>[];
+      for (var post in searchPosts) {
+        if (post.address.cityName!
+            .removeVietnameseAccents()
+            .contains(newValue.removeVietnameseAccents())) {
+          filterPosts.add(post);
+        }
+      }
+      searchPosts.value = [...filterPosts];
+    }
   }
 
   /// add new query to history
