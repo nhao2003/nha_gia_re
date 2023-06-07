@@ -1,4 +1,4 @@
-import '../../../enums/property_enums.dart';
+import '../../../enums/enums.dart';
 import '../../../models/address.dart';
 import 'post_request.dart';
 
@@ -15,6 +15,7 @@ class HouseRequest extends PostRequest {
   Direction? mainDoorDirection;
   LegalDocumentStatus? legalDocumentStatus;
   FurnitureStatus? furnitureStatus;
+  bool isWidensTowardsTheBack;
   HouseRequest({
     required this.furnitureStatus,
     required double area,
@@ -30,6 +31,7 @@ class HouseRequest extends PostRequest {
     required this.numOfFloors,
     required this.mainDoorDirection,
     required this.legalDocumentStatus,
+    required this.isWidensTowardsTheBack,
     required Address address,
     required String userID,
     required bool isLease,
@@ -75,6 +77,7 @@ class HouseRequest extends PostRequest {
       'main_door_direction': mainDoorDirection?.toString(),
       'legal_document_status': legalDocumentStatus?.toString(),
       'furniture_status': furnitureStatus?.toString(),
+      'is_widens_towards_the_back': isWidensTowardsTheBack,
       ...super.toJson(),
     };
   }

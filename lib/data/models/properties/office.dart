@@ -1,5 +1,6 @@
 import 'package:nha_gia_re/data/models/address.dart';
 
+import '../../enums/enums.dart';
 import 'post.dart';
 
 class Office extends Post {
@@ -28,6 +29,9 @@ class Office extends Post {
     required String? projectName,
     required int? deposit,
     required int numOfLikes,
+    required PostStatus status,
+    required String? rejectedInfo,
+    required bool isHide,
     this.hasWideAlley = false,
     this.isFacade = false,
     this.officeType,
@@ -51,6 +55,9 @@ class Office extends Post {
           projectName: projectName,
           deposit: deposit,
           numOfLikes: numOfLikes,
+        status: status,
+        rejectedInfo: rejectedInfo,
+        isHide: isHide,
         );
 
   factory Office.fromJson(Map<String, dynamic> json) {
@@ -84,6 +91,39 @@ class Office extends Post {
       furnitureStatus: json['furniture_status'] != null
           ? FurnitureStatus.parse(json['furniture_status'])
           : null,
+      status: PostStatus.parse(json['status']),
+      rejectedInfo: json['rejected_info'],
+      isHide: json['is_hide'],
     );
+  }
+  @override
+  String toString() {
+    return 'Office{'
+        'id: $id, '
+        'area: $area, '
+        'projectName: $projectName, '
+        'type: $type, '
+        'address: $address, '
+        'userID: $userID, '
+        'price: $price, '
+        'deposit: $deposit, '
+        'isLease: $isLease, '
+        'title: $title, '
+        'description: $description, '
+        'postedDate: $postedDate, '
+        'expiryDate: $expiryDate, '
+        'numOfLikes: $numOfLikes, '
+        'imagesUrl: $imagesUrl, '
+        'isProSeller: $isProSeller, '
+        'hasWideAlley: $hasWideAlley, '
+        'isFacade: $isFacade, '
+        'officeType: $officeType, '
+        'mainDoorDirection: $mainDoorDirection, '
+        'legalDocumentStatus: $legalDocumentStatus, '
+        'furnitureStatus: $furnitureStatus'
+        'status: $status'
+        'rejectedInfo: $rejectedInfo'
+        'isHide: $isHide'
+        '}';
   }
 }

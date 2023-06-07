@@ -71,10 +71,11 @@ class CardHouse extends StatelessWidget {
             onChanged: searchController.houseLegalDocuments.onChange,
           ),
           const SizedBox(height: 10),
-          CategoryBoxRadio(
+          CategoryBoxCheck(
             title: "Tình trạng nội thất",
-            categorys: searchController.houseInteriorStatus.values,
-            selected: searchController.houseInteriorStatus.selectedValue,
+            categorys: searchController.houseInteriorStatus.checkListItems,
+            multipleSelected:
+                searchController.houseInteriorStatus.multipleSelected,
             onChanged: searchController.houseInteriorStatus.onChange,
           ),
           const SizedBox(height: 10),

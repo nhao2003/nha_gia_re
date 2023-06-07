@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 
 import '../../../core/extensions/color_ex.dart';
 import '../../../core/theme/text_styles.dart';
 
 class CustomButton extends StatefulWidget {
   const CustomButton({super.key, this.icon, required this.title, required this.onPressed});
+  const CustomButton({super.key, this.icon, required this.title, required this.onPressed});
 
   final Widget? icon;
   final String title;
+  final VoidCallback onPressed;
   final VoidCallback onPressed;
   @override
   State<CustomButton> createState() => _CustomButtonState();

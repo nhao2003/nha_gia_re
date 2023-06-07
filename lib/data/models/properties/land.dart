@@ -1,5 +1,6 @@
 import 'package:nha_gia_re/data/models/address.dart';
 
+import '../../enums/enums.dart';
 import 'post.dart';
 
 class Land extends Post {
@@ -41,6 +42,9 @@ class Land extends Post {
     required bool isProSeller,
     required int? deposit,
     required int numOfLikes,
+    required PostStatus status,
+    required String? rejectedInfo,
+    required bool isHide,
   })  : assert(landLotCode?.trim().isNotEmpty ?? true),
         assert(width * length > 0),
         assert(subdivisionName?.trim().isNotEmpty ?? true),
@@ -61,6 +65,9 @@ class Land extends Post {
           projectName: projectName,
           deposit: deposit,
           numOfLikes: numOfLikes,
+        status: status,
+        rejectedInfo: rejectedInfo,
+        isHide: isHide,
         );
 
   factory Land.fromJson(Map<String, dynamic> json) {
@@ -95,6 +102,43 @@ class Land extends Post {
       landLotCode: json['land_lot_code'],
       subdivisionName: json['subdivision_name'],
       isWidensTowardsTheBack: json['is_widens_towards_the_back'],
+      status: PostStatus.parse(json['status']),
+      rejectedInfo: json['rejected_info'],
+      isHide: json['is_hide'],
     );
+  }
+  @override
+  String toString() {
+    return 'Land{'
+        'id: $id, '
+        'area: $area, '
+        'projectName: $projectName, '
+        'type: $type, '
+        'address: $address, '
+        'userID: $userID, '
+        'price: $price, '
+        'deposit: $deposit, '
+        'isLease: $isLease, '
+        'title: $title, '
+        'description: $description, '
+        'postedDate: $postedDate, '
+        'expiryDate: $expiryDate, '
+        'numOfLikes: $numOfLikes, '
+        'imagesUrl: $imagesUrl, '
+        'isProSeller: $isProSeller, '
+        'landLotCode: $landLotCode, '
+        'subdivisionName: $subdivisionName, '
+        'landType: $landType, '
+        'width: $width, '
+        'length: $length, '
+        'landDirection: $landDirection, '
+        'legalDocumentStatus: $legalDocumentStatus, '
+        'isFacade: $isFacade, '
+        'isWidensTowardsTheBack: $isWidensTowardsTheBack, '
+        'hasWideAlley: $hasWideAlley'
+        'status: $status'
+        'rejectedInfo: $rejectedInfo'
+        'isHide: $isHide'
+        '}';
   }
 }

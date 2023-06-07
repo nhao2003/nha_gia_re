@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
-import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/data/services/onesignal_service.dart';
 import 'package:nha_gia_re/routers/app_pages.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
@@ -14,6 +13,7 @@ import 'core/languages/localization_service.dart';
 import 'core/values/api_values.dart';
 import 'core/languages/localization_service.dart';
 import 'core/values/app_strings.dart';
+import 'data/repositories/auth_repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +28,9 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
+
   var auth = AuthRepository();
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -60,7 +62,7 @@ class MyApp extends StatelessWidget {
       translations: LocalizationService(),
       builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
-      initialRoute: (auth.isUserLoggedIn) ? AppRoutes.dashboard : AppRoutes.login,
+      initialRoute: AppRoutes.splashScreen,
       getPages: AppPages.pages,
       defaultTransition: Transition.cupertino,
     );

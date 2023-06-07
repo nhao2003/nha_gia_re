@@ -22,11 +22,12 @@ class _CheckFormFieldState extends State<CheckFormField> {
       children: [
         Row(children: [
           Checkbox(checkColor: Colors.indigo,
-              value: widget.initialValue, onChanged: (bool? value){
-                setState(() {
-                  widget.onChange(!value!);
-                });
-          }),
+              onChanged: (valueChange){
+            setState(() {
+              widget.initialValue = valueChange ?? false;
+            });
+            widget.onChange( valueChange?? false);
+              }, value: widget.initialValue,),
           Text(widget.name, style: AppTextStyles.roboto12regular),
         ]),
       ],

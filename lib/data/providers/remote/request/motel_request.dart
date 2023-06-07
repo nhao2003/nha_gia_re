@@ -1,4 +1,4 @@
-import '../../../enums/property_enums.dart';
+import '../../../enums/enums.dart';
 import '../../../models/address.dart';
 import 'post_request.dart';
 

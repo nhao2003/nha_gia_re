@@ -11,6 +11,8 @@ class AuthRepository extends BaseRepository {
 
   bool get isUserLoggedIn => _user.currentUser != null;
 
+  String? get userID => Supabase.instance.client.auth.currentUser?.id;
+
   Future<UserInfo> signIn(
       {required String email, required String password}) async {
     try {

@@ -1,9 +1,11 @@
+import '../../enums/enums.dart';
 import '../address.dart';
 import 'post.dart';
 
 class House extends Post {
   bool hasWideAlley;
   bool isFacade;
+  bool isWidensTowardsTheBack;
   double? areaUsed;
   HouseType? houseType;
   double? width;
@@ -22,6 +24,7 @@ class House extends Post {
     required String? projectName,
     required this.hasWideAlley,
     required this.isFacade,
+    required this.isWidensTowardsTheBack,
     required this.areaUsed,
     required this.width,
     required this.length,
@@ -44,6 +47,9 @@ class House extends Post {
     required bool isProSeller,
     required int? deposit,
     required int numOfLikes,
+    required PostStatus status,
+    required String? rejectedInfo,
+    required bool isHide,
   })  : assert(areaUsed == null || areaUsed > 0),
         assert((width == null && length == null) ||
             (width != null && length != null && width * length > 0)),
@@ -67,6 +73,9 @@ class House extends Post {
           projectName: projectName,
           deposit: deposit,
           numOfLikes: numOfLikes,
+        status: status,
+        rejectedInfo: rejectedInfo,
+        isHide: isHide,
         );
 
   factory House.fromJson(Map<String, dynamic> json) {
@@ -89,8 +98,10 @@ class House extends Post {
       numOfLikes: json['num_of_likes'],
       hasWideAlley: json['has_wide_alley'],
       isFacade: json['is_facade'],
-      houseType:
-          json['house_type']  != null ? HouseType.parse(json['house_type']) : null,
+      isWidensTowardsTheBack: json['is_widens_towards_the_back'],
+      houseType: json['house_type'] != null
+          ? HouseType.parse(json['house_type'])
+          : null,
       mainDoorDirection: json['main_door_direction'] != null
           ? Direction.parse(json['main_door_direction'])
           : null,
@@ -106,6 +117,34 @@ class House extends Post {
       numOfBedRooms: json['nums_of_bed_rooms'],
       numOfToilets: json['nums_of_toilets'],
       numOfFloors: json['nums_of_floors'],
+      status: PostStatus.parse(json['status']),
+      rejectedInfo: json['rejected_info'],
+      isHide: json['is_hide'],
     );
+  }
+  @override
+  String toString() {
+    return 'House{'
+        'id: $id, '
+        'furnitureStatus: $furnitureStatus, '
+        'area: $area, '
+        'price: $price'
+        'projectName: $projectName, '
+        'hasWideAlley: $hasWideAlley, '
+        'isFacade: $isFacade, '
+        'areaUsed: $areaUsed, '
+        'width: $width, '
+        'length: $length, '
+        'houseType: $houseType, '
+        'numOfBedRooms: $numOfBedRooms, '
+        'numOfToilets: $numOfToilets, '
+        'numOfFloors: $numOfFloors, '
+        'mainDoorDirection: $mainDoorDirection, '
+        'legalDocumentStatus: $legalDocumentStatus, '
+        'address: $address, '
+        'status: $status'
+        'rejectedInfo: $rejectedInfo'
+        'isHide: $isHide'
+        '}';
   }
 }

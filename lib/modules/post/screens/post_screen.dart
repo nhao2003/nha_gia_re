@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/data/services/validate_service.dart';
@@ -11,6 +14,8 @@ import 'package:nha_gia_re/modules/post/widgets/check_field.dart';
 import 'package:nha_gia_re/modules/post/widgets/dropdownfied.dart';
 import 'package:nha_gia_re/modules/post/widgets/seperator.dart';
 import 'package:nha_gia_re/modules/post/widgets/textformfield.dart';
+
+import '../../../data/enums/enums.dart';
 
 // Define a custom Form widget.
 class MyCustomForm extends StatefulWidget {
@@ -25,10 +30,46 @@ class MyCustomForm extends StatefulWidget {
 class MyCustomFormState extends State<MyCustomForm> {
   final _formKey = GlobalKey<FormState>();
   late String? selectedValue;
+  Future<void> _loadResource() async {
+    if (Get.find<PropertyController>().provinceList.isEmpty) {
+      await Get.find<PropertyController>().getProvince();
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    print("Get resource call");
+    _loadResource();
+  }
+
+  void _showPicker(context, PropertyController controller) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return SafeArea(
+              child: Wrap(
+            children: [
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text("Gallery"),
+                onTap: () {
+                  controller.imgFromGallery();
+                  Get.back();
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.photo_camera),
+                title: Text("Camera"),
+                onTap: () {
+                  controller.imgFromCamera();
+                  Get.back();
+                },
+              )
+            ],
+          ));
+        });
   }
 
   @override
@@ -61,26 +102,27 @@ class MyCustomFormState extends State<MyCustomForm> {
                                     const BorderSide(color: Colors.black)),
                           ),
                           hint: Text("Chọn loại bất động sản"),
-                          items: controller.propertyTypeList.map((value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
+                          items: controller.propertyMap.entries.map((entry) {
+                            return DropdownMenuItem(
+                              value: entry.key,
+                              child: Text(entry.value),
                             );
                           }).toList(),
                           onChanged: (value) {
-                            controller.setVisibility(
-                                controller.propertyTypeList.indexOf(value!));
+                            if (value != null) {
+                              controller.setVisibility(value);
+                            }
                           },
                           onSaved: (value) {
-                            if (value == null || value.isEmpty) return;
-                            controller.propertyType = value;
+                            if (value == null) return;
                             print("Save DropDown Fied" + value.toString());
                           },
                         ),
                       ),
                       Visibility(
-                        visible: controller.selectedIndex != 3 &&
-                                controller.selectedIndex != -1
+                        visible: controller.selectedPropertyType !=
+                                    PropertyType.motel &&
+                                controller.selectedPropertyType != null
                             ? true
                             : false,
                         child: Container(
@@ -144,8 +186,9 @@ class MyCustomFormState extends State<MyCustomForm> {
                         height: 10.h,
                       ),
                       Visibility(
-                          visible:
-                              controller.selectedIndex != -1 ? true : false,
+                          visible: controller.selectedPropertyType != null
+                              ? true
+                              : false,
                           child: Column(children: [
                             const Seperator(
                               height: 10,
@@ -261,7 +304,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                     hint: "(Tiêu đề)",
                                     error: "Vui lòng nhập tiêu đề",
                                     onSave: (value) {
-                                      controller.title = value;
+                                      controller.title = value!;
                                     },
                                   ),
                                   SizedBox(
@@ -272,7 +315,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                       hint: "(Mô tả chi tiết)",
                                       error: "Vui lòng nhập mô tả chi tiết",
                                       onSave: (value) {
-                                        controller.description = value;
+                                        controller.description = value!;
                                       }),
                                 ],
                               ),
@@ -297,53 +340,58 @@ class MyCustomFormState extends State<MyCustomForm> {
                                   //Tên tòa/khu dân cư/ dự án
                                   TextFormCustom(
                                     label: "Tên tòa nhà / khu dân cư / dự án ",
-                                    hint: controller.selectedIndex == 1
+                                    hint: controller.selectedPropertyType ==
+                                            PropertyType.land
                                         ? "(Không bắt buộc)"
                                         : "(Tên tòa nhà / khu dân cư / dự án)",
                                     error: "Vui lòng nhập thông tin",
                                     onSave: (v) {
-                                      controller.projectName = v;
+                                      controller.projectName =
+                                          v != null ? v : "";
                                     },
                                   ),
                                   SizedBox(
                                     height: 10.h,
                                   ),
                                   //Địa chỉ
-                                  GestureDetector(
+                                  Container(
+                                    child: TextFormField(
                                       onTap: () {
-                                        Get.to(PostAddressScreen());
+                                        Get.to(() => PostAddressScreen());
                                       },
-                                      child: Container(
-                                        child: TextFormField(
-                                          initialValue:
-                                              controller.addressDisplay,
-                                          enabled: false,
-                                          decoration: InputDecoration(
-                                            hintText: "Địa chỉ",
-                                            hintStyle: AppTextStyles
-                                                .roboto16regular
-                                                .copyWith(
-                                                    color: AppColors.grey),
-                                            disabledBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(5.r)),
-                                              borderSide: const BorderSide(
-                                                  color: Colors.grey),
-                                            ),
-                                            border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(5.r)),
-                                                borderSide: const BorderSide(
-                                                    color: Colors.grey)),
-                                          ),
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty)
+                                          return 'Vui lòng chọn địa chỉ';
+                                        return null;
+                                      },
+                                      readOnly: true,
+                                      controller: controller.addressController,
+                                      enabled: true,
+                                      decoration: InputDecoration(
+                                        hintText: "Địa chỉ",
+                                        hintStyle: AppTextStyles.roboto16regular
+                                            .copyWith(color: AppColors.grey),
+                                        disabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(5.r)),
+                                          borderSide: const BorderSide(
+                                              color: Colors.grey),
                                         ),
-                                      )),
+                                        border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(5.r)),
+                                            borderSide: const BorderSide(
+                                                color: Colors.grey)),
+                                      ),
+                                    ),
+                                  ),
                                   //Tầng + Block
                                   SizedBox(
                                     height: 10.h,
                                   ),
                                   Visibility(
-                                    visible: controller.selectedIndex == 4
+                                    visible: controller.selectedPropertyType ==
+                                            PropertyType.apartment
                                         ? true
                                         : false,
                                     child: Row(
@@ -360,7 +408,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                             hint: "(Tầng)",
                                             error: "Vui lòng nhập tầng",
                                             onSave: (v) {
-                                              controller.floor = v;
+                                              controller.floor = int.parse(v!);
                                             },
                                             keyBoardType: TextInputType.number,
                                             onValidate: validateCount,
@@ -376,7 +424,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                             hint: "(Block/Tháp)",
                                             error: "Vui lòng nhập Block/Tháp",
                                             onSave: (v) {
-                                              controller.block = v;
+                                              controller.block = v!;
                                             },
                                           ),
                                         )
@@ -386,22 +434,127 @@ class MyCustomFormState extends State<MyCustomForm> {
                                 ],
                               ),
                             ),
-                            DottedBorder(
-                              radius: Radius.circular(5.r),
-                              strokeWidth: 1,
-                              dashPattern: [5, 2],
-                              color: AppColors.primaryColor,
-                              child: Container(
-                                margin: EdgeInsets.symmetric(vertical: 10.h),
-                                width: MediaQuery.of(context).size.width - 20.w,
-                                height: 50.h,
-                                child: Center(
-                                  child: Image(
-                                    image: AssetImage(
-                                        "assets/images/add_photo_alternate.png"),
-                                  ),
+
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                DottedBorder(
+                                  radius: Radius.circular(5.r),
+                                  strokeWidth: 1,
+                                  dashPattern: [5, 2],
+                                  color: AppColors.primaryColor,
+                                  child: controller.photo.length == 0
+                                      ? Container(
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: 10.h),
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width -
+                                              20.w,
+                                          height: 200.h,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              controller.imgFromGallery();
+                                            },
+                                            child: Center(
+                                              child: Image(
+                                                height: 100.h,
+                                                width: 100.w,
+                                                image: AssetImage(
+                                                    "assets/images/add_photo_alternate.png"),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width -
+                                              20.w,
+                                          child: SizedBox(
+                                            height: 200.h,
+                                            child: ListView.builder(
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount:
+                                                  controller.photo.length + 1,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                return SizedBox(
+                                                  height: 190.h,
+                                                  child: Container(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 3.w),
+                                                    alignment: Alignment.center,
+                                                    decoration: BoxDecoration(
+                                                        color: AppColors
+                                                            .backgroundColor),
+                                                    child: index == 0
+                                                        ? GestureDetector(
+                                                            onTap: () {
+                                                              _showPicker(
+                                                                  context,
+                                                                  controller);
+                                                              //controller.imgFromGallery();
+                                                            },
+                                                            child: Container(
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      vertical:
+                                                                          10.h),
+                                                              // width: MediaQuery.of(context).size.width - 20.w,
+                                                              height: 80.h,
+                                                              width: 80.h,
+                                                              child: Image(
+                                                                image: AssetImage(
+                                                                    "assets/images/add_photo_alternate.png"),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        : Stack(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            children: [
+                                                              Image.file(
+                                                                File(controller
+                                                                    .photo[
+                                                                        index -
+                                                                            1]
+                                                                    .path),
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                height: 190.h,
+                                                              ),
+                                                              Positioned(
+                                                                top: -10.h,
+                                                                right: -10.w,
+                                                                child:
+                                                                    IconButton(
+                                                                  icon: Icon(
+                                                                    Icons.close,
+                                                                    size: 20.h,
+                                                                    color: AppColors
+                                                                        .primaryColor,
+                                                                  ),
+                                                                  onPressed:
+                                                                      () {
+                                                                    controller.deleteImage(
+                                                                        index -
+                                                                            1);
+                                                                  },
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ),
                                 ),
-                              ),
+                              ],
                             ),
                             SizedBox(
                               height: 10.h,
@@ -418,7 +571,9 @@ class MyCustomFormState extends State<MyCustomForm> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Visibility(
-                                      visible: controller.selectedIndex != 3,
+                                      visible:
+                                          controller.selectedPropertyType !=
+                                              PropertyType.motel,
                                       child: Column(
                                         children: [
                                           Text(
@@ -434,17 +589,19 @@ class MyCustomFormState extends State<MyCustomForm> {
                                   //Visibility(child: Container())
                                   //VAN PHONG
                                   Visibility(
-                                      visible: controller.selectedIndex == 0
-                                          ? true
-                                          : false,
+                                      visible:
+                                          controller.selectedPropertyType ==
+                                                  PropertyType.office
+                                              ? true
+                                              : false,
                                       child: Column(
                                         children: [
                                           DropDownButtonFormFieldCustom(
                                             hint: "Loại hình văn phòng",
-                                            items: controller.apartmentTypeList,
+                                            items: controller.officeMap,
                                             fieldValue: controller.officeType,
                                             onSave: (v) {
-                                              controller.apartmentType = v;
+                                              controller.officeType = v;
                                             },
                                           ),
                                           SizedBox(
@@ -452,7 +609,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                           ),
                                           DropDownButtonFormFieldCustom(
                                             hint: "Hướng cửa chính",
-                                            items: controller.directionList,
+                                            items: controller.directionMap,
                                             fieldValue:
                                                 controller.directionDoor,
                                             onSave: (v) {
@@ -466,7 +623,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                                       )),
                                   //DAT
                                   Visibility(
-                                    visible: controller.selectedIndex == 1
+                                    visible: controller.selectedPropertyType ==
+                                            PropertyType.land
                                         ? true
                                         : false,
                                     child: Column(children: [
@@ -505,7 +663,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                       SizedBox(height: 10.h),
                                       DropDownButtonFormFieldCustom(
                                         hint: "Loại hình đất",
-                                        items: controller.landTypeList,
+                                        items: controller.landMap,
                                         fieldValue: controller.landType,
                                         onSave: (v) {
                                           controller.landType = v;
@@ -516,7 +674,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                       ),
                                       DropDownButtonFormFieldCustom(
                                         hint: "Hướng đất chính",
-                                        items: controller.directionList,
+                                        items: controller.directionMap,
                                         fieldValue: controller.landDirection,
                                         onSave: (v) {
                                           controller.landDirection = v;
@@ -526,9 +684,11 @@ class MyCustomFormState extends State<MyCustomForm> {
                                   ),
                                   //CAN HO, CHUNG CU
                                   Visibility(
-                                      visible: controller.selectedIndex == 4
-                                          ? true
-                                          : false,
+                                      visible:
+                                          controller.selectedPropertyType ==
+                                                  PropertyType.apartment
+                                              ? true
+                                              : false,
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -625,7 +785,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                           //Loại hình căn hộ
                                           DropDownButtonFormFieldCustom(
                                             hint: "Loại hình căn hộ",
-                                            items: controller.apartmentTypeList,
+                                            items: controller.apartmentMap,
                                             fieldValue:
                                                 controller.apartmentType,
                                             onSave: (v) {
@@ -639,8 +799,11 @@ class MyCustomFormState extends State<MyCustomForm> {
                                       )),
                                   //NHA O
                                   Visibility(
-                                      visible: controller.selectedIndex == 4 ||
-                                              controller.selectedIndex == 2
+                                      visible: controller
+                                                      .selectedPropertyType ==
+                                                  PropertyType.house ||
+                                              controller.selectedPropertyType ==
+                                                  PropertyType.apartment
                                           ? true
                                           : false,
                                       child: Column(
@@ -649,16 +812,18 @@ class MyCustomFormState extends State<MyCustomForm> {
                                         children: [
                                           //Loại hình nhà ở
                                           Visibility(
-                                              visible:
-                                                  controller.selectedIndex == 2
-                                                      ? true
-                                                      : false,
+                                              visible: controller
+                                                          .selectedPropertyType ==
+                                                      PropertyType.house
+                                                  ? true
+                                                  : false,
                                               child: Column(
                                                 children: [
                                                   DropDownButtonFormFieldCustom(
                                                     hint: "Loại hình nhà ở",
-                                                    items: controller
-                                                        .houseTypeList,
+                                                    items: controller.houseMap,
+                                                    fieldValue:
+                                                        controller.houseType,
                                                     onSave: (v) {
                                                       controller.houseType = v;
                                                     },
@@ -683,7 +848,9 @@ class MyCustomFormState extends State<MyCustomForm> {
                                                   hint: "(Không bắt buộc)",
                                                   onSave: (v) {
                                                     controller.numberOfBedroom =
-                                                        v;
+                                                        v != null
+                                                            ? int.tryParse(v)
+                                                            : null;
                                                   },
                                                   keyBoardType:
                                                       TextInputType.number,
@@ -700,7 +867,9 @@ class MyCustomFormState extends State<MyCustomForm> {
                                                   hint: "(Không bắt buộc)",
                                                   onSave: (v) {
                                                     controller.numberOfToilet =
-                                                        v;
+                                                        v != null
+                                                            ? int.tryParse(v)
+                                                            : null;
                                                   },
                                                   keyBoardType:
                                                       TextInputType.number,
@@ -712,49 +881,43 @@ class MyCustomFormState extends State<MyCustomForm> {
                                           SizedBox(
                                             height: 10.h,
                                           ),
-                                          //         //Hướng ban công, hướng cửa chính
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Container(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.46,
-                                                child:
-                                                    DropDownButtonFormFieldCustom(
-                                                  hint: "Hướng ban công",
-                                                  items:
-                                                      controller.directionList,
-                                                  fieldValue: controller
-                                                      .balconyDirection,
-                                                  onSave: (v) {
-                                                    controller
-                                                        .balconyDirection = v;
-                                                  },
-                                                ),
-                                              ),
-                                              Container(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.46,
-                                                child:
-                                                    DropDownButtonFormFieldCustom(
-                                                  hint: "Hướng cửa chính",
-                                                  items:
-                                                      controller.directionList,
-                                                  fieldValue:
-                                                      controller.directionDoor,
-                                                  onSave: (v) {
-                                                    controller.directionDoor =
-                                                        v;
-                                                  },
-                                                ),
-                                              )
-                                            ],
+                                          TextFormCustom(
+                                            label: "Số tầng",
+                                            hint: "(Không bắt buộc)",
+                                            onSave: (v) {
+                                              controller.numberOfFloor =
+                                                  v != null
+                                                      ? int.tryParse(v)
+                                                      : null;
+                                            },
+                                            keyBoardType: TextInputType.number,
+                                            onValidate: validateCount,
                                           ),
+                                          SizedBox(
+                                            height: 10.h,
+                                          ),
+                                          DropDownButtonFormFieldCustom(
+                                            hint: "Hướng ban công",
+                                            isCompulsory: false,
+                                            items: controller.directionMap,
+                                            fieldValue:
+                                                controller.balconyDirection,
+                                            onSave: (v) {
+                                              controller.balconyDirection = v;
+                                            },
+                                          ),
+                                          SizedBox(height: 10.h),
+                                          DropDownButtonFormFieldCustom(
+                                            hint: "Hướng cửa chính",
+                                            isCompulsory: false,
+                                            items: controller.directionMap,
+                                            fieldValue:
+                                                controller.directionDoor,
+                                            onSave: (v) {
+                                              controller.directionDoor = v;
+                                            },
+                                          ),
+                                          //         //Hướng ban công, hướng cửa chính
                                         ],
                                       )),
                                 ],
@@ -782,7 +945,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                     hint: "(Diện tích)",
                                     error: "Vui lòng nhập diện tích",
                                     onSave: (v) {
-                                      controller.area = v;
+                                      controller.area = double.parse(v!);
                                     },
                                     keyBoardType: TextInputType.number,
                                     onValidate: validatePositiveDouble,
@@ -791,8 +954,10 @@ class MyCustomFormState extends State<MyCustomForm> {
                                     height: 10.h,
                                   ),
                                   Visibility(
-                                    visible: controller.selectedIndex == 1 ||
-                                            controller.selectedIndex == 2
+                                    visible: controller.selectedPropertyType ==
+                                                PropertyType.land ||
+                                            controller.selectedPropertyType ==
+                                                PropertyType.house
                                         ? true
                                         : false,
                                     child: Column(children: [
@@ -807,9 +972,10 @@ class MyCustomFormState extends State<MyCustomForm> {
                                                   0.46,
                                               child: TextFormCustom(
                                                 label: "Chiều dài",
-                                                hint: "(Không bắt buộc)",
+                                                hint: "Nhập chiều dài",
                                                 onSave: (v) {
-                                                  controller.height = v;
+                                                  controller.height =
+                                                      double.parse(v!);
                                                 },
                                                 keyBoardType:
                                                     TextInputType.number,
@@ -823,9 +989,10 @@ class MyCustomFormState extends State<MyCustomForm> {
                                                   0.46,
                                               child: TextFormCustom(
                                                 label: "Chiều ngang",
-                                                hint: "(Không bắt buộc)",
+                                                hint: "Nhập chiều rộng",
                                                 onSave: (v) {
-                                                  controller.width = v;
+                                                  controller.width =
+                                                      double.parse(v!);
                                                 },
                                                 keyBoardType:
                                                     TextInputType.number,
@@ -840,7 +1007,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                                     ]),
                                   ),
                                   Visibility(
-                                    visible: controller.selectedIndex == 2
+                                    visible: controller.selectedPropertyType ==
+                                            PropertyType.house
                                         ? true
                                         : false,
                                     child: Column(
@@ -849,7 +1017,10 @@ class MyCustomFormState extends State<MyCustomForm> {
                                           label: "Diện tích sử dụng",
                                           hint: "(Không bắt buộc)",
                                           onSave: (v) {
-                                            controller.usedArea = v;
+                                            controller.usedArea =
+                                                v != null && v.isEmpty == false
+                                                    ? double.parse(v)
+                                                    : null;
                                           },
                                           keyBoardType: TextInputType.number,
                                           onValidate: validatePositiveDouble,
@@ -865,23 +1036,108 @@ class MyCustomFormState extends State<MyCustomForm> {
                                     hint: "(Giá)",
                                     error: "Vui lòng nhập giá (Vnđ)",
                                     onSave: (v) {
-                                      controller.price = v;
+                                      controller.price = int.parse(v!);
                                     },
                                     keyBoardType: TextInputType.number,
-                                    onValidate: validatePositiveDouble,
+                                    onValidate: validateCount,
                                   ),
                                   SizedBox(
                                     height: 10.h,
                                   ),
+                                  //PHONG TRO
                                   Visibility(
-                                      visible: controller.isSale == false,
+                                      visible:
+                                          controller.selectedPropertyType ==
+                                                  PropertyType.motel
+                                              ? true
+                                              : false,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.46,
+                                                child: TextFormCustom(
+                                                  label: "Tiền nước",
+                                                  hint: "(Không bắt buộc)",
+                                                  onSave: (v) {
+                                                    controller.electricPrice =
+                                                        v != null
+                                                            ? int.tryParse(v)
+                                                            : null;
+                                                  },
+                                                  keyBoardType:
+                                                      TextInputType.number,
+                                                  onValidate: validateCount,
+                                                ),
+                                              ),
+                                              Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.46,
+                                                child: TextFormCustom(
+                                                  label: "Tiền điện",
+                                                  hint: "(Không bắt buộc)",
+                                                  onSave: (v) {
+                                                    controller.waterPrice =
+                                                        v != null
+                                                            ? int.tryParse(v)
+                                                            : null;
+                                                  },
+                                                  keyBoardType:
+                                                      TextInputType.number,
+                                                  onValidate: validateCount,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10.h,
+                                          ),
+                                        ],
+                                      )),
+                                  Visibility(
+                                      visible: controller.isSale == false &&
+                                          controller.selectedPropertyType !=
+                                              PropertyType.motel,
                                       child: Column(
                                         children: [
                                           TextFormCustom(
                                             label: "Số tiền cọc",
-                                            hint: "(Không bắt buộc (Vnđ))",
+                                            hint: "(Không bắt buộc)",
                                             onSave: (v) {
-                                              controller.deposit = v;
+                                              controller.deposit = v != null
+                                                  ? int.tryParse(v)
+                                                  : null;
+                                            },
+                                            keyBoardType: TextInputType.number,
+                                            onValidate: validatePositiveDouble,
+                                          ),
+                                          SizedBox(
+                                            height: 10.h,
+                                          ),
+                                        ],
+                                      )),
+                                  Visibility(
+                                      visible:
+                                          controller.selectedPropertyType ==
+                                              PropertyType.motel,
+                                      child: Column(
+                                        children: [
+                                          TextFormCustom(
+                                            label: "Số tiền cọc",
+                                            hint: "(Số tiền cọc)",
+                                            onSave: (v) {
+                                              controller.modelDeposit =
+                                                  int.parse(v!);
                                             },
                                             keyBoardType: TextInputType.number,
                                             onValidate: validatePositiveDouble,
@@ -914,15 +1170,15 @@ class MyCustomFormState extends State<MyCustomForm> {
                                   ),
 
                                   Visibility(
-                                    visible: controller.selectedIndex != 3
+                                    visible: controller.selectedPropertyType !=
+                                            PropertyType.motel
                                         ? true
                                         : false,
                                     child: Column(
                                       children: [
                                         DropDownButtonFormFieldCustom(
                                             hint: "Giấy tờ pháp lý",
-                                            items:
-                                                controller.propertyCertificate,
+                                            items: controller.certificateMap,
                                             fieldValue: controller.legalStatus,
                                             onSave: (v) {
                                               controller.legalStatus = v;
@@ -934,30 +1190,33 @@ class MyCustomFormState extends State<MyCustomForm> {
                                     ),
                                   ),
                                   Visibility(
-                                    visible: controller.selectedIndex != 1
+                                    visible: controller.selectedPropertyType !=
+                                            PropertyType.land
                                         ? true
                                         : false,
                                     child: Column(
                                       children: [
                                         DropDownButtonFormFieldCustom(
                                             hint: "Tình trạng nội thất",
-                                            items: controller.iteriorStateList,
+                                            items: controller.iteriorMap,
                                             fieldValue:
-                                                controller.interiorState,
+                                                controller.furnitureStatus,
                                             onSave: (v) {
-                                              controller.interiorState = v;
+                                              controller.furnitureStatus = v;
                                             }),
-                                        SizedBox(
-                                          height: 10.h,
-                                        ),
                                       ],
                                     ),
                                   ),
                                   //Đặc điểm nhà đất
+                                  SizedBox(
+                                    height: 5.h,
+                                  ),
                                   Visibility(
-                                      visible: controller.selectedIndex != 3
-                                          ? true
-                                          : false,
+                                      visible:
+                                          controller.selectedPropertyType !=
+                                                  PropertyType.motel
+                                              ? true
+                                              : false,
                                       child: Container(
                                         width: double.maxFinite,
                                         child: Column(
@@ -969,7 +1228,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                                               style: AppTextStyles
                                                   .roboto12semiBold,
                                             ),
-                                            controller.selectedIndex == 0
+                                            controller.selectedPropertyType ==
+                                                    PropertyType.office
                                                 ? Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment.start,
@@ -988,7 +1248,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                                                 : Container(
                                                     height: 0,
                                                   ),
-                                            controller.selectedIndex == 1
+                                            controller.selectedPropertyType ==
+                                                    PropertyType.land
                                                 ? Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment.start,
@@ -1025,7 +1286,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                                                 : Container(
                                                     height: 0,
                                                   ),
-                                            controller.selectedIndex == 2
+                                            controller.selectedPropertyType ==
+                                                    PropertyType.house
                                                 ? Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment.start,
@@ -1038,6 +1300,15 @@ class MyCustomFormState extends State<MyCustomForm> {
                                                         },
                                                         initialValue:
                                                             controller.isFacade,
+                                                      ),
+                                                      CheckFormField(
+                                                        name: "Nở hậu",
+                                                        onChange: (v) {
+                                                          controller
+                                                              .isWidensTowardsTheBack = v;
+                                                        },
+                                                        initialValue: controller
+                                                            .isWidensTowardsTheBack,
                                                       ),
                                                       CheckFormField(
                                                         name: "Hẻm xe hơi",
@@ -1053,7 +1324,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                                                 : Container(
                                                     height: 0,
                                                   ),
-                                            controller.selectedIndex == 4
+                                            controller.selectedPropertyType ==
+                                                    PropertyType.apartment
                                                 ? Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment.start,
@@ -1079,34 +1351,39 @@ class MyCustomFormState extends State<MyCustomForm> {
                               ),
                             ),
                             GestureDetector(
-                              onTap: () {
+                              onTap: () async {
                                 if (_formKey.currentState!.validate()) {
                                   _formKey.currentState!.save();
-                                  print("Save Success!");
-                                  print("Diện tích" +
-                                      controller.area +
-                                      controller.title);
-                                  print("Loai " +
-                                      controller.propertyType +
-                                      " Hướng cửa " +
-                                      controller.directionDoor.toString() +
-                                      " Giá " +
-                                      controller.price.toString());
+                                  await controller.addPost();
+                                  final snackBar = SnackBar(
+                                    content: Text(
+                                      'Đăng tin thành công!',
+                                    ),
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
                                 } else {
+                                  final snackBar = SnackBar(
+                                    content: Text(
+                                      'Thông tin không hợp lệ!',
+                                    ),
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
                                   print("Validate failed!");
                                 }
                               },
                               child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 3.h),
+                                padding: EdgeInsets.symmetric(vertical: 5.h),
                                 margin: EdgeInsets.symmetric(
                                     horizontal: 10.w, vertical: 10.h),
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(3.h),
+                                  borderRadius: BorderRadius.circular(8.h),
                                   color: AppColors.primaryColor,
                                 ),
                                 child: SizedBox(
                                     width: double.maxFinite,
-                                    height: 20.h,
+                                    height: 30.h,
                                     child: Center(
                                         child: Text(
                                       "Đăng tin",

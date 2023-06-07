@@ -54,10 +54,11 @@ class CardOffice extends StatelessWidget {
             onChanged: searchController.officeLegalDocuments.onChange,
           ),
           const SizedBox(height: 10),
-          CategoryBoxRadio(
+          CategoryBoxCheck(
             title: "Tình trạng nội thất",
-            categorys: searchController.officeInteriorStatus.values,
-            selected: searchController.officeInteriorStatus.selectedValue,
+            categorys: searchController.officeInteriorStatus.checkListItems,
+            multipleSelected:
+                searchController.officeInteriorStatus.multipleSelected,
             onChanged: searchController.officeInteriorStatus.onChange,
           ),
           const SizedBox(height: 10),

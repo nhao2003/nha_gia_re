@@ -1,5 +1,6 @@
 import 'package:nha_gia_re/data/models/address.dart';
 
+import '../../enums/enums.dart';
 import 'post.dart';
 
 class Motel extends Post {
@@ -27,6 +28,9 @@ class Motel extends Post {
     required bool isProSeller,
     required int? deposit,
     required int numOfLikes,
+    required PostStatus status,
+    required String? rejectedInfo,
+    required bool isHide,
   })  : assert(electricPrice == null || electricPrice > 0),
         assert(waterPrice == null || waterPrice > 0),
         super(
@@ -46,6 +50,9 @@ class Motel extends Post {
           projectName: projectName,
           deposit: deposit,
           numOfLikes: numOfLikes,
+        status: status,
+        rejectedInfo: rejectedInfo,
+        isHide: isHide,
         );
 
   factory Motel.fromJson(Map<String, dynamic> json) {
@@ -71,6 +78,9 @@ class Motel extends Post {
           : null,
       electricPrice: json['electric_price'],
       waterPrice: json['water_price'],
+      status: PostStatus.parse(json['status']),
+      rejectedInfo: json['rejected_info'],
+      isHide: json['is_hide'],
     );
   }
 }
