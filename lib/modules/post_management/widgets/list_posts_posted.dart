@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nha_gia_re/core/extensions/date_ex.dart';
+import 'package:nha_gia_re/data/models/properties/post.dart';
 import 'package:nha_gia_re/modules/post_management/widgets/item_post.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/text_styles.dart';
@@ -12,15 +13,15 @@ class ListPostsPosted extends StatelessWidget {
   final PostManagementController controller =
       Get.find<PostManagementController>();
 
-  void onSelectedMenu(int i) {
+  void onSelectedMenu(int i, Post post) {
     if (i == 0) {
-      controller.hidePost();
+      controller.hidePost(post);
     } else if (i == 1) {
-      controller.editPost();
+      controller.editPost(post);
     } else if (i == 2) {
-      controller.deletePost();
+      controller.deletePost(post);
     } else if (i == 3) {
-      controller.extensionPost();
+      controller.extensionPost(post);
     }
   }
 

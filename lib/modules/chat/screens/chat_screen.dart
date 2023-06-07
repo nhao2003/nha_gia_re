@@ -1,18 +1,9 @@
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:nha_gia_re/core/extensions/double_ex.dart';
-import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/data/models/conversation.dart';
 import 'package:nha_gia_re/data/models/message.dart';
-import 'package:nha_gia_re/data/repositories/chat_repository.dart';
 import 'package:nha_gia_re/modules/chat/chat_controller.dart';
-import 'package:nha_gia_re/modules/chat/screens/picked_media.dart';
 import 'package:nha_gia_re/modules/chat/widgets/message_row.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/theme/text_styles.dart';
 
@@ -48,7 +39,6 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
-        title: Obx(() => Text(_controller.mediaPicker.value.length.toString())),
         actions: [
           IconButton(
               onPressed: () {
@@ -66,7 +56,7 @@ class _ChatScreenState extends State<ChatScreen> {
               );
             } else {
               List<Message> messages = snapshot.data ?? [];
-              print("Snapshot: " + messages.length.toString());
+              print("Snapshot: ${messages.length}");
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -85,47 +75,59 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ),
                   ),
-                  Obx(
-                    ()=> SingleChildScrollView(
-                      padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: List.generate(
-                        _controller.mediaPicker.value.length, (index) {
-                      return SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.file(
-                                _controller.mediaPicker.value[index],
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                            Positioned(
-                              top: -5,
-                              right: 20,
-                              child: IconButton(
-                                icon: const Icon(Icons.close),
-                                color: Colors.white,
-                                onPressed: () {
-                                  _controller.removeMedia(_controller.mediaPicker.value[index]);
-                                },
-                                splashRadius: 14,
-                                padding: EdgeInsets.zero,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                      }),
-                    ),
-                    )
-                  ),
+                  if (_controller.mediaPicker.isNotEmpty)
+                    Obx(() => SingleChildScrollView(
+                          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ...List.generate(_controller.mediaPicker.length,
+                                  (index) {
+                                return Stack(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.only(right: 5),
+                                      height: 100,
+                                      width: 100,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.file(
+                                          _controller.mediaPicker[index],
+                                          fit: BoxFit.fitWidth,
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      right: 0,
+                                      child: IconButton(
+                                        icon: const Icon(Icons.close),
+                                        color: Colors.white,
+                                        onPressed: () {
+                                          _controller.removeMedia(_controller
+                                              .mediaPicker.value[index]);
+                                        },
+                                        splashRadius: 14,
+                                        padding: EdgeInsets.zero,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }),
+                              SizedBox(
+                                height: 100,
+                                width: 100,
+                                child: Center(
+                                    child: TextButton(
+                                        onPressed:
+                                            _controller.mediaPicker.clear,
+                                        child: Text("Xoá tất cả"))),
+                              )
+                            ],
+                          ),
+                        )),
                   StreamBuilder<bool>(
                       stream: _controller.isAllowSendMessage,
                       builder: (context, snapshot) {

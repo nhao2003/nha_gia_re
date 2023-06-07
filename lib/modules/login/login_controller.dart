@@ -7,38 +7,54 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginController extends GetxController {
 
-  var loginEmail = TextEditingController();
-  var loginPassword = TextEditingController();
+  var loginEmail = TextEditingController(text: 'tienanhnguyen996@gmail.com');
+  var loginPassword = TextEditingController(text: 'Nguyen123');
   var forgotPassEmail = TextEditingController();
   var registerEmail = TextEditingController();
   var registerPassword = TextEditingController();
 
   final registerFormGlobalKey = GlobalKey<FormState>();
-  final loginFormGlobalKey = GlobalKey<FormState>();  
+  final loginFormGlobalKey = GlobalKey<FormState>();
   final forgotPassFormGlobalKey = GlobalKey<FormState>();
 
   RxString loginError = RxString('');
   RxString registerError = RxString('');
   RxBool isLoading = false.obs;
+  RxBool isObscureLogin = true.obs;
+  RxBool isObscureRegister = true.obs;
+  RxBool isObscureRepeatPass = true.obs;
+  RxBool validatorVisibility = true.obs;
 
+  void togglePassword()
+  {
+    isObscureLogin.value = !isObscureLogin.value;
+  }
+  void togglePassReg()
+  {
+    isObscureRegister.value = !isObscureRegister.value;
+  }
+  void toggleRepeatPassReg()
+  {
+    isObscureRepeatPass.value = !isObscureRepeatPass.value;
+  }
   Future<void> handleLogin()
   async {
     final auth = AuthRepository();
     if(loginFormGlobalKey.currentState!.validate())
     {
       print(loginEmail.text + ' ' + loginPassword.text);
-      try 
+      try
       {
         isLoading.value = true;
         final res = await auth.signIn(email: loginEmail.text, password: loginPassword.text)
         .then((value) {
           if(value.updatedDate == null)
           {
-            Get.toNamed(AppRoutes.userProfile);
+            Get.offAllNamed(AppRoutes.userProfile);
           }
           else
           {
-            Get.toNamed(AppRoutes.home);
+            Get.offAllNamed(AppRoutes.tabScreen);
           }
         });
       }
@@ -57,16 +73,15 @@ class LoginController extends GetxController {
       }
     }
   }
-  String? validatePassword(String? value)
+  void showValidator()
   {
-    if(value!.isEmpty) return 'Please provide a password'.tr;
-    var regex = RegExp(r".{8,}");
-    if(!regex.hasMatch(value)) return 'Must be at least 8 characters'.tr;
-    regex = RegExp(r"(?=.*[A-Z])");
-    if(!regex.hasMatch(value)) return 'Must contain at least one upper case'.tr;
-    regex = RegExp(r"(?=.*[a-z])");
-    if(!regex.hasMatch(value)) return 'Must contain at least one lower case'.tr;
-    return null;
+    debugPrint(validatorVisibility.value.toString());
+    validatorVisibility.value = true;
+  }
+   void hideValidator()
+  {
+    debugPrint(validatorVisibility.value.toString());
+    validatorVisibility.value = false;
   }
   Future<void> handleRegister()
   async {
@@ -98,7 +113,7 @@ class LoginController extends GetxController {
     final auth = AuthRepository();
     if(forgotPassFormGlobalKey.currentState!.validate())
     {
-      try 
+      try
       {
         isLoading.value = true;
         print(forgotPassEmail.text);

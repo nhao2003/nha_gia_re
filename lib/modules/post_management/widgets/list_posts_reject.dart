@@ -13,9 +13,9 @@ class ListPostsReject extends StatelessWidget {
   final PostManagementController controller =
       Get.find<PostManagementController>();
 
-  void onSelectedMenu(int i) {
+  void onSelectedMenu(int i, Post post) {
     if (i == 0) {
-      controller.deletePost();
+      controller.deletePost(post);
     }
   }
 

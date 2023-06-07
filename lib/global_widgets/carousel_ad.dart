@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
@@ -8,7 +9,7 @@ class CarouselAd extends StatefulWidget {
   final List<String> imgList;
   final double aspectRatio;
   final double indicatorSize;
-  
+
   @override
   State<CarouselAd> createState() => _CarouselAdState();
 }
@@ -24,9 +25,7 @@ class _CarouselAdState extends State<CarouselAd> {
       children: [
         CarouselSlider(
           items: widget.imgList
-          .map((item) => Container(
-            child: Image.network(item, fit: BoxFit.fitWidth, width: 1000.0)
-          ))
+          .map((item) => CachedNetworkImage(imageUrl: item, fit: BoxFit.fitWidth, width: 1000.0))
           .toList(),
           carouselController: _controller,
           options: CarouselOptions(

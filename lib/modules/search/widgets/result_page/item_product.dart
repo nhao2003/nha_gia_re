@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
@@ -51,24 +52,19 @@ class _ItemProductState extends State<ItemProduct> {
                   width: sizeImage,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      widget.post.imagesUrl[0],
+                    child: CachedNetworkImage(
+                      imageUrl: widget.post.imagesUrl[0],
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
+                      errorWidget: (context, error, stackTrace) {
                         return Image.asset(
                           "assets/images/default_image.png",
                           fit: BoxFit.cover,
                         );
                       },
-                      loadingBuilder: (BuildContext context, Widget child,
-                          ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress == null) return child;
+                      progressIndicatorBuilder: (ctx, str, prc){
                         return Center(
                           child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
+                            value: prc.progress,
                           ),
                         );
                       },

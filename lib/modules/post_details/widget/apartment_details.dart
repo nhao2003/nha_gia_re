@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:nha_gia_re/core/extensions/double_ex.dart';
+import 'package:nha_gia_re/core/extensions/integer_ex.dart';
 import 'package:nha_gia_re/data/models/properties/post.dart';
 import 'package:nha_gia_re/modules/post_details/widget/details.dart';
 
@@ -15,7 +18,7 @@ class ApartmentDetails extends StatelessWidget {
         padding: EdgeInsets.only(left: 20),
         child: GridView.count(
           physics: NeverScrollableScrollPhysics(),
-          childAspectRatio: 3,
+          childAspectRatio: 4,
           crossAxisCount: 2,
           shrinkWrap: true,
           children: [
@@ -24,10 +27,14 @@ class ApartmentDetails extends StatelessWidget {
                 iconAsset: Assets.ad_type,
                 value: 'Cho Thuê',
               ),
+            if(apartment.deposit != null)
+              Detail(iconAsset: Assets.deposit, value: 'Tiền cọc ${apartment.deposit?.toFormattedMoney()}'),
+
+              Detail(iconAsset: Assets.property_status, value: 'Tình trạng bất động sản: ${(apartment.isHandOver? 'Đã bàn giao' : 'Chưa bàn giao')}'),
             if (apartment.furnitureStatus != null)
               Detail(
                 iconAsset: Assets.furnishing_sell,
-                value: 'Tình trạng nội thất: ${apartment.furnitureStatus}',
+                value: 'Tình trạng nội thất: ${apartment.furnitureStatus.toString().tr}',
               ),
             Detail(
               iconAsset: Assets.area,
@@ -35,7 +42,7 @@ class ApartmentDetails extends StatelessWidget {
             ),
             Detail(
               iconAsset: Assets.price_m2,
-              value: 'Giá/m2: ${apartment.price / apartment.area} triệu/m2',
+              value: 'Giá/m2: ${(apartment.price / apartment.area).toFormattedMoney()}',
             ),
             if (apartment.block != null)
               Detail(
@@ -55,12 +62,12 @@ class ApartmentDetails extends StatelessWidget {
             if (apartment.legalDocumentStatus != null)
               Detail(
                 iconAsset: Assets.paper,
-                value: 'Giấy tờ pháp lý: ${apartment.legalDocumentStatus}',
+                value: 'Giấy tờ pháp lý: ${apartment.legalDocumentStatus.toString().tr}',
               ),
             if (apartment.apartmentType != null)
               Detail(
                 iconAsset: Assets.commercial_type,
-                value: 'Loại hình căn hộ: ${apartment.apartmentType}',
+                value: 'Loại hình căn hộ: ${apartment.apartmentType.toString().tr}',
               ),
             if (apartment.floor != null)
               Detail(
@@ -70,13 +77,15 @@ class ApartmentDetails extends StatelessWidget {
             if (apartment.mainDoorDirection != null)
               Detail(
                 iconAsset: Assets.direction,
-                value: 'Hướng cửa chính: ${apartment.mainDoorDirection}',
+                value: 'Hướng cửa chính: ${apartment.mainDoorDirection.toString().tr}',
               ),
             if (apartment.balconyDirection != null)
               Detail(
                 iconAsset: Assets.balconyDirection,
-                value: 'Hướng ban công: ${apartment.balconyDirection}',
+                value: 'Hướng ban công: ${apartment.balconyDirection.toString().tr}',
               ),
+            if(apartment.isCorner)
+              Detail(iconAsset: Assets.apartment_feature, value: 'Căn góc')
           ],
         ));
   }

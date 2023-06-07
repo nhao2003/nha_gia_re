@@ -11,17 +11,17 @@ extension ResponsiveText on int {
 String formatMoney(int amount, {bool isLease = false}) {
   String suffix = '';
   if (isLease) {
-    suffix = ' /tháng';
+    suffix = '/tháng';
   }
   if (amount >= 1000000000) {
     double value = amount / 1000000000;
-    return '${value.toStringAsFixed(value.truncateToDouble() == value ? 0 : 3)} tỷ đồng$suffix';
+    return '${value.toStringAsFixed(value.truncateToDouble() == value ? 0 : 3)} tỷ$suffix';
   } else if (amount >= 1000000) {
     double value = amount / 1000000;
-    return '${value.toStringAsFixed(value.truncateToDouble() == value ? 0 : 3)} triệu đồng$suffix';
+    return '${value.toStringAsFixed(value.truncateToDouble() == value ? 0 : 3)} triệu$suffix';
   } else {
     double value = amount / 1000;
-    return '${value.toStringAsFixed(value.truncateToDouble() == value ? 0 : 1)} nghìn đồng';
+    return '${value.toStringAsFixed(value.truncateToDouble() == value ? 0 : 1)} nghìn$suffix';
   }
 }
 

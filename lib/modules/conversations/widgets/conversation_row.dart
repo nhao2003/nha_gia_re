@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:nha_gia_re/core/extensions/date_ex.dart';
+import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/models/conversation.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -14,53 +16,39 @@ class ConversationRow extends StatelessWidget {
   final bool isRead;
   Conversation conversation;
   UserInfo userInfo;
+  Function()? onTap, onLongPress;
   final EdgeInsetsGeometry? padding;
-
   ConversationRow({
     Key? key,
     required this.conversation,
     required this.userInfo,
+    this.onTap,
+    this.onLongPress,
     this.padding,
     this.isRead = false,
   }) : super(key: key);
+
+  String _getLastMessage() {
+    if (conversation.lastMessageType == null)
+      return "Start the conversation Null!";
+    else if (conversation.lastMessageType == MessageType.text) {
+      return conversation.lastMessage ?? "Start the conversation!";
+    } else if (conversation.lastMessageType == MessageType.images) {
+      return "${userInfo.fullName} has sent image to you.";
+    } else if (conversation.lastMessageType == MessageType.location) {
+      return "${userInfo.fullName} has sent a location to you.";
+    } else if (conversation.lastMessageType == MessageType.post) {
+      return "${userInfo.fullName} has sent a post to you.";
+    }
+    return "";
+  }
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       splashColor: AppColors.secondary,
-      onTap: () {
-        Get.toNamed(AppRoutes.chat, arguments: conversation);
-      },
-      onLongPress: () {
-        Get.dialog(Dialog(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              TextButton(
-                onPressed: () {
-                  Get.back();
-                },
-                child: Text(
-                  "Đánh dấu đã đọc",
-                  style: AppTextStyles.roboto16regular
-                      .copyWith(color: AppColors.black),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Get.back();
-                },
-                child: Text(
-                  "Xoá tin nhắn",
-                  style: AppTextStyles.roboto16regular
-                      .copyWith(color: AppColors.black),
-                ),
-              ),
-            ],
-          ),
-        ));
-      },
+      onTap: onTap,
+      onLongPress: onLongPress,
       child: Container(
         height: 100,
         width: double.infinity,
@@ -70,13 +58,14 @@ class ConversationRow extends StatelessWidget {
           children: [
             userInfo.avatarUrl != null
                 ? CircleAvatar(
-              backgroundImage: NetworkImage(userInfo.avatarUrl!),
-              radius: 30,
-            )
+                    backgroundImage:
+                        CachedNetworkImageProvider(userInfo.avatarUrl!),
+                    radius: 30,
+                  )
                 : const CircleAvatar(
-              backgroundImage: AssetImage(Assets.avatar_2),
-              radius: 30,
-            ),
+                    backgroundImage: AssetImage(Assets.avatar_2),
+                    radius: 30,
+                  ),
             const SizedBox(width: 10),
             Expanded(
               child: Column(
@@ -90,11 +79,11 @@ class ConversationRow extends StatelessWidget {
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    conversation.lastMessage ?? "Start the conversation!",
+                    _getLastMessage(),
                     style: isRead
                         ? AppTextStyles.roboto14semiBold
                         : AppTextStyles.roboto14regular
-                        .copyWith(color: AppColors.grey),
+                            .copyWith(color: AppColors.grey),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
@@ -104,7 +93,7 @@ class ConversationRow extends StatelessWidget {
             Text(
               conversation.lastMessageSentAt.getTimeAgo(),
               style:
-              AppTextStyles.roboto14regular.copyWith(color: AppColors.grey),
+                  AppTextStyles.roboto14regular.copyWith(color: AppColors.grey),
               overflow: TextOverflow.ellipsis,
             ),
           ],
