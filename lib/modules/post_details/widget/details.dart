@@ -20,7 +20,7 @@ class Detail extends StatelessWidget {
                   width: 10,
                 ),
                 SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.25,
+                    width: MediaQuery.of(context).size.width * 0.35,
                     child: Text(
                       value,
                       style: AppTextStyles.roboto14regular,

@@ -170,8 +170,8 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                       ]),
                 ),
                 ExpandableContainer(
-                  title: 'Gần bạn',
-                  minHeight: 110,
+                  title: 'Đặc điểm bất động sản',
+                  minHeight: 130,
                   child: _controller.postDetail(_controller.post),
                 ),
                 ExpandableContainer(
@@ -204,7 +204,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.phone_in_talk_outlined,
                           size: 24,
                           color: Colors.white,
