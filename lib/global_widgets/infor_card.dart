@@ -16,21 +16,6 @@ import 'package:nha_gia_re/routers/app_routes.dart';
 
 import '../data/models/properties/post.dart';
 
-class InforCardProps {
-  String title;
-  String price;
-  String address;
-  DateTime postTime;
-  String imageUrl;
-
-  InforCardProps(
-      {required this.title,
-      required this.price,
-      required this.address,
-      required this.postTime,
-      required this.imageUrl});
-}
-
 class InforCard extends StatelessWidget {
   InforCard({super.key, required this.post});
 
@@ -120,7 +105,7 @@ class _InforCardListState extends State<InforCardList> {
           height: 10,
         ),
         SizedBox(
-          height: 210,
+          height: 220,
           child: ListView.separated(
               shrinkWrap: true,
               itemCount: widget.list.length,
