@@ -14,6 +14,12 @@ import '../../data/repositories/post_repository.dart';
 class SearchController extends GetxController {
   /// instance
   static SearchController get i => Get.find();
+// voice controller
+  RxBool isListening = false.obs;
+
+  void toggleListening(bool check) {
+    isListening.value = check;
+  }
 
 // data in search screen
   /// query of search bar
