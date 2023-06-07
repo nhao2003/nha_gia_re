@@ -86,8 +86,8 @@ class SearchController extends GetxController {
       List<Post> filterPosts = <Post>[];
       for (var post in searchPosts) {
         if (post.address.cityName!
-            .removeVietnameseAccents()
-            .contains(newValue.removeVietnameseAccents())) {
+            .noAccentVietnamese()
+            .contains(newValue.noAccentVietnamese())) {
           filterPosts.add(post);
         }
       }
@@ -128,9 +128,9 @@ class SearchController extends GetxController {
     else {
       for (String value in searchStrings) {
         if (value
-            .removeVietnameseAccents()
+            .noAccentVietnamese()
             .toLowerCase()
-            .startsWith(query.removeVietnameseAccents().toLowerCase())) {
+            .startsWith(query.noAccentVietnamese().toLowerCase())) {
           results.add(value);
         }
       }

@@ -32,24 +32,26 @@ class MessageRow extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   constraints: BoxConstraints(maxWidth: 75.0.wp),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: message.isMine
+                        ? CrossAxisAlignment.end
+                        : CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (message.text?.trim().isNotEmpty??false)
-                      Container(
-                        padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                        decoration: BoxDecoration(
-                          color: message.isMine
-                              ? AppColors.primaryColor
-                              : Colors.grey[300],
-                          borderRadius: BorderRadius.circular(16),
+                      if (message.text?.trim().isNotEmpty ?? false)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: message.isMine
+                                ? AppColors.primaryColor
+                                : Colors.grey[300],
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Text(
+                            message.text ?? "NULL",
+                            style: AppTextStyles.roboto16regular,
+                          ),
                         ),
-                        child: Text(
-                          message.text ?? "NULL",
-                          style: AppTextStyles.roboto16regular,
-                        ),
-                      ),
                       const SizedBox(height: 4),
                       if (message.isMine && isError)
                         Padding(
@@ -77,5 +79,4 @@ class MessageRow extends StatelessWidget {
       ),
     );
   }
-
 }

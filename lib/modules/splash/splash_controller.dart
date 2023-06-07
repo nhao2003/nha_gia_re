@@ -9,9 +9,9 @@ class SplashController extends GetxController {
   Future<void> init() async {
     await Future.delayed(Duration.zero);
     if(_authRepository.isUserLoggedIn){
-      Get.toNamed(AppRoutes.tabScreen);
+      Get.offAllNamed(AppRoutes.tabScreen);
     } else {
-      Get.toNamed(AppRoutes.login);
+      Get.offAllNamed(AppRoutes.login);
     }
   }
 }

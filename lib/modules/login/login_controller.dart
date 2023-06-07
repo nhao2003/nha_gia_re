@@ -14,7 +14,7 @@ class LoginController extends GetxController {
   var registerPassword = TextEditingController();
 
   final registerFormGlobalKey = GlobalKey<FormState>();
-  final loginFormGlobalKey = GlobalKey<FormState>();  
+  final loginFormGlobalKey = GlobalKey<FormState>();
   final forgotPassFormGlobalKey = GlobalKey<FormState>();
 
   RxString loginError = RxString('');
@@ -43,18 +43,18 @@ class LoginController extends GetxController {
     if(loginFormGlobalKey.currentState!.validate())
     {
       print(loginEmail.text + ' ' + loginPassword.text);
-      try 
+      try
       {
         isLoading.value = true;
         final res = await auth.signIn(email: loginEmail.text, password: loginPassword.text)
         .then((value) {
           if(value.updatedDate == null)
           {
-            Get.toNamed(AppRoutes.userProfile);
+            Get.offAllNamed(AppRoutes.userProfile);
           }
           else
           {
-            Get.toNamed(AppRoutes.tabScreen);
+            Get.offAllNamed(AppRoutes.tabScreen);
           }
         });
       }
@@ -113,7 +113,7 @@ class LoginController extends GetxController {
     final auth = AuthRepository();
     if(forgotPassFormGlobalKey.currentState!.validate())
     {
-      try 
+      try
       {
         isLoading.value = true;
         print(forgotPassEmail.text);

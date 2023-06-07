@@ -4,7 +4,6 @@ import 'package:nha_gia_re/data/providers/remote/remote_data_source.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/modules/login/screens/forget_password.dart';
 import 'package:nha_gia_re/modules/login/screens/login_screen.dart';
-import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 
 import '../../../core/theme/text_styles.dart';

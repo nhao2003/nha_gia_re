@@ -39,7 +39,6 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
-        title: Obx(() => Text(_controller.mediaPicker.length.toString())),
         actions: [
           IconButton(
               onPressed: () {

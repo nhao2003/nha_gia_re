@@ -29,6 +29,13 @@ class PostManagementController extends GetxController {
   }
 
   Future<void> getPostsInit() async {
+    allPosts.clear();
+    pendingPosts.clear();
+    expiredPosts.clear();
+    hidedPosts.clear();
+    rejectedPosts.clear();
+    approvedPosts.clear();
+    pendingPosts.clear();
     allPosts = await getAllPosts();
 
     for (Post post in allPosts) {

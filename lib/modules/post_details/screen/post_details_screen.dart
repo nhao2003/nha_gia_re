@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -129,7 +130,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                             CircleAvatar(
                               radius: 25,
                               backgroundImage:
-                                  NetworkImage(_controller.userInfo.avatarUrl! ),
+                                  CachedNetworkImageProvider( _controller.userInfo.avatarUrl! ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 10.0),
@@ -191,7 +192,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
           }
         },
       ),
-      
+
       bottomNavigationBar: (!_controller.isYourPost) ?
        BottomAppBar(
           child: SizedBox(

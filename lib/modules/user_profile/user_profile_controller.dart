@@ -14,7 +14,7 @@ import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../data/services/upload_avatar_service.dart';
 
 class UserProfileController extends GetxController {
-  late String avatarUrl; 
+  late String avatarUrl;
   var gender = "male".obs;
   var userProfileFormKey = GlobalKey<FormState>();
   var birthDayTextController = TextEditingController();
@@ -84,15 +84,15 @@ class UserProfileController extends GetxController {
       if(auth.isUserLoggedIn)
       {
         UpdateProfileRequest request = UpdateProfileRequest.name(
-          address: Address(cityCode: 1, cityName: '1',districtCode: 1, districtName: '1',wardCode: 1, wardName: '1'), 
-          isMale: (gender.value == 'male'), 
-          avatarUrl: "avatarUrl", 
+          address: Address(cityCode: 1, cityName: '1',districtCode: 1, districtName: '1',wardCode: 1, wardName: '1'),
+          isMale: (gender.value == 'male'),
+          avatarUrl: "avatarUrl",
           fullName: fullNameTextController.text,
           phoneNumber: phoneNumberTextController.text,
-          dob: birthday, 
+          dob: birthday,
           description: (bioTextController.text.isEmpty) ? "sao lai ep toi gioi thieu" : bioTextController.text );
         print(request.toJson());
-        var response = await auth.updateProfile(request).then((value) => Get.offAllNamed(AppRoutes.home));
+        var response = await auth.updateProfile(request).then((value) => Get.offAllNamed(AppRoutes.tabScreen));
       }
     }
   }
