@@ -6,11 +6,9 @@ import '../../../core/theme/text_styles.dart';
 
 class CustomButton extends StatefulWidget {
   const CustomButton({super.key, this.icon, required this.title, required this.onPressed});
-  const CustomButton({super.key, this.icon, required this.title, required this.onPressed});
 
   final Widget? icon;
   final String title;
-  final VoidCallback onPressed;
   final VoidCallback onPressed;
   @override
   State<CustomButton> createState() => _CustomButtonState();

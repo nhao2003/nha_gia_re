@@ -12,7 +12,6 @@ import 'package:nha_gia_re/modules/post_management/post_management_binding.dart'
 import 'package:nha_gia_re/modules/search/screens/filter_screen.dart';
 import 'package:nha_gia_re/modules/chat/chat_binding.dart';
 import 'package:nha_gia_re/modules/chat/screens/chat_screen.dart';
-import 'package:nha_gia_re/modules/dashboard/screens/dashboard_screen.dart';
 import 'package:nha_gia_re/modules/search/screens/search_screen.dart';
 import '../modules/conversations/conversation_binding.dart';
 import '../modules/conversations/screens/conversation_screen.dart';
