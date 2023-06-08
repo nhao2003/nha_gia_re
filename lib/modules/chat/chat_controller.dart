@@ -66,7 +66,17 @@ class ChatController extends GetxController {
       } catch (e) {
         rethrow;
       }
-    } else {
+    } 
+    else if (arg is String)
+    {
+      try {
+        print("Test");
+        conversation = await repo.getOrCreateConversation(arg);
+      } catch (e) {
+        rethrow;
+      }
+    }    
+    else {
       throw Exception("Invalid arg. Arg is UserInfo or Conversation");
     }
     streamSubscription =

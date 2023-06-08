@@ -1,4 +1,9 @@
+import 'dart:developer';
+
+import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
 import 'package:nha_gia_re/core/values/api_values.dart';
+import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class OneSignalService {
@@ -13,6 +18,31 @@ class OneSignalService {
     OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
         print("Accepted permission: $accepted");
     });
+
+    
+
+    OneSignal.shared.setNotificationOpenedHandler((OSNotificationOpenedResult result) {
+    // Retrieve the notification payload
+    OSNotification notification = result.notification;
+
+    debugPrint("testing ");
+    // Extract notification data
+    Map<String, dynamic>? additionalData = notification.additionalData;
+    if (additionalData != null) {
+      // Access the notification data fields
+      String uid = additionalData['uid'];
+      Get.toNamed(AppRoutes.chat, arguments: uid);
+      debugPrint("testing " + uid);
+      // ...
+      
+      // Perform actions based on the notification data
+      // ...
+    }
+
+    // Additional handling logic when a notification is opened
+    // ...
+  });
+
   }
   static void addExternalId(String externalUserId)
   {
