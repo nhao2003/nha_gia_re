@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/models/address.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -10,10 +11,10 @@ class MessageRequest {
   String? postID;
   List<File>? images;
   late MessageType type;
-  Address? location;
+  LatLng? location;
   MessageRequest({
     required this.conservationId,
-    required this.content,
+    this.content,
     this.postID,
     this.images,
     this.location,
@@ -43,6 +44,7 @@ class MessageRequest {
       'post_id': postID,
       'images': imageUrls,
       'message_type': type.toString(),
+      'location_message': location?.toJson(),
     };
   }
 }

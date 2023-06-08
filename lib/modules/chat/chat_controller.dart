@@ -1,11 +1,14 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:nha_gia_re/data/models/address.dart';
 import 'package:nha_gia_re/data/models/conversation.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/providers/remote/request/messsage_request.dart';
@@ -13,6 +16,7 @@ import 'package:nha_gia_re/data/repositories/chat_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../data/models/message.dart';
+import '../../routers/app_routes.dart';
 
 class ChatController extends GetxController {
   final repo = ChatRepository();
@@ -97,6 +101,17 @@ class ChatController extends GetxController {
       } finally {
         _allowSendingMessageController.sink.add(true);
       }
+    }
+  }
+
+  Future<void> sendLocation() async {
+    final data = await Get.toNamed(AppRoutes.map_view_screen);
+    if(data != null){
+      LatLng latLng = data;
+      final request = MessageRequest(conservationId: conversation.id, location: latLng);
+      await _chatRepository.sendMessage(request);
+    } else {
+      log("None data from map_view_screen: $data");
     }
   }
 }
