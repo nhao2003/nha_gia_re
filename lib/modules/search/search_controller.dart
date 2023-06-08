@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:nha_gia_re/core/extensions/string_ex.dart';
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
 import 'package:nha_gia_re/data/services/list_check_service.dart';
 import 'package:nha_gia_re/data/services/radio_service.dart';
@@ -30,6 +31,18 @@ class SearchController extends GetxController {
     "Dat nong nghiep",
   ];
 
+  final RxList<String> searchStrings = <String>[].obs;
+
+  Future<RxList<String>> getSearchString() async {
+    List<Post> datas = await repository.getUserPosts(AuthRepository().userID!);
+    searchStrings.clear();
+    for (var data in datas) {
+      searchStrings.add(data.title);
+      print(data.title);
+    }
+    return searchStrings;
+  }
+
   RxList<Post> searchPosts = <Post>[].obs;
 
   Future<List<Post>> getAllPosts() async {
@@ -37,8 +50,13 @@ class SearchController extends GetxController {
     return datas;
   }
 
-  Future<void> initPosts() async {
-    searchPosts.value = await getAllPosts();
+  Future<void> initPosts(OrderBy orderby) async {
+    PostFilter filter = PostFilter(
+      textSearch: _query,
+      orderBy: orderby,
+      postedBy: PostedBy.all,
+    );
+    searchPosts.value = await repository.getAllPosts(filter);
   }
 
   /// data in search delegate
@@ -61,6 +79,20 @@ class SearchController extends GetxController {
   /// change new value to selectedTypeItem
   void changeSelectedItem(String newValue) {
     selectedTypeItem.value = newValue;
+    // add filter
+    if (newValue == FilterValues.instance.provinces[0]) {
+      initPosts(OrderBy.priceAsc);
+    } else {
+      List<Post> filterPosts = <Post>[];
+      for (var post in searchPosts) {
+        if (post.address.cityName!
+            .noAccentVietnamese()
+            .contains(newValue.noAccentVietnamese())) {
+          filterPosts.add(post);
+        }
+      }
+      searchPosts.value = [...filterPosts];
+    }
   }
 
   /// add new query to history
@@ -89,9 +121,21 @@ class SearchController extends GetxController {
 
   /// get list Suggestions
   List<String> getSuggestions(String query) {
-    return query.isEmpty
-        ? [...history]
-        : dummydata.where((word) => word.startsWith(query)).toList();
+    // xu ly in hoa, in thuong, co dau, khong dau
+    List<String> results = [];
+    if (query.isEmpty)
+      results = [...history];
+    else {
+      for (String value in searchStrings) {
+        if (value
+            .noAccentVietnamese()
+            .toLowerCase()
+            .startsWith(query.noAccentVietnamese().toLowerCase())) {
+          results.add(value);
+        }
+      }
+    }
+    return results;
   }
 
   /// update suggestions

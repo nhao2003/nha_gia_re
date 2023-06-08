@@ -26,4 +26,7 @@ abstract class AppRoutes {
   // noti
   static const notification = '/notification';
   static const post_detail = '/post_detail';
+
+  static const map_view_screen = '/map_view_screen';
+  static const map_picker_screen = '/map_picker_screen';
 }

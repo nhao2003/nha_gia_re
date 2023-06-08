@@ -1,3 +1,4 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/models/address.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -11,7 +12,7 @@ class Message {
   DateTime sentAt;
   bool isMine;
   bool isRead;
-  Address? location;
+  LatLng? location;
   MessageType type;
 
   Message({
@@ -42,7 +43,7 @@ class Message {
         isRead: json['is_receiver_read'],
         type: MessageType.parse(json['message_type']),
         location: json['location_message'] != null
-            ? Address.fromJson(json['location_message'])
+            ? LatLng.fromJson(json['location_message'])
             : null);
   }
 

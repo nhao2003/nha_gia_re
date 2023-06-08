@@ -9,15 +9,12 @@ extension StringX on String {
   }
 
   double removeTrailingZerosAndNumberfy(String n) {
-    if(n.contains('.')){
-      return double.parse(
-        n.replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "") //remove all trailing 0's and extra decimals at end if any
-      );
-    }
-    else{
-      return double.parse(
-        n
-      );
+    if (n.contains('.')) {
+      return double.parse(n.replaceAll(RegExp(r"([.]*0+)(?!.*\d)"),
+              "") //remove all trailing 0's and extra decimals at end if any
+          );
+    } else {
+      return double.parse(n);
     }
   }
 
@@ -34,7 +31,8 @@ extension StringX on String {
     return double.tryParse(this) != null;
   }
 
-  String noAccentVietnamese(String s) {
+  String noAccentVietnamese() {
+    String s = this;
     s = s.replaceAll(RegExp(r'[àáạảãâầấậẩẫăằắặẳẵ]'), 'a');
     s = s.replaceAll(RegExp(r'[ÀÁẠẢÃĂẰẮẶẲẴÂẦẤẬẨẪ]'), 'A');
     s = s.replaceAll(RegExp(r'[èéẹẻẽêềếệểễ]'), 'e');
@@ -51,4 +49,5 @@ extension StringX on String {
     s = s.replaceAll(RegExp(r'[đ]'), 'd');
     return s;
   }
+
 }

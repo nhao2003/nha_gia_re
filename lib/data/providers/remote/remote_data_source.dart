@@ -217,7 +217,7 @@ class RemoteDataSource {
         .eq('status', PostStatus.approved.toString())
         .eq('is_hide', false);
     if (filter.textSearch?.isNotEmpty != null) {
-      filter.textSearch = "".noAccentVietnamese(filter.textSearch!);
+      filter.textSearch = filter.textSearch!.noAccentVietnamese();
       query = query.textSearch('title_description', filter.textSearch!,
           type: TextSearchType.plain);
     }
@@ -547,12 +547,15 @@ class RemoteDataSource {
   }
 
   Future<void> extendPost(String id) async {
-    await supabaseClient.rpc('extend_post_expiry_date', params: {'id': id});
+    log(id);
+    await supabaseClient.rpc('extend_post_expiry_date', params: {'post_id': id}).then((value) {
+      log("Done");
+    });
   }
 
   Future<void> hideOrUnHidePost(String id, bool isHide) async {
     await supabaseClient.from(tablePost).update({
       'is_hide': isHide,
-    });
+    }).eq('id', id);
   }
 }

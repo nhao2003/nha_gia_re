@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nha_gia_re/data/models/properties/post.dart';
@@ -73,27 +74,22 @@ class _ItemPostState extends State<ItemPost> {
                     width: sizeImage,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        widget.post.imagesUrl[0],
+                      child: CachedNetworkImage(
+                        imageUrl: widget.post.imagesUrl[0],
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
+                        errorWidget: (context, error, stackTrace) {
                           return Image.asset(
                             "assets/images/default_image.png",
                             fit: BoxFit.cover,
                           );
                         },
-                        loadingBuilder: (BuildContext context, Widget child,
-                            ImageChunkEvent? loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
-                                  : null,
-                            ),
-                          );
-                        },
+                       progressIndicatorBuilder: (ctx, str, prc){
+                         return Center(
+                           child: CircularProgressIndicator(
+                             value: prc.progress,
+                           ),
+                         );
+                       },
                       ),
                     ),
                   ),
@@ -132,7 +128,7 @@ class _ItemPostState extends State<ItemPost> {
               onSelected: (int item) {
                 setState(() {
                   selectedMenu = item;
-                  widget.onSelectedMenu(item);
+                  widget.onSelectedMenu(item, widget.post);
                 });
               },
               itemBuilder: (BuildContext context) =>

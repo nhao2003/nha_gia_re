@@ -25,11 +25,17 @@ class PostManagementController extends GetxController {
 
   Future<List<Post>> getAllPosts() async {
     List<Post> datas = await repository.getUserPosts(AuthRepository().userID!);
-    print(datas[0]);
     return datas;
   }
 
   Future<void> getPostsInit() async {
+    allPosts.clear();
+    pendingPosts.clear();
+    expiredPosts.clear();
+    hidedPosts.clear();
+    rejectedPosts.clear();
+    approvedPosts.clear();
+    pendingPosts.clear();
     allPosts = await getAllPosts();
 
     for (Post post in allPosts) {
@@ -57,23 +63,32 @@ class PostManagementController extends GetxController {
     Get.toNamed(AppRoutes.post_detail, arguments: post);
   }
 
-  void showPost() {
+  void showPost(Post post) async {
     print("Hien tin");
+    await repository.hideOrUnHidePost(post.id, false);
+    await getPostsInit();
   }
 
-  void hidePost() {
+  void hidePost(Post post) async {
     print("hide post");
+    await repository.hideOrUnHidePost(post.id, true);
+    await getPostsInit();
   }
 
-  void editPost() {
+  void editPost(Post post) async {
     print("edit post");
+    // edit post
   }
 
-  void deletePost() {
+  void deletePost(Post post) async {
     print("delete post");
+    await repository.deletePost(post.id);
+    await getPostsInit();
   }
 
-  void extensionPost() {
+  void extensionPost(Post post) async {
     print("gia han");
+    await repository.extendPostExpiryDate(post.id, true);
+    await getPostsInit();
   }
 }

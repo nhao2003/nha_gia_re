@@ -137,6 +137,7 @@ from auth.users
 where id = 'f8a68af6-f0d7-45c8-8b9f-666f6e4f1314' ::uuid
 
 delete
+
 from user_info
 where uid = '99785dd5-7516-4d5c-8310-d791a90256fc' ::uuid
 --follow trigger;

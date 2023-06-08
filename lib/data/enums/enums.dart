@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:nha_gia_re/core/values/app_strings.dart';
 
 enum PropertyType {
@@ -312,6 +314,7 @@ enum PostStatus {
         return status;
       }
     }
+    log(value);
     throw Exception("Can't parse PostStatus! Your input value is \"$value\"");
   }
 }

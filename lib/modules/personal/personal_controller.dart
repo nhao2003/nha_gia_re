@@ -8,7 +8,7 @@ import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../data/repositories/chat_repository.dart';
 
 class PersonalController extends GetxController {
-  UserInfo? userInfo;
+  late UserInfo userInfo;
   var auth = AuthRepository();
   bool isYourSelf = false;
   late bool isFollowing = true;
@@ -19,35 +19,26 @@ class PersonalController extends GetxController {
     return await repository.getUserPosts(userInfo!.uid);
   }
 
-  PersonalController() {
-    getAuthUserInfo();
-  }
-
-  @override
-  Future<void> onInit() async {
-    await getAuthUserInfo();
-    super.onInit();
-  }
-
-  Future<void> getAuthUserInfo() async {
-    userInfo = await chatRepository.getUserInfo(AuthRepository().userID!);
+  Future<UserInfo> getAuthUserInfo() async {
+    return await chatRepository.getUserInfo(AuthRepository().userID!);
   }
 
   void navToUserProfile() {
     Get.toNamed(AppRoutes.userProfile, arguments: userInfo);
   }
 
-  void init(dynamic arg) async {
+  Future<UserInfo> init(dynamic arg) async {
+    // cua minh phai get info
     if (arg == null) {
-      await getAuthUserInfo();
+      return await getAuthUserInfo();
     }
     if (arg is UserInfo) {
-      userInfo = arg;
-      if (userInfo!.uid == auth.userID) {
+      if (arg.uid == auth.userID) {
         isYourSelf = true;
       }
+      return arg;
     } else {
-      //throw Exception('Arg ...');
+      throw Exception('Arg ...');
     }
   }
 }

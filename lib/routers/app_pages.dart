@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:nha_gia_re/modules/maps/screens/map_picker_screen.dart';
+import 'package:nha_gia_re/modules/maps/screens/map_screen.dart';
 import 'package:nha_gia_re/modules/post_details/post_detail_binding.dart';
 import 'package:nha_gia_re/modules/post_details/screen/post_details_screen.dart';
 import 'package:nha_gia_re/modules/notification/notification_binding.dart';
@@ -24,6 +26,7 @@ import '../modules/home/screens/home_screen.dart';
 import '../modules/login/login_binding.dart';
 import '../modules/login/screens/login_screen.dart';
 import '../modules/login/screens/register_screen.dart';
+import '../modules/maps/map_binding.dart';
 import '../modules/personal/personal_binding.dart';
 import '../modules/personal/screens/personal_screen.dart';
 import '../modules/post/post_binding.dart';
@@ -103,8 +106,19 @@ abstract class AppPages {
       binding: SplashBinding(),
     ),
     GetPage(
-        name: AppRoutes.post_detail,
-        page: () => const PostDetailsScreen(),
-        binding: PostDetailBinding()),
+      name: AppRoutes.post_detail,
+      page: () => const PostDetailsScreen(),
+      binding: PostDetailBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.map_view_screen,
+      page: () => MapViewScreen(),
+      binding: MapsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.map_picker_screen,
+      page: () => const MapPickerScreen(),
+      binding: MapsBinding(),
+    ),
   ];
 }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:nha_gia_re/core/extensions/double_ex.dart';
+import 'package:nha_gia_re/core/extensions/integer_ex.dart';
 import 'package:nha_gia_re/data/models/properties/post.dart';
 import 'package:nha_gia_re/modules/post_details/widget/details.dart';
 
@@ -15,7 +18,7 @@ class HouseDetails extends StatelessWidget {
         padding: EdgeInsets.only(left: 20),
         child: GridView.count(
           physics: NeverScrollableScrollPhysics(),
-          childAspectRatio: 3,
+          childAspectRatio: 4,
           crossAxisCount: 2,
           shrinkWrap: true,
           children: [
@@ -24,13 +27,15 @@ class HouseDetails extends StatelessWidget {
                 iconAsset: Assets.ad_type,
                 value: 'Cho Thuê',
               ),
+            if(house.deposit != null)
+              Detail(iconAsset: Assets.deposit, value: 'Tiền cọc: ${house.deposit?.toFormattedMoney()}'),
             Detail(
               iconAsset: Assets.area,
               value: 'Diện tích: ${house.area} m2',
             ),
             Detail(
               iconAsset: Assets.price_m2,
-              value: 'Giá/m2: ${house.price / house.area} triệu/m2',
+              value: 'Giá/m2: ${(house.price / house.area).toFormattedMoney()}',
             ),
             if (house.width != null)
               Detail(
@@ -45,7 +50,7 @@ class HouseDetails extends StatelessWidget {
             if (house.furnitureStatus != null)
               Detail(
                 iconAsset: Assets.furnishing_sell,
-                value: 'Tình trạng nội thất: ${house.furnitureStatus}',
+                value: 'Tình trạng nội thất: ${house.furnitureStatus.toString().tr}',
               ),
             if (house.numOfBedRooms != null)
               Detail(
@@ -60,12 +65,12 @@ class HouseDetails extends StatelessWidget {
             if (house.legalDocumentStatus != null)
               Detail(
                 iconAsset: Assets.paper,
-                value: 'Giấy tờ pháp lý: ${house.legalDocumentStatus}',
+                value: 'Giấy tờ pháp lý: ${house.legalDocumentStatus.toString().tr}',
               ),
             if (house.houseType != null)
               Detail(
                 iconAsset: Assets.home_type,
-                value: 'Loại hình căn hộ: ${house.houseType}',
+                value: 'Loại hình căn hộ: ${house.houseType.toString().tr}',
               ),
             if (house.numOfFloors != null)
               Detail(
@@ -75,7 +80,7 @@ class HouseDetails extends StatelessWidget {
             if (house.mainDoorDirection != null)
               Detail(
                 iconAsset: Assets.direction,
-                value: 'Hướng cửa chính: ${house.mainDoorDirection}',
+                value: 'Hướng cửa chính: ${house.mainDoorDirection.toString().tr}',
               ),
           ],
         ));
