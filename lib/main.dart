@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
+import 'package:nha_gia_re/data/services/onesignal_service.dart';
 import 'package:nha_gia_re/routers/app_pages.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -21,6 +22,7 @@ Future<void> main() async {
     anonKey: SUPABASE_ANON_KEY,
   );
   await Hive.initFlutter();
+  OneSignalService.init();
   runApp(MyApp());
 }
 

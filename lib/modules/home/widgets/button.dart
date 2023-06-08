@@ -10,7 +10,6 @@ class CustomButton extends StatefulWidget {
   final Widget? icon;
   final String title;
   final VoidCallback onPressed;
-
   @override
   State<CustomButton> createState() => _CustomButtonState();
 }

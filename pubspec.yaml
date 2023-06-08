@@ -61,6 +61,7 @@ dependencies:
   flutter_xlider: ^3.5.0
   uuid: ^3.0.7
   cached_network_image: ^3.2.3
+  onesignal_flutter: ^3.5.0
   google_maps_flutter: ^2.3.0
   location: ^4.4.0
 

@@ -12,7 +12,7 @@ abstract class AppRoutes {
   static const filter = '/search/filter';
 
   static const post = '/post';
-
+  static const dashboard = '/dashboard';
   static const personal = '/personal';
   //chat
   static const conversation = '/conversation';
