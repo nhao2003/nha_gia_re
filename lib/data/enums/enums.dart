@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:nha_gia_re/core/values/app_strings.dart';
 
 enum PropertyType {
@@ -288,6 +290,7 @@ enum HouseAndLandFeatureFilter {
   hasWideAlley,
   isFacade,
 }
+
 enum PostStatus {
   pending, // đang chờ duyệt
   approved, // đã được duyệt
@@ -296,7 +299,6 @@ enum PostStatus {
   @override
   String toString() {
     switch (this) {
-
       case PostStatus.pending:
         return "pending";
       case PostStatus.approved:
@@ -304,16 +306,70 @@ enum PostStatus {
       case PostStatus.rejected:
         return "rejected";
     }
-
   }
-  static PostStatus parse(String value){
-    for (PostStatus status in PostStatus.values){
-        if(status.toString() == value) {
-          return status;
-        }
-      }
-    throw Exception("Can't parse PostStatus! Your input value is \"$value\"");
-    }
 
+  static PostStatus parse(String value) {
+    for (PostStatus status in PostStatus.values) {
+      if (status.toString() == value) {
+        return status;
+      }
+    }
+    log(value);
+    throw Exception("Can't parse PostStatus! Your input value is \"$value\"");
+  }
 }
 
+enum PostStatusMana {
+  pending, // đang chờ duyệt
+  approved, // đã được duyệt
+  rejected,
+  hided,
+  expired;
+
+  @override
+  String toString() {
+    switch (this) {
+      case PostStatusMana.pending:
+        return "pending";
+      case PostStatusMana.approved:
+        return "approved";
+      case PostStatusMana.rejected:
+        return "rejected";
+      case PostStatusMana.hided:
+        return "hided";
+      case PostStatusMana.expired:
+        return "expired";
+    }
+  }
+
+  static PostStatus parse(String value) {
+    for (PostStatus status in PostStatus.values) {
+      if (status.toString() == value) {
+        return status;
+      }
+    }
+    throw Exception("Can't parse PostStatus! Your input value is \"$value\"");
+  }
+}
+
+enum MessageType {
+  text,
+  images,
+  post,
+  location;
+
+  @override
+  String toString() {
+    super.toString();
+    return super.toString().split('.').last;
+  }
+
+  static MessageType parse(String value) {
+    for (MessageType type in MessageType.values) {
+      if (type.toString() == value) {
+        return type;
+      }
+    }
+    throw Exception("Can't parse MessageType! Your input value is \"$value\"");
+  }
+}

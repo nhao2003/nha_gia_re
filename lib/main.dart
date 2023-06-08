@@ -8,7 +8,6 @@ import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/routers/app_pages.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 import 'core/languages/localization_service.dart';
 import 'core/values/api_values.dart';
 import 'core/languages/localization_service.dart';
@@ -61,7 +60,7 @@ class MyApp extends StatelessWidget {
       translations: LocalizationService(),
       builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
-      initialRoute:AppRoutes.splashScreen,
+      initialRoute: AppRoutes.splashScreen,
       getPages: AppPages.pages,
       defaultTransition: Transition.cupertino,
     );

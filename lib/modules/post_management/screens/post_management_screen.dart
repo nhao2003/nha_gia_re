@@ -8,10 +8,23 @@ import '../widgets/list_posts_pendding.dart';
 import '../widgets/list_posts_posted.dart';
 import '../widgets/list_posts_reject.dart';
 
-class PostManagementScreen extends StatelessWidget {
+class PostManagementScreen extends StatefulWidget {
   PostManagementScreen({super.key});
+
+  @override
+  State<PostManagementScreen> createState() => _PostManagementScreenState();
+}
+
+class _PostManagementScreenState extends State<PostManagementScreen> {
   final PostManagementController controller =
       Get.find<PostManagementController>();
+
+  @override
+  void initState() {
+    controller.getPostsInit();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -41,7 +54,7 @@ class PostManagementScreen extends StatelessWidget {
                       }).toList()),
                 )),
           ),
-          body: const TabBarView(
+          body: TabBarView(
             children: <Widget>[
               ListPostsPosted(),
               ListPostsPendding(),

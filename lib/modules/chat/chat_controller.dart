@@ -1,67 +1,99 @@
 import 'dart:async';
+import 'dart:developer';
+import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:nha_gia_re/data/models/address.dart';
 import 'package:nha_gia_re/data/models/conversation.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/providers/remote/request/messsage_request.dart';
-import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/data/repositories/chat_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../data/models/message.dart';
+import '../../routers/app_routes.dart';
 
 class ChatController extends GetxController {
   final repo = ChatRepository();
   final supabase = Supabase.instance.client;
+  RxList<File> mediaPicker = RxList<File>();
   late StreamSubscription<List<Message>> streamSubscription;
-  StreamController<List<Message>> _controller = StreamController();
-
+  final StreamController<List<Message>> _controller = StreamController();
   Stream<List<Message>> get stream => _controller.stream;
   late Conversation conversation;
   TextEditingController textEditingController = TextEditingController();
   final StreamController<bool> _allowSendingMessageController =
-      StreamController();
+  StreamController();
 
   Stream<bool> get isAllowSendMessage => _allowSendingMessageController.stream;
   final ChatRepository _chatRepository = ChatRepository();
+
+  @override
+  void onClose() {
+    streamSubscription.cancel();
+    _allowSendingMessageController.close();
+    _controller.close();
+    super.onClose();
+  }
+  Future<void> pickMedias()async {
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.media,
+    );
+    if(result != null){
+      mediaPicker.addAll(result.files.map((e) => File(e.path!)).toList());
+    }
+  }
+  Future<void> takeAPhoto()async {
+    final imagePicker = ImagePicker();
+    XFile? xFile =  await imagePicker.pickImage(
+        source: ImageSource.camera);
+    if(xFile!=null){
+      mediaPicker.add(File(xFile.path));
+    }
+  }
+  void removeMedia(File file){
+    mediaPicker.remove(file);
+  }
   Future<void> initializeMessages(dynamic arg) async {
-    AuthRepository authRepository = AuthRepository();
     if (arg is Conversation) {
       conversation = arg;
     } else if (arg is UserInfo) {
       try {
-        throwIf(arg.uid == authRepository.userID!, Exception("UserInfo has UID equal current user Id!"));
         conversation = await repo.getOrCreateConversation(arg.uid);
-        print('Goto chat by userInfo');
       } catch (e) {
-        Get.back();
-        Get.showSnackbar(GetSnackBar(
-          title: "Lỗi",
-          message: "Đã xảy ra lỗi",
-        ));
         rethrow;
       }
     } else {
       throw Exception("Invalid arg. Arg is UserInfo or Conversation");
     }
     streamSubscription =
-        _chatRepository.getMessages(conversation.id).listen((event) {
-      _controller.sink.add(event);
-    });
+        _chatRepository.getMessages(conversation).listen((event) {
+          _controller.sink.add(event);
+        });
   }
 
   Future<void> sendMessage() async {
-    if (textEditingController.text.trim().isNotEmpty) {
+    final trimmedText = textEditingController.text.trim();
+    if (trimmedText.isNotEmpty || mediaPicker.isNotEmpty) {
       try {
         _allowSendingMessageController.sink.add(false);
-        final txt = textEditingController.text;
         textEditingController.clear();
+        final files = List<File>.from(mediaPicker);
+        mediaPicker.clear();
         await _chatRepository.sendMessage(MessageRequest(
-            conservationId: conversation.id, content: txt.trim()));
+          conservationId: conversation.id,
+          content: trimmedText,
+          images: files.isEmpty ? null: files,
+        ));
       } catch (e) {
-        print(e.toString());
+        e.printError();
         Get.snackbar(
           "Lỗi",
           "Đã xảy ra lỗi khi gửi tin nhắn. Vui lòng thử lại",
@@ -72,7 +104,14 @@ class ChatController extends GetxController {
     }
   }
 
-  Future close() async {
-    streamSubscription.cancel();
+  Future<void> sendLocation() async {
+    final data = await Get.toNamed(AppRoutes.map_view_screen);
+    if(data != null){
+      LatLng latLng = data;
+      final request = MessageRequest(conservationId: conversation.id, location: latLng);
+      await _chatRepository.sendMessage(request);
+    } else {
+      log("None data from map_view_screen: $data");
+    }
   }
 }

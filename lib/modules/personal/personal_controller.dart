@@ -5,38 +5,40 @@ import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/data/repositories/post_repository.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 
-class PersonalController extends GetxController{
+import '../../data/repositories/chat_repository.dart';
+
+class PersonalController extends GetxController {
   late UserInfo userInfo;
   var auth = AuthRepository();
   bool isYourSelf = false;
   late bool isFollowing = true;
+  ChatRepository chatRepository = ChatRepository();
 
-  Future<List<Post>> getPosts() async
-  {
+  Future<List<Post>> getPosts() async {
     PostRepository repository = PostRepository();
-    return await repository.getUserPosts(userInfo.uid);
+    return await repository.getUserPosts(userInfo!.uid);
   }
-  void navToUserProfile()
-  {
+
+  Future<UserInfo> getAuthUserInfo() async {
+    return await chatRepository.getUserInfo(AuthRepository().userID!);
+  }
+
+  void navToUserProfile() {
     Get.toNamed(AppRoutes.userProfile, arguments: userInfo);
   }
-  void init(dynamic arg)
-  {
-    if(arg is UserInfo)
-    {
-      userInfo = arg;
-      if(userInfo.uid == auth.userID)
-      {
+
+  Future<UserInfo> init(dynamic arg) async {
+    // cua minh phai get info
+    if (arg == null) {
+      return await getAuthUserInfo();
+    }
+    if (arg is UserInfo) {
+      if (arg.uid == auth.userID) {
         isYourSelf = true;
       }
-    }
-    else
-    {
-      //throw Exception('Arg ...');
+      return arg;
+    } else {
+      throw Exception('Arg ...');
     }
   }
 }
-
-
-
-

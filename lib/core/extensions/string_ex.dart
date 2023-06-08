@@ -9,15 +9,12 @@ extension StringX on String {
   }
 
   double removeTrailingZerosAndNumberfy(String n) {
-    if(n.contains('.')){
-      return double.parse(
-        n.replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "") //remove all trailing 0's and extra decimals at end if any
-      );
-    }
-    else{
-      return double.parse(
-        n
-      );
+    if (n.contains('.')) {
+      return double.parse(n.replaceAll(RegExp(r"([.]*0+)(?!.*\d)"),
+              "") //remove all trailing 0's and extra decimals at end if any
+          );
+    } else {
+      return double.parse(n);
     }
   }
 
@@ -33,4 +30,24 @@ extension StringX on String {
     }
     return double.tryParse(this) != null;
   }
+
+  String noAccentVietnamese() {
+    String s = this;
+    s = s.replaceAll(RegExp(r'[àáạảãâầấậẩẫăằắặẳẵ]'), 'a');
+    s = s.replaceAll(RegExp(r'[ÀÁẠẢÃĂẰẮẶẲẴÂẦẤẬẨẪ]'), 'A');
+    s = s.replaceAll(RegExp(r'[èéẹẻẽêềếệểễ]'), 'e');
+    s = s.replaceAll(RegExp(r'[ÈÉẸẺẼÊỀẾỆỂỄ]'), 'E');
+    s = s.replaceAll(RegExp(r'[òóọỏõôồốộổỗơờớợởỡ]'), 'o');
+    s = s.replaceAll(RegExp(r'[ÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠ]'), 'O');
+    s = s.replaceAll(RegExp(r'[ìíịỉĩ]'), 'i');
+    s = s.replaceAll(RegExp(r'[ÌÍỊỈĨ]'), 'I');
+    s = s.replaceAll(RegExp(r'[ùúụủũưừứựửữ]'), 'u');
+    s = s.replaceAll(RegExp(r'[ƯỪỨỰỬỮÙÚỤỦŨ]'), 'U');
+    s = s.replaceAll(RegExp(r'[ỳýỵỷỹ]'), 'y');
+    s = s.replaceAll(RegExp(r'[ỲÝỴỶỸ]'), 'Y');
+    s = s.replaceAll(RegExp(r'[Đ]'), 'D');
+    s = s.replaceAll(RegExp(r'[đ]'), 'd');
+    return s;
+  }
+
 }

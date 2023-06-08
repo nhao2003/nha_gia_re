@@ -12,7 +12,9 @@ class MySearchDelegate extends SearchDelegate<String> {
   final SearchController controller =
       Get.put<SearchController>(SearchController());
 
-  MySearchDelegate();
+  MySearchDelegate() {
+    controller.getSearchString();
+  }
 
   void closeDelegate(BuildContext context, String value) {
     // SearchDelegate.close() can return vlaues, similar to Navigator.pop().
