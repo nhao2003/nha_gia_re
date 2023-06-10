@@ -105,7 +105,7 @@ class ChatController extends GetxController {
   }
 
   Future<void> sendLocation() async {
-    final data = await Get.toNamed(AppRoutes.map_view_screen);
+    final data = await Get.toNamed(AppRoutes.map_picker_screen);
     if(data != null){
       LatLng latLng = data;
       final request = MessageRequest(conservationId: conversation.id, location: latLng);
