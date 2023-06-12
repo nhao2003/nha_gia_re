@@ -6,6 +6,7 @@ import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/values/assets_image.dart';
 import 'package:nha_gia_re/data/models/properties/post.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
+import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/global_widgets/infor_card.dart';
 import 'package:nha_gia_re/modules/personal/personal_controller.dart';
 
@@ -131,64 +132,46 @@ class _PersonalScreenState extends State<PersonalScreen> {
                               //     ],
                               //   ),
                               // ),
-                              if (!_controller.isYourSelf)
-                                if (!_controller.isFollowing)
-                                  ElevatedButton(
-                                      style: ButtonStyle(
-                                          shape: MaterialStateProperty.all<
-                                                  RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18.0),
-                                      ))),
-                                      onPressed: () {},
-                                      child: Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.add_circle_outline,
-                                            color: Colors.white,
-                                            size: 20,
-                                          ),
-                                          const SizedBox(
-                                            width: 6,
-                                          ),
-                                          Text(
-                                            'Theo dõi',
-                                            style: AppTextStyles.roboto14regular
-                                                .copyWith(color: Colors.white),
-                                          )
-                                        ],
-                                      ))
-                                else
-                                  ElevatedButton(
-                                      style: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStateProperty.all(
-                                                  AppColors.grey),
-                                          shape: MaterialStateProperty.all<
-                                                  RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(18.0),
-                                          ))),
-                                      onPressed: () {},
-                                      child: Row(
-                                        children: [
-                                          const ImageIcon(
-                                            AssetImage(Assets.delete),
-                                            color: Colors.white,
-                                            size: 20,
-                                          ),
-                                          const SizedBox(
-                                            width: 6,
-                                          ),
-                                          Text(
-                                            'Bỏ theo dõi',
-                                            style: AppTextStyles.roboto14regular
-                                                .copyWith(color: Colors.white),
-                                          )
-                                        ],
-                                      ))
+                              if (!_controller.check())
+                                Obx(() => ElevatedButton(
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            (_controller.isFollowing.value)
+                                                ? MaterialStateProperty.all(
+                                                    AppColors.grey)
+                                                : null,
+                                        shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(18.0),
+                                        ))),
+                                    onPressed: _controller.handleFollowUser,
+                                    child: Row(
+                                      children: [
+                                        (!_controller.isFollowing.value)
+                                            ? const Icon(
+                                                Icons.add_circle_outline,
+                                                color: Colors.white,
+                                                size: 20,
+                                              )
+                                            : const ImageIcon(
+                                                AssetImage(Assets.delete),
+                                                color: Colors.white,
+                                                size: 20,
+                                              ),
+                                        const SizedBox(
+                                          width: 6,
+                                        ),
+                                        Text(
+                                          (!_controller.isFollowing.value)
+                                              ? 'Theo dõi'
+                                              : 'Bỏ theo dõi',
+                                          style: AppTextStyles.roboto14regular
+                                              .copyWith(color: Colors.white),
+                                        )
+                                      ],
+                                    )))
                               else
                                 InkWell(
                                   onTap: _controller.navToUserProfile,

@@ -92,6 +92,21 @@ class PostRepository extends BaseRepository {
         return House.fromJson(data);
     }
   }
+  Future<void> likePost(String postId)
+  async {
+    await remoteDataSourceImpl.likePost(postId: postId);
+  }
+
+  Future<void> unlikePost(String postId)
+    async {
+      await remoteDataSourceImpl.unlikePost(postId: postId);
+    }
+
+  Future<bool> hasLikePost(String postId)
+  async {
+    return await remoteDataSourceImpl.hasLikePost(postId: postId); 
+  }
+
   Future<List<Post>> getUserPosts(String uid) async {
     final List<Map<String, dynamic>> response;
     response = await remoteDataSourceImpl.getUserPosts(uid);

@@ -48,7 +48,9 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
               child: CircularProgressIndicator(),
             );
           } else {
-            _controller.post = snapshot.data?.last;
+            _controller.post = snapshot.data?[1];
+            _controller.numOfLikes.value = _controller.post.numOfLikes;
+            _controller.liked.value = snapshot.data?.last;
             _controller.userInfo = snapshot.data?.first;
             print(snapshot.data);
             return SingleChildScrollView(
@@ -77,11 +79,13 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                             Text(' - ${_controller.post.area}m2',
                                 style: AppTextStyles.roboto20regular),
                             Spacer(),
-                            IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.favorite_border_outlined,
+                            Obx(() => IconButton(
+                                onPressed: _controller.likePost,
+                                icon: (_controller.liked.value) 
+                                  ? Icon(Icons.favorite, color: AppColors.red,)
+                                  : const Icon(Icons.favorite_border_outlined,)
                                 )),
+                            Obx(() => Text(_controller.numOfLikes.value.toString(),style: AppTextStyles.roboto18regular)),
                           ],
                         ),
                         Row(
