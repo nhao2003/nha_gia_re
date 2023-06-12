@@ -373,3 +373,10 @@ enum MessageType {
     throw Exception("Can't parse MessageType! Your input value is \"$value\"");
   }
 }
+
+enum TypeNavigate {
+  search,
+  sell,
+  rent,
+  province,
+}

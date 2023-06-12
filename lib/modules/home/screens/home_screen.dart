@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/values/assets_image.dart';
-import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/global_widgets/infor_card.dart';
 import 'package:nha_gia_re/modules/home/widgets/button.dart';
 import 'package:nha_gia_re/global_widgets/carousel_ad.dart';
@@ -73,83 +72,87 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: FutureBuilder<List<List<Post>>>(
-        future: _controller.init(),
+          future: _controller.init(),
           builder: (context, snapShot) {
-        if (!snapShot.hasData) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else {
-          List<List<Post>> data = snapShot.data!;
-          print(data.first);
-          print(data.last);
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                CarouselAd(
-                  imgList: _controller.imgList,
-                  aspectRatio: 2.59,
-                  indicatorSize: 6,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(13.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      CustomButton(
-                        icon: Image.asset(Assets.thunder),
-                        title: 'Mua bán',
-                        onPressed: (){AuthRepository auth = AuthRepository(); auth.signOut();},
-                      ),
-                      CustomButton(
-                        icon: Image.asset(Assets.arrow),
-                        title: 'Cho thuê',
-                        onPressed: (){},
-                      ),
-                      CustomButton(
-                          icon: Image.asset(Assets.edit_color),
-                          title: 'Đăng bài',
-                          onPressed: _controller.navToPost,
-                        ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Gần bạn',
-                        style: AppTextStyles.roboto20Bold,
-                      ),
-                      const SizedBox(height: 10),
-                      GridView.count(
-                        shrinkWrap: true,
-                        primary: false,
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10,
-                        crossAxisCount: 3,
-                        children: const [
-                          ImageButton(),
-                          ImageButton(),
-                          ImageButton(),
-                          ImageButton(),
-                          ImageButton(),
-                          ImageButton(),
+            if (!snapShot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              List<List<Post>> data = snapShot.data!;
+              print(data.first);
+              print(data.last);
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    CarouselAd(
+                      imgList: _controller.imgList,
+                      aspectRatio: 2.59,
+                      indicatorSize: 6,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(13.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          CustomButton(
+                            icon: Image.asset(Assets.coin),
+                            title: 'Mua bán',
+                            onPressed: () {
+                              _controller.navToSell();
+                            },
+                          ),
+                          CustomButton(
+                            icon: Image.asset(Assets.key),
+                            title: 'Cho thuê',
+                            onPressed: () {
+                              _controller.navToRent();
+                            },
+                          ),
+                          CustomButton(
+                            icon: Image.asset(Assets.edit_color),
+                            title: 'Đăng bài',
+                            onPressed: _controller.navToPost,
+                          ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Tỉnh thành',
+                            style: AppTextStyles.roboto20Bold,
+                          ),
+                          const SizedBox(height: 10),
+                          GridView.count(
+                            shrinkWrap: true,
+                            primary: false,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10,
+                            crossAxisCount: 3,
+                            children: const [
+                              ImageButton(),
+                              ImageButton(),
+                              ImageButton(),
+                              ImageButton(),
+                              ImageButton(),
+                              ImageButton(),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    InforCardList(title: 'Gần bạn', list: []),
+                    InforCardList(title: 'Nhà bán', list: data.first),
+                    InforCardList(title: 'Nhà cho thuê', list: data.last),
+                  ],
                 ),
-                InforCardList(title: 'Gần bạn', list:[]),
-                InforCardList(title: 'Nhà bán', list: data.first),
-                InforCardList(title: 'Nhà cho thuê', list: data.last),
-              ],
-            ),
-          );
-        }
-      }),
+              );
+            }
+          }),
     );
   }
 }
