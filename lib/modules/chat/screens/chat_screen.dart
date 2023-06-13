@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nha_gia_re/data/models/conversation.dart';
 import 'package:nha_gia_re/data/models/message.dart';
+import 'package:nha_gia_re/global_widgets/media_page_view.dart';
 import 'package:nha_gia_re/modules/chat/chat_controller.dart';
 import 'package:nha_gia_re/modules/chat/widgets/message_row.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
@@ -48,6 +49,12 @@ class _ChatScreenState extends State<ChatScreen> {
               messages[index],
               onLocationMessageTap: (message) {
                 Get.toNamed(AppRoutes.map_view_screen, arguments: message);
+              },
+              onMediaItemInMediaGridTap: (mess, index) {
+                Get.to(MediaPageView(
+                  mess.images!,
+                  defaultIndex: index,
+                ));
               },
             ),
           );

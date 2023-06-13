@@ -17,9 +17,13 @@ class MessageRow extends StatelessWidget {
   final Message message;
   final Function(Message message)? onLocationMessageTap;
   final Function(Message message)? onTextMessageTap;
+  final Function(Message message, int index)? onMediaItemInMediaGridTap;
 
   const MessageRow(this.message,
-      {Key? key, this.onLocationMessageTap, this.onTextMessageTap})
+      {Key? key,
+      this.onLocationMessageTap,
+      this.onTextMessageTap,
+      this.onMediaItemInMediaGridTap})
       : super(key: key);
 
   Widget _buildContent() {
@@ -31,7 +35,9 @@ class MessageRow extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
         ),
         child: GestureDetector(
-          onTap: onTextMessageTap != null ? () => onTextMessageTap!(message) : null,
+          onTap: onTextMessageTap != null
+              ? () => onTextMessageTap!(message)
+              : null,
           child: Text(
             message.text ?? "NULL",
             style: AppTextStyles.roboto16regular,
@@ -59,7 +65,9 @@ class MessageRow extends StatelessWidget {
             ListTile(
               title: const Text("Vị trí của bạn"),
               subtitle: const Text("Nhấn để xem vị trí trên bản đồ"),
-              onTap: onLocationMessageTap != null ? () => onLocationMessageTap!(message) : null,
+              onTap: onLocationMessageTap != null
+                  ? () => onLocationMessageTap!(message)
+                  : null,
             ),
           ],
         ),
@@ -75,7 +83,7 @@ class MessageRow extends StatelessWidget {
       children: [
         Row(
           mainAxisAlignment:
-          message.isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
+              message.isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
           children: [
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -87,12 +95,19 @@ class MessageRow extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   _buildContent(),
-                  if (message.images != null) Column(
-                    children: [
-                      const SizedBox(height: 4),
-                      MediaGrid(message.images!),
-                    ],
-                  ),
+                  if (message.images != null)
+                    Column(
+                      children: [
+                        const SizedBox(height: 4),
+                        MediaGrid(
+                          message.images!,
+                          onMediaItemInMediaGridTap:
+                              onMediaItemInMediaGridTap != null
+                                  ? (index) => onMediaItemInMediaGridTap!(message, index)
+                                  : null,
+                        ),
+                      ],
+                    ),
                   const SizedBox(height: 4),
                   Text(
                     DateFormat('HH:mm').format(message.sentAt),
