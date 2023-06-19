@@ -52,6 +52,10 @@ class ChatRepository {
     return remoteDataSourceImpl.getMessages(conversation);
   }
 
+  Future<void> markMessagesRead (String conversationId) async{
+    await remoteDataSourceImpl.markMessagesRead(conversationId);
+  }
+
   Future<Conversation> getOrCreateConversation(String uid) async {
     final data = await remoteDataSourceImpl.getOrCreateConversation(uid);
     return Conversation.fromJson(data);

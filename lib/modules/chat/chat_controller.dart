@@ -24,43 +24,49 @@ class ChatController extends GetxController {
   RxList<File> mediaPicker = RxList<File>();
   late StreamSubscription<List<Message>> streamSubscription;
   final StreamController<List<Message>> _controller = StreamController();
+
   Stream<List<Message>> get stream => _controller.stream;
   late Conversation conversation;
   TextEditingController textEditingController = TextEditingController();
   final StreamController<bool> _allowSendingMessageController =
-  StreamController();
+      StreamController();
 
   Stream<bool> get isAllowSendMessage => _allowSendingMessageController.stream;
   final ChatRepository _chatRepository = ChatRepository();
 
   @override
   void onClose() {
+    repo.markMessagesRead(conversation.id);
     streamSubscription.cancel();
     _allowSendingMessageController.close();
     _controller.close();
     super.onClose();
   }
-  Future<void> pickMedias()async {
-    FilePickerResult? result =
-        await FilePicker.platform.pickFiles(
+
+  Future<void> pickMedias() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
       type: FileType.media,
     );
-    if(result != null){
+    if (result != null) {
       mediaPicker.addAll(result.files.map((e) => File(e.path!)).toList());
     }
   }
-  Future<void> takeAPhoto()async {
+
+  Future<void> takeAPhoto() async {
     final imagePicker = ImagePicker();
-    XFile? xFile =  await imagePicker.pickImage(
-        source: ImageSource.camera);
-    if(xFile!=null){
+    XFile? xFile = await imagePicker.pickImage(source: ImageSource.camera);
+    if (xFile != null) {
       mediaPicker.add(File(xFile.path));
     }
   }
-  void removeMedia(File file){
+
+  void removeMedia(File file) {
     mediaPicker.remove(file);
   }
+
+  int i = 0;
+
   Future<void> initializeMessages(dynamic arg) async {
     if (arg is Conversation) {
       conversation = arg;
@@ -73,10 +79,11 @@ class ChatController extends GetxController {
     } else {
       throw Exception("Invalid arg. Arg is UserInfo or Conversation");
     }
+    repo.markMessagesRead(conversation.id);
     streamSubscription =
         _chatRepository.getMessages(conversation).listen((event) {
-          _controller.sink.add(event);
-        });
+      _controller.sink.add(event);
+    });
   }
 
   Future<void> sendMessage() async {
@@ -90,7 +97,7 @@ class ChatController extends GetxController {
         await _chatRepository.sendMessage(MessageRequest(
           conservationId: conversation.id,
           content: trimmedText,
-          images: files.isEmpty ? null: files,
+          images: files.isEmpty ? null : files,
         ));
       } catch (e) {
         e.printError();
@@ -106,9 +113,10 @@ class ChatController extends GetxController {
 
   Future<void> sendLocation() async {
     final data = await Get.toNamed(AppRoutes.map_picker_screen);
-    if(data != null){
+    if (data != null) {
       LatLng latLng = data;
-      final request = MessageRequest(conservationId: conversation.id, location: latLng);
+      final request =
+          MessageRequest(conservationId: conversation.id, location: latLng);
       await _chatRepository.sendMessage(request);
     } else {
       log("None data from map_view_screen: $data");

@@ -18,6 +18,7 @@ class ConversationRow extends StatelessWidget {
   UserInfo userInfo;
   Function()? onTap, onLongPress;
   final EdgeInsetsGeometry? padding;
+
   ConversationRow({
     Key? key,
     required this.conversation,
@@ -45,59 +46,41 @@ class ConversationRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      splashColor: AppColors.secondary,
+    return ListTile(
       onTap: onTap,
       onLongPress: onLongPress,
-      child: Container(
-        height: 100,
-        width: double.infinity,
-        padding: padding ?? const EdgeInsets.all(10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            userInfo.avatarUrl != null
-                ? CircleAvatar(
-                    backgroundImage:
-                        CachedNetworkImageProvider(userInfo.avatarUrl!),
-                    radius: 30,
-                  )
-                : const CircleAvatar(
-                    backgroundImage: AssetImage(Assets.avatar_2),
-                    radius: 30,
-                  ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    userInfo.fullName!,
-                    style: AppTextStyles.roboto16semiBold,
-                    maxLines: 1,
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    _getLastMessage(),
-                    style: isRead
-                        ? AppTextStyles.roboto14semiBold
-                        : AppTextStyles.roboto14regular
-                            .copyWith(color: AppColors.grey),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 5),
-            Text(
-              conversation.lastMessageSentAt.getTimeAgo(),
-              style:
-                  AppTextStyles.roboto14regular.copyWith(color: AppColors.grey),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
+      contentPadding: EdgeInsets.all(10),
+      leading: userInfo.avatarUrl != null
+          ? CircleAvatar(
+        backgroundImage:
+        CachedNetworkImageProvider(userInfo.avatarUrl!),
+        radius: 30,
+      )
+          : const CircleAvatar(
+        backgroundImage: AssetImage(Assets.avatar_2),
+        radius: 30,
+      ),
+      title: Text(
+        userInfo.fullName!,
+        style: AppTextStyles.roboto16semiBold,
+        maxLines: 1,
+      ),
+      subtitle: Container(
+        margin: const EdgeInsets.only(top: 15),
+        child: Text(
+          _getLastMessage(),
+          style: conversation.numOfUnReadMessage != 0
+              ? AppTextStyles.roboto14semiBold.copyWith(color: AppColors.black)
+              : AppTextStyles.roboto14regular
+              .copyWith(color: AppColors.grey),
+          overflow: TextOverflow.ellipsis,
         ),
+      ),
+      trailing: Text(
+        conversation.lastMessageSentAt.getTimeAgo(),
+        style:
+        AppTextStyles.roboto14regular.copyWith(color: AppColors.grey),
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }

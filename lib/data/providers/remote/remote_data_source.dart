@@ -17,8 +17,8 @@ class RemoteDataSource {
   static const String tablePost = 'post';
   final SupabaseClient supabaseClient = Supabase.instance.client;
 
-
-  Future<AuthResponse> signUp({required String email, required String password}) async {
+  Future<AuthResponse> signUp(
+      {required String email, required String password}) async {
     try {
       return await supabaseClient.auth.signUp(email: email, password: password);
     } catch (e) {
@@ -26,9 +26,11 @@ class RemoteDataSource {
     }
   }
 
-  Future<AuthResponse> signIn({required String email, required String password}) async {
+  Future<AuthResponse> signIn(
+      {required String email, required String password}) async {
     try {
-      return await supabaseClient.auth.signInWithPassword(email: email, password: password);
+      return await supabaseClient.auth
+          .signInWithPassword(email: email, password: password);
     } catch (e) {
       rethrow;
     }
@@ -68,7 +70,8 @@ class RemoteDataSource {
 
   Future<Map<String, dynamic>> postApartment(Map<String, dynamic> data) async {
     try {
-      final res = await supabaseClient.from(tableApartments).insert(data).select();
+      final res =
+          await supabaseClient.from(tableApartments).insert(data).select();
       return List<Map<String, dynamic>>.from(res).first;
     } catch (e) {
       rethrow;
@@ -129,7 +132,6 @@ class RemoteDataSource {
     }
   }
 
-
   Future<Map<String, dynamic>> editPostApartment(
       String postId, Map<String, dynamic> data) async {
     try {
@@ -144,7 +146,6 @@ class RemoteDataSource {
     }
   }
 
-
   Future<Map<String, dynamic>> editPostHouse(
       String postId, Map<String, dynamic> data) async {
     try {
@@ -158,7 +159,6 @@ class RemoteDataSource {
       rethrow;
     }
   }
-
 
   Future<Map<String, dynamic>> editPostLand(
       String postId, Map<String, dynamic> data) async {
@@ -203,8 +203,6 @@ class RemoteDataSource {
       rethrow;
     }
   }
-
-
 
   PostgrestFilterBuilder<dynamic> _defaultFilter(
     String propertyTable,
@@ -477,11 +475,14 @@ class RemoteDataSource {
     final response;
     switch (propertyType) {
       case PropertyType.apartment:
-        response =
-            await supabaseClient.from(tableApartments).select().eq('id', postId);
+        response = await supabaseClient
+            .from(tableApartments)
+            .select()
+            .eq('id', postId);
         break;
       case PropertyType.land:
-        response = await supabaseClient.from(tableLands).select().eq('id', postId);
+        response =
+            await supabaseClient.from(tableLands).select().eq('id', postId);
         break;
       case PropertyType.office:
         response =
@@ -523,7 +524,11 @@ class RemoteDataSource {
         .stream(primaryKey: ['id'])
         .order('sent_at')
         .eq('conversation_id', conversation.id)
-        .map((event) => event.map((e) => Message.fromJson(e)).toList());
+        .map((event) => event
+            .map((e) => Message.fromJson(e))
+            .toList()
+            .where((element) => element.sentAt.compareTo(conversation.timeJoined) != -1)
+            .toList());
   }
 
   /// Creates or returns an existing roomID of both participants
@@ -532,6 +537,13 @@ class RemoteDataSource {
     final data = await supabaseClient.rpc('get_or_create_conversation',
         params: {'user_info_id': otherUserId});
     return data;
+  }
+
+  Future<void> markMessagesRead(String conversationId) async {
+    await supabaseClient.rpc('mark_messages_read', params: {
+      'user_id': supabaseClient.auth.currentUser!.id,
+      'conv_id': conversationId,
+    });
   }
 
   Future deleteConversation(String conversationId) async {
@@ -548,7 +560,8 @@ class RemoteDataSource {
 
   Future<void> extendPost(String id) async {
     log(id);
-    await supabaseClient.rpc('extend_post_expiry_date', params: {'post_id': id}).then((value) {
+    await supabaseClient
+        .rpc('extend_post_expiry_date', params: {'post_id': id}).then((value) {
       log("Done");
     });
   }

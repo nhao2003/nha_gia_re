@@ -85,9 +85,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                           MainAxisAlignment.start,
                                       children: [
                                         TextButton(
-                                          onPressed: () {
-                                            Get.back();
-                                          },
+                                          onPressed: () => _chatController.markRead(e),
                                           child: Text(
                                             "Đánh dấu đã đọc",
                                             style: AppTextStyles.roboto16regular

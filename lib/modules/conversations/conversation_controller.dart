@@ -58,4 +58,9 @@ class ConversationController extends GetxController {
   Future<void> close() async {
     await streamSubscription.cancel();
   }
+
+  void markRead(Conversation e) {
+    repo.markMessagesRead(e.id);
+    Get.back();
+  }
 }
