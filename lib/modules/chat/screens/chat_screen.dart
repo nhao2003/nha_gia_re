@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:nha_gia_re/data/models/conversation.dart';
 import 'package:nha_gia_re/data/models/message.dart';
 import 'package:nha_gia_re/global_widgets/media_page_view.dart';
 import 'package:nha_gia_re/modules/chat/chat_controller.dart';
@@ -120,11 +117,12 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildTextField(bool isTyping, bool? isEnable) {
-    return Expanded(
+    return Flexible(
       child: TextField(
         controller: _controller.textEditingController,
         style: AppTextStyles.roboto16regular,
-        maxLines: null,
+        maxLines: 5,
+        minLines: 1,
         focusNode: focusNode,
         onTap: () {
           setState(() {
