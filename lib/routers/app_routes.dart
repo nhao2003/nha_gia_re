@@ -10,6 +10,7 @@ abstract class AppRoutes {
   // search
   static const search = '/search';
   static const filter = '/search/filter';
+  static const resultArg = '/search/resultArg';
 
   static const post = '/post';
   static const dashboard = '/dashboard';

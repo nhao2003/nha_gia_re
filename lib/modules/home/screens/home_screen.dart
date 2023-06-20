@@ -140,17 +140,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           CustomButton(
-                            icon: Image.asset(Assets.thunder),
+                            icon: Image.asset(Assets.coin),
                             title: 'Mua bán',
                             onPressed: () {
-                              AuthRepository auth = AuthRepository();
-                              auth.signOut();
+                              _controller.navToSell();
                             },
                           ),
                           CustomButton(
-                            icon: Image.asset(Assets.arrow),
+                            icon: Image.asset(Assets.key),
                             title: 'Cho thuê',
-                            onPressed: () {},
+                            onPressed: () {
+                              _controller.navToRent();
+                            },
                           ),
                           CustomButton(
                             icon: Image.asset(Assets.edit_color),
@@ -166,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Gần bạn',
+                            'Tỉnh thành',
                             style: AppTextStyles.roboto20Bold,
                           ),
                           const SizedBox(height: 10),
