@@ -1,5 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:nha_gia_re/core/extensions/date_ex.dart';
+import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/data/models/message.dart';
 import 'package:nha_gia_re/global_widgets/media_page_view.dart';
 import 'package:nha_gia_re/modules/chat/chat_controller.dart';
@@ -35,25 +40,60 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildMessageList(List<Message> messages) {
+    String currentDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
+
     return Expanded(
       child: ListView.builder(
         reverse: true,
         itemCount: messages.length,
         itemBuilder: (BuildContext context, int index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: MessageRow(
-              messages[index],
-              onLocationMessageTap: (message) {
-                Get.toNamed(AppRoutes.map_view_screen, arguments: message);
-              },
-              onMediaItemInMediaGridTap: (mess, index) {
-                Get.to(MediaPageView(
-                  mess.images!,
-                  defaultIndex: index,
-                ));
-              },
-            ),
+          final currentMessage = messages[index];
+          final currentDow = currentMessage.sentAt.weekday;
+
+          bool showDayOfWeek = (index != 0 &&
+                  index + 1 < messages.length &&
+                  currentDow != messages[index + 1].sentAt.weekday) ||
+              index == messages.length - 1;
+
+          String dateFormat =
+              DateFormat('dd/MM/yyyy').format(currentMessage.sentAt);
+          final displayDate =
+              (dateFormat == currentDate) ? 'Hôm nay' : currentMessage.sentAt.getTimeAgo();
+
+          log("$index / ${messages.length} / ${messages[index].text}");
+
+          return Column(
+            children: [
+              if (showDayOfWeek)
+                Container(
+                  margin: const EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: AppColors.grey.withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    displayDate,
+                    style: AppTextStyles.roboto10regular,
+                  ),
+                ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: MessageRow(
+                  isNewest: index == 0,
+                  messages[index],
+                  onLocationMessageTap: (message) {
+                    Get.toNamed(AppRoutes.map_view_screen, arguments: message);
+                  },
+                  onMediaItemInMediaGridTap: (mess, index) {
+                    Get.to(MediaPageView(
+                      mess.images!,
+                      defaultIndex: index,
+                    ));
+                  },
+                ),
+              ),
+            ],
           );
         },
       ),
@@ -165,12 +205,6 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         titleSpacing: 0,
         actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {});
-            },
-            icon: const Icon(Icons.more_vert),
-          ),
         ],
       ),
       body: StreamBuilder<List<Message>>(

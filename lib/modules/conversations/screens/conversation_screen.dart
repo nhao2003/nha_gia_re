@@ -22,10 +22,12 @@ class ConversationScreen extends StatefulWidget {
 class _ConversationScreenState extends State<ConversationScreen> {
   late ConversationController _chatController;
 
+
   @override
-  initState() {
+  void initState() {
     _chatController = Get.find<ConversationController>();
     _chatController.initializeConversations();
+    super.initState();
   }
 
   @override

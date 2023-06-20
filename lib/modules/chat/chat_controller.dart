@@ -19,7 +19,6 @@ import '../../data/models/message.dart';
 import '../../routers/app_routes.dart';
 
 class ChatController extends GetxController {
-  final repo = ChatRepository();
   final supabase = Supabase.instance.client;
   RxList<File> mediaPicker = RxList<File>();
   late StreamSubscription<List<Message>> streamSubscription;
@@ -32,11 +31,11 @@ class ChatController extends GetxController {
       StreamController();
 
   Stream<bool> get isAllowSendMessage => _allowSendingMessageController.stream;
-  final ChatRepository _chatRepository = ChatRepository();
+  final ChatRepository _chatRepository = GetIt.instance<ChatRepository>();
 
   @override
   void onClose() {
-    repo.markMessagesRead(conversation.id);
+    _chatRepository.markMessagesRead(conversation.id);
     streamSubscription.cancel();
     _allowSendingMessageController.close();
     _controller.close();
@@ -72,14 +71,14 @@ class ChatController extends GetxController {
       conversation = arg;
     } else if (arg is UserInfo) {
       try {
-        conversation = await repo.getOrCreateConversation(arg.uid);
+        conversation = await _chatRepository.getOrCreateConversation(arg.uid);
       } catch (e) {
         rethrow;
       }
     } else {
       throw Exception("Invalid arg. Arg is UserInfo or Conversation");
     }
-    repo.markMessagesRead(conversation.id);
+    _chatRepository.markMessagesRead(conversation.id);
     streamSubscription =
         _chatRepository.getMessages(conversation).listen((event) {
       _controller.sink.add(event);

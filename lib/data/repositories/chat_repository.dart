@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:get/get.dart';
@@ -11,14 +13,23 @@ import '../models/conversation.dart';
 import '../providers/remote/request/messsage_request.dart';
 
 class ChatRepository {
-  final remoteDataSourceImpl = RemoteDataSource();
+  final RemoteDataSource _remoteDataSource;
+  final StreamController<List<Conversation>> _conversationStreamController =
+  StreamController<List<Conversation>>.broadcast();
+  ChatRepository(this._remoteDataSource);
+
+  late StreamSubscription<List<Conversation>> conversationSubscription;
   final Map<String, UserInfo> _userInfos = {};
+  late final Stream<List<Conversation>> stream;
+  Stream<List<Conversation>> get conversationStream =>
+      _remoteDataSource.getAllConversation();
 
   Future<UserInfo> getUserInfo(String uid) async {
+
     UserInfo? user = _userInfos[uid];
     if (user != null) return user;
     try {
-      final data = await remoteDataSourceImpl.getUserInfo(uid);
+      final data = await _remoteDataSource.getUserInfo(uid);
       user = UserInfo.fromJson(data);
       _userInfos.putIfAbsent(user.uid, () => user!);
       return UserInfo.fromJson(data);
@@ -27,40 +38,29 @@ class ChatRepository {
     }
   }
 
-  Stream<List<Conversation>> getAllConservations() async* {
-    final Stream<List<Map<String, dynamic>>> res =
-        remoteDataSourceImpl.getAllConversation();
-    await for (var conversations in res) {
-      List<Conversation> conversationList = [];
-      for (var conversationJson in conversations) {
-        conversationList.add(Conversation.fromJson(conversationJson));
-      }
-      yield conversationList;
-    }
-  }
-
   Future sendMessage(MessageRequest request) async {
     List<String>? urls;
-    if(request.images?.isNotEmpty != null){
-      print("OKKKK ${List<File>.from(request.images!)}");
-      urls = await uploadMessageMedia(List<File>.from(request.images!), request.conservationId);
+    if (request.images?.isNotEmpty != null) {
+      urls = await uploadMessageMedia(
+          List<File>.from(request.images!), request.conservationId);
     }
-    await remoteDataSourceImpl.sendMessage(request.toJson(urls));
+    await _remoteDataSource.sendMessage(request.toJson(urls));
   }
 
   Stream<List<Message>> getMessages(Conversation conversation) {
-    return remoteDataSourceImpl.getMessages(conversation);
+    return _remoteDataSource.getMessages(conversation);
   }
 
-  Future<void> markMessagesRead (String conversationId) async{
-    await remoteDataSourceImpl.markMessagesRead(conversationId);
+  Future<void> markMessagesRead(String conversationId) async {
+    await _remoteDataSource.markMessagesRead(conversationId);
   }
 
   Future<Conversation> getOrCreateConversation(String uid) async {
-    final data = await remoteDataSourceImpl.getOrCreateConversation(uid);
+    final data = await _remoteDataSource.getOrCreateConversation(uid);
     return Conversation.fromJson(data);
   }
+
   Future deleteConversation(String conversationID) async {
-    await remoteDataSourceImpl.deleteConversation(conversationID);
+    await _remoteDataSource.deleteConversation(conversationID);
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/models/properties/post.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
@@ -16,7 +17,7 @@ class PersonalController extends GetxController {
   late RxBool isFollowing = true.obs;
   bool isLoading = false;
   final remoteDataSourceImpl = RemoteDataSource();
-  ChatRepository chatRepository = ChatRepository();
+  ChatRepository chatRepository = GetIt.instance<ChatRepository>();
 
   bool check()
   {

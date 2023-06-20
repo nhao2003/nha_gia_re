@@ -588,17 +588,28 @@ class RemoteDataSource {
     return List<Map<String, dynamic>>.from(response).first;
   }
 
-  Stream<List<Map<String, dynamic>>> getAllConversation() async* {
+  Stream<List<Conversation>> getAllConversation() async* {
     String uid = supabaseClient.auth.currentUser!.id;
-    final res = supabaseClient
-        .from('conservations')
-        .select(
-            '*, user1_info: user_info!conservations_user1_id_fkey(*), user2_info: user_info!conservations_user2_id_fkey(*), messages: messages(*)')
-        .or('user1_id.eq.$uid, user2_id.eq.$uid')
-        .asStream();
-    await for (var x in res) {
-      yield List<Map<String, dynamic>>.from(x).toList();
-    }
+    yield* supabaseClient
+        .from('conversations')
+        .stream(primaryKey: ['id']).transform<List<Conversation>>(
+      StreamTransformer<List<Map<String, dynamic>>,
+          List<Conversation>>.fromHandlers(handleData: (value, sink) {
+        final List<Conversation> cons = [];
+        for (var element in value) {
+          log(element.toString());
+          if ((element['user1_id'] == uid &&
+                  DateTime.tryParse(element['user1_joined_at'].toString()) !=
+                      null) ||
+              (element['user2_id'] == uid &&
+                  DateTime.tryParse(element['user2_joined_at'].toString()) !=
+                      null)) {
+            cons.add(Conversation.fromJson(element));
+          }
+        }
+        if (cons.isNotEmpty) sink.add(cons);
+      }),
+    );
   }
 
   Future sendMessage(Map<String, dynamic> data) async {
@@ -615,7 +626,8 @@ class RemoteDataSource {
         .map((event) => event
             .map((e) => Message.fromJson(e))
             .toList()
-            .where((element) => element.sentAt.compareTo(conversation.timeJoined) != -1)
+            .where((element) =>
+                element.sentAt.compareTo(conversation.timeJoined) != -1)
             .toList());
   }
 

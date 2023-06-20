@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -16,16 +17,19 @@ import '../../../data/models/message.dart';
 
 class MessageRow extends StatelessWidget {
   final Message message;
+  bool isNewest;
   final Function(Message message)? onLocationMessageTap;
   final Function(Message message)? onTextMessageTap;
   final Function(Message message, int index)? onMediaItemInMediaGridTap;
 
-  const MessageRow(this.message,
-      {Key? key,
-      this.onLocationMessageTap,
-      this.onTextMessageTap,
-      this.onMediaItemInMediaGridTap})
-      : super(key: key);
+  MessageRow(
+    this.message, {
+    Key? key,
+    this.onLocationMessageTap,
+    this.onTextMessageTap,
+    this.onMediaItemInMediaGridTap,
+    this.isNewest = false,
+  }) : super(key: key);
 
   Widget _buildContent() {
     if (message.text?.trim().isNotEmpty ?? false) {
@@ -47,32 +51,51 @@ class MessageRow extends StatelessWidget {
       );
     }
     if (message.location != null) {
-      return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
-        ),
-        child: Column(
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10),
+      return FutureBuilder(
+          future: placemarkFromCoordinates(
+              message.location!.latitude, message.location!.longitude),
+          builder: (context, snapShot) {
+            RxString title = "Vị trí không xác định".obs;
+            if (snapShot.hasData) {
+              final data = snapShot.data;
+              if (data != null && data.isNotEmpty) {
+                final place = data.first;
+                title = MapUtils.buildAddressString(
+                        name: place.name,
+                        street: place.street,
+                        administrativeArea: place.administrativeArea,
+                        locality: place.locality,
+                        country: place.country)
+                    .obs;
+              }
+            }
+            return Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
               ),
-              child: CachedNetworkImage(
-                imageUrl: MapUtils.getStaticMapUrl(message.location!, 10),
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                    ),
+                    child: CachedNetworkImage(
+                      imageUrl: MapUtils.getStaticMapUrl(message.location!, 10),
+                    ),
+                  ),
+                  ListTile(
+                    title: Obx(() => Text(title.value)),
+                    subtitle: const Text("Nhấn để xem vị trí trên bản đồ"),
+                    onTap: onLocationMessageTap != null
+                        ? () => onLocationMessageTap!(message)
+                        : null,
+                  ),
+                ],
               ),
-            ),
-            ListTile(
-              title: const Text("Vị trí của bạn"),
-              subtitle: const Text("Nhấn để xem vị trí trên bản đồ"),
-              onTap: onLocationMessageTap != null
-                  ? () => onLocationMessageTap!(message)
-                  : null,
-            ),
-          ],
-        ),
-      );
+            );
+          });
     }
     return const SizedBox();
   }
@@ -104,14 +127,17 @@ class MessageRow extends StatelessWidget {
                           message.images!,
                           onMediaItemInMediaGridTap:
                               onMediaItemInMediaGridTap != null
-                                  ? (index) => onMediaItemInMediaGridTap!(message, index)
+                                  ? (index) =>
+                                      onMediaItemInMediaGridTap!(message, index)
                                   : null,
                         ),
                       ],
                     ),
                   const SizedBox(height: 4),
                   Text(
-                    DateFormat('HH:mm').format(message.sentAt),
+                    (isNewest && message.isMine)
+                        ? (message.isRead ? "Đã xem" : "Đã gửi")
+                        : DateFormat('HH:mm').format(message.sentAt),
                     style: TextStyle(fontSize: 12, color: AppColors.grey),
                   ),
                 ],

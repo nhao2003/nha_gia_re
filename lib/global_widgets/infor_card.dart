@@ -59,11 +59,13 @@ class InforCard extends StatelessWidget {
             post.address.toString(),
             style: AppTextStyles.roboto12semiBold.copyWith(
                 color: AppColors.grey, overflow: TextOverflow.ellipsis),
+            maxLines: 1,
           ),
           const SizedBox(
             height: 8,
           ),
           Text(
+            maxLines: 1,
             post.postedDate.getTimeAgo(),
             style:
                 AppTextStyles.roboto12semiBold.copyWith(color: AppColors.grey),
@@ -105,7 +107,7 @@ class _InforCardListState extends State<InforCardList> {
           height: 10,
         ),
         SizedBox(
-          height: 220,
+          height: 230,
           child: ListView.separated(
               shrinkWrap: true,
               itemCount: widget.list.length,

@@ -1,7 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
+import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/values/assets_image.dart';
+import 'package:nha_gia_re/data/repositories/chat_repository.dart';
 import 'package:nha_gia_re/data/services/onesignal_service.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/global_widgets/infor_card.dart';
@@ -65,94 +70,132 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              Get.toNamed(AppRoutes.conversation);
-            },
-            icon: Image.asset(Assets.messCircle, width: 24),
-            padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
-            constraints: const BoxConstraints(),
-          ),
-        ],
-      ),
-      body: FutureBuilder<List<List<Post>>>(
-        future: _controller.init(),
-          builder: (context, snapShot) {
-        if (!snapShot.hasData) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else {
-          List<List<Post>> data = snapShot.data!;
-          print(data.first);
-          print(data.last);
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                CarouselAd(
-                  imgList: _controller.imgList,
-                  aspectRatio: 2.59,
-                  indicatorSize: 6,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(13.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+          StreamBuilder(
+              stream: GetIt.instance<ChatRepository>().conversationStream,
+              builder: (context, snapShot) {
+                final conversations = snapShot.data ?? [];
+                final unreadConversations = conversations
+                    .where(
+                        (conversation) => conversation.numOfUnReadMessage != 0)
+                    .toList();
+                final unreadCount = unreadConversations.length;
+
+                return IconButton(
+                  onPressed: () {
+                    Get.toNamed(AppRoutes.conversation);
+                  },
+                  padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
+                  constraints: const BoxConstraints(),
+                  icon: Stack(
                     children: [
-                      CustomButton(
-                        icon: Image.asset(Assets.thunder),
-                        title: 'Mua bán',
-                        onPressed: (){AuthRepository auth = AuthRepository(); auth.signOut();},
-                      ),
-                      CustomButton(
-                        icon: Image.asset(Assets.arrow),
-                        title: 'Cho thuê',
-                        onPressed: (){},
-                      ),
-                      CustomButton(
-                          icon: Image.asset(Assets.edit_color),
-                          title: 'Đăng bài',
-                          onPressed: _controller.navToPost,
+                      Image.asset(Assets.messCircle, width: 36),
+                      if (unreadCount > 0)
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: AppColors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text(
+                              unreadCount.toString(),
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
                     ],
                   ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Gần bạn',
-                        style: AppTextStyles.roboto20Bold,
-                      ),
-                      const SizedBox(height: 10),
-                      GridView.count(
-                        shrinkWrap: true,
-                        primary: false,
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10,
-                        crossAxisCount: 3,
-                        children: const [
-                          ImageButton(),
-                          ImageButton(),
-                          ImageButton(),
-                          ImageButton(),
-                          ImageButton(),
-                          ImageButton(),
+                );
+              })
+        ],
+      ),
+      body: FutureBuilder<List<List<Post>>>(
+          future: _controller.init(),
+          builder: (context, snapShot) {
+            if (!snapShot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              List<List<Post>> data = snapShot.data!;
+              print(data.first);
+              print(data.last);
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    CarouselAd(
+                      imgList: _controller.imgList,
+                      aspectRatio: 2.59,
+                      indicatorSize: 6,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(13.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          CustomButton(
+                            icon: Image.asset(Assets.thunder),
+                            title: 'Mua bán',
+                            onPressed: () {
+                              AuthRepository auth = AuthRepository();
+                              auth.signOut();
+                            },
+                          ),
+                          CustomButton(
+                            icon: Image.asset(Assets.arrow),
+                            title: 'Cho thuê',
+                            onPressed: () {},
+                          ),
+                          CustomButton(
+                            icon: Image.asset(Assets.edit_color),
+                            title: 'Đăng bài',
+                            onPressed: _controller.navToPost,
+                          ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Gần bạn',
+                            style: AppTextStyles.roboto20Bold,
+                          ),
+                          const SizedBox(height: 10),
+                          GridView.count(
+                            shrinkWrap: true,
+                            primary: false,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10,
+                            crossAxisCount: 3,
+                            children: const [
+                              ImageButton(),
+                              ImageButton(),
+                              ImageButton(),
+                              ImageButton(),
+                              ImageButton(),
+                              ImageButton(),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    InforCardList(title: 'Gần bạn', list: []),
+                    InforCardList(title: 'Nhà bán', list: data.first),
+                    InforCardList(title: 'Nhà cho thuê', list: data.last),
+                  ],
                 ),
-                InforCardList(title: 'Gần bạn', list:[]),
-                InforCardList(title: 'Nhà bán', list: data.first),
-                InforCardList(title: 'Nhà cho thuê', list: data.last),
-              ],
-            ),
-          );
-        }
-      }),
+              );
+            }
+          }),
     );
   }
 }

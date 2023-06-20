@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
@@ -53,7 +54,7 @@ class PostDetailController extends GetxController {
   }
 
   Future<List<dynamic>> init() async {
-    ChatRepository repo = ChatRepository();
+    ChatRepository repo = GetIt.instance<ChatRepository>();
     PostRepository postRepo = PostRepository();
     final data = Future.wait([
       repo.getUserInfo(post.userID),

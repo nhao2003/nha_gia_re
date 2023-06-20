@@ -64,6 +64,7 @@ dependencies:
   onesignal_flutter: ^3.5.0
   google_maps_flutter: ^2.3.0
   location: ^4.4.0
+  geocoding: ^2.1.0
 
 dev_dependencies:
   flutter_test:
