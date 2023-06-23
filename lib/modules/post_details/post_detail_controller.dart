@@ -61,7 +61,7 @@ class PostDetailController extends GetxController {
   {
     ChatRepository repo = ChatRepository();
     PostRepository postRepo = PostRepository();
-    final data = Future.wait([repo.getUserInfo(post.userID),postRepo.getPostDetail(post)]);
+    final data = Future.wait([repo.getUserInfo(post.userID),postRepo.getPostDetail(post.id, post.type)]);
     return data;
   }
 

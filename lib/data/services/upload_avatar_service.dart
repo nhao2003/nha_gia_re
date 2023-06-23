@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
@@ -32,25 +33,33 @@ Future<void> uploadAvatar(File avatar) async {
     rethrow;
   }
 }
+Future<void> deletePostImage() async{
+
+}
 
 Future<List<String>> uploadPostImages(List<File> images) async {
   try {
-    final List<Future<String>> futures = [];
+    log("Upload line 42:");
+    log(images.length.toString());
+    final List<String> urls = [];
     const uuid = Uuid();
-    images.map((image) {
+
+    for (var image in images) {
       var uid = Supabase.instance.client.auth.currentUser!.id;
       String fileName = image.path.split('/').last;
       fileName = "${uuid.v4()}.${fileName.split('.').last}";
       var path = '$uid/$fileName';
       print('path $path');
-      futures.add(uploadFileToSupabaseStorage(image, 'post_images', path));
-    });
-    final urls = await Future.wait(futures);
-    return List<String>.from(urls);
+      urls.add(await uploadFileToSupabaseStorage(image, 'post_images', path));
+    }
+    log("Upload line 56:");
+    log(urls.toString());
+    return urls;
   } catch (e) {
     rethrow;
   }
 }
+
 
 Future<List<String>> uploadMessageMedia(
     List<File> medias, String conversationID) async {

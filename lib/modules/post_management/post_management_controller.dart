@@ -78,6 +78,11 @@ class PostManagementController extends GetxController {
   void editPost(Post post) async {
     print("edit post");
     // edit post
+
+    Get.toNamed(AppRoutes.post, parameters: {
+      "id":  post.id,
+      'type': post.type.toString(),
+    });
   }
 
   void deletePost(Post post) async {
