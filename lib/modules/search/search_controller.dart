@@ -14,6 +14,20 @@ import '../../data/repositories/post_repository.dart';
 class SearchController extends GetxController {
   /// instance
   static SearchController get i => Get.find();
+// type of result
+  // type of navigate when navigate from home
+  TypeNavigate typeResult = TypeNavigate.search;
+  String province = ""; // province when navigate
+
+  void setTypeResult(TypeNavigate type) {
+    typeResult = type;
+    province = "";
+    if (type == TypeNavigate.province) {
+      province = Get.arguments["province"];
+      selectedTypeItem.value = Get.arguments["province"];
+    }
+  }
+
 // voice controller
   RxBool isListening = false.obs;
 
@@ -51,22 +65,51 @@ class SearchController extends GetxController {
 
   RxList<Post> searchPosts = <Post>[].obs;
 
-  Future<List<Post>> getAllPosts() async {
-    List<Post> datas = await repository.getUserPosts(AuthRepository().userID!);
-    return datas;
-  }
-
   Future<void> initPosts(OrderBy orderby) async {
+    // init search post for tab
+    // có 2 tab: order by giá và thời gian
+    // có 4 loại: search, sell, rent, province
+    // khai báo 1 init filter
     PostFilter filter = PostFilter(
-      textSearch: _query,
       orderBy: orderby,
       postedBy: PostedBy.all,
     );
+    if (typeResult == TypeNavigate.search) {
+      filter = PostFilter(
+        textSearch: _query,
+        orderBy: orderby,
+        postedBy: PostedBy.all,
+      );
+    } else if (typeResult == TypeNavigate.sell) {
+      // for sell
+      filter = PostFilter(
+        orderBy: orderby,
+        isLease: false,
+        postedBy: PostedBy.all,
+      );
+    } else if (typeResult == TypeNavigate.rent) {
+      // for rent
+      filter = PostFilter(
+        orderBy: orderby,
+        isLease: true,
+        postedBy: PostedBy.all,
+      );
+    } else if (typeResult == TypeNavigate.province) {
+      // for province
+      changeSelectedItem(province);
+      return;
+    }
+
     searchPosts.value = await repository.getAllPosts(filter);
   }
 
   /// data in search delegate
-  final List<String> history = <String>['apple', 'hello', 'world', 'flutter'];
+  final List<String> history = <String>[
+    'nha tro',
+    'ban nha',
+    'chung cu',
+    'van phong',
+  ];
 
   /// list suggestions in search
   RxList<String> suggestions = <String>[].obs;
@@ -83,22 +126,52 @@ class SearchController extends GetxController {
   RxString selectedTypeItem = FilterValues.instance.provinces[0].obs;
 
   /// change new value to selectedTypeItem
-  void changeSelectedItem(String newValue) {
+  void changeSelectedItem(String newValue) async {
     selectedTypeItem.value = newValue;
     // add filter
     if (newValue == FilterValues.instance.provinces[0]) {
       initPosts(OrderBy.priceAsc);
     } else {
-      List<Post> filterPosts = <Post>[];
-      for (var post in searchPosts) {
-        if (post.address.cityName!
-            .noAccentVietnamese()
-            .contains(newValue.noAccentVietnamese())) {
-          filterPosts.add(post);
-        }
-      }
-      searchPosts.value = [...filterPosts];
+      searchPosts.value = await getPostByProvince(newValue, typeResult);
     }
+  }
+
+  Future<List<Post>> getPostByProvince(String value, TypeNavigate type) async {
+    // lay tat ca cac post tren remote roi loc ra
+    List<Post> filterPosts = <Post>[];
+    List<Post> allPosts;
+    if (type == TypeNavigate.search) {
+      allPosts = await getAllPostsInitWithQuery();
+    } else {
+      allPosts = await getAllPostsInit();
+    }
+    for (var post in allPosts) {
+      if (post.address.cityName!
+          .noAccentVietnamese()
+          .contains(value.noAccentVietnamese())) {
+        filterPosts.add(post);
+      }
+    }
+    return [...filterPosts];
+  }
+
+  Future<List<Post>> getAllPostsInit() async {
+    // lay tat ca cac post tren remote
+    PostFilter filter = PostFilter(
+      orderBy: OrderBy.createdAtAsc,
+      postedBy: PostedBy.all,
+    );
+    return await repository.getAllPosts(filter);
+  }
+
+  Future<List<Post>> getAllPostsInitWithQuery() async {
+    // lay tat ca cac post tren remote
+    PostFilter filter = PostFilter(
+      textSearch: _query,
+      orderBy: OrderBy.createdAtAsc,
+      postedBy: PostedBy.all,
+    );
+    return await repository.getAllPosts(filter);
   }
 
   /// add new query to history
@@ -129,9 +202,9 @@ class SearchController extends GetxController {
   List<String> getSuggestions(String query) {
     // xu ly in hoa, in thuong, co dau, khong dau
     List<String> results = [];
-    if (query.isEmpty)
+    if (query.isEmpty) {
       results = [...history];
-    else {
+    } else {
       for (String value in searchStrings) {
         if (value
             .noAccentVietnamese()
