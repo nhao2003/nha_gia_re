@@ -3,6 +3,7 @@ import 'package:nha_gia_re/core/extensions/string_ex.dart';
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
 import 'package:nha_gia_re/data/services/list_check_service.dart';
 import 'package:nha_gia_re/data/services/radio_service.dart';
+import 'package:nha_gia_re/data/services/search_service.dart';
 import 'package:nha_gia_re/modules/search/screens/filter_screen.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../core/values/filter_values.dart';
@@ -25,7 +26,12 @@ class SearchController extends GetxController {
     if (type == TypeNavigate.province) {
       province = Get.arguments["province"];
       selectedTypeItem.value = Get.arguments["province"];
+    } else {
+      province = FilterValues.instance.provinces[0];
+      selectedTypeItem.value = FilterValues.instance.provinces[0];
     }
+
+    SearchService.instance.setTypeResult(type);
   }
 
 // voice controller
@@ -58,7 +64,6 @@ class SearchController extends GetxController {
     searchStrings.clear();
     for (var data in datas) {
       searchStrings.add(data.title);
-      print(data.title);
     }
     return searchStrings;
   }
@@ -130,20 +135,22 @@ class SearchController extends GetxController {
     selectedTypeItem.value = newValue;
     // add filter
     if (newValue == FilterValues.instance.provinces[0]) {
-      initPosts(OrderBy.priceAsc);
+      searchPosts.value = await getAllPostsInit(SearchService.instance.orderBy);
     } else {
-      searchPosts.value = await getPostByProvince(newValue, typeResult);
+      searchPosts.value = await getPostByProvince(
+          newValue, typeResult, SearchService.instance.orderBy);
     }
   }
 
-  Future<List<Post>> getPostByProvince(String value, TypeNavigate type) async {
+  Future<List<Post>> getPostByProvince(
+      String value, TypeNavigate type, OrderBy orderby) async {
     // lay tat ca cac post tren remote roi loc ra
     List<Post> filterPosts = <Post>[];
     List<Post> allPosts;
     if (type == TypeNavigate.search) {
       allPosts = await getAllPostsInitWithQuery();
     } else {
-      allPosts = await getAllPostsInit();
+      allPosts = await getAllPostsInit(orderby);
     }
     for (var post in allPosts) {
       if (post.address.cityName!
@@ -155,10 +162,10 @@ class SearchController extends GetxController {
     return [...filterPosts];
   }
 
-  Future<List<Post>> getAllPostsInit() async {
+  Future<List<Post>> getAllPostsInit(OrderBy orderby) async {
     // lay tat ca cac post tren remote
     PostFilter filter = PostFilter(
-      orderBy: OrderBy.createdAtAsc,
+      orderBy: orderby,
       postedBy: PostedBy.all,
     );
     return await repository.getAllPosts(filter);
