@@ -17,6 +17,7 @@ class SearchService {
   TypeNavigate typeResult = TypeNavigate.search;
 
   void setTypeResult(TypeNavigate type) {
+    print(type.toString());
     typeResult = type;
   }
 }
