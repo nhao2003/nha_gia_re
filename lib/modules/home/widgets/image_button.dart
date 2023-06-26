@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/modules/home/home_controller.dart';
+import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
+// ignore: must_be_immutable
 class ImageButton extends StatefulWidget {
   int index;
   String province;
@@ -16,7 +18,7 @@ class _ImageButtonState extends State<ImageButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return ZoomTapAnimation(
       child: GestureDetector(
         onTap: () {
           // do something when the image is tapped
@@ -43,7 +45,7 @@ class _ImageButtonState extends State<ImageButton> {
               child: Container(
                 height: 32,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(10),
                     bottomRight: Radius.circular(10),
                   ),

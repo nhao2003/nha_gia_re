@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
@@ -7,16 +5,12 @@ import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/values/assets_image.dart';
 import 'package:nha_gia_re/data/repositories/chat_repository.dart';
-import 'package:nha_gia_re/data/services/onesignal_service.dart';
-import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/global_widgets/infor_card.dart';
 import 'package:nha_gia_re/modules/home/widgets/button.dart';
 import 'package:nha_gia_re/global_widgets/carousel_ad.dart';
 import 'package:nha_gia_re/modules/home/widgets/image_button.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../../core/values/filter_values.dart';
-import 'package:supabase/supabase.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../data/models/properties/post.dart';
 import '../../search/widgets/my_search_delegate.dart';
 import '../home_controller.dart';
@@ -125,8 +119,6 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             } else {
               List<List<Post>> data = snapShot.data!;
-              print(data.first);
-              print(data.last);
               return SingleChildScrollView(
                 child: Column(
                   children: [
@@ -163,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -172,16 +164,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: AppTextStyles.roboto20Bold,
                           ),
                           const SizedBox(height: 10),
-                          // GridView.count(
-                          //   shrinkWrap: true,
-                          //   primary: false,
-                          //   mainAxisSpacing: 10,
-                          //   crossAxisSpacing: 10,
-                          //   crossAxisCount: 3,
-                          //   children: FilterValues.instance.provinces
-                          //       .map((e) => ImageButton())
-                          //       .toList(),
-                          // ),
                           SizedBox(
                             height: 250,
                             child: GridView(
@@ -205,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    InforCardList(title: 'Gần bạn', list: []),
+                    const InforCardList(title: 'Gần bạn', list: []),
                     InforCardList(title: 'Nhà bán', list: data.first),
                     InforCardList(title: 'Nhà cho thuê', list: data.last),
                   ],

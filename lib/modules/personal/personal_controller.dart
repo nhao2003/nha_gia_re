@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/models/properties/post.dart';
@@ -26,7 +25,7 @@ class PersonalController extends GetxController {
 
   Future<List<Post>> getPosts() async {
     PostRepository repository = PostRepository();
-    return await repository.getUserPosts(userInfo!.uid);
+    return await repository.getUserPosts(userInfo.uid);
   }
 
   Future<UserInfo> getAuthUserInfo() async {
