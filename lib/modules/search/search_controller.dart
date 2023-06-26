@@ -151,7 +151,6 @@ class SearchController extends GetxController {
 
   Future<List<Post>> getPostByProvince(
       String value, TypeNavigate type, OrderBy orderby) async {
-    print("153 == " + value);
     // lay tat ca cac post tren remote roi loc ra
     List<Post> filterPosts = <Post>[];
     List<Post> allPosts;
@@ -160,13 +159,10 @@ class SearchController extends GetxController {
     } else {
       allPosts = await getAllPostsInit(orderby);
     }
-    int i = 1;
     for (var post in allPosts) {
       if (post.address.cityName!
           .noAccentVietnamese()
           .contains(value.noAccentVietnamese())) {
-        print("aaaaaaaaaaaaaaa" + i.toString());
-        i++;
         filterPosts.add(post);
       }
     }
@@ -288,6 +284,9 @@ class SearchController extends GetxController {
       datas = await repository.getAllMotels(getMotelFilter());
     }
     searchPosts.value = datas;
+    // reset provinces
+    province = FilterValues.instance.provinces[0];
+    selectedTypeItem.value = FilterValues.instance.provinces[0];
     // pop screen when done
     popScreen();
   }
