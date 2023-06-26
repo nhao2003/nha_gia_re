@@ -14,6 +14,7 @@ import 'package:nha_gia_re/modules/home/widgets/button.dart';
 import 'package:nha_gia_re/global_widgets/carousel_ad.dart';
 import 'package:nha_gia_re/modules/home/widgets/image_button.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
+import '../../../core/values/filter_values.dart';
 import 'package:supabase/supabase.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../data/models/properties/post.dart';
@@ -171,21 +172,36 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: AppTextStyles.roboto20Bold,
                           ),
                           const SizedBox(height: 10),
-                          GridView.count(
-                            shrinkWrap: true,
-                            primary: false,
-                            mainAxisSpacing: 10,
-                            crossAxisSpacing: 10,
-                            crossAxisCount: 3,
-                            children: const [
-                              ImageButton(),
-                              ImageButton(),
-                              ImageButton(),
-                              ImageButton(),
-                              ImageButton(),
-                              ImageButton(),
-                            ],
-                          ),
+                          // GridView.count(
+                          //   shrinkWrap: true,
+                          //   primary: false,
+                          //   mainAxisSpacing: 10,
+                          //   crossAxisSpacing: 10,
+                          //   crossAxisCount: 3,
+                          //   children: FilterValues.instance.provinces
+                          //       .map((e) => ImageButton())
+                          //       .toList(),
+                          // ),
+                          SizedBox(
+                            height: 250,
+                            child: GridView(
+                                scrollDirection: Axis.horizontal,
+                                gridDelegate:
+                                    const SliverGridDelegateWithMaxCrossAxisExtent(
+                                        maxCrossAxisExtent: 200, // chieu cao
+                                        mainAxisExtent: 125, // chieu rong
+                                        childAspectRatio: 3 / 2,
+                                        crossAxisSpacing: 10,
+                                        mainAxisSpacing: 10),
+                                children: FilterValues.instance.provinces
+                                    .asMap()
+                                    .entries
+                                    .map((e) {
+                                  int i = e.key;
+                                  String title = e.value;
+                                  return ImageButton(i, title);
+                                }).toList()),
+                          )
                         ],
                       ),
                     ),

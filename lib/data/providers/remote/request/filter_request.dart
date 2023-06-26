@@ -27,6 +27,22 @@ class PostFilter {
     required this.postedBy,
   }) : assert((from != null && to != null && from < to) ||
             (from == null && to == null));
+  
+  void setTextSearch(String text) {
+    textSearch = text;
+  }
+
+  void setOrderBy(OrderBy orderBy) {
+    this.orderBy = orderBy;
+  }
+
+  void setIsLease(bool isLease) {
+    this.isLease = isLease;
+  }
+
+  void setPostedBy(PostedBy postedBy) {
+    this.postedBy = postedBy;
+  }
 }
 
 class ApartmentFilter extends PostFilter {

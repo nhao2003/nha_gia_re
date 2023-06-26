@@ -25,7 +25,8 @@ class InforCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       splashColor: AppColors.secondary,
-      child: SizedBox(
+      child: Container(
+        color: AppColors.white,
         width: 180,
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           ClipRRect(
@@ -97,56 +98,63 @@ class _InforCardListState extends State<InforCardList> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(
-          widget.title,
-          style: AppTextStyles.roboto20Bold,
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        SizedBox(
-          height: 230,
-          child: ListView.separated(
-              shrinkWrap: true,
-              itemCount: widget.list.length,
-              scrollDirection: Axis.horizontal,
-              separatorBuilder: (BuildContext context, int index) =>
-                  const SizedBox(
-                    width: 10,
-                  ),
-              itemBuilder: (BuildContext context, int index) {
-                return InkWell(
-                  child: InforCard(key: UniqueKey(), post: widget.list[index]),
-                  onTap: () {
-                    //TODO: Handle detail screen
-                    Get.toNamed(AppRoutes.post_detail, arguments: widget.list[index]);
-                  },
-                );
-              }),
-        ),
-        const Divider(
-          thickness: 0.5,
-          height: 2,
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            InkWell(
-              child: Text(
-                'Xem thêm 12.345 mẫu tin khác',
-                style: AppTextStyles.roboto16regular
-                    .copyWith(color: AppColors.blue),
-              ),
-              onTap: () {},
+      padding: const EdgeInsets.all(10),
+      color: AppColors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            widget.title,
+            style: AppTextStyles.roboto20Bold,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          if (widget.list.isNotEmpty)
+            SizedBox(
+              height: 220,
+              child: ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: widget.list.length,
+                  scrollDirection: Axis.horizontal,
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const SizedBox(
+                        width: 10,
+                      ),
+                  itemBuilder: (BuildContext context, int index) {
+                    return InkWell(
+                      child:
+                          InforCard(key: UniqueKey(), post: widget.list[index]),
+                      onTap: () {
+                        //TODO: Handle detail screen
+                        Get.toNamed(AppRoutes.post_detail,
+                            arguments: widget.list[index]);
+                      },
+                    );
+                  }),
             ),
-          ],
-        )
-      ]),
+          const Divider(
+            thickness: 0.5,
+            height: 2,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              InkWell(
+                child: Text(
+                  'Xem thêm 12.345 mẫu tin khác',
+                  style: AppTextStyles.roboto16regular
+                      .copyWith(color: AppColors.blue),
+                ),
+                onTap: () {},
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }

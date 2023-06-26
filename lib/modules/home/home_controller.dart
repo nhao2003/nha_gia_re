@@ -54,6 +54,7 @@ class HomeController extends GetxController {
     var data = {
       "title": 'Tỉnh thành',
       "type": TypeNavigate.province,
+      "province": provider,
     };
     Get.toNamed(AppRoutes.resultArg, arguments: data);
   }
