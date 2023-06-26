@@ -1,13 +1,22 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
+import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/values/assets_image.dart';
+import 'package:nha_gia_re/data/repositories/chat_repository.dart';
+import 'package:nha_gia_re/data/services/onesignal_service.dart';
+import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/global_widgets/infor_card.dart';
 import 'package:nha_gia_re/modules/home/widgets/button.dart';
 import 'package:nha_gia_re/global_widgets/carousel_ad.dart';
 import 'package:nha_gia_re/modules/home/widgets/image_button.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../../core/values/filter_values.dart';
+import 'package:supabase/supabase.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../data/models/properties/post.dart';
 import '../../search/widgets/my_search_delegate.dart';
 import '../home_controller.dart';
@@ -62,14 +71,49 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              Get.toNamed(AppRoutes.conversation);
-            },
-            icon: Image.asset(Assets.messCircle, width: 24),
-            padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
-            constraints: const BoxConstraints(),
-          ),
+          StreamBuilder(
+              stream: GetIt.instance<ChatRepository>().conversationStream,
+              builder: (context, snapShot) {
+                final conversations = snapShot.data ?? [];
+                final unreadConversations = conversations
+                    .where(
+                        (conversation) => conversation.numOfUnReadMessage != 0)
+                    .toList();
+                final unreadCount = unreadConversations.length;
+
+                return IconButton(
+                  onPressed: () {
+                    Get.toNamed(AppRoutes.conversation);
+                  },
+                  padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
+                  constraints: const BoxConstraints(),
+                  icon: Stack(
+                    children: [
+                      Image.asset(Assets.messCircle, width: 36),
+                      if (unreadCount > 0)
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: AppColors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text(
+                              unreadCount.toString(),
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                );
+              })
         ],
       ),
       body: FutureBuilder<List<List<Post>>>(

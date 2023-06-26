@@ -13,7 +13,7 @@ abstract class AppRoutes {
   static const resultArg = '/search/resultArg';
 
   static const post = '/post';
-
+  static const dashboard = '/dashboard';
   static const personal = '/personal';
   //chat
   static const conversation = '/conversation';

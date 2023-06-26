@@ -60,11 +60,13 @@ class InforCard extends StatelessWidget {
             post.address.toString(),
             style: AppTextStyles.roboto12semiBold.copyWith(
                 color: AppColors.grey, overflow: TextOverflow.ellipsis),
+            maxLines: 1,
           ),
           const SizedBox(
             height: 8,
           ),
           Text(
+            maxLines: 1,
             post.postedDate.getTimeAgo(),
             style:
                 AppTextStyles.roboto12semiBold.copyWith(color: AppColors.grey),

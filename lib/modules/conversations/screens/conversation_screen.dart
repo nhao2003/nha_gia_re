@@ -22,10 +22,12 @@ class ConversationScreen extends StatefulWidget {
 class _ConversationScreenState extends State<ConversationScreen> {
   late ConversationController _chatController;
 
+
   @override
-  initState() {
+  void initState() {
     _chatController = Get.find<ConversationController>();
     _chatController.initializeConversations();
+    super.initState();
   }
 
   @override
@@ -85,9 +87,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                           MainAxisAlignment.start,
                                       children: [
                                         TextButton(
-                                          onPressed: () {
-                                            Get.back();
-                                          },
+                                          onPressed: () => _chatController.markRead(e),
                                           child: Text(
                                             "Đánh dấu đã đọc",
                                             style: AppTextStyles.roboto16regular

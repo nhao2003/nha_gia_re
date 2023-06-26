@@ -115,7 +115,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.map_picker_screen,
-      page: () => const MapPickerScreen(),
+      page: () =>  MapPickerScreen(),
       binding: MapsBinding(),
     ),
     GetPage(

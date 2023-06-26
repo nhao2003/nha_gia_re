@@ -37,5 +37,35 @@ class MapUtils {
     final url = '$baseUrl?center=$center&zoom=$zoom&size=$size&$marker&key=$apiKey';
     return url;
   }
+  static String buildAddressString({
+    required String? name,
+    required String? street,
+    required String? administrativeArea,
+    required String? locality,
+    required String? country,
+  }) {
+    List<String> addressComponents = [];
+
+    if (name != null && name.isNotEmpty) {
+      addressComponents.add(name);
+    }
+
+    if (street != null && street.isNotEmpty) {
+      addressComponents.add(street);
+    }
+
+    if (locality != null && locality.isNotEmpty) {
+      addressComponents.add(locality);
+    }
+
+    if (administrativeArea != null && administrativeArea.isNotEmpty) {
+      addressComponents.add(administrativeArea);
+    }
+
+    if (country != null && country.isNotEmpty) {
+      addressComponents.add(country);
+    }
+    return addressComponents.join(', ');
+  }
 
 }

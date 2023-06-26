@@ -11,6 +11,7 @@ import 'package:nha_gia_re/data/providers/remote/request/house_request.dart';
 import 'package:nha_gia_re/data/providers/remote/request/post_request.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/data/repositories/post_repository.dart';
+import 'package:nha_gia_re/data/services/upload_avatar_service.dart';
 import 'dart:developer';
 import '../../data/enums/enums.dart';
 import '../../data/models/properties/post.dart';
@@ -18,6 +19,9 @@ import '../../data/providers/remote/request/office_request.dart';
 
 class PropertyController extends GetxController{
   PropertyController();
+  void editPost(Post post){
+
+  }
   final authRepository = AuthRepository();
   final postRepository = PostRepository();
   Future<void> getProvince() async{
@@ -34,34 +38,57 @@ class PropertyController extends GetxController{
     else {
       print("Fail");
     }
+    //selectedDistrict = 8;
+    // selectedDistrict=73;
+    // selectedWard = 2311;
+    //setProvince(8);
+    //setProvince(8);
+
+    //selectedDistrict = 10;
   }
 
-  void setProvince(Province value){
+  void setProvince(Province? value){
     selectedProvince = value;
-    districtsList =  selectedProvince!.districts!;
-    selectedDistricts = null;
-    selectedWards = null;
+    selectedDistrict = null;
+    selectedWard = null;
+    districtsList = value?.districts != null ?(value?.districts as List<District?>): <District>[];
+    districtsList.add(District());
+    wardsList = <Ward?>[Ward()];
     update();
   }
-  void setDistrict(Districts value){
-    selectedDistricts = value;
-    wardsList = selectedDistricts!.wards!;
-    selectedWards = null;
+  void setDistrict(District? value){
+    selectedDistrict = value;
+    selectedWard = null;
+    wardsList= value?.wards != null ? value?.wards as List<Ward?> : <Ward?>[];
+    wardsList.add(Ward());
     update();
   }
-  void setWards(Wards value){
-    selectedWards = value;
+  void setWards(Ward? value){
+    selectedWard = value;
     update();
   }
   void deleteImage(int index){
     photo.removeAt(index);
+    checkLengthPhoto();
     update();
   }
-  List<XFile> photo  = [];
+  bool? photoController;
+  void checkLengthPhoto(){
+    int length = photo.length;
+    if(length >= 3 && length <= 10){
+      photoController = true;
+    }
+    else photoController = false;
+    update();
+  }
+  List<File> photo  = [];
   final ImagePicker _picker = ImagePicker();
   Future imgFromGallery() async{
     final pickedImages = await _picker.pickMultiImage();
-    photo.addAll(pickedImages);
+    for(int i = 0; i < pickedImages.length; i++){
+      photo.add(File(pickedImages[i].path));
+    }
+    checkLengthPhoto();
     update();
   }
 
@@ -69,7 +96,8 @@ class PropertyController extends GetxController{
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
     if(image != null){
-      photo.add(image);
+      photo.add(File(image.path));
+      checkLengthPhoto();
       update();
     }
   }
@@ -79,16 +107,16 @@ class PropertyController extends GetxController{
     "https://cdn.chotot.com/CfGsMoWBJT1DyHpnZ8-HewH4yU-fqpXGe-DMTFVI0EE/preset:view/plain/4d0ed210a1790ea9a6b1695d78643010-2824246234360911779.jpg"
   ];
   PageController pageController = PageController(viewportFraction: 0.85);
-  List<Province> provinceList = [];
-  List<Districts> districtsList = [];
-  List<Wards> wardsList = [];
+  List<Province?> provinceList = [];
+  List<District?> districtsList = [District()];
+  List<Ward?> wardsList = [Ward()];
   late Address address;
   bool isPersonal = true;
   late bool isSale = false;
   bool isHandover = false;
   Province? selectedProvince;
-  Districts? selectedDistricts;
-  Wards? selectedWards;
+  District? selectedDistrict;
+  Ward? selectedWard;
    String? selectedPropertyCertificate;
   //post
   String title = "";
@@ -182,12 +210,12 @@ class PropertyController extends GetxController{
     OfficeType.shopHouse: 'Shophouse',
     OfficeType.officetel: 'Officetel',
   };
-   OfficeType? officeType;
+   OfficeType? officeType = OfficeType.officetel;
   final TextEditingController addressController = TextEditingController();
 
   void setAddress(){
-    addressController.text = selectedProvince!.name.toString() + " " + selectedDistricts!.name.toString() + " " + selectedWards!.name.toString();
-    address = Address(cityCode: (selectedProvince!.code!),cityName: (selectedProvince!.name!) , districtCode: (selectedDistricts!.code!), districtName: (selectedDistricts!.name!), wardCode: (selectedWards!.code!) ,wardName: (selectedWards!.name!));
+   // addressController.text = provinceList[selectedProvince!]!.name.toString() + " " + districtsList[selectedDistrict!]!.name.toString() + " " + wardsList[selectedWard!].name.toString();
+    //address = Address(cityCode: (selectedProvince!.code != null ? selectedProvince!.code! : 0), districtCode: (selectedDistrict!.code != null ? selectedDistrict!.code! : 0) , wardCode: (selectedWard!.code!) ,);
     update();
   }
   void initBody(){
@@ -216,9 +244,11 @@ class PropertyController extends GetxController{
     isSale = value;
     update();
   }
+
   Future<void> addPost() async {
     if(authRepository.userID == null) return;
-    print("user ton tai");
+    final imageUrls =  await uploadPostImages(photo);
+    print("user ton tai" + imageUrls.length.toString() + "  " + photo.length.toString() );
     PostRequest post;
     DateTime now = DateTime.now();
     switch (selectedPropertyType){
