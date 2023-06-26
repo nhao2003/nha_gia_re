@@ -68,6 +68,7 @@ dependencies:
   location: ^4.4.0
   geocoding: ^2.1.0
   zoom_tap_animation: ^1.1.0
+  hidden_drawer_menu: ^3.0.1
 
 dev_dependencies:
   flutter_test:

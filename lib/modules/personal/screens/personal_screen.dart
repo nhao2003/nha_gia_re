@@ -29,10 +29,10 @@ class _PersonalScreenState extends State<PersonalScreen> {
           _controller.userInfo = snapshot.data!;
           return Scaffold(
             backgroundColor: AppColors.backgroundColor,
-            appBar: AppBar(
-              backgroundColor: AppColors.primaryColor,
-              title: Text(_controller.userInfo.fullName ?? "NULL"),
-            ),
+            // appBar: AppBar(
+            //   backgroundColor: AppColors.primaryColor,
+            //   title: Text(_controller.userInfo.fullName ?? "NULL"),
+            // ),
             body: Column(children: [
               Container(
                 color: Colors.white,
@@ -46,8 +46,8 @@ class _PersonalScreenState extends State<PersonalScreen> {
                           width: 100.w,
                           height: 100.w,
                           child: CircleAvatar(
-                            backgroundImage: NetworkImage(
-                                _controller.userInfo.avatarUrl!),
+                            backgroundImage:
+                                NetworkImage(_controller.userInfo.avatarUrl!),
                           ),
                         ),
                         SizedBox(
