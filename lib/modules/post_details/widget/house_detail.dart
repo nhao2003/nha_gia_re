@@ -4,8 +4,6 @@ import 'package:nha_gia_re/core/extensions/double_ex.dart';
 import 'package:nha_gia_re/core/extensions/integer_ex.dart';
 import 'package:nha_gia_re/data/models/properties/post.dart';
 import 'package:nha_gia_re/modules/post_details/widget/details.dart';
-
-import '../../../core/theme/text_styles.dart';
 import '../../../core/values/assets_image.dart';
 
 class HouseDetails extends StatelessWidget {
@@ -15,9 +13,9 @@ class HouseDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(left: 20),
+        padding: const EdgeInsets.only(left: 20),
         child: GridView.count(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           childAspectRatio: 4,
           crossAxisCount: 2,
           shrinkWrap: true,

@@ -56,6 +56,6 @@ class ListPostsHided extends StatelessWidget {
               );
             },
           ));
-    ;
+    
   }
 }

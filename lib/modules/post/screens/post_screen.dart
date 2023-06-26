@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -13,7 +12,6 @@ import 'package:nha_gia_re/modules/post/widgets/check_field.dart';
 import 'package:nha_gia_re/modules/post/widgets/dropdownfied.dart';
 import 'package:nha_gia_re/modules/post/widgets/seperator.dart';
 import 'package:nha_gia_re/modules/post/widgets/textformfield.dart';
-
 import '../../../data/enums/enums.dart';
 
 // Define a custom Form widget.
@@ -341,7 +339,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                       : "(Tên tòa nhà / khu dân cư / dự án)",
                                   error: "Vui lòng nhập thông tin",
                                   onSave: (v) {
-                                    controller.projectName = v != null ? v : "";
+                                    controller.projectName = v ?? "";
                                   },
                                   fieldValue: controller.projectName,
                                 ),
@@ -349,35 +347,34 @@ class MyCustomFormState extends State<MyCustomForm> {
                                   height: 10.h,
                                 ),
                                 //Địa chỉ
-                                Container(
-                                  child: TextFormField(
-                                    onTap: () {
-                                      Get.to(() => PostAddressScreen());
-                                    },
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty)
-                                        return 'Vui lòng chọn địa chỉ';
-                                      return null;
-                                    },
-                                    readOnly: true,
-                                    controller: controller.addressController,
-                                    enabled: true,
-                                    decoration: InputDecoration(
-                                      hintText: "Địa chỉ",
-                                      hintStyle: AppTextStyles.roboto16regular
-                                          .copyWith(color: AppColors.grey),
-                                      disabledBorder: OutlineInputBorder(
+                                TextFormField(
+                                  onTap: () {
+                                    Get.to(() => const PostAddressScreen());
+                                  },
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Vui lòng chọn địa chỉ';
+                                    }
+                                    return null;
+                                  },
+                                  readOnly: true,
+                                  controller: controller.addressController,
+                                  enabled: true,
+                                  decoration: InputDecoration(
+                                    hintText: "Địa chỉ",
+                                    hintStyle: AppTextStyles.roboto16regular
+                                        .copyWith(color: AppColors.grey),
+                                    disabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(5.r)),
+                                      borderSide:
+                                          const BorderSide(color: Colors.grey),
+                                    ),
+                                    border: OutlineInputBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(5.r)),
                                         borderSide: const BorderSide(
-                                            color: Colors.grey),
-                                      ),
-                                      border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(5.r)),
-                                          borderSide: const BorderSide(
-                                              color: Colors.grey)),
-                                    ),
+                                            color: Colors.grey)),
                                   ),
                                 ),
                                 //Tầng + Block
@@ -393,7 +390,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Container(
+                                      SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width *
                                                 0.46,
@@ -410,7 +407,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                           onValidate: validateCount,
                                         ),
                                       ),
-                                      Container(
+                                      SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width *
                                                 0.46,
@@ -439,11 +436,11 @@ class MyCustomFormState extends State<MyCustomForm> {
                               DottedBorder(
                                 radius: Radius.circular(5.r),
                                 strokeWidth: 1,
-                                dashPattern: [5, 2],
+                                dashPattern: const [5, 2],
                                 color: controller.photoController == false
                                     ? Colors.red
                                     : AppColors.primaryColor,
-                                child: controller.photo.length == 0
+                                child: controller.photo.isEmpty
                                     ? Container(
                                         margin: EdgeInsets.symmetric(
                                             vertical: 10.h),
@@ -459,13 +456,13 @@ class MyCustomFormState extends State<MyCustomForm> {
                                             child: Image(
                                               height: 100.h,
                                               width: 100.w,
-                                              image: AssetImage(
+                                              image: const AssetImage(
                                                   "assets/images/add_photo_alternate.png"),
                                             ),
                                           ),
                                         ),
                                       )
-                                    : Container(
+                                    : SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width -
                                                 20.w,
@@ -508,7 +505,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                                                                 // width: MediaQuery.of(context).size.width - 20.w,
                                                                 height: 80.h,
                                                                 width: 80.h,
-                                                                child: Image(
+                                                                child:
+                                                                    const Image(
                                                                   image: AssetImage(
                                                                       "assets/images/add_photo_alternate.png"),
                                                                 ),
@@ -645,7 +643,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Container(
+                                        SizedBox(
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
@@ -662,7 +660,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                             },
                                           ),
                                         ),
-                                        Container(
+                                        SizedBox(
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
@@ -853,7 +851,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Container(
+                                            SizedBox(
                                               width: MediaQuery.of(context)
                                                       .size
                                                       .width *
@@ -872,7 +870,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                                 onValidate: validateCount,
                                               ),
                                             ),
-                                            Container(
+                                            SizedBox(
                                               width: MediaQuery.of(context)
                                                       .size
                                                       .width *
@@ -986,7 +984,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Container(
+                                        SizedBox(
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *
@@ -1006,7 +1004,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                               onValidate:
                                                   validatePositiveDouble,
                                             )),
-                                        Container(
+                                        SizedBox(
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *
@@ -1091,7 +1089,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Container(
+                                            SizedBox(
                                               width: MediaQuery.of(context)
                                                       .size
                                                       .width *
@@ -1116,7 +1114,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                                 onValidate: validateCount,
                                               ),
                                             ),
-                                            Container(
+                                            SizedBox(
                                               width: MediaQuery.of(context)
                                                       .size
                                                       .width *
@@ -1267,7 +1265,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                             PropertyType.motel
                                         ? true
                                         : false,
-                                    child: Container(
+                                    child: SizedBox(
                                       width: double.maxFinite,
                                       child: Column(
                                         crossAxisAlignment:
@@ -1408,6 +1406,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                     'Đăng tin thành công!',
                                   ),
                                 );
+                                // ignore: use_build_context_synchronously
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(snackBar);
                               } else {

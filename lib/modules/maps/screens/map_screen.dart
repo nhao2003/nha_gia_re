@@ -1,10 +1,7 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
-import 'package:nha_gia_re/core/utils/map_utils.dart';
 import 'package:nha_gia_re/data/models/message.dart';
 
 class MapViewScreen extends StatefulWidget {

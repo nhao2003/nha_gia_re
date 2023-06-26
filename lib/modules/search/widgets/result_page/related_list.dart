@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
-import 'package:nha_gia_re/data/providers/data_center.dart';
 import 'package:nha_gia_re/data/services/search_service.dart';
 import 'package:nha_gia_re/modules/search/widgets/result_page/item_product.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -32,12 +31,12 @@ class _RelatedListState extends State<RelatedList> {
       future: searchController.initPosts(widget.orderBy),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         } else {
           if (snapshot.error != null) {
-            return Center(
+            return const Center(
               child: Text('An error occured'),
             );
           } else {

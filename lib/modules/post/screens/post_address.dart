@@ -1,14 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/data/models/province.dart';
 import 'package:nha_gia_re/modules/post/property_controller.dart';
-import 'package:nha_gia_re/modules/post/screens/post_screen.dart';
-import 'package:nha_gia_re/modules/post/widgets/dropdownfied.dart';
 
 class PostAddressScreen extends StatefulWidget {
   const PostAddressScreen({Key? key}) : super(key: key);

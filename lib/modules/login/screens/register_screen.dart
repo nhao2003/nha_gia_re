@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:nha_gia_re/data/providers/remote/remote_data_source.dart';
-import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/modules/login/screens/forget_password.dart';
-import 'package:nha_gia_re/modules/login/screens/login_screen.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
-
-import '../../../core/theme/text_styles.dart';
 import '../login_controller.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -52,19 +47,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 15,
                   ),
                   Obx(() => TextFormField(
-                    controller: _controller.registerPassword,
-                    obscureText: _controller.isObscureRegister.value,
-                    autocorrect: false,
-                    enableSuggestions: false,
-                    decoration: InputDecoration(
-                        hintText: 'Password'.tr,
-                        labelText: 'Password'.tr,
-                        suffixIcon: IconButton(
-                          icon: Icon(!_controller.isObscureRegister.value ? Icons.visibility : Icons.visibility_off),
-                          onPressed: _controller.togglePassReg,
-                        ),
-                        border: const OutlineInputBorder()),
-                  )),
+                        controller: _controller.registerPassword,
+                        obscureText: _controller.isObscureRegister.value,
+                        autocorrect: false,
+                        enableSuggestions: false,
+                        decoration: InputDecoration(
+                            hintText: 'Password'.tr,
+                            labelText: 'Password'.tr,
+                            suffixIcon: IconButton(
+                              icon: Icon(!_controller.isObscureRegister.value
+                                  ? Icons.visibility
+                                  : Icons.visibility_off),
+                              onPressed: _controller.togglePassReg,
+                            ),
+                            border: const OutlineInputBorder()),
+                      )),
                   const SizedBox(
                     height: 10,
                   ),
@@ -85,24 +82,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 10,
                   ),
                   Obx(() => TextFormField(
-                    obscureText: _controller.isObscureRepeatPass.value,
-                    autocorrect: false,
-                    enableSuggestions: false,
-                    decoration: InputDecoration(
-                        hintText: 'Repeat your password'.tr,
-                        labelText: 'Repeat your password'.tr,
-                        suffixIcon: IconButton(
-                          icon: Icon(!_controller.isObscureRepeatPass.value ? Icons.visibility : Icons.visibility_off),
-                          onPressed: _controller.toggleRepeatPassReg,
-                        ),
-                        border: const OutlineInputBorder()),
-                    validator: (value) {
-                      if (value != _controller.registerPassword.text) {
-                        return "Password doesn't match".tr;
-                      }
-                      return null;
-                    },
-                  )),
+                        obscureText: _controller.isObscureRepeatPass.value,
+                        autocorrect: false,
+                        enableSuggestions: false,
+                        decoration: InputDecoration(
+                            hintText: 'Repeat your password'.tr,
+                            labelText: 'Repeat your password'.tr,
+                            suffixIcon: IconButton(
+                              icon: Icon(!_controller.isObscureRepeatPass.value
+                                  ? Icons.visibility
+                                  : Icons.visibility_off),
+                              onPressed: _controller.toggleRepeatPassReg,
+                            ),
+                            border: const OutlineInputBorder()),
+                        validator: (value) {
+                          if (value != _controller.registerPassword.text) {
+                            return "Password doesn't match".tr;
+                          }
+                          return null;
+                        },
+                      )),
                   const SizedBox(
                     height: 10,
                   ),

@@ -57,7 +57,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.chat,
-      page: () => ChatScreen(),
+      page: () => const ChatScreen(),
       binding: ChatBinding(),
     ),
     GetPage(
@@ -81,7 +81,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.personal,
-      page: () => PersonalScreen(),
+      page: () => const PersonalScreen(),
       binding: PersonalBinding(),
     ),
     GetPage(
@@ -95,12 +95,12 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.notification,
-      page: () => NotificationScreen(),
+      page: () => const NotificationScreen(),
       binding: NotificationBinding(),
     ),
     GetPage(
       name: AppRoutes.splashScreen,
-      page: () => SplashScreen(),
+      page: () => const SplashScreen(),
       binding: SplashBinding(),
     ),
     GetPage(

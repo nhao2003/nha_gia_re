@@ -6,7 +6,7 @@ import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/modules/home/home_controller.dart';
 
 class CarouselAd extends StatefulWidget {
-  CarouselAd(
+  const CarouselAd(
       {super.key,
       required this.imgList,
       required this.aspectRatio,
@@ -65,7 +65,7 @@ class _CarouselAdState extends State<CarouselAd> {
                 child: Container(
                   width: widget.indicatorSize,
                   height: widget.indicatorSize,
-                  margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                  margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: AppColors.white

@@ -7,15 +7,12 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:nha_gia_re/data/models/address.dart';
 import 'package:nha_gia_re/data/models/province.dart';
-import 'package:nha_gia_re/data/providers/remote/request/house_request.dart';
 import 'package:nha_gia_re/data/providers/remote/request/post_request.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/data/repositories/post_repository.dart';
 import 'package:nha_gia_re/data/services/upload_avatar_service.dart';
-import 'dart:developer';
 import '../../data/enums/enums.dart';
 import '../../data/models/properties/post.dart';
-import '../../data/providers/remote/request/office_request.dart';
 
 class PropertyController extends GetxController{
   PropertyController();
@@ -78,7 +75,9 @@ class PropertyController extends GetxController{
     if(length >= 3 && length <= 10){
       photoController = true;
     }
-    else photoController = false;
+    else {
+      photoController = false;
+    }
     update();
   }
   List<File> photo  = [];

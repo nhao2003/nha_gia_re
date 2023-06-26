@@ -1,16 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:nha_gia_re/core/extensions/date_ex.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/models/conversation.dart';
-
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/text_styles.dart';
 import '../../../core/values/assets_image.dart';
 import '../../../data/models/user_info.dart';
-import '../../../routers/app_routes.dart';
 
 class ConversationRow extends StatelessWidget {
   final bool isRead;
@@ -49,7 +45,7 @@ class ConversationRow extends StatelessWidget {
     return ListTile(
       onTap: onTap,
       onLongPress: onLongPress,
-      contentPadding: EdgeInsets.all(10),
+      contentPadding: const EdgeInsets.all(10),
       leading: userInfo.avatarUrl != null
           ? CircleAvatar(
         backgroundImage:

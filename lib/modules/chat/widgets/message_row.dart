@@ -1,17 +1,12 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:nha_gia_re/core/extensions/double_ex.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/utils/map_utils.dart';
 import 'package:nha_gia_re/modules/chat/widgets/media_grid.dart';
-import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../data/models/message.dart';
 

@@ -1,5 +1,3 @@
-import 'package:http/http.dart' as http;
-
 class Address {
   late int? cityCode;
   late String? cityName;
@@ -11,11 +9,11 @@ class Address {
   late double? latitude;
   late double? longitude;
   Address({
-     this.cityCode,
-     this.cityName,
-     this.districtCode,
-     this.districtName,
-     this.wardCode,
+    this.cityCode,
+    this.cityName,
+    this.districtCode,
+    this.districtName,
+    this.wardCode,
     this.wardName,
     this.detail,
     this.latitude,
@@ -29,9 +27,9 @@ class Address {
         'city_code': cityCode,
         'city_name': cityName,
         'district_code': districtCode,
-        'district_name' : districtName,
+        'district_name': districtName,
         'ward_code': wardCode,
-        'ward_name' : wardName,
+        'ward_name': wardName,
         'detail': detail,
         'latitude': latitude,
         'longitude': longitude,
@@ -40,6 +38,7 @@ class Address {
   String toString() {
     return '${wardName}, ${districtName}, ${cityName}';
   }
+
   Address.fromJson(Map<String, dynamic> json)
       : cityCode = json['city_code'],
         cityName = json['city_name'],

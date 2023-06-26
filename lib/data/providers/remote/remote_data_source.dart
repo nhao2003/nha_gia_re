@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:async';
-import 'package:get/get.dart';
 import 'package:nha_gia_re/core/extensions/string_ex.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/models/conversation.dart';
@@ -38,92 +37,90 @@ class RemoteDataSource {
       rethrow;
     }
   }
+
   Future<void> likePost({required postId}) async {
-    try
-    {
+    try {
       Map<String, dynamic> data = {
-        'user_id' : supabaseClient.auth.currentUser?.id,
-        'post_id' : postId
+        'user_id': supabaseClient.auth.currentUser?.id,
+        'post_id': postId
       };
       await supabaseClient.from(tableUserLike).insert(data).select();
-    }
-    catch(e)
-    {
+    } catch (e) {
       rethrow;
     }
   }
+
   Future<void> unlikePost({required postId}) async {
-    try
-    {
-      await supabaseClient.from(tableUserLike).delete()
-      .eq('user_id', supabaseClient.auth.currentUser?.id)
-      .eq('post_id', postId);
-    }
-    catch(e)
-    {
+    try {
+      await supabaseClient
+          .from(tableUserLike)
+          .delete()
+          .eq('user_id', supabaseClient.auth.currentUser?.id)
+          .eq('post_id', postId);
+    } catch (e) {
       rethrow;
     }
   }
+
   Future<bool> hasLikePost({required postId}) async {
-    try
-    {
-      final res = await supabaseClient.from(tableUserLike)
-      .select()
-      .eq('user_id', supabaseClient.auth.currentUser?.id)
-      .eq('post_id', postId).limit(1);
-      if(List<Map<String, dynamic>>.from(res).isNotEmpty)
-      {
+    try {
+      final res = await supabaseClient
+          .from(tableUserLike)
+          .select()
+          .eq('user_id', supabaseClient.auth.currentUser?.id)
+          .eq('post_id', postId)
+          .limit(1);
+      if (List<Map<String, dynamic>>.from(res).isNotEmpty) {
         return true;
-      }
-      else return false;
-    }
-    catch(e)
-    {
+      } else
+        return false;
+    } catch (e) {
       rethrow;
     }
   }
+
   Future<void> followUser({required userId}) async {
-    try{
+    try {
       Map<String, dynamic> data = {
-        'follower_id' :  supabaseClient.auth.currentUser?.id,
-        'followed_id' : userId
+        'follower_id': supabaseClient.auth.currentUser?.id,
+        'followed_id': userId
       };
       await supabaseClient.from(tableUserFollow).insert(data);
-    }
-    catch(e)
-    {
+    } catch (e) {
       rethrow;
     }
   }
+
   Future<void> unfollowUser({required userId}) async {
-    try{
-      await supabaseClient.from(tableUserFollow).delete()
-      .eq('follower_id', supabaseClient.auth.currentUser?.id)
-      .eq('followed_id', userId);
-    }
-    catch(e)
-    {
+    try {
+      await supabaseClient
+          .from(tableUserFollow)
+          .delete()
+          .eq('follower_id', supabaseClient.auth.currentUser?.id)
+          .eq('followed_id', userId);
+    } catch (e) {
       rethrow;
     }
   }
+
   Future<bool> isFollowing({required userId}) async {
-    try
-    {
-      final res = await supabaseClient.from(tableUserFollow)
-      .select()
-      .eq('follower_id', supabaseClient.auth.currentUser?.id)
-      .eq('followed_id', userId).limit(1);
-      if(List<Map<String, dynamic>>.from(res).isNotEmpty)
-      {
+    try {
+      final res = await supabaseClient
+          .from(tableUserFollow)
+          .select()
+          .eq('follower_id', supabaseClient.auth.currentUser?.id)
+          .eq('followed_id', userId)
+          .limit(1);
+      if (List<Map<String, dynamic>>.from(res).isNotEmpty) {
         return true;
+      } else {
+        return false;
       }
-      else return false;
-    }
-    catch(e)
-    {
+    } catch (e) {
       rethrow;
     }
   }
+
   Future<void> signOut() async {
     try {
       await supabaseClient.auth.signOut();

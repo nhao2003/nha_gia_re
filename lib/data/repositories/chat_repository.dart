@@ -1,21 +1,16 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
-
-import 'package:get/get.dart';
 import 'package:nha_gia_re/data/models/message.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/providers/remote/remote_data_source.dart';
 import 'package:nha_gia_re/data/services/upload_avatar_service.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../models/conversation.dart';
 import '../providers/remote/request/messsage_request.dart';
 
 class ChatRepository {
   final RemoteDataSource _remoteDataSource;
   final StreamController<List<Conversation>> _conversationStreamController =
-  StreamController<List<Conversation>>.broadcast();
+      StreamController<List<Conversation>>.broadcast();
   ChatRepository(this._remoteDataSource);
 
   late StreamSubscription<List<Conversation>> conversationSubscription;
@@ -25,7 +20,6 @@ class ChatRepository {
       _remoteDataSource.getAllConversation();
 
   Future<UserInfo> getUserInfo(String uid) async {
-
     UserInfo? user = _userInfos[uid];
     if (user != null) return user;
     try {

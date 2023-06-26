@@ -2,22 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/values/assets_image.dart';
-import 'package:nha_gia_re/core/extensions/string_ex.dart';
-import 'package:nha_gia_re/data/models/address.dart';
-import 'package:nha_gia_re/data/providers/remote/remote_data_source.dart';
-import 'package:nha_gia_re/data/providers/remote/request/post_request.dart';
-import 'package:nha_gia_re/data/repositories/auth_repository.dart';
-import 'package:nha_gia_re/data/repositories/chat_repository.dart';
-import 'package:nha_gia_re/data/repositories/post_repository.dart';
-import 'package:nha_gia_re/modules/chat/screens/chat_screen.dart';
-import 'package:nha_gia_re/modules/login/screens/register_screen.dart';
-import 'package:nha_gia_re/routers/app_pages.dart';
-import 'package:nha_gia_re/routers/app_routes.dart';
-import 'package:supabase/supabase.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../../../data/models/properties/post.dart';
-import '../../../data/providers/remote/request/messsage_request.dart';
+import '../../../routers/app_routes.dart';
 import '../login_controller.dart';
 import 'forget_password.dart';
 

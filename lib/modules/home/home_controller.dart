@@ -5,8 +5,6 @@ import 'package:nha_gia_re/data/repositories/post_repository.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../data/models/properties/post.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../data/models/user_info.dart';
-import 'package:nha_gia_re/routers/app_routes.dart';
 
 class HomeController extends GetxController {
   // code controller here
