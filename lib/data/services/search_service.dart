@@ -1,4 +1,5 @@
 import '../enums/enums.dart';
+import '../providers/remote/request/filter_request.dart';
 
 class SearchService {
   static final SearchService _instance = SearchService._();
@@ -17,7 +18,15 @@ class SearchService {
   TypeNavigate typeResult = TypeNavigate.search;
 
   void setTypeResult(TypeNavigate type) {
-    print(type.toString());
+    filter = PostFilter(
+      orderBy: OrderBy.priceAsc,
+      postedBy: PostedBy.all,
+    );
     typeResult = type;
   }
+
+  PostFilter filter = PostFilter(
+    orderBy: OrderBy.priceAsc,
+    postedBy: PostedBy.all,
+  );
 }

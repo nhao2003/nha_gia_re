@@ -75,26 +75,26 @@ class SearchController extends GetxController {
     // có 2 tab: order by giá và thời gian
     // có 4 loại: search, sell, rent, province
     // khai báo 1 init filter
-    PostFilter filter = PostFilter(
-      orderBy: orderby,
-      postedBy: PostedBy.all,
-    );
-    if (typeResult == TypeNavigate.search) {
-      filter = PostFilter(
+    if (selectedTypeItem != FilterValues.instance.provinces[0].obs) {
+      // for province
+      changeSelectedItem(selectedTypeItem.value);
+      return;
+    } else if (typeResult == TypeNavigate.search) {
+      SearchService.instance.filter = PostFilter(
         textSearch: _query,
         orderBy: orderby,
         postedBy: PostedBy.all,
       );
     } else if (typeResult == TypeNavigate.sell) {
       // for sell
-      filter = PostFilter(
+      SearchService.instance.filter = PostFilter(
         orderBy: orderby,
         isLease: false,
         postedBy: PostedBy.all,
       );
     } else if (typeResult == TypeNavigate.rent) {
       // for rent
-      filter = PostFilter(
+      SearchService.instance.filter = PostFilter(
         orderBy: orderby,
         isLease: true,
         postedBy: PostedBy.all,
@@ -105,7 +105,8 @@ class SearchController extends GetxController {
       return;
     }
 
-    searchPosts.value = await repository.getAllPosts(filter);
+    searchPosts.value =
+        await repository.getAllPosts(SearchService.instance.filter);
   }
 
   /// data in search delegate
@@ -135,7 +136,13 @@ class SearchController extends GetxController {
     selectedTypeItem.value = newValue;
     // add filter
     if (newValue == FilterValues.instance.provinces[0]) {
-      searchPosts.value = await getAllPostsInit(SearchService.instance.orderBy);
+      if (SearchService.instance.typeResult == TypeNavigate.search) {
+        searchPosts.value =
+            await getAllPostsInitWithQuery(SearchService.instance.orderBy);
+      } else {
+        searchPosts.value =
+            await getAllPostsInit(SearchService.instance.orderBy);
+      }
     } else {
       searchPosts.value = await getPostByProvince(
           newValue, typeResult, SearchService.instance.orderBy);
@@ -144,18 +151,22 @@ class SearchController extends GetxController {
 
   Future<List<Post>> getPostByProvince(
       String value, TypeNavigate type, OrderBy orderby) async {
+    print("153 == " + value);
     // lay tat ca cac post tren remote roi loc ra
     List<Post> filterPosts = <Post>[];
     List<Post> allPosts;
     if (type == TypeNavigate.search) {
-      allPosts = await getAllPostsInitWithQuery();
+      allPosts = await getAllPostsInitWithQuery(orderby);
     } else {
       allPosts = await getAllPostsInit(orderby);
     }
+    int i = 1;
     for (var post in allPosts) {
       if (post.address.cityName!
           .noAccentVietnamese()
           .contains(value.noAccentVietnamese())) {
+        print("aaaaaaaaaaaaaaa" + i.toString());
+        i++;
         filterPosts.add(post);
       }
     }
@@ -164,21 +175,15 @@ class SearchController extends GetxController {
 
   Future<List<Post>> getAllPostsInit(OrderBy orderby) async {
     // lay tat ca cac post tren remote
-    PostFilter filter = PostFilter(
-      orderBy: orderby,
-      postedBy: PostedBy.all,
-    );
-    return await repository.getAllPosts(filter);
+    SearchService.instance.filter.setOrderBy(orderby);
+    return await repository.getAllPosts(SearchService.instance.filter);
   }
 
-  Future<List<Post>> getAllPostsInitWithQuery() async {
+  Future<List<Post>> getAllPostsInitWithQuery(OrderBy orderby) async {
     // lay tat ca cac post tren remote
-    PostFilter filter = PostFilter(
-      textSearch: _query,
-      orderBy: OrderBy.createdAtAsc,
-      postedBy: PostedBy.all,
-    );
-    return await repository.getAllPosts(filter);
+    SearchService.instance.filter.setOrderBy(orderby);
+    SearchService.instance.filter.setTextSearch(_query);
+    return await repository.getAllPosts(SearchService.instance.filter);
   }
 
   /// add new query to history
