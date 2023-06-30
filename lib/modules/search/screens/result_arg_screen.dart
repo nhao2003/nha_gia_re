@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nha_gia_re/modules/search/screens/result_page.dart';
-import '../search_controller.dart';
+import '../my_search_controller.dart';
 
 class ResultArgScreen extends StatelessWidget {
   ResultArgScreen({super.key});
 
-  final SearchController searchController = Get.find<SearchController>();
+  final MySearchController searchController = Get.find<MySearchController>();
   String title = Get.arguments['title'];
 
   @override

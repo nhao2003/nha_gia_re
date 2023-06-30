@@ -12,9 +12,9 @@ import '../../data/models/properties/post.dart';
 import '../../data/repositories/auth_repository.dart';
 import '../../data/repositories/post_repository.dart';
 
-class SearchController extends GetxController {
+class MySearchController extends GetxController {
   /// instance
-  static SearchController get i => Get.find();
+  static MySearchController get i => Get.find();
 // type of result
   // type of navigate when navigate from home
   TypeNavigate typeResult = TypeNavigate.search;

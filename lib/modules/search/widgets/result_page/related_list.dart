@@ -6,7 +6,7 @@ import 'package:nha_gia_re/modules/search/widgets/result_page/item_product.dart'
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/text_styles.dart';
 import '../../../../data/models/properties/post.dart';
-import '../../search_controller.dart';
+import '../../my_search_controller.dart';
 
 class RelatedList extends StatefulWidget {
   OrderBy orderBy;
@@ -17,7 +17,7 @@ class RelatedList extends StatefulWidget {
 }
 
 class _RelatedListState extends State<RelatedList> {
-  final SearchController searchController = Get.find<SearchController>();
+  final MySearchController searchController = Get.find<MySearchController>();
 
   @override
   void initState() {

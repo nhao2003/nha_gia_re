@@ -5,11 +5,11 @@ import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/modules/search/widgets/result_page/dropdownbutton_cities.dart';
 import 'package:nha_gia_re/modules/search/widgets/result_page/tab_result.dart';
 
-import '../search_controller.dart';
+import '../my_search_controller.dart';
 
 class ResultPage extends StatelessWidget {
   ResultPage({super.key});
-  final SearchController searchController = Get.find<SearchController>();
+  final MySearchController searchController = Get.find<MySearchController>();
 
   @override
   Widget build(BuildContext context) {

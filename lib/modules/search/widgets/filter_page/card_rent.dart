@@ -1,11 +1,11 @@
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/text_styles.dart';
-import '../../search_controller.dart';
+import '../../my_search_controller.dart';
 import 'package:flutter/material.dart';
 import 'category_box_check.dart';
 
 class CardRent extends StatelessWidget {
-  final SearchController searchController;
+  final MySearchController searchController;
   const CardRent(this.searchController, {super.key});
 
   @override
