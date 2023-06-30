@@ -373,7 +373,26 @@ enum MessageType {
     throw Exception("Can't parse MessageType! Your input value is \"$value\"");
   }
 }
-
+enum NotificationType {
+  suggest,
+  expirationWarning,
+  rejectPost,
+  acceptPost,
+  advertise;
+  @override
+  String toString() {
+    super.toString();
+    return super.toString().split('.').last;
+  }
+  static NotificationType parse(String value) {
+    for (NotificationType type in NotificationType.values) {
+      if (type.toString() == value) {
+        return type;
+      }
+    }
+    throw Exception("Can't parse NotificationType! Your input value is \"$value\"");
+  }
+}
 enum TypeNavigate {
   search,
   sell,

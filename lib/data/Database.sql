@@ -233,37 +233,33 @@ CREATE TABLE messages
 ALTER
 publication supabase_realtime add table public.messages;
 
-CREATE
-OR REPLACE FUNCTION update_last_message()
+CREATE OR REPLACE FUNCTION update_last_message()
   RETURNS TRIGGER AS $$
 BEGIN
-    set
-timezone = 'Asia/Ho_Chi_Minh';
-UPDATE conversations
-SET last_message                    = NEW.message,
-    last_message_type               = NEW.message_type,
-    last_message_sent_at            = NEW.sent_at,
-    user1_joined_at                 = CASE
-                                          WHEN user1_joined_at IS NULL THEN timezone('Asia/Ho_Chi_Minh', now())
-                                          ELSE user1_joined_at END,
-    user2_joined_at                 = CASE
-                                          WHEN user2_joined_at IS NULL THEN timezone('Asia/Ho_Chi_Minh', now())
-                                          ELSE user2_joined_at END,
-    num_Of_unread_messages_of_user1 = CASE
-                                          WHEN user1_id = new.sender_id THEN 0
-                                          ELSE (SELECT COUNT(*)
-                                                FROM messages
-                                                WHERE messages.conversation_id = new.conversation_id
-                                                  AND messages.sender_id != new.sender_id AND
-                                      messages.is_receiver_read = false )
-END,
-  num_Of_unread_messages_of_user2 = CASE WHEN user2_id = new.sender_id THEN 0 ELSE (
-    SELECT COUNT(*) FROM messages
-    WHERE messages.conversation_id = new.conversation_id AND messages.sender_id != new.sender_id AND messages.is_receiver_read = false
-  )
-END
+  UPDATE conversations
+  SET
+    last_message = NEW.message,
+    last_message_type = NEW.message_type,
+    last_message_sent_at = NEW.sent_at,
+    user1_joined_at = COALESCE(user1_joined_at, timezone('Asia/Ho_Chi_Minh', now())),
+    user2_joined_at = COALESCE(user2_joined_at, timezone('Asia/Ho_Chi_Minh', now())),
+    num_of_unread_messages_of_user1 = (
+      SELECT COUNT(*)
+      FROM messages
+      WHERE conversation_id = NEW.conversation_id
+        AND sender_id != NEW.sender_id
+        AND is_receiver_read = FALSE
+    ),
+    num_of_unread_messages_of_user2 = (
+      SELECT COUNT(*)
+      FROM messages
+      WHERE conversation_id = NEW.conversation_id
+        AND sender_id != NEW.sender_id
+        AND is_receiver_read = FALSE
+    )
   WHERE id = NEW.conversation_id;
-RETURN NEW;
+
+  RETURN NEW;
 END;
 $$
 LANGUAGE plpgsql;
@@ -329,6 +325,21 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+CREATE OR REPLACE FUNCTION mark_messages_read(user_id uuid, conv_id uuid)
+  RETURNS void AS $$
+BEGIN
+  UPDATE conversations
+  SET
+    num_of_unread_messages_of_user1 = CASE WHEN user1_id = user_id THEN 0 ELSE num_of_unread_messages_of_user1 END,
+    num_of_unread_messages_of_user2 = CASE WHEN user2_id = user_id THEN 0 ELSE num_of_unread_messages_of_user2 END
+  WHERE id = conv_id;
+
+  UPDATE messages
+  SET
+    is_receiver_read = true
+  WHERE sender_id != user_id AND conversation_id = conv_id;
+END;
+$$ LANGUAGE plpgsql;
 
 
 
@@ -654,3 +665,17 @@ create function title_description(post) returns text as $$
 select unaccent($1.title) || ' ' || unaccent($1.description);
 $$
 language sql immutable;
+
+CREATE TABLE notification
+(
+    id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL,
+    type VARCHAR NOT NULL,
+    create_at TIMESTAMP NOT NULL,
+    is_read BOOLEAN DEFAULT FALSE,
+    title VARCHAR NOT NULL,
+    content TEXT NOT NULL,
+    image TEXT,
+    link TEXT,
+    FOREIGN KEY (user_id) REFERENCES public.user_info (uid) ON DELETE CASCADE
+);
