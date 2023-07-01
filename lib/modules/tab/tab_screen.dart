@@ -1,6 +1,7 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nha_gia_re/modules/blog/screens/blog_list_screen.dart';
 import 'package:nha_gia_re/modules/home/screens/home_screen.dart';
 import 'package:nha_gia_re/modules/notification/screens/notification_screen.dart';
 import 'package:nha_gia_re/modules/personal/screens/personal_screen.dart';
@@ -25,7 +26,7 @@ class TabScreen extends StatelessWidget {
       const HomeScreen(),
       PostManagementScreen(),
       const Scaffold(),
-      const NotificationScreen(),
+      const BlogListScreen(),
       const HiddenDrawer(),
     ];
     _tab = [
@@ -49,9 +50,9 @@ class TabScreen extends StatelessWidget {
         ),
       ),
       TabItem(
-        icon: Image.asset(Assets.bell),
-        activeIcon: Image.asset(Assets.bell, color: AppColors.primaryColor),
-        title: 'Thông báo',
+        icon: Icon(Icons.newspaper_outlined),
+        activeIcon: Icon(Icons.newspaper_outlined, color: AppColors.primaryColor),
+        title: 'Blog',
       ),
       TabItem(
         icon: Image.asset(Assets.person),

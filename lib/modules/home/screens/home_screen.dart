@@ -107,7 +107,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 );
-              })
+              }),
+          IconButton(onPressed: (){
+            Get.toNamed(AppRoutes.notification);
+          }, icon: Image.asset(Assets.bell))
         ],
       ),
       body: FutureBuilder<List<List<Post>>>(

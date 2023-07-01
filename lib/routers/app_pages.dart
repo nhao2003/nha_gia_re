@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:nha_gia_re/modules/blog/screens/blog_detail_screen.dart';
+import 'package:nha_gia_re/modules/blog/screens/blog_list_screen.dart';
 import 'package:nha_gia_re/modules/maps/screens/map_picker_screen.dart';
 import 'package:nha_gia_re/modules/maps/screens/map_screen.dart';
 import 'package:nha_gia_re/modules/post_details/post_detail_binding.dart';
@@ -16,6 +18,7 @@ import 'package:nha_gia_re/modules/search/screens/filter_screen.dart';
 import 'package:nha_gia_re/modules/chat/chat_binding.dart';
 import 'package:nha_gia_re/modules/chat/screens/chat_screen.dart';
 import 'package:nha_gia_re/modules/search/screens/search_screen.dart';
+import '../modules/blog/blog_binding.dart';
 import '../modules/conversations/conversation_binding.dart';
 import '../modules/conversations/screens/conversation_screen.dart';
 import 'package:nha_gia_re/modules/user_profile/screens/user_profile_screen.dart';
@@ -122,6 +125,16 @@ abstract class AppPages {
       name: AppRoutes.resultArg,
       page: () => ResultArgScreen(),
       binding: SearchBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.blog_screen,
+      page: () => BlogListScreen(),
+      binding: BlogBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.blog_screen_detail,
+      page: () => BlogDetailScreen(),
+      binding: BlogBinding(),
     ),
   ];
 }

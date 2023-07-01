@@ -30,4 +30,7 @@ abstract class AppRoutes {
 
   static const map_view_screen = '/map_view_screen';
   static const map_picker_screen = '/map_picker_screen';
+
+  static const blog_screen = '/blog_screen';
+  static const blog_screen_detail = '/blog_screen_detail';
 }
