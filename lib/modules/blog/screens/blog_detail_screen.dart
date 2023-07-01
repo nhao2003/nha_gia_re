@@ -2,8 +2,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart';
+import 'package:nha_gia_re/core/extensions/date_ex.dart';
+import 'package:nha_gia_re/modules/blog/blog_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../../data/models/blog.dart';
 
 class BlogDetailScreen extends StatefulWidget {
   const BlogDetailScreen({Key? key}) : super(key: key);
@@ -14,30 +20,107 @@ class BlogDetailScreen extends StatefulWidget {
 
 class _BlogDetailScreenState extends State<BlogDetailScreen> {
   Future<String> getTextData() async {
-    String url =
-        'https://plo.vn/cuu-pho-cuc-truong-cuc-thue-tphcm-nguyen-thi-bich-hanh-bi-phat-4-nam-tu-post740211.html';
-    var response = await get(Uri.parse(url));
-    return response.body;
+    return r""" 
+    <!DOCTYPE html>
+<html>
+<head>
+    <title>Mẫu HTML</title>
+</head>
+<body>
+    <h1>Heading 1</h1>
+    <h2>Heading 2</h2>
+    <h3>Heading 3</h3>
+    
+    <p>Đây là một đoạn văn bản thường.</p>
+    
+    <img src="https://picsum.photos/200/300?random=1" alt="Ảnh ngẫu nhiên 1" width="200" height="300">
+    
+    <img src="https://picsum.photos/200/300?random=2" alt="Ảnh ngẫu nhiên 2" width="200" height="300">
+    
+    <a href="https://example.com">Đây là một liên kết đến Example.com</a>
+    
+    <table>
+        <tr>
+            <th>Tiêu đề cột 1</th>
+            <th>Tiêu đề cột 2</th>
+        </tr>
+        <tr>
+            <td>Dữ liệu hàng 1, cột 1</td>
+            <td>Dữ liệu hàng 1, cột 2</td>
+        </tr>
+        <tr>
+            <td>Dữ liệu hàng 2, cột 1</td>
+            <td>Dữ liệu hàng 2, cột 2</td>
+        </tr>
+    </table>
+</body>
+</html>
+
+     """;
   }
+
+  BlogController _controller = Get.put(BlogController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
       body: FutureBuilder(
-        future: getTextData(),
+        future: _controller.initBlog(Get.arguments),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            Blog blog = snapshot.data!;
             return SingleChildScrollView(
-              child: Html(
-                data: snapshot.data,
-                onLinkTap: (url, _, __) async {
-                  print("Opening $url...");
-                  await launchUrl(
-                    Uri.parse(url!),
-                    mode: LaunchMode.externalApplication,
-                  );
-                },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      blog.title,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      blog.shortDescription,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          blog.author,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        const Icon(Icons.watch_later_outlined),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(blog.createAt.getTimeAgo())
+                      ],
+                    ),
+                    Html(
+                      data: blog.content,
+                      onLinkTap: (url, _, __) async {
+                        print("Opening $url...");
+                        await launchUrl(
+                          Uri.parse(url!),
+                          mode: LaunchMode.externalApplication,
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             );
           }
@@ -47,69 +130,5 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
         },
       ),
     );
-    // return Scaffold(
-    //   appBar: AppBar(),
-    //   body: Padding(
-    //     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-    //     child: Column(
-    //       children: [
-    //         Text(
-    //           "Cựu phó cục trưởng Cục Thuế TP.HCM Nguyễn Thị Bích Hạnh bị phạt 4 năm tù",
-    //           style: Theme.of(context)
-    //               .textTheme
-    //               .headlineSmall!
-    //               .copyWith(fontWeight: FontWeight.bold),
-    //         ),
-    //         const SizedBox(
-    //           height: 10,
-    //         ),
-    //         Text(
-    //           "(PLO)- Với cáo buộc ký các quyết định hoàn thuế trái quy định gây thất thoát 331 tỉ đồng, cựu phó Cục trưởng Cục Thuế TP.HCM Nguyễn Thị Bích Hạnh bị phạt bốn năm tù.",
-    //           style: Theme.of(context).textTheme.titleMedium,
-    //         ),
-    //         const SizedBox(
-    //           height: 10,
-    //         ),
-    //         Row(
-    //           children: const [
-    //             Text(
-    //               "Nhật Hào",
-    //               style: TextStyle(fontWeight: FontWeight.bold),
-    //             ),
-    //             SizedBox(
-    //               width: 5,
-    //             ),
-    //             Icon(Icons.watch_later_outlined),
-    //             SizedBox(
-    //               width: 5,
-    //             ),
-    //             Text("12:03 30/06/2023")
-    //           ],
-    //         ),
-    //
-    //         FutureBuilder(
-    //           future: getTextData(),
-    //           builder: (context, snapshot) {
-    //             if (snapshot.hasData) {
-    //               return Container(
-    //                 child: Html(
-    //                   data: snapshot.data,
-    //                   onLinkTap: (url, _, __) async {
-    //                     print("Opening $url...");
-    //                     await launchUrl(
-    //                       Uri.parse(url!),
-    //                       mode: LaunchMode.externalApplication,
-    //                     );
-    //                   },
-    //                 ),
-    //               );
-    //             }
-    //             return CircularProgressIndicator();
-    //           },
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    // );
   }
 }

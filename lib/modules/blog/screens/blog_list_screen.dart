@@ -50,11 +50,10 @@ class _BlogListScreenState extends State<BlogListScreen> {
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     child: InkWell(
                       onTap: () {
-                        Get.toNamed(AppRoutes.blog_screen_detail);
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return BlogDetailScreen();
-                        }));
+                        Get.toNamed(
+                          AppRoutes.blog_screen_detail,
+                          arguments: data[index],
+                        );
                       },
                       child: Stack(
                         alignment: AlignmentDirectional.bottomEnd,
