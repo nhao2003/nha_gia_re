@@ -3,6 +3,7 @@ import '../../../enums/enums.dart';
 class PostFilter {
   String? textSearch;
   OrderBy orderBy;
+  String? postedByUserID;
   bool? isLease;
   int? from;
   int? to;
@@ -15,6 +16,7 @@ class PostFilter {
   PostFilter({
     this.textSearch,
     this.isLease,
+    this.postedByUserID,
     required this.orderBy,
     this.from,
     this.to,
@@ -23,7 +25,24 @@ class PostFilter {
     this.minArea,
     this.maxArea,
     required this.postedBy,
-  }) : assert((from != null && to != null && from < to)||(from == null && to == null) );
+  }) : assert((from != null && to != null && from < to) ||
+            (from == null && to == null));
+  
+  void setTextSearch(String text) {
+    textSearch = text;
+  }
+
+  void setOrderBy(OrderBy orderBy) {
+    this.orderBy = orderBy;
+  }
+
+  void setIsLease(bool isLease) {
+    this.isLease = isLease;
+  }
+
+  void setPostedBy(PostedBy postedBy) {
+    this.postedBy = postedBy;
+  }
 }
 
 class ApartmentFilter extends PostFilter {
@@ -38,6 +57,7 @@ class ApartmentFilter extends PostFilter {
 
   ApartmentFilter({
     String? textSearch,
+    String? postedByUserID,
     bool? isLease,
     required OrderBy orderBy,
     required int from,
@@ -56,6 +76,7 @@ class ApartmentFilter extends PostFilter {
     this.legalStatus = const [],
     this.furnitureStatus = const [],
   }) : super(
+          postedByUserID: postedByUserID,
           textSearch: textSearch,
           orderBy: orderBy,
           from: from,
@@ -79,6 +100,7 @@ class HouseFilter extends PostFilter {
   List<FurnitureStatus> furnitureStatus;
 
   HouseFilter({
+    String? postedByUserID,
     String? textSearch,
     bool? isLease,
     required OrderBy orderBy,
@@ -98,6 +120,7 @@ class HouseFilter extends PostFilter {
     this.legalStatus = const [],
     this.furnitureStatus = const [],
   }) : super(
+          postedByUserID: postedByUserID,
           textSearch: textSearch,
           orderBy: orderBy,
           from: from,
@@ -120,6 +143,7 @@ class LandFilter extends PostFilter {
 
   LandFilter({
     String? textSearch,
+    String? postedByUserID,
     bool? isLease,
     required OrderBy orderBy,
     required int from,
@@ -136,6 +160,7 @@ class LandFilter extends PostFilter {
     this.landDirections = const [],
     this.legalStatus = const [],
   }) : super(
+          postedByUserID: postedByUserID,
           textSearch: textSearch,
           orderBy: orderBy,
           from: from,
@@ -155,6 +180,7 @@ class OfficeFilter extends PostFilter {
   List<FurnitureStatus> furnitureStatus;
 
   OfficeFilter({
+    String? postedByUserID,
     String? textSearch,
     bool? isLease,
     required OrderBy orderBy,
@@ -171,6 +197,7 @@ class OfficeFilter extends PostFilter {
     this.furnitureStatus = const [],
   }) : super(
           textSearch: textSearch,
+          postedByUserID: postedByUserID,
           orderBy: orderBy,
           from: from,
           to: to,
@@ -187,6 +214,7 @@ class MotelFilter extends PostFilter {
 
   MotelFilter({
     String? textSearch,
+    String? postedByUserID,
     bool? isLease,
     required OrderBy orderBy,
     required int from,
@@ -198,6 +226,7 @@ class MotelFilter extends PostFilter {
     required PostedBy postedBy,
     this.furnitureStatus = const [],
   }) : super(
+          postedByUserID: postedByUserID,
           textSearch: textSearch,
           orderBy: orderBy,
           from: from,

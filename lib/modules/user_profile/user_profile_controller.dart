@@ -1,7 +1,4 @@
-import 'dart:developer';
 import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -24,10 +21,8 @@ class UserProfileController extends GetxController {
   var birthday = DateTime.now();
   var isUploadAvatar = false.obs;
 
-  void init(dynamic arg)
-  {
-    if(arg is UserInfo)
-    {
+  void init(dynamic arg) {
+    if (arg is UserInfo) {
       avatarUrl = arg.avatarUrl!;
       fullNameTextController.text = arg.fullName!;
       phoneNumberTextController.text = arg.phoneNumber!;
@@ -58,7 +53,7 @@ class UserProfileController extends GetxController {
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light().copyWith(
+            colorScheme: const ColorScheme.light().copyWith(
               primary: Theme.of(context).primaryColor,
             ),
             dialogTheme: DialogTheme(
@@ -76,23 +71,30 @@ class UserProfileController extends GetxController {
       birthDayTextController.text = DateFormat('dd/MM/yyyy').format(picked);
     }
   }
-  Future<void> handleSubmit()
-  async {
-    if(userProfileFormKey.currentState!.validate())
-    {
+
+  Future<void> handleSubmit() async {
+    if (userProfileFormKey.currentState!.validate()) {
       var auth = AuthRepository();
-      if(auth.isUserLoggedIn)
-      {
+      if (auth.isUserLoggedIn) {
         UpdateProfileRequest request = UpdateProfileRequest.name(
-          address: Address(cityCode: 1, cityName: '1',districtCode: 1, districtName: '1',wardCode: 1, wardName: '1'),
-          isMale: (gender.value == 'male'),
-          avatarUrl: "avatarUrl",
-          fullName: fullNameTextController.text,
-          phoneNumber: phoneNumberTextController.text,
-          dob: birthday,
-          description: (bioTextController.text.isEmpty) ? "sao lai ep toi gioi thieu" : bioTextController.text );
-        print(request.toJson());
-        var response = await auth.updateProfile(request).then((value) => Get.offAllNamed(AppRoutes.tabScreen));
+            address: Address(
+                cityCode: 1,
+                cityName: '1',
+                districtCode: 1,
+                districtName: '1',
+                wardCode: 1,
+                wardName: '1'),
+            isMale: (gender.value == 'male'),
+            avatarUrl: "avatarUrl",
+            fullName: fullNameTextController.text,
+            phoneNumber: phoneNumberTextController.text,
+            dob: birthday,
+            description: (bioTextController.text.isEmpty)
+                ? "sao lai ep toi gioi thieu"
+                : bioTextController.text);
+        var response = await auth
+            .updateProfile(request)
+            .then((value) => Get.offAllNamed(AppRoutes.tabScreen));
       }
     }
   }

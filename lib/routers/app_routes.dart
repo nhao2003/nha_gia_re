@@ -10,9 +10,10 @@ abstract class AppRoutes {
   // search
   static const search = '/search';
   static const filter = '/search/filter';
+  static const resultArg = '/search/resultArg';
 
   static const post = '/post';
-
+  static const dashboard = '/dashboard';
   static const personal = '/personal';
   //chat
   static const conversation = '/conversation';
@@ -26,4 +27,10 @@ abstract class AppRoutes {
   // noti
   static const notification = '/notification';
   static const post_detail = '/post_detail';
+
+  static const map_view_screen = '/map_view_screen';
+  static const map_picker_screen = '/map_picker_screen';
+
+  static const blog_screen = '/blog_screen';
+  static const blog_screen_detail = '/blog_screen_detail';
 }

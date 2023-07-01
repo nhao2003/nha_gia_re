@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
-import '../search_controller.dart';
+import '../my_search_controller.dart';
 import '../widgets/my_search_delegate.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -13,7 +13,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  final SearchController searchController = Get.find<SearchController>();
+  final MySearchController searchController = Get.find<MySearchController>();
   // search sreen
   late MySearchDelegate _delegate;
 

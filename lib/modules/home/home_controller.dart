@@ -1,50 +1,82 @@
 import 'package:get/get.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
-import 'package:nha_gia_re/data/repositories/chat_repository.dart';
 import 'package:nha_gia_re/data/repositories/post_repository.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
-
 import '../../data/models/properties/post.dart';
-import '../../data/models/user_info.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeController extends GetxController {
   // code controller here
   // define variable and function
+  final String fakeUrl = 'https://flutter.dev';
+
   final List<String> imgList = [
-    'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
-    'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
-    'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
-    'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
-    'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
-    'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
+    'https://cdn.chotot.com/admincentre/D7Le2XZDgAF07oJDVyc_Gz765rWVQ5c8hwXonwYWapg/preset:raw/plain/a54ed308183c261c8529a6729ef4512c-2812912165257461362.jpg',
+    'https://cdn.chotot.com/admincentre/ctc6HtBG1QICBtN5KQNCNO34k73kZn9gQLxmhOjfWw4/preset:raw/plain/1bfd526b0b6c995da1c20eb5f3ba0c51-2805772162331331393.jpg',
+    'https://cdn.chotot.com/admincentre/ICGqIPhBAn559vSI4v7jaBAYFYegeRG7xSfUJ6tkugI/preset:raw/plain/6ec3994f81e14d768dfc467847ce430c-2820195948173896828.jpg',
+    'https://cdn.chotot.com/admincentre/83O9GjTqqxMohxXA1DcGEojtznUAIxJYWwTDMhhWp88/preset:raw/plain/bb0f1e32befe115598c292f0b7434fe7-2829010373569559918.jpg',
+    'https://cdn.chotot.com/admincentre/586665ff-021b-4eb2-a0a2-acf2405ebedc_banner.jpg',
   ];
+
+  void launchWebURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri)) {
+      throw Exception('Could not launch $url');
+    }
+  }
 
   PostRepository repository = PostRepository();
 
-  void navToPost()
-  {
+  void navToPost() {
     Get.toNamed(AppRoutes.post);
   }
 
+  void navToSell() {
+    var data = {
+      "title": 'Mua bán',
+      "type": TypeNavigate.sell,
+    };
+    Get.toNamed(AppRoutes.resultArg, arguments: data);
+  }
+
+  void navToRent() {
+    var data = {
+      "title": 'Cho thuê',
+      "type": TypeNavigate.rent,
+    };
+    Get.toNamed(AppRoutes.resultArg, arguments: data);
+  }
+
+  void navByProvince(String provider) {
+    var data = {
+      "title": 'Tỉnh thành',
+      "type": TypeNavigate.province,
+      "province": provider,
+    };
+    Get.toNamed(AppRoutes.resultArg, arguments: data);
+  }
+
   Future<List<List<Post>>> init() async {
-    final List<List<Post>> data = await Future.wait([getLeasePosts(), getSellPosts()]);
+    final List<List<Post>> data =
+        await Future.wait([getLeasePosts(), getSellPosts()]);
     print("Data Length: ${data.length}");
     return data;
   }
-  Future<List<Post>> getLeasePosts() async  {
+
+  Future<List<Post>> getLeasePosts() async {
     return await repository.getAllPosts(PostFilter(
       isLease: true,
       orderBy: OrderBy.createdAtDesc,
       postedBy: PostedBy.all,
     ));
   }
-  Future<List<Post>> getSellPosts() async  {
+
+  Future<List<Post>> getSellPosts() async {
     return await repository.getAllPosts(PostFilter(
       isLease: false,
       orderBy: OrderBy.createdAtDesc,
       postedBy: PostedBy.all,
     ));
   }
-
 }

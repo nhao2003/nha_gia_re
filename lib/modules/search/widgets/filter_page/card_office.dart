@@ -1,12 +1,11 @@
 import 'package:nha_gia_re/modules/search/widgets/filter_page/category_box_check.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/text_styles.dart';
-import '../../search_controller.dart';
+import '../../my_search_controller.dart';
 import 'package:flutter/material.dart';
-import 'category_box_radio.dart';
 
 class CardOffice extends StatelessWidget {
-  final SearchController searchController;
+  final MySearchController searchController;
   const CardOffice(this.searchController, {super.key});
 
   @override

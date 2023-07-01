@@ -2,12 +2,12 @@ import 'package:nha_gia_re/modules/search/widgets/filter_page/category_box_check
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/text_styles.dart';
-import '../../search_controller.dart';
+import '../../my_search_controller.dart';
 import 'package:flutter/material.dart';
 import 'category_box_radio.dart';
 
 class CardApartment extends StatelessWidget {
-  final SearchController searchController;
+  final MySearchController searchController;
   const CardApartment(this.searchController, {super.key});
 
   @override

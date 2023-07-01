@@ -14,11 +14,13 @@ class RemoteDataSource {
   static const String tableMotels = 'motels';
   static const String tableOffices = 'offices';
   static const String tableUserInfo = 'user_info';
+  static const String tableUserLike = 'user_like';
+  static const String tableUserFollow = 'user_follow';
   static const String tablePost = 'post';
   final SupabaseClient supabaseClient = Supabase.instance.client;
 
-
-  Future<AuthResponse> signUp({required String email, required String password}) async {
+  Future<AuthResponse> signUp(
+      {required String email, required String password}) async {
     try {
       return await supabaseClient.auth.signUp(email: email, password: password);
     } catch (e) {
@@ -26,9 +28,94 @@ class RemoteDataSource {
     }
   }
 
-  Future<AuthResponse> signIn({required String email, required String password}) async {
+  Future<AuthResponse> signIn(
+      {required String email, required String password}) async {
     try {
-      return await supabaseClient.auth.signInWithPassword(email: email, password: password);
+      return await supabaseClient.auth
+          .signInWithPassword(email: email, password: password);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> likePost({required postId}) async {
+    try {
+      Map<String, dynamic> data = {
+        'user_id': supabaseClient.auth.currentUser?.id,
+        'post_id': postId
+      };
+      await supabaseClient.from(tableUserLike).insert(data).select();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> unlikePost({required postId}) async {
+    try {
+      await supabaseClient
+          .from(tableUserLike)
+          .delete()
+          .eq('user_id', supabaseClient.auth.currentUser?.id)
+          .eq('post_id', postId);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> hasLikePost({required postId}) async {
+    try {
+      final res = await supabaseClient
+          .from(tableUserLike)
+          .select()
+          .eq('user_id', supabaseClient.auth.currentUser?.id)
+          .eq('post_id', postId)
+          .limit(1);
+      if (List<Map<String, dynamic>>.from(res).isNotEmpty) {
+        return true;
+      } else
+        return false;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> followUser({required userId}) async {
+    try {
+      Map<String, dynamic> data = {
+        'follower_id': supabaseClient.auth.currentUser?.id,
+        'followed_id': userId
+      };
+      await supabaseClient.from(tableUserFollow).insert(data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> unfollowUser({required userId}) async {
+    try {
+      await supabaseClient
+          .from(tableUserFollow)
+          .delete()
+          .eq('follower_id', supabaseClient.auth.currentUser?.id)
+          .eq('followed_id', userId);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> isFollowing({required userId}) async {
+    try {
+      final res = await supabaseClient
+          .from(tableUserFollow)
+          .select()
+          .eq('follower_id', supabaseClient.auth.currentUser?.id)
+          .eq('followed_id', userId)
+          .limit(1);
+      if (List<Map<String, dynamic>>.from(res).isNotEmpty) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (e) {
       rethrow;
     }
@@ -68,7 +155,8 @@ class RemoteDataSource {
 
   Future<Map<String, dynamic>> postApartment(Map<String, dynamic> data) async {
     try {
-      final res = await supabaseClient.from(tableApartments).insert(data).select();
+      final res =
+          await supabaseClient.from(tableApartments).insert(data).select();
       return List<Map<String, dynamic>>.from(res).first;
     } catch (e) {
       rethrow;
@@ -129,7 +217,6 @@ class RemoteDataSource {
     }
   }
 
-
   Future<Map<String, dynamic>> editPostApartment(
       String postId, Map<String, dynamic> data) async {
     try {
@@ -144,7 +231,6 @@ class RemoteDataSource {
     }
   }
 
-
   Future<Map<String, dynamic>> editPostHouse(
       String postId, Map<String, dynamic> data) async {
     try {
@@ -158,7 +244,6 @@ class RemoteDataSource {
       rethrow;
     }
   }
-
 
   Future<Map<String, dynamic>> editPostLand(
       String postId, Map<String, dynamic> data) async {
@@ -203,8 +288,6 @@ class RemoteDataSource {
       rethrow;
     }
   }
-
-
 
   PostgrestFilterBuilder<dynamic> _defaultFilter(
     String propertyTable,
@@ -477,11 +560,14 @@ class RemoteDataSource {
     final response;
     switch (propertyType) {
       case PropertyType.apartment:
-        response =
-            await supabaseClient.from(tableApartments).select().eq('id', postId);
+        response = await supabaseClient
+            .from(tableApartments)
+            .select()
+            .eq('id', postId);
         break;
       case PropertyType.land:
-        response = await supabaseClient.from(tableLands).select().eq('id', postId);
+        response =
+            await supabaseClient.from(tableLands).select().eq('id', postId);
         break;
       case PropertyType.office:
         response =
@@ -499,17 +585,28 @@ class RemoteDataSource {
     return List<Map<String, dynamic>>.from(response).first;
   }
 
-  Stream<List<Map<String, dynamic>>> getAllConversation() async* {
+  Stream<List<Conversation>> getAllConversation() async* {
     String uid = supabaseClient.auth.currentUser!.id;
-    final res = supabaseClient
-        .from('conservations')
-        .select(
-            '*, user1_info: user_info!conservations_user1_id_fkey(*), user2_info: user_info!conservations_user2_id_fkey(*), messages: messages(*)')
-        .or('user1_id.eq.$uid, user2_id.eq.$uid')
-        .asStream();
-    await for (var x in res) {
-      yield List<Map<String, dynamic>>.from(x).toList();
-    }
+    yield* supabaseClient
+        .from('conversations')
+        .stream(primaryKey: ['id']).transform<List<Conversation>>(
+      StreamTransformer<List<Map<String, dynamic>>,
+          List<Conversation>>.fromHandlers(handleData: (value, sink) {
+        final List<Conversation> cons = [];
+        for (var element in value) {
+          log(element.toString());
+          if ((element['user1_id'] == uid &&
+                  DateTime.tryParse(element['user1_joined_at'].toString()) !=
+                      null) ||
+              (element['user2_id'] == uid &&
+                  DateTime.tryParse(element['user2_joined_at'].toString()) !=
+                      null)) {
+            cons.add(Conversation.fromJson(element));
+          }
+        }
+        if (cons.isNotEmpty) sink.add(cons);
+      }),
+    );
   }
 
   Future sendMessage(Map<String, dynamic> data) async {
@@ -523,7 +620,12 @@ class RemoteDataSource {
         .stream(primaryKey: ['id'])
         .order('sent_at')
         .eq('conversation_id', conversation.id)
-        .map((event) => event.map((e) => Message.fromJson(e)).toList());
+        .map((event) => event
+            .map((e) => Message.fromJson(e))
+            .toList()
+            .where((element) =>
+                element.sentAt.compareTo(conversation.timeJoined) != -1)
+            .toList());
   }
 
   /// Creates or returns an existing roomID of both participants
@@ -532,6 +634,13 @@ class RemoteDataSource {
     final data = await supabaseClient.rpc('get_or_create_conversation',
         params: {'user_info_id': otherUserId});
     return data;
+  }
+
+  Future<void> markMessagesRead(String conversationId) async {
+    await supabaseClient.rpc('mark_messages_read', params: {
+      'user_id': supabaseClient.auth.currentUser!.id,
+      'conv_id': conversationId,
+    });
   }
 
   Future deleteConversation(String conversationId) async {
@@ -548,7 +657,8 @@ class RemoteDataSource {
 
   Future<void> extendPost(String id) async {
     log(id);
-    await supabaseClient.rpc('extend_post_expiry_date', params: {'post_id': id}).then((value) {
+    await supabaseClient
+        .rpc('extend_post_expiry_date', params: {'post_id': id}).then((value) {
       log("Done");
     });
   }

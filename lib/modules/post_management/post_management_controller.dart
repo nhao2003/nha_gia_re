@@ -64,13 +64,11 @@ class PostManagementController extends GetxController {
   }
 
   void showPost(Post post) async {
-    print("Hien tin");
     await repository.hideOrUnHidePost(post.id, false);
     await getPostsInit();
   }
 
   void hidePost(Post post) async {
-    print("hide post");
     await repository.hideOrUnHidePost(post.id, true);
     await getPostsInit();
   }
@@ -86,13 +84,11 @@ class PostManagementController extends GetxController {
   }
 
   void deletePost(Post post) async {
-    print("delete post");
     await repository.deletePost(post.id);
     await getPostsInit();
   }
 
   void extensionPost(Post post) async {
-    print("gia han");
     await repository.extendPostExpiryDate(post.id, true);
     await getPostsInit();
   }

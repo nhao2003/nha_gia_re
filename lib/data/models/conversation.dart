@@ -33,7 +33,7 @@ class Conversation {
         numOfUnReadMessage =
             json['user1_id'] == Supabase.instance.client.auth.currentUser!.id
                 ? json['num_of_unread_messages_of_user1']
-                : json['num_of_unread_messages_of_user1'],
+                : json['num_of_unread_messages_of_user2'],
         lastMessage = json['last_message'],
         lastMessageSentAt = DateTime.parse(json['last_message_sent_at']),
         timeJoined =

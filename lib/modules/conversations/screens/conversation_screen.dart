@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:nha_gia_re/core/extensions/date_ex.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/values/assets_image.dart';
 import 'package:nha_gia_re/data/models/conversation.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
-import 'package:nha_gia_re/modules/chat/screens/chat_screen.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../../core/values/app_strings.dart';
 import '../conversation_controller.dart';
@@ -22,10 +20,12 @@ class ConversationScreen extends StatefulWidget {
 class _ConversationScreenState extends State<ConversationScreen> {
   late ConversationController _chatController;
 
+
   @override
-  initState() {
+  void initState() {
     _chatController = Get.find<ConversationController>();
     _chatController.initializeConversations();
+    super.initState();
   }
 
   @override
@@ -85,9 +85,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                           MainAxisAlignment.start,
                                       children: [
                                         TextButton(
-                                          onPressed: () {
-                                            Get.back();
-                                          },
+                                          onPressed: () => _chatController.markRead(e),
                                           child: Text(
                                             "Đánh dấu đã đọc",
                                             style: AppTextStyles.roboto16regular

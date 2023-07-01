@@ -1,16 +1,13 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:nha_gia_re/core/theme/app_colors.dart';
-import 'package:nha_gia_re/modules/post/widgets/seperator.dart';
 
 class UserImagePicker extends StatefulWidget {
   final void Function(File pickedImage) imagePickFn;
   final bool isUploading;
   final String url;
 
-  const UserImagePicker(this.imagePickFn, this.isUploading, this.url);
+  const UserImagePicker(this.imagePickFn, this.isUploading, this.url, {super.key});
 
   @override
   State<UserImagePicker> createState() => _UserImagePickerState();
@@ -95,10 +92,10 @@ class _UserImagePickerState extends State<UserImagePicker> {
               radius: 60,
             ),
           ),
-          if (widget.isUploading) SizedBox(width: 120, height: 120,child: CircularProgressIndicator()) ,
+          if (widget.isUploading) const SizedBox(width: 120, height: 120,child: CircularProgressIndicator()) ,
           Transform.translate(
-            offset: Offset(0, 10),
-            child: Icon(Icons.add_circle_outline),
+            offset: const Offset(0, 10),
+            child: const Icon(Icons.add_circle_outline),
           ),
         ],
       ),

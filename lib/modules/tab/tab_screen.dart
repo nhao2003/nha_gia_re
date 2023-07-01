@@ -1,20 +1,24 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nha_gia_re/modules/blog/screens/blog_list_screen.dart';
 import 'package:nha_gia_re/modules/home/screens/home_screen.dart';
 import 'package:nha_gia_re/modules/notification/screens/notification_screen.dart';
 import 'package:nha_gia_re/modules/personal/screens/personal_screen.dart';
+import 'package:nha_gia_re/modules/tab/hidden_draw_menu.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/values/assets_image.dart';
-import '../post/screens/post_screen.dart';
 import 'package:nha_gia_re/modules/post_management/screens/post_management_screen.dart';
 import 'tab_controller.dart';
 
+// ignore: must_be_immutable
 class TabScreen extends StatelessWidget {
   final controller = Get.put(TabNavController());
 
   List<Widget> _pages = [];
   List<TabItem<dynamic>> _tab = [];
+
+  TabScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +26,8 @@ class TabScreen extends StatelessWidget {
       const HomeScreen(),
       PostManagementScreen(),
       const Scaffold(),
-      const NotificationScreen(),
-      PersonalScreen(),
+      const BlogListScreen(),
+      const HiddenDrawer(),
     ];
     _tab = [
       TabItem(
@@ -46,9 +50,9 @@ class TabScreen extends StatelessWidget {
         ),
       ),
       TabItem(
-        icon: Image.asset(Assets.bell),
-        activeIcon: Image.asset(Assets.bell, color: AppColors.primaryColor),
-        title: 'Thông báo',
+        icon: Icon(Icons.newspaper_outlined),
+        activeIcon: Icon(Icons.newspaper_outlined, color: AppColors.primaryColor),
+        title: 'Blog',
       ),
       TabItem(
         icon: Image.asset(Assets.person),

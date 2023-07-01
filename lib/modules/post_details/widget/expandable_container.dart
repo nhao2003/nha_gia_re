@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
-
 import '../../../core/theme/app_colors.dart';
 
 class ExpandableContainer extends StatefulWidget {
@@ -50,7 +49,6 @@ class _ExpandableContainerState extends State<ExpandableContainer>
             height: 10,
           ),
           AnimatedSize(
-            vsync: this,
             duration: const Duration(milliseconds: 200),
             curve: Curves.fastOutSlowIn,
             child: ConstrainedBox(

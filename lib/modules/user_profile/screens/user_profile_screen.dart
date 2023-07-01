@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
-import 'package:nha_gia_re/data/services/upload_avatar_service.dart';
 import 'package:nha_gia_re/modules/user_profile/user_profile_controller.dart';
 import 'package:nha_gia_re/modules/user_profile/widgets/user_image_picker.dart';
 
@@ -69,9 +68,7 @@ class UserProfileScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        width: 50,
-                      ),
+                      const SizedBox(width: 50),
                       Row(
                         children: [
                           Obx(() => Radio(
