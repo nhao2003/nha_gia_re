@@ -1,6 +1,6 @@
 # Nha Gia Re
 
-**The idea**:
+**The idea**: A mobile application serving as a platform connecting real estate sellers and buyers for searching, buying, and renting properties
 
 ## Project stucture
 
