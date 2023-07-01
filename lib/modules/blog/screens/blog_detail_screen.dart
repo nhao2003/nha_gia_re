@@ -19,46 +19,6 @@ class BlogDetailScreen extends StatefulWidget {
 }
 
 class _BlogDetailScreenState extends State<BlogDetailScreen> {
-  Future<String> getTextData() async {
-    return r""" 
-    <!DOCTYPE html>
-<html>
-<head>
-    <title>Mẫu HTML</title>
-</head>
-<body>
-    <h1>Heading 1</h1>
-    <h2>Heading 2</h2>
-    <h3>Heading 3</h3>
-    
-    <p>Đây là một đoạn văn bản thường.</p>
-    
-    <img src="https://picsum.photos/200/300?random=1" alt="Ảnh ngẫu nhiên 1" width="200" height="300">
-    
-    <img src="https://picsum.photos/200/300?random=2" alt="Ảnh ngẫu nhiên 2" width="200" height="300">
-    
-    <a href="https://example.com">Đây là một liên kết đến Example.com</a>
-    
-    <table>
-        <tr>
-            <th>Tiêu đề cột 1</th>
-            <th>Tiêu đề cột 2</th>
-        </tr>
-        <tr>
-            <td>Dữ liệu hàng 1, cột 1</td>
-            <td>Dữ liệu hàng 1, cột 2</td>
-        </tr>
-        <tr>
-            <td>Dữ liệu hàng 2, cột 1</td>
-            <td>Dữ liệu hàng 2, cột 2</td>
-        </tr>
-    </table>
-</body>
-</html>
-
-     """;
-  }
-
   BlogController _controller = Get.put(BlogController());
 
   @override
