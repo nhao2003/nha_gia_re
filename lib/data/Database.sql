@@ -671,11 +671,21 @@ CREATE TABLE notification
     id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL,
     type VARCHAR NOT NULL,
-    create_at TIMESTAMP NOT NULL,
+    create_at TIMESTAMP NOT NULL DEFAULT,
     is_read BOOLEAN DEFAULT FALSE,
     title VARCHAR NOT NULL,
     content TEXT NOT NULL,
     image TEXT,
     link TEXT,
     FOREIGN KEY (user_id) REFERENCES public.user_info (uid) ON DELETE CASCADE
+);
+CREATE TABLE blogs (
+    id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+    create_at TIMESTAMP DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
+    title varchar(255),
+    short_description VARCHAR(255),
+    author VARCHAR DEFAULT 'Unknown',
+    link text,
+    image_link text,
+    view_count INTEGER DEFAULT 0
 );
