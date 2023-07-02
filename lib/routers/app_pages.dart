@@ -1,4 +1,8 @@
 import 'package:get/get.dart';
+import 'package:nha_gia_re/modules/admin_post_detail/admin_post_detail_binding.dart';
+import 'package:nha_gia_re/modules/admin_post_detail/screens/admin_post_detail_screen.dart';
+import 'package:nha_gia_re/modules/admin_post_manage/admin_post_binding.dart';
+import 'package:nha_gia_re/modules/admin_post_manage/screens/admin_post_screen.dart';
 import 'package:nha_gia_re/modules/post_details/post_detail_binding.dart';
 import 'package:nha_gia_re/modules/post_details/screen/post_details_screen.dart';
 import 'package:nha_gia_re/modules/notification/notification_binding.dart';
@@ -70,7 +74,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.post,
-      page: () => const MyCustomForm(),
+      page: () => const PostScreen(),
       binding: PostBinding(),
     ),
     GetPage(
@@ -106,5 +110,15 @@ abstract class AppPages {
         name: AppRoutes.post_detail,
         page: () => const PostDetailsScreen(),
         binding: PostDetailBinding()),
+    GetPage(
+      name: AppRoutes.admin_post,
+      page: () => AdminPostScreen(),
+      binding: AdminPostBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.admin_post_detail,
+      page: () => const AdminPostDetailScreen(),
+      binding: AdminPostDetailBinding(),
+    ),
   ];
 }

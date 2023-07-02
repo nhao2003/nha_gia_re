@@ -19,16 +19,16 @@ import 'package:nha_gia_re/modules/post/widgets/textformfield.dart';
 import '../../../data/enums/enums.dart';
 
 // Define a custom Form widget.
-class MyCustomForm extends StatefulWidget {
-  const MyCustomForm({super.key});
+class PostScreen extends StatefulWidget {
+  const PostScreen({super.key});
 
   @override
-  MyCustomFormState createState() {
-    return MyCustomFormState();
+  PostScreenState createState() {
+    return PostScreenState();
   }
 }
 
-class MyCustomFormState extends State<MyCustomForm> {
+class PostScreenState extends State<PostScreen> {
   final _formKey = GlobalKey<FormState>();
   late String? selectedValue;
   Future<void> _loadResource() async {
@@ -1677,7 +1677,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                                 )
                                               : Center(
                                                   child: Text(
-                                                  "Đăng tin",
+                                                  "Chỉnh sửa",
                                                   style: AppTextStyles
                                                       .roboto20semiBold
                                                       .copyWith(

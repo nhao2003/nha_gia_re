@@ -6,7 +6,7 @@ class TabNavController extends GetxController {
 
   void changeTabIndex(int index) {
     if (index == 2) {
-      Get.toNamed(AppRoutes.post);
+      Get.toNamed(AppRoutes.admin_post);
     } else {
       tabIndex = index;
     }

@@ -61,6 +61,8 @@ dependencies:
   flutter_xlider: ^3.5.0
   uuid: ^3.0.7
   cached_network_image: ^3.2.3
+  ionicons: ^0.2.2
+  community_material_icon: ^5.9.55
 
 dev_dependencies:
   flutter_test:

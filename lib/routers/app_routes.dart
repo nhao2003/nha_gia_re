@@ -26,4 +26,6 @@ abstract class AppRoutes {
   // noti
   static const notification = '/notification';
   static const post_detail = '/post_detail';
+  static const admin_post = '/admin_post';
+  static const admin_post_detail = '/admin_post_detail';
 }
