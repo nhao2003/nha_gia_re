@@ -29,7 +29,7 @@ class HomeController extends GetxController {
     }
   }
 
-  PostRepository repository = PostRepository();
+  PostRepository repository = GetIt.instance<PostRepository>();
   UserInfo? userInfo;
 
   void navToPost() {
@@ -62,10 +62,10 @@ class HomeController extends GetxController {
   }
 
   Future<List<List<Post>>> init() async {
-    AuthRepository authRepository = AuthRepository();
+    AuthRepository authRepository = GetIt.instance<AuthRepository>();
     late List<List<Post>> data;
     await authRepository.getUserInfo().then((value) async {
-      PostRepository repository = PostRepository();
+      PostRepository repository = GetIt.instance<PostRepository>();
       PostFilter filter = PostFilter(
         orderBy: OrderBy.priceAsc,
         postedBy: PostedBy.all,

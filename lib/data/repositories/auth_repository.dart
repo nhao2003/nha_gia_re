@@ -17,7 +17,8 @@ class AuthRepository{
 
   static UserInfo? userInfo;
 
-  final RemoteDataSource _remoteDataSource = RemoteDataSource();
+  final RemoteDataSource _remoteDataSource;
+  AuthRepository(this._remoteDataSource);
 
   Future<UserInfo> getUserInfo()
   async {
@@ -44,9 +45,9 @@ class AuthRepository{
       {required String email, required String password}) async {
     try {
       final response =
-          await remoteDataSourceImpl.signIn(email: email, password: password);
+          await _remoteDataSource.signIn(email: email, password: password);
       final info =
-          await remoteDataSourceImpl.getUserInfo(response.user!.id);
+          await _remoteDataSource.getUserInfo(response.user!.id);
       userInfo = UserInfo.fromJson(info);
       return userInfo!;
     } catch (e) {
@@ -64,7 +65,7 @@ class AuthRepository{
         throw const AuthException("A user with this email address has already been registered");
       }
       final info =
-          await remoteDataSourceImpl.getUserInfo(response.user!.id);
+          await _remoteDataSource.getUserInfo(response.user!.id);
       userInfo = UserInfo.fromJson(info);
       return userInfo!;
     } catch (e) {
@@ -79,7 +80,7 @@ class AuthRepository{
   Future<UserInfo> updateProfile(
       UpdateProfileRequest updateProfileRequest) async {
     final userRes =
-        await remoteDataSourceImpl.updateUser(updateProfileRequest.toJson());
+        await _remoteDataSource.updateUser(updateProfileRequest.toJson());
     userInfo = UserInfo.fromJson(userRes);
     return userInfo!;
   }
