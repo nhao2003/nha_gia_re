@@ -4,10 +4,12 @@ import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/models/conversation.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/repositories/chat_repository.dart';
+import 'package:nha_gia_re/data/repositories/user_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ConversationController extends GetxController {
   late final ChatRepository repo;
+  late final UserRepository userRepo;
   final supabase = Supabase.instance.client;
 
   Stream<List<Conversation>> get conversationStream => repo.conversationStream;
@@ -19,7 +21,7 @@ class ConversationController extends GetxController {
 
   Future<UserInfo> getUserInfo(String uid) async {
     try {
-      return await repo.getUserInfo(uid);
+      return await userRepo.getUserInfo(uid);
     } catch (e) {
       rethrow;
     }
@@ -27,6 +29,7 @@ class ConversationController extends GetxController {
 
   void initializeConversations() {
     repo = GetIt.instance<ChatRepository>();
+    userRepo = GetIt.instance<UserRepository>();
   }
 
   Future deleteConversation(Conversation conversation) async {

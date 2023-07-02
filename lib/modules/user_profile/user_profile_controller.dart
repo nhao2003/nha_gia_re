@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:nha_gia_re/data/models/address.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
@@ -74,7 +75,7 @@ class UserProfileController extends GetxController {
 
   Future<void> handleSubmit() async {
     if (userProfileFormKey.currentState!.validate()) {
-      var auth = AuthRepository();
+      final auth = GetIt.instance<AuthRepository>();
       if (auth.isUserLoggedIn) {
         UpdateProfileRequest request = UpdateProfileRequest.name(
             address: Address(

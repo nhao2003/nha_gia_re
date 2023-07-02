@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
 import 'package:nha_gia_re/data/repositories/post_repository.dart';
@@ -26,7 +27,7 @@ class HomeController extends GetxController {
     }
   }
 
-  PostRepository repository = PostRepository();
+  PostRepository repository = GetIt.instance<PostRepository>();
 
   void navToPost() {
     Get.toNamed(AppRoutes.post);

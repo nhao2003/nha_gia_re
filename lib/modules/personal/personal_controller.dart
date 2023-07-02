@@ -4,6 +4,7 @@ import 'package:nha_gia_re/data/models/properties/post.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/data/repositories/post_repository.dart';
+import 'package:nha_gia_re/data/repositories/user_repository.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 
 import '../../data/providers/remote/remote_data_source.dart';
@@ -11,12 +12,12 @@ import '../../data/repositories/chat_repository.dart';
 
 class PersonalController extends GetxController {
   late UserInfo userInfo;
-  var auth = AuthRepository();
-  var authId = AuthRepository().userID;
+  var auth = GetIt.instance<AuthRepository>();
+  var authId = GetIt.instance<AuthRepository>().userID;
   late RxBool isFollowing = true.obs;
   bool isLoading = false;
   final remoteDataSourceImpl = RemoteDataSource();
-  ChatRepository chatRepository = GetIt.instance<ChatRepository>();
+  UserRepository userRepo = GetIt.instance<UserRepository>();
 
   bool check()
   {
@@ -24,12 +25,12 @@ class PersonalController extends GetxController {
   }
 
   Future<List<Post>> getPosts() async {
-    PostRepository repository = PostRepository();
+    PostRepository repository = GetIt.instance<PostRepository>();
     return await repository.getUserPosts(userInfo.uid);
   }
 
   Future<UserInfo> getAuthUserInfo() async {
-    return await chatRepository.getUserInfo(AuthRepository().userID!);
+    return await userRepo.getUserInfo(auth.userID!);
   }
 
   void navToUserProfile() {

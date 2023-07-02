@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/data/services/onesignal_service.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
@@ -39,7 +40,7 @@ class LoginController extends GetxController {
   }
   Future<void> handleLogin()
   async {
-    final auth = AuthRepository();
+    final auth = GetIt.instance<AuthRepository>();
     if(loginFormGlobalKey.currentState!.validate())
     {
       print(loginEmail.text + ' ' + loginPassword.text);
@@ -86,7 +87,7 @@ class LoginController extends GetxController {
   }
   Future<void> handleRegister()
   async {
-    final auth = AuthRepository();
+    final auth = GetIt.instance<AuthRepository>();
     if(registerFormGlobalKey.currentState!.validate())
     {
       try{
@@ -111,7 +112,7 @@ class LoginController extends GetxController {
   }
   Future<void> handleForgotPass()
   async {
-    final auth = AuthRepository();
+    final auth = GetIt.instance<AuthRepository>();
     if(forgotPassFormGlobalKey.currentState!.validate())
     {
       try
