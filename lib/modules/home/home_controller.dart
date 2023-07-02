@@ -69,6 +69,8 @@ class HomeController extends GetxController {
       isLease: true,
       orderBy: OrderBy.createdAtDesc,
       postedBy: PostedBy.all,
+      from: 0,
+      to: 10,
     ));
   }
 
@@ -77,6 +79,8 @@ class HomeController extends GetxController {
       isLease: false,
       orderBy: OrderBy.createdAtDesc,
       postedBy: PostedBy.all,
+      from: 0,
+      to: 10,
     ));
   }
 }

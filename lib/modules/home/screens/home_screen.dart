@@ -11,6 +11,7 @@ import 'package:nha_gia_re/global_widgets/carousel_ad.dart';
 import 'package:nha_gia_re/modules/home/widgets/image_button.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../../core/values/filter_values.dart';
+import '../../../data/enums/enums.dart';
 import '../../../data/models/properties/post.dart';
 import '../../search/widgets/my_search_delegate.dart';
 import '../home_controller.dart';
@@ -190,9 +191,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    const InforCardList(title: 'Gần bạn', list: []),
-                    InforCardList(title: 'Nhà bán', list: data.first),
-                    InforCardList(title: 'Nhà cho thuê', list: data.last),
+                    const InforCardList(title: 'Gần bạn', list: [], navType: TypeNavigate.province,),
+                    InforCardList(title: 'Nhà cho thuê', list: data.first, navType: TypeNavigate.rent,),
+                    InforCardList(title: 'Nhà bán', list: data.last, navType: TypeNavigate.sell ,),
                   ],
                 ),
               );

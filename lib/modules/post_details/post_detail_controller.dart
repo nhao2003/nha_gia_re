@@ -11,15 +11,17 @@ import 'package:nha_gia_re/modules/post_details/widget/motel_details.dart';
 import 'package:nha_gia_re/modules/post_details/widget/office_details.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../data/enums/enums.dart';
 import '../../data/models/properties/post.dart';
 import '../../data/models/user_info.dart';
+import '../../data/providers/remote/request/filter_request.dart';
 
 class PostDetailController extends GetxController {
   // code controller here
   // define variable and function
   late Post post;
   late UserInfo userInfo;
-
+  late List<Post> relatedPost;
   late bool isYourPost = false;
   bool isLoading = false;
   RxBool liked = false.obs;
@@ -54,10 +56,18 @@ class PostDetailController extends GetxController {
   Future<List<dynamic>> init() async {
     ChatRepository repo = GetIt.instance<ChatRepository>();
     PostRepository postRepo = PostRepository();
+    PostFilter filter = PostFilter(
+      orderBy: OrderBy.priceAsc,
+      postedBy: PostedBy.all,
+      from: 0,
+      to: 10,
+      provinceCode: post.address.cityCode,
+    );
     final data = Future.wait([
       repo.getUserInfo(post.userID),
       postRepo.getPostDetail(post),
-      postRepo.hasLikePost(post.id)
+      postRepo.hasLikePost(post.id),
+      postRepo.getAllPosts(filter,)
     ]);
     return data;
   }
