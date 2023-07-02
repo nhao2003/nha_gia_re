@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nha_gia_re/core/extensions/date_ex.dart';
 import 'package:nha_gia_re/core/extensions/integer_ex.dart';
+import 'package:nha_gia_re/core/extensions/string_ex.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
+import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
+import '../core/values/filter_values.dart';
 import '../data/models/properties/post.dart';
 
 class InforCard extends StatelessWidget {
@@ -43,7 +46,7 @@ class InforCard extends StatelessWidget {
               height: 8,
             ),
             Text(
-              1010000000.toFormattedMoney(isLease: post.isLease),
+              post.price.toFormattedMoney(isLease: post.isLease),
               style:
                   AppTextStyles.roboto16semiBold.copyWith(color: AppColors.red),
             ),
@@ -73,11 +76,13 @@ class InforCard extends StatelessWidget {
 }
 
 class InforCardList extends StatefulWidget {
-  const InforCardList({super.key, required this.title, required this.list});
+  const InforCardList({super.key, required this.title, required this.list, required this.navType, this.province, this.uid});
 
   final String title;
   final List<Post> list;
-
+  final TypeNavigate navType;
+  final String? province;
+  final String? uid;
   @override
   State<InforCardList> createState() => _InforCardListState();
 }
@@ -130,14 +135,28 @@ class _InforCardListState extends State<InforCardList> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              InkWell(
+              ZoomTapAnimation( child: InkWell(
                 child: Text(
-                  'Xem thêm 12.345 mẫu tin khác',
+                  'Xem tất cả',
                   style: AppTextStyles.roboto16regular
                       .copyWith(color: AppColors.blue),
                 ),
-                onTap: () {},
-              ),
+                onTap: () {
+                  String? matchingProvince;
+                  if(widget.province != null) {
+                    matchingProvince = FilterValues.instance.provinces.firstWhere(
+                        (item) => widget.province!.noAccentVietnamese().contains(item.noAccentVietnamese()),
+                      );
+                  }
+                  var data = {
+                    "title": widget.title,
+                    "type": widget.navType,
+                    "province" : matchingProvince,
+                    "uid" : widget.uid,
+                  };
+                  Get.toNamed(AppRoutes.resultArg, arguments: data);
+                },
+              ),)
             ],
           )
         ],

@@ -398,4 +398,5 @@ enum TypeNavigate {
   sell,
   rent,
   province,
+  user,
 }

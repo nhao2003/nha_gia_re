@@ -20,6 +20,7 @@ class MySearchController extends GetxController {
   // type of navigate when navigate from home
   TypeNavigate typeResult = TypeNavigate.search;
   String province = ""; // province when navigate
+  String uid = "";
 
   void setTypeResult(TypeNavigate type) {
     typeResult = type;
@@ -105,9 +106,16 @@ class MySearchController extends GetxController {
       changeSelectedItem(province);
       return;
     }
-
-    searchPosts.value =
-        await repository.getAllPosts(SearchService.instance.filter);
+    if(typeResult == TypeNavigate.user) 
+    {
+      uid = Get.arguments["uid"];
+      searchPosts.value = await repository.getUserPosts(uid);
+    }
+    else
+    {
+      searchPosts.value =
+          await repository.getAllPosts(SearchService.instance.filter);
+    }
   }
 
   /// data in search delegate

@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:nha_gia_re/modules/address_form/address_binding.dart';
+import 'package:nha_gia_re/modules/address_form/screens/address.dart';
 import 'package:nha_gia_re/modules/blog/screens/blog_detail_screen.dart';
 import 'package:nha_gia_re/modules/blog/screens/blog_list_screen.dart';
 import 'package:nha_gia_re/modules/maps/screens/map_picker_screen.dart';
@@ -135,6 +137,11 @@ abstract class AppPages {
       name: AppRoutes.blog_screen_detail,
       page: () => BlogDetailScreen(),
       binding: BlogBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.address,
+      page: () => AddressScreen(),
+      binding: AddressBinding(),
     ),
   ];
 }

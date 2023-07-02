@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
+import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
+import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/data/repositories/post_repository.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../data/models/properties/post.dart';
@@ -27,6 +29,7 @@ class HomeController extends GetxController {
     }
   }
 
+  UserInfo? userInfo;
   PostRepository repository = GetIt.instance<PostRepository>();
 
   void navToPost() {
@@ -59,8 +62,21 @@ class HomeController extends GetxController {
   }
 
   Future<List<List<Post>>> init() async {
-    final List<List<Post>> data =
-        await Future.wait([getLeasePosts(), getSellPosts()]);
+    AuthRepository authRepository = AuthRepository();
+    late List<List<Post>> data;
+    await authRepository.getUserInfo().then((value) async {
+      PostRepository repository = PostRepository();
+      PostFilter filter = PostFilter(
+        orderBy: OrderBy.priceAsc,
+        postedBy: PostedBy.all,
+        provinceCode: value.address?.cityCode,
+        from: 0,
+        to: 10,
+      );
+      userInfo = value;
+      data = await Future.wait([getLeasePosts(), repository.getAllPosts(filter),  getSellPosts()]);
+    }
+    );
     print("Data Length: ${data.length}");
     return data;
   }
@@ -70,6 +86,8 @@ class HomeController extends GetxController {
       isLease: true,
       orderBy: OrderBy.createdAtDesc,
       postedBy: PostedBy.all,
+      from: 0,
+      to: 10,
     ));
   }
 
@@ -78,6 +96,8 @@ class HomeController extends GetxController {
       isLease: false,
       orderBy: OrderBy.createdAtDesc,
       postedBy: PostedBy.all,
+      from: 0,
+      to: 10,
     ));
   }
 }

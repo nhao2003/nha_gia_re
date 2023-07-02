@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/modules/user_profile/user_profile_controller.dart';
 import 'package:nha_gia_re/modules/user_profile/widgets/user_image_picker.dart';
+import 'package:nha_gia_re/routers/app_routes.dart';
 
 class UserProfileScreen extends StatelessWidget {
   const UserProfileScreen({super.key});
@@ -11,6 +14,7 @@ class UserProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserProfileController _controller = Get.find<UserProfileController>();
+    final TextEditingController addressController = TextEditingController();
     _controller.init(Get.arguments);
     return Scaffold(
       appBar: AppBar(
@@ -51,6 +55,35 @@ class UserProfileScreen extends StatelessWidget {
                         labelText: 'Số điện thoại',
                         border: OutlineInputBorder()),
                     validator: _controller.validateTextField,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    onTap: () async {
+                      addressController.text = await Get.toNamed(AppRoutes.address)!.then((value) => value.toString());
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Vui lòng chọn địa chỉ';
+                      }
+                      return null;
+                    },
+                    readOnly: true,
+                    controller: addressController,
+                    enabled: true,
+                    decoration: InputDecoration(
+                      hintText: "Địa chỉ",
+                      hintStyle: AppTextStyles.roboto16regular
+                          .copyWith(color: AppColors.grey),
+                      disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                        borderSide: const BorderSide(color: Colors.grey),
+                      ),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                          borderSide: const BorderSide(color: Colors.grey)),
+                    ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

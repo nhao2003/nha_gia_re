@@ -11,6 +11,7 @@ class PostFilter {
   int? maxPrice;
   int? minArea;
   int? maxArea;
+  int? provinceCode;
   PostedBy postedBy;
 
   PostFilter({
@@ -24,6 +25,7 @@ class PostFilter {
     this.maxPrice,
     this.minArea,
     this.maxArea,
+    this.provinceCode,
     required this.postedBy,
   }) : assert((from != null && to != null && from < to) ||
             (from == null && to == null));

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/values/assets_image.dart';
+import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/models/properties/post.dart';
 import 'package:nha_gia_re/global_widgets/infor_card.dart';
 import 'package:nha_gia_re/modules/personal/personal_controller.dart';
@@ -270,7 +271,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                     );
                   } else {
                     final List<Post> data = snapshot.data!;
-                    return InforCardList(title: 'Tin đã đăng', list: data);
+                    return InforCardList(title: 'Tin đã đăng', list: data, navType: TypeNavigate.user,uid: _controller.userInfo.uid,);
                   }
                 },
                 future: _controller.getPosts(),

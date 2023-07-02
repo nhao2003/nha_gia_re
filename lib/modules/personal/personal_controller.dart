@@ -7,7 +7,9 @@ import 'package:nha_gia_re/data/repositories/post_repository.dart';
 import 'package:nha_gia_re/data/repositories/user_repository.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 
+import '../../data/enums/enums.dart';
 import '../../data/providers/remote/remote_data_source.dart';
+import '../../data/providers/remote/request/filter_request.dart';
 import '../../data/repositories/chat_repository.dart';
 
 class PersonalController extends GetxController {
@@ -27,10 +29,19 @@ class PersonalController extends GetxController {
   Future<List<Post>> getPosts() async {
     PostRepository repository = GetIt.instance<PostRepository>();
     return await repository.getUserPosts(userInfo.uid);
+    PostRepository repository = PostRepository();
+    PostFilter filter = PostFilter(
+      orderBy: OrderBy.priceAsc,
+      postedBy: PostedBy.all,
+      postedByUserID: userInfo.uid,
+      from: 0,
+      to: 10,
+    );
+    return await repository.getAllPosts(filter);
   }
 
   Future<UserInfo> getAuthUserInfo() async {
-    return await userRepo.getUserInfo(auth.userID!);
+    return await auth.getUserInfo();
   }
 
   void navToUserProfile() {

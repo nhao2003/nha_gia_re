@@ -10,6 +10,8 @@ import 'package:nha_gia_re/global_widgets/infor_card.dart';
 import 'package:nha_gia_re/global_widgets/carousel_ad.dart';
 import 'package:nha_gia_re/modules/post_details/post_detail_controller.dart';
 import 'package:nha_gia_re/modules/post_details/widget/expandable_container.dart';
+
+import '../../../data/enums/enums.dart';
 class PostDetailsScreen extends StatefulWidget {
   const PostDetailsScreen({super.key});
 
@@ -44,8 +46,9 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
           } else {
             _controller.post = snapshot.data?[1];
             _controller.numOfLikes.value = _controller.post.numOfLikes;
-            _controller.liked.value = snapshot.data?.last;
+            _controller.liked.value = snapshot.data?[2];
             _controller.userInfo = snapshot.data?.first;
+            _controller.relatedPost = snapshot.data?.last;
             print(snapshot.data);
             return SingleChildScrollView(
               child: Column(children: [
@@ -183,7 +186,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                     ),
                   ),
                 ),
-                const InforCardList(title: 'Liên Quan', list: [])
+                InforCardList(title: 'Liên Quan', list: _controller.relatedPost, navType: TypeNavigate.province, province: _controller.post.address.cityName,)
               ]),
             );
           }
