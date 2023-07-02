@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/core/extensions/string_ex.dart';
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
 import 'package:nha_gia_re/data/services/list_check_service.dart';
@@ -61,7 +62,7 @@ class MySearchController extends GetxController {
   final RxList<String> searchStrings = <String>[].obs;
 
   Future<RxList<String>> getSearchString() async {
-    List<Post> datas = await repository.getUserPosts(AuthRepository().userID!);
+    List<Post> datas = await repository.getUserPosts(GetIt.instance<AuthRepository>().userID!);
     searchStrings.clear();
     for (var data in datas) {
       searchStrings.add(data.title);
@@ -266,7 +267,7 @@ class MySearchController extends GetxController {
 
   // filter function ===============================
   /// this function use to filter post in search
-  PostRepository repository = PostRepository();
+  PostRepository repository = GetIt.instance<PostRepository>();
   int indexStartPost = 0;
   int rangeGetPosts = 10;
 

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';

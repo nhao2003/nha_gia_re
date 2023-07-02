@@ -16,7 +16,6 @@ import '../../data/models/message.dart';
 import '../../routers/app_routes.dart';
 
 class ChatController extends GetxController {
-  final supabase = Supabase.instance.client;
   RxList<File> mediaPicker = RxList<File>();
   late StreamSubscription<List<Message>> streamSubscription;
   final StreamController<List<Message>> _controller = StreamController();
@@ -60,8 +59,6 @@ class ChatController extends GetxController {
   void removeMedia(File file) {
     mediaPicker.remove(file);
   }
-
-  int i = 0;
 
   Future<void> initializeMessages(dynamic arg) async {
     if (arg is Conversation) {

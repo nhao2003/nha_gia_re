@@ -6,10 +6,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
 import '../../../core/utils/map_utils.dart';
+import '../map_controller.dart';
 
 class MapPickerScreen extends StatefulWidget {
   bool isSelecting = true;
   LatLng location = const LatLng(37.422, -122.084);
+
   MapPickerScreen({super.key});
 
   @override
@@ -17,29 +19,14 @@ class MapPickerScreen extends StatefulWidget {
 }
 
 class _MapPickerScreenState extends State<MapPickerScreen> {
-  late GoogleMapController mapController;
-  LatLng? _pickedLocation;
   Location location = Location();
-
-  Future<bool> requestLocationServiceAndPermission() async {
-    if (!await MapUtils.requestLocationService()) {
-      Get.snackbar(
-          "Vị trị đang tắt", "Vui lòng bật vị trí để sử dụng ứng dụng");
-      return false;
-    }
-    if (!await MapUtils.requestLocationPermission()) {
-      Get.snackbar("Quyền truy cập vị trí đang tắt",
-          "Vui lòng cấp quyền vị trí để sử dụng ứng dụng");
-      return false;
-    }
-    return true;
-  }
+  late final MapController _controller;
 
   @override
   void initState() {
-    // TODO: implement initState
+    _controller = Get.find<MapController>();
+    _controller.requestLocationServiceAndPermission();
     super.initState();
-    requestLocationServiceAndPermission();
   }
 
   @override
@@ -47,43 +34,37 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
     return Scaffold(
       appBar: AppBar(
         title:
-        Text(widget.isSelecting ? 'Pick your Location' : 'Your Location'),
+            Text(widget.isSelecting ? 'Pick your Location' : 'Your Location'),
       ),
       body: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          GoogleMap(
-            zoomControlsEnabled: false,
-            myLocationButtonEnabled: true,
-            myLocationEnabled: true,
-            onMapCreated: (controller) {
-              mapController = controller;
-            },
-            onTap: !widget.isSelecting
-                ? null
-                : (position) {
-              setState(() {
-                _pickedLocation = position;
-              });
-            },
-            initialCameraPosition: CameraPosition(
-              target: LatLng(
-                widget.location.latitude,
-                widget.location.longitude,
+          Obx(
+            () => GoogleMap(
+              zoomControlsEnabled: false,
+              myLocationButtonEnabled: true,
+              myLocationEnabled: true,
+              onTap: !widget.isSelecting ? null :_controller.onMapTap,
+              initialCameraPosition: CameraPosition(
+                target: LatLng(
+                  widget.location.latitude,
+                  widget.location.longitude,
+                ),
               ),
+              markers: (_controller.pickedLocation.value == null &&
+                      widget.isSelecting)
+                  ? {}
+                  : {
+                      Marker(
+                        markerId: const MarkerId('m1'),
+                        position: _controller.pickedLocation.value ??
+                            LatLng(
+                              widget.location.latitude,
+                              widget.location.longitude,
+                            ),
+                      ),
+                    },
             ),
-            markers: (_pickedLocation == null && widget.isSelecting)
-                ? {}
-                : {
-              Marker(
-                markerId: const MarkerId('m1'),
-                position: _pickedLocation ??
-                    LatLng(
-                      widget.location.latitude,
-                      widget.location.longitude,
-                    ),
-              ),
-            },
           ),
           Container(
             margin: const EdgeInsets.fromLTRB(10, 0, 10, 20),
@@ -92,20 +73,13 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton.icon(
-                  onPressed: () async {
-                    final data = await Location.instance.getLocation();
-                    log("${data.latitude}/${data.longitude}");
-                    Get.back(result: LatLng(data.latitude!, data.longitude!));
-                  },
+                  onPressed: _controller.pickCurrentPosition,
                   label: const Text("Chọn vị trí hiện tại"),
                   icon: const Icon(Icons.my_location),
                 ),
-                if(_pickedLocation != null)
+                if (_controller.pickedLocation.value != null)
                   ElevatedButton.icon(
-                    onPressed: () {
-                      log("${_pickedLocation!.latitude}/${_pickedLocation!.longitude}");
-                      Get.back(result: _pickedLocation);
-                    },
+                    onPressed: _controller.pickPickedLocation,
                     label: const Text("Chọn vị trí đã ghim"),
                     icon: const Icon(Icons.add_location),
                   ),
@@ -116,5 +90,4 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
       ),
     );
   }
-
 }

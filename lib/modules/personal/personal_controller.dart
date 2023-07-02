@@ -4,6 +4,7 @@ import 'package:nha_gia_re/data/models/properties/post.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/data/repositories/post_repository.dart';
+import 'package:nha_gia_re/data/repositories/user_repository.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 
 import '../../data/enums/enums.dart';
@@ -13,11 +14,12 @@ import '../../data/repositories/chat_repository.dart';
 
 class PersonalController extends GetxController {
   late UserInfo userInfo;
-  var auth = AuthRepository();
-  var authId = AuthRepository().userID;
+  var auth = GetIt.instance<AuthRepository>();
+  var authId = GetIt.instance<AuthRepository>().userID;
   late RxBool isFollowing = true.obs;
   bool isLoading = false;
   final remoteDataSourceImpl = RemoteDataSource();
+  UserRepository userRepo = GetIt.instance<UserRepository>();
 
   bool check()
   {
@@ -25,7 +27,7 @@ class PersonalController extends GetxController {
   }
 
   Future<List<Post>> getPosts() async {
-    PostRepository repository = PostRepository();
+    PostRepository repository = GetIt.instance<PostRepository>();
     PostFilter filter = PostFilter(
       orderBy: OrderBy.priceAsc,
       postedBy: PostedBy.all,

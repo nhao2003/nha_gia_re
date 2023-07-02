@@ -15,6 +15,7 @@ import '../../data/enums/enums.dart';
 import '../../data/models/properties/post.dart';
 import '../../data/models/user_info.dart';
 import '../../data/providers/remote/request/filter_request.dart';
+import '../../data/repositories/user_repository.dart';
 
 class PostDetailController extends GetxController {
   // code controller here
@@ -30,7 +31,7 @@ class PostDetailController extends GetxController {
   void initArg(dynamic arg) {
     if (arg is Post) {
       post = arg;
-      var auth = AuthRepository();
+      var auth = GetIt.instance<AuthRepository>();
       if (post.userID == auth.userID) {
         isYourPost = true;
       }
@@ -54,8 +55,8 @@ class PostDetailController extends GetxController {
   }
 
   Future<List<dynamic>> init() async {
-    ChatRepository repo = GetIt.instance<ChatRepository>();
-    PostRepository postRepo = PostRepository();
+    final repo = GetIt.instance<UserRepository>();
+    PostRepository postRepo = GetIt.instance<PostRepository>();
     PostFilter filter = PostFilter(
       orderBy: OrderBy.priceAsc,
       postedBy: PostedBy.all,
@@ -73,7 +74,7 @@ class PostDetailController extends GetxController {
   }
 
   void likePost() async {
-    PostRepository postRepo = PostRepository();
+    PostRepository postRepo = GetIt.instance<PostRepository>();
     if (!liked.value && !isLoading) {
       isLoading = true;
       await postRepo.likePost(post.id).then((value) {

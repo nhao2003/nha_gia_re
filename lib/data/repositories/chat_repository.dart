@@ -14,23 +14,9 @@ class ChatRepository {
   ChatRepository(this._remoteDataSource);
 
   late StreamSubscription<List<Conversation>> conversationSubscription;
-  final Map<String, UserInfo> _userInfos = {};
   late final Stream<List<Conversation>> stream;
   Stream<List<Conversation>> get conversationStream =>
       _remoteDataSource.getAllConversation();
-
-  Future<UserInfo> getUserInfo(String uid) async {
-    UserInfo? user = _userInfos[uid];
-    if (user != null) return user;
-    try {
-      final data = await _remoteDataSource.getUserInfo(uid);
-      user = UserInfo.fromJson(data);
-      _userInfos.putIfAbsent(user.uid, () => user!);
-      return UserInfo.fromJson(data);
-    } catch (e) {
-      rethrow;
-    }
-  }
 
   Future sendMessage(MessageRequest request) async {
     List<String>? urls;

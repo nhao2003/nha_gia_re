@@ -30,7 +30,7 @@ class _BlogListScreenState extends State<BlogListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('News List'),
+        title: Text('Blogs'),
       ),
       body: FutureBuilder<List<Blog>>(
           future: _controller.getBlogs(),
@@ -40,7 +40,7 @@ class _BlogListScreenState extends State<BlogListScreen> {
                 child: CircularProgressIndicator(),
               );
             }
-            final data = snapshot.data!;
+            List<Blog> data = snapshot.data!;
             return ListView.builder(
               itemCount: data.length,
               itemBuilder: (BuildContext context, int index) {
@@ -94,6 +94,7 @@ class _BlogListScreenState extends State<BlogListScreen> {
                                   style: AppTextStyles.roboto16regular
                                       .copyWith(color: AppColors.white),
                                   maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                                 const SizedBox(
                                   height: 8,

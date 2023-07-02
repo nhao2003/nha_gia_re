@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:nha_gia_re/data/models/address.dart';
@@ -19,8 +20,8 @@ class PropertyController extends GetxController{
   void editPost(Post post){
 
   }
-  final authRepository = AuthRepository();
-  final postRepository = PostRepository();
+  final authRepository = GetIt.instance<AuthRepository>();
+  final postRepository = GetIt.instance<PostRepository>();
   Future<void> getProvince() async{
     final response = await http.get(Uri.parse('https://provinces.open-api.vn/api/?depth=3'));
     print(response.statusCode);
