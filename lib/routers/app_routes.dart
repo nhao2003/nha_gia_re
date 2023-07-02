@@ -7,6 +7,8 @@ abstract class AppRoutes {
   static const home = '/home';
   // login
   static const login = '/login';
+  // address form
+  static const address = '/address';
   // search
   static const search = '/search';
   static const filter = '/search/filter';
