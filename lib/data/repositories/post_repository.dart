@@ -77,9 +77,11 @@ class PostRepository extends BaseRepository {
       rethrow;
     }
   }
-  Future<Post> getPostDetail(Post post) async {
-    final data = await remoteDataSourceImpl.getPostDetails(post.id, post.type);
-    switch (post.type){
+
+  Future<Post> getPostDetail(String id, PropertyType type) async {
+    Map<String, dynamic> data =
+        await remoteDataSourceImpl.getPostDetails(id, type);
+    switch (type) {
       case PropertyType.apartment:
         return Apartment.fromJson(data);
       case PropertyType.land:
@@ -92,45 +94,54 @@ class PostRepository extends BaseRepository {
         return House.fromJson(data);
     }
   }
+
   Future<List<Post>> getUserPosts(String uid) async {
     final List<Map<String, dynamic>> response;
     response = await remoteDataSourceImpl.getUserPosts(uid);
     return response.map((e) => Post.fromJson(e)).toList();
   }
+
   Future<List<Post>> getAllPosts(PostFilter filter) async {
     final List<Map<String, dynamic>> response;
     response = await remoteDataSourceImpl.getAllPosts(filter);
     return response.map((e) => Post.fromJson(e)).toList();
   }
+
   Future<List<Apartment>> getAllApartments(ApartmentFilter filter) async {
     final List<Map<String, dynamic>> response;
     response = await remoteDataSourceImpl.getAllApartments(filter);
     return response.map((e) => Apartment.fromJson(e)).toList();
   }
+
   Future<List<House>> getAllHouses(HouseFilter filter) async {
     final List<Map<String, dynamic>> response;
     response = await remoteDataSourceImpl.getAllHouses(filter);
     return response.map((e) => House.fromJson(e)).toList();
   }
+
   Future<List<Land>> getAllLands(LandFilter filter) async {
     final List<Map<String, dynamic>> response;
     response = await remoteDataSourceImpl.getAllLands(filter);
     return response.map((e) => Land.fromJson(e)).toList();
   }
+
   Future<List<Office>> getAllOffices(OfficeFilter filter) async {
     final List<Map<String, dynamic>> response;
     response = await remoteDataSourceImpl.getAllOffices(filter);
     return response.map((e) => Office.fromJson(e)).toList();
   }
+
   Future<List<Motel>> getAllMotels(MotelFilter filter) async {
     final List<Map<String, dynamic>> response;
     response = await remoteDataSourceImpl.getAllMotels(filter);
     return response.map((e) => Motel.fromJson(e)).toList();
   }
-  Future<void> hideOrUnHidePost(String postId, bool isHide) async{
+
+  Future<void> hideOrUnHidePost(String postId, bool isHide) async {
     await remoteDataSourceImpl.hideOrUnHidePost(postId, isHide);
   }
-  Future<void> extendPostExpiryDate(String postId, bool isHide) async{
+
+  Future<void> extendPostExpiryDate(String postId, bool isHide) async {
     await remoteDataSourceImpl.extendPost(postId);
   }
 }

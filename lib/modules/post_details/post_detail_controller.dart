@@ -23,62 +23,54 @@ class PostDetailController extends GetxController {
   late UserInfo userInfo;
 
   late bool isYourPost = false;
-  void initArg(dynamic arg)
-  {
-    if(arg is Post)
-    {
+  void initArg(dynamic arg) {
+    if (arg is Post) {
       post = arg;
       var auth = AuthRepository();
-      if(post.userID == auth.userID)
-      {
+      if (post.userID == auth.userID) {
         isYourPost = true;
       }
     }
   }
 
-  Widget postDetail(Post post)
-  {
-    if(post is Apartment) {
+  Widget postDetail(Post post) {
+    if (post is Apartment) {
       return ApartmentDetails(apartment: post);
-    } else if(post is House)
-    {
+    } else if (post is House) {
       return HouseDetails(house: post);
-    } else if(post is Land)
-    {
+    } else if (post is Land) {
       return LandDetails(land: post);
-    } else if(post is Office)
-    {
+    } else if (post is Office) {
       return OfficeDetails(office: post);
-    } else if(post is Motel)
-    {
+    } else if (post is Motel) {
       return MotelDetails(motel: post);
-    }
-    else
+    } else
       return SizedBox();
   }
 
-  Future<List<dynamic>> init() async
-  {
+  Future<List<dynamic>> init() async {
     ChatRepository repo = ChatRepository();
     PostRepository postRepo = PostRepository();
-    final data = Future.wait([repo.getUserInfo(post.userID),postRepo.getPostDetail(post)]);
+    final data = Future.wait([
+      repo.getUserInfo(post.userID),
+      postRepo.getPostDetail(post.id, post.type)
+    ]);
     return data;
   }
 
-  void navToChat()
-  {
+  void navToChat() {
     Get.toNamed(AppRoutes.chat, arguments: userInfo);
   }
-  void navToUserProfile()
-  {
-    Get.toNamed(AppRoutes.personal,arguments: userInfo);
+
+  void navToUserProfile() {
+    Get.toNamed(AppRoutes.personal, arguments: userInfo);
   }
-  void launchPhone()
-  {
+
+  void launchPhone() {
     launchUrl(Uri.parse("tel://${userInfo.phoneNumber}"));
   }
-  void launchSms()
-  {
+
+  void launchSms() {
     launchUrl(Uri.parse("sms://${userInfo.phoneNumber}"));
   }
 }

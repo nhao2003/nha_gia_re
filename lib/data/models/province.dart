@@ -4,15 +4,15 @@ class Province {
   String? codename;
   String? divisionType;
   int? phoneCode;
-  List<Districts>? districts;
+  List<District?>? districts;
 
   Province(
-      { this.name,
-        this.code,
-        this.codename,
-        this.divisionType,
-        this.phoneCode,
-        this.districts});
+      {this.name,
+      this.code,
+      this.codename,
+      this.divisionType,
+      this.phoneCode,
+      this.districts});
 
   Province.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -21,13 +21,12 @@ class Province {
     divisionType = json['division_type'];
     phoneCode = json['phone_code'];
     if (json['districts'] != null) {
-      districts = <Districts>[];
+      districts = <District>[];
       json['districts'].forEach((v) {
-        districts?.add(new Districts.fromJson(v));
+        districts?.add(District.fromJson(v));
       });
     }
   }
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
@@ -37,72 +36,72 @@ class Province {
     data['phone_code'] = this.phoneCode;
     final districts = this.districts;
     if (districts != null) {
-      data['districts'] = districts.map((v) => v.toJson()).toList();
+      data['districts'] = districts.map((v) => v?.toJson()).toList();
     }
     return data;
   }
 }
 
-class Districts {
+class District {
   String? name;
   int? code;
   String? codename;
   String? divisionType;
   String? shortCodename;
-  List<Wards>? wards;
+  List<Ward?>? wards;
 
-  Districts(
+  District(
       {this.name,
-        this.code,
-        this.codename,
-        this.divisionType,
-        this.shortCodename,
-        this.wards});
+      this.code,
+      this.codename,
+      this.divisionType,
+      this.shortCodename,
+      this.wards});
 
-  Districts.fromJson(Map<String, dynamic> json) {
+  District.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     code = json['code'];
     codename = json['codename'];
     divisionType = json['division_type'];
     shortCodename = json['short_codename'];
     if (json['wards'] != null) {
-      wards = <Wards>[];
+      wards = <Ward>[];
       json['wards'].forEach((v) {
-        wards?.add(new Wards.fromJson(v));
+        wards?.add(Ward.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['code'] = this.code;
-    data['codename'] = this.codename;
-    data['division_type'] = this.divisionType;
-    data['short_codename'] = this.shortCodename;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['code'] = code;
+    data['codename'] = codename;
+    data['division_type'] = divisionType;
+    data['short_codename'] = shortCodename;
     final wards = this.wards;
     if (wards != null) {
-      data['wards'] = wards.map((v) => v.toJson()).toList();
+      data['wards'] = wards.map((v) => v?.toJson()).toList();
     }
     return data;
   }
 }
 
-class Wards {
+class Ward {
   String? name;
   int? code;
   String? codename;
   String? divisionType;
   String? shortCodename;
 
-  Wards(
+  Ward(
       {this.name,
-        this.code,
-        this.codename,
-        this.divisionType,
-        this.shortCodename});
+      this.code,
+      this.codename,
+      this.divisionType,
+      this.shortCodename});
 
-  Wards.fromJson(Map<String, dynamic> json) {
+  Ward.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     code = json['code'];
     codename = json['codename'];
@@ -111,12 +110,12 @@ class Wards {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['code'] = this.code;
-    data['codename'] = this.codename;
-    data['division_type'] = this.divisionType;
-    data['short_codename'] = this.shortCodename;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['code'] = code;
+    data['codename'] = codename;
+    data['division_type'] = divisionType;
+    data['short_codename'] = shortCodename;
     return data;
   }
 }

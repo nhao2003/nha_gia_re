@@ -48,16 +48,20 @@ class _PostAddressScreenState extends State<PostAddressScreen> {
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5.r)),
                           borderSide: const BorderSide(color: Colors.black)),
+                      hintText: "Tỉnh/ thành phố",
                     ),
-                    hint: Text("Tỉnh/ thành phố"),
-                    items: controller.provinceList.map((province) {
-                      return DropdownMenuItem<Province>(
-                        value: province, // ensure this is unique
-                        child: Text(province.name.toString()),
+                    items: controller.provinceList.map((value) {
+                      return DropdownMenuItem<Province?>(
+                        value: value, // ensure this is unique
+                        child: value == null
+                            ? const Text("Chọn tỉnh, thành phố ")
+                            : Text(value.name != null
+                                ? value.name.toString()
+                                : "Chọn tỉnh, thành phố"),
                       );
                     }).toList(),
-                    onChanged: (value) {
-                      controller.setProvince(value!);
+                    onChanged: (code) {
+                      controller.setProvince(code);
                     },
                     validator: (value) {
                       if (value == null) {
@@ -70,21 +74,26 @@ class _PostAddressScreenState extends State<PostAddressScreen> {
                     height: 10.h,
                   ),
                   DropdownButtonFormField(
-                    value: controller.selectedDistricts,
+                    value: controller.selectedDistrict,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5.r)),
                           borderSide: const BorderSide(color: Colors.black)),
+                      hintText: "Quận/ huyện",
                     ),
-                    hint: Text("Quận/ huyện"),
                     items: controller.districtsList.map((value) {
-                      return DropdownMenuItem<Districts>(
+                      return DropdownMenuItem(
                         value: value,
-                        child: Text(value.name.toString()),
+                        child: value == null
+                            ? const Text("Chọn quận, huyện")
+                            : Text(value.name != null
+                                ? value.name.toString()
+                                : "Chọn quận, huyện"),
                       );
                     }).toList(),
-                    onChanged: (value) {
-                      controller.setDistrict(value!);
+                    onChanged: (code) {
+                      print("Change district");
+                      controller.setDistrict(code);
                     },
                     validator: (value) {
                       if (value == null) {
@@ -97,7 +106,7 @@ class _PostAddressScreenState extends State<PostAddressScreen> {
                     height: 10.h,
                   ),
                   DropdownButtonFormField(
-                    value: controller.selectedWards,
+                    value: controller.selectedWard,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5.r)),
@@ -105,13 +114,17 @@ class _PostAddressScreenState extends State<PostAddressScreen> {
                     ),
                     hint: Text("Phường/ xã"),
                     items: controller.wardsList.map((value) {
-                      return DropdownMenuItem<Wards>(
+                      return DropdownMenuItem(
                         value: value,
-                        child: Text(value.name.toString()),
+                        child: value != null
+                            ? Text(value.name != null
+                                ? value.name.toString()
+                                : "Chọn phường, xã")
+                            : const Text(""),
                       );
                     }).toList(),
                     onChanged: (value) {
-                      controller.setWards(value!);
+                      controller.setWards(value);
                     },
                     validator: (value) {
                       if (value == null) {
