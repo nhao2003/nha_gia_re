@@ -6,6 +6,9 @@ import 'package:nha_gia_re/data/providers/remote/remote_data_source.dart';
 import 'package:nha_gia_re/data/providers/remote/request/update_profile_request.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+class AuthRepository{
+  final RemoteDataSource _remoteDataSource;
+  AuthRepository(this._remoteDataSource);
 import '../providers/remote/remote_data_source.dart';
 
 class AuthRepository{
