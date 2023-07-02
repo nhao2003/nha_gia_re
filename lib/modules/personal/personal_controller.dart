@@ -14,12 +14,11 @@ import '../../data/repositories/chat_repository.dart';
 
 class PersonalController extends GetxController {
   late UserInfo userInfo;
-  var auth = GetIt.instance<AuthRepository>();
+  var userRepo = GetIt.instance<UserRepository>();
   var authId = GetIt.instance<AuthRepository>().userID;
   late RxBool isFollowing = true.obs;
   bool isLoading = false;
   final remoteDataSourceImpl = RemoteDataSource();
-  UserRepository userRepo = GetIt.instance<UserRepository>();
 
   bool check()
   {
@@ -39,7 +38,7 @@ class PersonalController extends GetxController {
   }
 
   Future<UserInfo> getAuthUserInfo() async {
-    return await auth.getUserInfo();
+    return await userRepo.getUserInfo();
   }
 
   void navToUserProfile() {

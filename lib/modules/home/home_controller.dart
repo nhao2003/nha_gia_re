@@ -5,6 +5,7 @@ import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/data/repositories/post_repository.dart';
+import 'package:nha_gia_re/data/repositories/user_repository.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../data/models/properties/post.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -62,11 +63,9 @@ class HomeController extends GetxController {
   }
 
   Future<List<List<Post>>> init() async {
-    AuthRepository authRepository = GetIt.instance<AuthRepository>();
-    AuthRepository authRepository = GetIt.instance<AuthRepository>();
+    UserRepository userRepo = GetIt.instance<UserRepository>();
     late List<List<Post>> data;
-    await authRepository.getUserInfo().then((value) async {
-      PostRepository repository = GetIt.instance<PostRepository>();
+    await userRepo.getUserInfo().then((value) async {
       PostRepository repository = GetIt.instance<PostRepository>();
       PostFilter filter = PostFilter(
         orderBy: OrderBy.priceAsc,
