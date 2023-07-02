@@ -191,9 +191,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    const InforCardList(title: 'Gần bạn', list: [], navType: TypeNavigate.province,),
+                    InforCardList(title: 'Gần bạn', list: data[1], navType: TypeNavigate.province, province: _controller.userInfo?.address?.cityName,),
                     InforCardList(title: 'Nhà cho thuê', list: data.first, navType: TypeNavigate.rent,),
                     InforCardList(title: 'Nhà bán', list: data.last, navType: TypeNavigate.sell ,),
+                    const SizedBox(height: 17,)
                   ],
                 ),
               );

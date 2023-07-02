@@ -142,9 +142,12 @@ class _InforCardListState extends State<InforCardList> {
                       .copyWith(color: AppColors.blue),
                 ),
                 onTap: () {
-                  String? matchingProvince = FilterValues.instance.provinces.firstWhere(
-                      (item) => widget.province!.noAccentVietnamese().contains(item.noAccentVietnamese()),
-                    );
+                  String? matchingProvince;
+                  if(widget.province != null) {
+                    matchingProvince = FilterValues.instance.provinces.firstWhere(
+                        (item) => widget.province!.noAccentVietnamese().contains(item.noAccentVietnamese()),
+                      );
+                  }
                   var data = {
                     "title": widget.title,
                     "type": widget.navType,

@@ -18,7 +18,6 @@ class PersonalController extends GetxController {
   late RxBool isFollowing = true.obs;
   bool isLoading = false;
   final remoteDataSourceImpl = RemoteDataSource();
-  ChatRepository chatRepository = GetIt.instance<ChatRepository>();
 
   bool check()
   {
@@ -38,7 +37,7 @@ class PersonalController extends GetxController {
   }
 
   Future<UserInfo> getAuthUserInfo() async {
-    return await chatRepository.getUserInfo(AuthRepository().userID!);
+    return await auth.getUserInfo();
   }
 
   void navToUserProfile() {

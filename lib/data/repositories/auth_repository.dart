@@ -6,6 +6,8 @@ import 'package:nha_gia_re/data/providers/remote/request/update_profile_request.
 import 'package:nha_gia_re/data/repositories/base_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../providers/remote/remote_data_source.dart';
+
 class AuthRepository extends BaseRepository {
   final _user = Supabase.instance.client.auth;
 
@@ -13,14 +15,40 @@ class AuthRepository extends BaseRepository {
 
   String? get userID => Supabase.instance.client.auth.currentUser?.id;
 
+  static UserInfo? userInfo;
+
+  final RemoteDataSource _remoteDataSource = RemoteDataSource();
+
+  Future<UserInfo> getUserInfo()
+  async {
+    if(userInfo != null)
+    {
+      return userInfo!;
+    }
+    else
+    {
+      if(isUserLoggedIn)
+      {
+        var info = await _remoteDataSource.getUserInfo(userID!);
+        userInfo = UserInfo.fromJson(info);
+        return userInfo!;
+      }
+      else
+      {
+        throw Exception("User has to be LoggedIn first");
+      }
+    }
+  }
+
   Future<UserInfo> signIn(
       {required String email, required String password}) async {
     try {
       final response =
           await remoteDataSourceImpl.signIn(email: email, password: password);
-      final userInfo =
+      final info =
           await remoteDataSourceImpl.getUserInfo(response.user!.id);
-      return UserInfo.fromJson(userInfo);
+      userInfo = UserInfo.fromJson(info);
+      return userInfo!;
     } catch (e) {
       rethrow;
     }
@@ -35,9 +63,10 @@ class AuthRepository extends BaseRepository {
       if (response.user!.identities!.isEmpty) {
         throw const AuthException("A user with this email address has already been registered");
       }
-      final userInfo =
+      final info =
           await remoteDataSourceImpl.getUserInfo(response.user!.id);
-      return UserInfo.fromJson(userInfo);
+      userInfo = UserInfo.fromJson(info);
+      return userInfo!;
     } catch (e) {
       rethrow;
     }
@@ -51,7 +80,8 @@ class AuthRepository extends BaseRepository {
       UpdateProfileRequest updateProfileRequest) async {
     final userRes =
         await remoteDataSourceImpl.updateUser(updateProfileRequest.toJson());
-    return UserInfo.fromJson(userRes);
+    userInfo = UserInfo.fromJson(userRes);
+    return userInfo!;
   }
 
   Future<void> recoveryPassword(String email) async {
