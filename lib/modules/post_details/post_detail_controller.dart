@@ -57,8 +57,6 @@ class PostDetailController extends GetxController {
   Future<List<dynamic>> init() async {
     final repo = GetIt.instance<UserRepository>();
     PostRepository postRepo = GetIt.instance<PostRepository>();
-    ChatRepository repo = GetIt.instance<ChatRepository>();
-    PostRepository postRepo = PostRepository();
     PostFilter filter = PostFilter(
       orderBy: OrderBy.priceAsc,
       postedBy: PostedBy.all,

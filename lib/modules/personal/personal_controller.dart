@@ -28,8 +28,6 @@ class PersonalController extends GetxController {
 
   Future<List<Post>> getPosts() async {
     PostRepository repository = GetIt.instance<PostRepository>();
-    return await repository.getUserPosts(userInfo.uid);
-    PostRepository repository = PostRepository();
     PostFilter filter = PostFilter(
       orderBy: OrderBy.priceAsc,
       postedBy: PostedBy.all,
