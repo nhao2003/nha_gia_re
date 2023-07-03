@@ -3,6 +3,7 @@ const iconPath = 'assets/icons';
 
 class Assets {
   Assets._();
+  static const String landmark_81 = '$imagePath/landmark_81.png';
   static const String emptyChat = '$imagePath/pana.png';
   static const String avatar_1 = '$imagePath/3D Avatars/1.png';
   static const String avatar_2 = '$imagePath/3D Avatars/2.png';

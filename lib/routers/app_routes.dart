@@ -37,4 +37,6 @@ abstract class AppRoutes {
 
   static const blog_screen = '/blog_screen';
   static const blog_screen_detail = '/blog_screen_detail';
+
+  static const purchase_screen = '/purchase_screen';
 }

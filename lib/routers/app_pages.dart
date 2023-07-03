@@ -13,6 +13,8 @@ import 'package:nha_gia_re/modules/post_details/post_detail_binding.dart';
 import 'package:nha_gia_re/modules/post_details/screen/post_details_screen.dart';
 import 'package:nha_gia_re/modules/notification/notification_binding.dart';
 import 'package:nha_gia_re/modules/notification/screens/notification_screen.dart';
+import 'package:nha_gia_re/modules/purchase/purchase_binding.dart';
+import 'package:nha_gia_re/modules/purchase/screens/purchase_screens.dart';
 import 'package:nha_gia_re/modules/search/screens/result_arg_screen.dart';
 import 'package:nha_gia_re/modules/splash/screens/spash_screen.dart';
 import 'package:nha_gia_re/modules/splash/splash_binding.dart';
@@ -156,6 +158,11 @@ abstract class AppPages {
       name: AppRoutes.admin_post_detail,
       page: () => const AdminPostDetailScreen(),
       binding: AdminPostDetailBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.purchase_screen,
+      page: () => const PurchaseScreen(),
+      binding: PurchaseBinding(),
     ),
   ];
 }

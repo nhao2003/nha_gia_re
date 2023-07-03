@@ -111,7 +111,10 @@ class _HomeScreenState extends State<HomeScreen> {
               }),
           IconButton(onPressed: (){
             Get.toNamed(AppRoutes.notification);
-          }, icon: Image.asset(Assets.bell))
+          }, icon: Image.asset(Assets.bell)),
+          IconButton(onPressed: (){
+            Get.toNamed(AppRoutes.purchase_screen);
+          }, icon: Icon(Icons.wallet))
         ],
       ),
       body: FutureBuilder<List<List<Post>>>(
