@@ -61,4 +61,10 @@ class AuthRepository {
       rethrow;
     }
   }
+
+  Future<Map<String, dynamic>> changePass(String currentPass, String newPass)
+  async {
+    var data = await _remoteDataSource.changePassword(currentPass: currentPass, newPass: newPass);
+    return data;
+  }
 }

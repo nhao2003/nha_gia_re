@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/values/assets_image.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/models/properties/post.dart';
 import 'package:nha_gia_re/global_widgets/infor_card.dart';
@@ -32,15 +33,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
             backgroundColor: AppColors.backgroundColor,
             appBar: AppBar(
               backgroundColor: AppColors.primaryColor,
-              title: Text(_controller.userInfo.fullName ?? "NULL"),
-              actions: [
-                IconButton(
-                  onPressed: () {
-                    _controller.navToSetting();
-                  },
-                  icon: const Icon(Icons.settings),
-                ),
-              ],
+              title: Text("Tài khoản"),
             ),
             body: Column(children: [
               Container(

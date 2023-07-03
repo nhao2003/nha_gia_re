@@ -19,6 +19,16 @@ class RemoteDataSource {
   static const String tablePost = 'post';
   final SupabaseClient supabaseClient = Supabase.instance.client;
 
+  Future<Map<String,dynamic>> changePassword({required String currentPass, required String newPass}) async
+  {
+    Map<String,dynamic> request = 
+    { 
+      'current_plain_password': currentPass,
+      'new_plain_password': newPass
+    };
+    return await supabaseClient.rpc('change_user_password', params:request);
+  }
+
   Future<AuthResponse> signUp(
       {required String email, required String password}) async {
     try {
