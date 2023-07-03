@@ -25,8 +25,7 @@ class PostRepository {
           response = await _remoteDataSource.postMotel(postRequest.toJson());
           return Motel.fromJson(response);
         case PropertyType.office:
-          response =
-              await _remoteDataSource.postOffice(postRequest.toJson());
+          response = await _remoteDataSource.postOffice(postRequest.toJson());
           return Office.fromJson(response);
         default:
           throw Exception("Undefined Post");
@@ -76,9 +75,10 @@ class PostRepository {
     }
   }
 
-  Future<Post> getPostDetail(Post post) async {
-    final data = await _remoteDataSource.getPostDetails(post.id, post.type);
-    switch (post.type) {
+  Future<Post> getPostDetail(String id, PropertyType type) async {
+    Map<String, dynamic> data =
+        await _remoteDataSource.getPostDetails(id, type);
+    switch (type) {
       case PropertyType.apartment:
         return Apartment.fromJson(data);
       case PropertyType.land:

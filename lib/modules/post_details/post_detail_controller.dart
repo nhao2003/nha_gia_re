@@ -66,9 +66,11 @@ class PostDetailController extends GetxController {
     );
     final data = Future.wait([
       repo.getUserInfo(post.userID),
-      postRepo.getPostDetail(post),
+      postRepo.getPostDetail(post.id, post.type),
       postRepo.hasLikePost(post.id),
-      postRepo.getAllPosts(filter,)
+      postRepo.getAllPosts(
+        filter,
+      )
     ]);
     return data;
   }
