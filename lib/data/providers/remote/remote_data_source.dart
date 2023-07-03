@@ -323,8 +323,7 @@ class RemoteDataSource {
     if (filter.postedBy != PostedBy.all) {
       query = query.eq('is_pro_seller', filter.postedBy == PostedBy.proSeller);
     }
-    if(filter.provinceCode != null)
-    {
+    if (filter.provinceCode != null) {
       query = query.eq('address->city_code', filter.provinceCode);
     }
     return query;

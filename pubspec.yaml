@@ -36,7 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   supabase: ^1.6.1
   get: ^4.6.5
-  intl: ^0.18.0
+  intl: ^0.18.1 
   google_fonts: ^4.0.4
   http: ^0.13.5
   url_launcher: ^6.1.11
@@ -61,6 +61,8 @@ dependencies:
   flutter_xlider: ^3.5.0
   uuid: ^3.0.7
   cached_network_image: ^3.2.3
+  ionicons: ^0.2.2
+  community_material_icon: ^5.9.55
   onesignal_flutter: ^3.5.0
   avatar_glow: ^2.0.2
   speech_to_text: ^6.1.1
@@ -71,6 +73,8 @@ dependencies:
   hidden_drawer_menu: ^3.0.1
   flutter_html: ^3.0.0-beta.2
   flutter_markdown: ^0.6.15
+  flutter_zalopay_sdk: ^0.1.13
+
 
 
 dev_dependencies:
