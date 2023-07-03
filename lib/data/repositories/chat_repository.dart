@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:nha_gia_re/data/models/message.dart';
-import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/providers/remote/remote_data_source.dart';
 import 'package:nha_gia_re/data/services/upload_avatar_service.dart';
 import '../models/conversation.dart';

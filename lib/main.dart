@@ -12,7 +12,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/languages/localization_service.dart';
 import 'core/values/api_values.dart';
 import 'core/values/app_strings.dart';
-import 'data/repositories/auth_repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,11 +22,11 @@ Future<void> main() async {
   await initAppModule();
   await Hive.initFlutter();
   OneSignalService.init();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {

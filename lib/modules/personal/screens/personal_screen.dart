@@ -30,10 +30,16 @@ class _PersonalScreenState extends State<PersonalScreen> {
           _controller.userInfo = snapshot.data!;
           return Scaffold(
             backgroundColor: AppColors.backgroundColor,
-            // appBar: AppBar(
-            //   backgroundColor: AppColors.primaryColor,
-            //   title: Text(_controller.userInfo.fullName ?? "NULL"),
-            // ),
+            appBar: AppBar(
+              backgroundColor: AppColors.primaryColor,
+              title: Text(_controller.userInfo.fullName ?? "NULL"),
+              actions: [
+                IconButton(
+                  onPressed: () async {},
+                  icon: const Icon(Icons.settings),
+                ),
+              ],
+            ),
             body: Column(children: [
               Container(
                 color: Colors.white,
@@ -271,7 +277,12 @@ class _PersonalScreenState extends State<PersonalScreen> {
                     );
                   } else {
                     final List<Post> data = snapshot.data!;
-                    return InforCardList(title: 'Tin đã đăng', list: data, navType: TypeNavigate.user,uid: _controller.userInfo.uid,);
+                    return InforCardList(
+                      title: 'Tin đã đăng',
+                      list: data,
+                      navType: TypeNavigate.user,
+                      uid: _controller.userInfo.uid,
+                    );
                   }
                 },
                 future: _controller.getPosts(),

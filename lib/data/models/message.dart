@@ -1,6 +1,5 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
-import 'package:nha_gia_re/data/models/address.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Message {

@@ -11,7 +11,6 @@ import 'package:nha_gia_re/data/models/conversation.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/providers/remote/request/messsage_request.dart';
 import 'package:nha_gia_re/data/repositories/chat_repository.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../data/models/message.dart';
 import '../../routers/app_routes.dart';
 

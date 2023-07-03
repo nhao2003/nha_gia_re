@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nha_gia_re/modules/blog/screens/blog_list_screen.dart';
 import 'package:nha_gia_re/modules/home/screens/home_screen.dart';
-import 'package:nha_gia_re/modules/notification/screens/notification_screen.dart';
-import 'package:nha_gia_re/modules/personal/screens/personal_screen.dart';
 import 'package:nha_gia_re/modules/tab/hidden_draw_menu.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/values/assets_image.dart';
 import 'package:nha_gia_re/modules/post_management/screens/post_management_screen.dart';
+import '../personal/screens/personal_screen.dart';
 import 'tab_controller.dart';
 
 // ignore: must_be_immutable
@@ -27,7 +26,7 @@ class TabScreen extends StatelessWidget {
       PostManagementScreen(),
       const Scaffold(),
       const BlogListScreen(),
-      const HiddenDrawer(),
+      const PersonalScreen(),
     ];
     _tab = [
       TabItem(
@@ -50,8 +49,9 @@ class TabScreen extends StatelessWidget {
         ),
       ),
       TabItem(
-        icon: Icon(Icons.newspaper_outlined),
-        activeIcon: Icon(Icons.newspaper_outlined, color: AppColors.primaryColor),
+        icon: const Icon(Icons.newspaper_outlined),
+        activeIcon:
+            Icon(Icons.newspaper_outlined, color: AppColors.primaryColor),
         title: 'Blog',
       ),
       TabItem(

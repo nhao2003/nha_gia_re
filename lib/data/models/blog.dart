@@ -1,6 +1,3 @@
-import 'package:http/http.dart';
-import 'package:html/dom.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 class Blog {
   String id;
   DateTime createAt;
@@ -10,7 +7,6 @@ class Blog {
   String content;
   String imageLink;
   int view;
-
 
   Blog({
     required this.id,
@@ -23,7 +19,7 @@ class Blog {
     required this.view,
   });
 
-   factory Blog.fromJson(Map<String, dynamic> json) {
+  factory Blog.fromJson(Map<String, dynamic> json) {
     return Blog(
       id: json['id'] as String,
       createAt: DateTime.parse(json['create_at'] as String),

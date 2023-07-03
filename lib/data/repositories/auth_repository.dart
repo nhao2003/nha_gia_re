@@ -1,13 +1,10 @@
 import 'dart:developer';
-
-import 'package:get/get.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/providers/remote/remote_data_source.dart';
 import 'package:nha_gia_re/data/providers/remote/request/update_profile_request.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../providers/remote/remote_data_source.dart';
 
-class AuthRepository{
+class AuthRepository {
   final RemoteDataSource _remoteDataSource;
   AuthRepository(this._remoteDataSource);
 
@@ -22,8 +19,7 @@ class AuthRepository{
     try {
       final response =
           await _remoteDataSource.signIn(email: email, password: password);
-      final info =
-          await _remoteDataSource.getUserInfo(response.user!.id);
+      final info = await _remoteDataSource.getUserInfo(response.user!.id);
       return UserInfo.fromJson(info);
     } catch (e) {
       rethrow;
@@ -37,10 +33,10 @@ class AuthRepository{
           await _remoteDataSource.signUp(email: email, password: password);
       inspect(response);
       if (response.user!.identities!.isEmpty) {
-        throw const AuthException("A user with this email address has already been registered");
+        throw const AuthException(
+            "A user with this email address has already been registered");
       }
-      final info =
-          await _remoteDataSource.getUserInfo(response.user!.id);
+      final info = await _remoteDataSource.getUserInfo(response.user!.id);
       return UserInfo.fromJson(info);
     } catch (e) {
       rethrow;
