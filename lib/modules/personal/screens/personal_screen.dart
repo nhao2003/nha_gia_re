@@ -35,7 +35,9 @@ class _PersonalScreenState extends State<PersonalScreen> {
               title: Text(_controller.userInfo.fullName ?? "NULL"),
               actions: [
                 IconButton(
-                  onPressed: () async {},
+                  onPressed: () {
+                    _controller.navToSetting();
+                  },
                   icon: const Icon(Icons.settings),
                 ),
               ],
