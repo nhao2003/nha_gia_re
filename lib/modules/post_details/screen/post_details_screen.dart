@@ -20,7 +20,7 @@ class PostDetailsScreen extends StatefulWidget {
 }
 
 class _PostDetailsScreenState extends State<PostDetailsScreen> {
-  final PostDetailController _controller = Get.find<PostDetailController>();
+  final PostDetailController _controller = PostDetailController();
   @override
   void initState() {
     super.initState();
@@ -45,8 +45,11 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
             );
           } else {
             _controller.post = snapshot.data?[1];
-            _controller.numOfLikes.value = _controller.post.numOfLikes;
-            _controller.liked.value = snapshot.data?[2];
+            Future.delayed(Duration.zero).then((value) {
+              // your obx var, eg. global_variables.appBarTitle.value = "Messages";   
+              _controller.numOfLikes.value = _controller.post.numOfLikes;
+              _controller.liked.value = snapshot.data?[2];
+            });
             _controller.userInfo = snapshot.data?.first;
             _controller.relatedPost = snapshot.data?.last;
             print(snapshot.data);
@@ -77,7 +80,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                 style: AppTextStyles.roboto20regular),
                             const Spacer(),
                             Obx(() => IconButton(
-                                onPressed: _controller.likePost,
+                                onPressed:( _controller.likePost),
                                 icon: (_controller.liked.value) 
                                   ? Icon(Icons.favorite, color: AppColors.red,)
                                   : const Icon(Icons.favorite_border_outlined,)

@@ -5,7 +5,6 @@ import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/data/repositories/post_repository.dart';
 import 'package:nha_gia_re/data/repositories/user_repository.dart';
-import 'package:nha_gia_re/modules/personal/screens/setting_screen.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../data/enums/enums.dart';
 import '../../data/providers/remote/remote_data_source.dart';
@@ -73,9 +72,5 @@ class PersonalController extends GetxController {
     } else {
       throw Exception('Arg ...');
     }
-  }
-
-  void navToSetting() {
-    Get.to(const SettingScreen());
   }
 }

@@ -119,7 +119,7 @@ class _InforCardListState extends State<InforCardList> {
                       child:
                           InforCard(key: UniqueKey(), post: widget.list[index]),
                       onTap: () {
-                        Get.toNamed(AppRoutes.post_detail,
+                        Get.toNamed(AppRoutes.getPostRoute( widget.list[index].id),
                             arguments: widget.list[index]);
                       },
                     );
