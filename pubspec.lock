@@ -328,6 +328,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.5.0"
+  flutter_zalopay_sdk:
+    dependency: "direct main"
+    description:
+      name: flutter_zalopay_sdk
+      sha256: "83fa03ba611de3988036c8954b953c02ecca6b9967624767b47f8e0b95143103"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.13"
   functions_client:
     dependency: transitive
     description:

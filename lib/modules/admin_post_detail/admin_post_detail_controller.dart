@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
@@ -15,6 +16,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../data/models/properties/post.dart';
 import '../../data/models/user_info.dart';
+import '../../data/repositories/user_repository.dart';
 
 class AdminPostDetailController extends GetxController {
   // code controller here
@@ -26,7 +28,7 @@ class AdminPostDetailController extends GetxController {
   void initArg(dynamic arg) {
     if (arg is Post) {
       post = arg;
-      var auth = AuthRepository();
+      var auth = GetIt.instance<AuthRepository>();
       if (post.userID == auth.userID) {
         isYourPost = true;
       }
@@ -49,11 +51,22 @@ class AdminPostDetailController extends GetxController {
   }
 
   Future<List<dynamic>> init() async {
-    ChatRepository repo = ChatRepository();
-    PostRepository postRepo = PostRepository();
+    final repo = GetIt.instance<UserRepository>();
+    PostRepository postRepo = GetIt.instance<PostRepository>();
+    PostFilter filter = PostFilter(
+      orderBy: OrderBy.priceAsc,
+      postedBy: PostedBy.all,
+      from: 0,
+      to: 10,
+      provinceCode: post.address.cityCode,
+    );
     final data = Future.wait([
       repo.getUserInfo(post.userID),
-      postRepo.getPostDetail(post.id, post.type)
+      postRepo.getPostDetail(post.id, post.type),
+      postRepo.hasLikePost(post.id),
+      postRepo.getAllPosts(
+        filter,
+      )
     ]);
     return data;
   }

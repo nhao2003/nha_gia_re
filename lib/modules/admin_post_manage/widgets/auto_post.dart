@@ -30,7 +30,7 @@ class AutoPost extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Tin sẽ được tự động duyệt nếu thỏa điều kiện",
+                  "Nội dung thanh toán mặc định",
                   style: AppTextStyles.roboto14regular,
                 ),
                 SizedBox.square(
@@ -59,22 +59,22 @@ class AutoPost extends StatelessWidget {
               children: [
                 Detail(
                   iconAsset: Assets.ad_type,
-                  value: 'Thời gian tạo tin trễ nhất: 7/2/2023',
+                  value: 'Giá property : 50000',
                   icon: Ionicons.calendar_outline,
                 ),
                 Detail(
                   iconAsset: Assets.ad_type,
-                  value: 'Số lần chỉnh sửa < 10',
+                  value: 'Embedddata: trống',
                   icon: Ionicons.receipt_outline,
                 ),
                 Detail(
                   iconAsset: Assets.ad_type,
-                  value: 'Số lần gia hạn < 10',
+                  value: 'Description: Thanh toán tiền cọc',
                   icon: Ionicons.lock_open_outline,
                 ),
                 Detail(
                   iconAsset: Assets.ad_type,
-                  value: 'Số bài đăng tối đa trong tháng < 10',
+                  value: 'Mã User:',
                   icon: Ionicons.newspaper_outline,
                 ),
               ],

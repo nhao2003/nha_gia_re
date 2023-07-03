@@ -28,7 +28,82 @@ class RemoteDataSource {
     }
   }
 
-  Future<AuthResponse> signIn({required String email, required String password}) async {
+  Future<AuthResponse> signIn(
+      {required String email, required String password}) async {
+    try {
+      return await supabaseClient.auth
+          .signInWithPassword(email: email, password: password);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> likePost({required postId}) async {
+    try {
+      Map<String, dynamic> data = {
+        'user_id': supabaseClient.auth.currentUser?.id,
+        'post_id': postId
+      };
+      await supabaseClient.from(tableUserLike).insert(data).select();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> unlikePost({required postId}) async {
+    try {
+      await supabaseClient
+          .from(tableUserLike)
+          .delete()
+          .eq('user_id', supabaseClient.auth.currentUser?.id)
+          .eq('post_id', postId);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> hasLikePost({required postId}) async {
+    try {
+      final res = await supabaseClient
+          .from(tableUserLike)
+          .select()
+          .eq('user_id', supabaseClient.auth.currentUser?.id)
+          .eq('post_id', postId)
+          .limit(1);
+      if (List<Map<String, dynamic>>.from(res).isNotEmpty) {
+        return true;
+      } else
+        return false;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> followUser({required userId}) async {
+    try {
+      Map<String, dynamic> data = {
+        'follower_id': supabaseClient.auth.currentUser?.id,
+        'followed_id': userId
+      };
+      await supabaseClient.from(tableUserFollow).insert(data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> unfollowUser({required userId}) async {
+    try {
+      await supabaseClient
+          .from(tableUserFollow)
+          .delete()
+          .eq('follower_id', supabaseClient.auth.currentUser?.id)
+          .eq('followed_id', userId);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> isFollowing({required userId}) async {
     try {
       final res = await supabaseClient
           .from(tableUserFollow)
@@ -41,7 +116,6 @@ class RemoteDataSource {
       } else {
         return false;
       }
->>>>>>> 569528bd48fa00d801e396763e892cb59656b454
     } catch (e) {
       rethrow;
     }
@@ -249,8 +323,7 @@ class RemoteDataSource {
     if (filter.postedBy != PostedBy.all) {
       query = query.eq('is_pro_seller', filter.postedBy == PostedBy.proSeller);
     }
-    if(filter.provinceCode != null)
-    {
+    if (filter.provinceCode != null) {
       query = query.eq('address->city_code', filter.provinceCode);
     }
     return query;
@@ -598,10 +671,4 @@ class RemoteDataSource {
       'is_hide': isHide,
     }).eq('id', id);
   }
-
-  // Future<void> verifyPost() async {
-  //   await supabaseClient.from(tablePost).update({
-  //     ''
-  //   });
-  // }
 }

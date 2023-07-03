@@ -64,17 +64,18 @@ class _AdminPostScreenState extends State<AdminPostScreen>
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Chế độ tự động duyệt bài đăng",
+                      Text("Thanh toán demo",
                           style: AppTextStyles.roboto16semiBold
                               .apply(color: AppColors.grey)
                           // .apply(color: AppColors.black),
                           ),
                       Switch(
                           value: controller.isAutoPost,
-                          onChanged: (val) {
+                          onChanged: (val) async {
                             setState(() {
                               controller.isAutoPost = val;
                             });
+                            controller.pay();
                           }),
                     ]),
               ),
