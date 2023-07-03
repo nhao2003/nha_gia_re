@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/text_styles.dart';
-import '../../search_controller.dart';
+import '../../my_search_controller.dart';
 import 'package:flutter/material.dart';
 
 class CardPostedBy extends StatelessWidget {
-  final SearchController searchController;
+  final MySearchController searchController;
   const CardPostedBy(this.searchController, {super.key});
 
   @override

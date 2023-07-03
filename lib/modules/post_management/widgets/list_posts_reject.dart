@@ -47,6 +47,6 @@ class ListPostsReject extends StatelessWidget {
               );
             },
           ));
-    ;
+    
   }
 }

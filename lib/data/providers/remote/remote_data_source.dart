@@ -14,6 +14,8 @@ class RemoteDataSource {
   static const String tableMotels = 'motels';
   static const String tableOffices = 'offices';
   static const String tableUserInfo = 'user_info';
+  static const String tableUserLike = 'user_like';
+  static const String tableUserFollow = 'user_follow';
   static const String tablePost = 'post';
   final SupabaseClient supabaseClient = Supabase.instance.client;
 
@@ -26,11 +28,20 @@ class RemoteDataSource {
     }
   }
 
-  Future<AuthResponse> signIn(
-      {required String email, required String password}) async {
+  Future<AuthResponse> signIn({required String email, required String password}) async {
     try {
-      return await supabaseClient.auth
-          .signInWithPassword(email: email, password: password);
+      final res = await supabaseClient
+          .from(tableUserFollow)
+          .select()
+          .eq('follower_id', supabaseClient.auth.currentUser?.id)
+          .eq('followed_id', userId)
+          .limit(1);
+      if (List<Map<String, dynamic>>.from(res).isNotEmpty) {
+        return true;
+      } else {
+        return false;
+      }
+>>>>>>> 569528bd48fa00d801e396763e892cb59656b454
     } catch (e) {
       rethrow;
     }
@@ -237,6 +248,10 @@ class RemoteDataSource {
     }
     if (filter.postedBy != PostedBy.all) {
       query = query.eq('is_pro_seller', filter.postedBy == PostedBy.proSeller);
+    }
+    if(filter.provinceCode != null)
+    {
+      query = query.eq('address->city_code', filter.provinceCode);
     }
     return query;
   }
@@ -500,17 +515,28 @@ class RemoteDataSource {
     return List<Map<String, dynamic>>.from(response).first;
   }
 
-  Stream<List<Map<String, dynamic>>> getAllConversation() async* {
+  Stream<List<Conversation>> getAllConversation() async* {
     String uid = supabaseClient.auth.currentUser!.id;
-    final res = supabaseClient
-        .from('conservations')
-        .select(
-            '*, user1_info: user_info!conservations_user1_id_fkey(*), user2_info: user_info!conservations_user2_id_fkey(*), messages: messages(*)')
-        .or('user1_id.eq.$uid, user2_id.eq.$uid')
-        .asStream();
-    await for (var x in res) {
-      yield List<Map<String, dynamic>>.from(x).toList();
-    }
+    yield* supabaseClient
+        .from('conversations')
+        .stream(primaryKey: ['id']).transform<List<Conversation>>(
+      StreamTransformer<List<Map<String, dynamic>>,
+          List<Conversation>>.fromHandlers(handleData: (value, sink) {
+        final List<Conversation> cons = [];
+        for (var element in value) {
+          log(element.toString());
+          if ((element['user1_id'] == uid &&
+                  DateTime.tryParse(element['user1_joined_at'].toString()) !=
+                      null) ||
+              (element['user2_id'] == uid &&
+                  DateTime.tryParse(element['user2_joined_at'].toString()) !=
+                      null)) {
+            cons.add(Conversation.fromJson(element));
+          }
+        }
+        if (cons.isNotEmpty) sink.add(cons);
+      }),
+    );
   }
 
   Future sendMessage(Map<String, dynamic> data) async {
@@ -524,7 +550,12 @@ class RemoteDataSource {
         .stream(primaryKey: ['id'])
         .order('sent_at')
         .eq('conversation_id', conversation.id)
-        .map((event) => event.map((e) => Message.fromJson(e)).toList());
+        .map((event) => event
+            .map((e) => Message.fromJson(e))
+            .toList()
+            .where((element) =>
+                element.sentAt.compareTo(conversation.timeJoined) != -1)
+            .toList());
   }
 
   /// Creates or returns an existing roomID of both participants
@@ -533,6 +564,13 @@ class RemoteDataSource {
     final data = await supabaseClient.rpc('get_or_create_conversation',
         params: {'user_info_id': otherUserId});
     return data;
+  }
+
+  Future<void> markMessagesRead(String conversationId) async {
+    await supabaseClient.rpc('mark_messages_read', params: {
+      'user_id': supabaseClient.auth.currentUser!.id,
+      'conv_id': conversationId,
+    });
   }
 
   Future deleteConversation(String conversationId) async {

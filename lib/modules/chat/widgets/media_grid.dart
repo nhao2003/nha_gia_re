@@ -2,8 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class MediaGrid extends StatelessWidget {
-    late List<String> medias;
-   MediaGrid(this.medias, {Key? key}) : super(key: key);
+  late List<String> medias;
+  final Function(int index)? onMediaItemInMediaGridTap;
+
+  MediaGrid(this.medias, {Key? key, this.onMediaItemInMediaGridTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +32,19 @@ class MediaGrid extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         return ClipRRect(
           borderRadius: BorderRadius.circular(5),
-          child: CachedNetworkImage(
-            fit: BoxFit.cover,
-            progressIndicatorBuilder: (context, url, progress) => Center(
-              child: CircularProgressIndicator(
-                value: progress.progress,
+          child: InkWell(
+            onTap: onMediaItemInMediaGridTap != null
+                ? () => onMediaItemInMediaGridTap!(index)
+                : null,
+            child: CachedNetworkImage(
+              fit: BoxFit.cover,
+              progressIndicatorBuilder: (context, url, progress) => Center(
+                child: CircularProgressIndicator(
+                  value: progress.progress,
+                ),
               ),
+              imageUrl: medias[index],
             ),
-            imageUrl: medias[index],
           ),
         );
       },

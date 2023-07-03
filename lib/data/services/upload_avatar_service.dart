@@ -1,10 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
-
-import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
-import 'package:uuid/uuid_util.dart';
 
 // path là đường dẫn trong bucket bao gồm cả tên file
 // vd abc/123.jpg hoặc 123.jpg
@@ -69,7 +66,8 @@ Future<List<String>> uploadMessageMedia(
     for (final image in medias) {
       final fileName = "${uuid.v4()}.${image.path.split('.').last}";
       final path = '$conversationID/$fileName';
-      final url = await uploadFileToSupabaseStorage(image, 'media_message', path);
+      final url =
+          await uploadFileToSupabaseStorage(image, 'media_message', path);
       urls.add(url);
     }
     return urls;

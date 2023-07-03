@@ -1,22 +1,20 @@
-import 'package:http/http.dart' as http;
-
 class Address {
-  late int cityCode;
+  late int? cityCode;
   late String? cityName;
-  late int districtCode;
+  late int? districtCode;
   late String? districtName;
-  late int wardCode;
+  late int? wardCode;
   late String? wardName;
   late String? detail;
   late double? latitude;
   late double? longitude;
   Address({
-    required this.cityCode,
-    required this.cityName,
-    required this.districtCode,
-    required this.districtName,
-    required this.wardCode,
-    required this.wardName,
+    this.cityCode,
+    this.cityName,
+    this.districtCode,
+    this.districtName,
+    this.wardCode,
+    this.wardName,
     this.detail,
     this.latitude,
     this.longitude,
@@ -29,17 +27,18 @@ class Address {
         'city_code': cityCode,
         'city_name': cityName,
         'district_code': districtCode,
-        'district_name' : districtName,
+        'district_name': districtName,
         'ward_code': wardCode,
-        'ward_name' : wardName,
+        'ward_name': wardName,
         'detail': detail,
         'latitude': latitude,
         'longitude': longitude,
       };
   @override
   String toString() {
-    return '${wardName}, ${districtName}, ${cityName}';
+    return '${cityName}, ${districtName}, ${wardName}';
   }
+
   Address.fromJson(Map<String, dynamic> json)
       : cityCode = json['city_code'],
         cityName = json['city_name'],

@@ -1,16 +1,19 @@
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
-import 'package:nha_gia_re/modules/search/search_controller.dart';
+import 'package:nha_gia_re/data/enums/enums.dart';
+import 'package:nha_gia_re/modules/search/my_search_controller.dart';
 import 'package:nha_gia_re/modules/search/screens/result_page.dart';
 import 'package:nha_gia_re/modules/search/widgets/suggestion_list.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 // Defines the content of the search page in `showSearch()`.
 // SearchDelegate has a member `query` which is the query string.
 class MySearchDelegate extends SearchDelegate<String> {
-  final SearchController controller =
-      Get.put<SearchController>(SearchController());
+  final MySearchController controller =
+      Get.put<MySearchController>(MySearchController());
 
   MySearchDelegate() {
     controller.getSearchString();
@@ -80,6 +83,7 @@ class MySearchDelegate extends SearchDelegate<String> {
 
     /// add the query to history
     controller.addToHistory(query.trim());
+    controller.setTypeResult(TypeNavigate.search);
     super.showResults(context);
   }
 
@@ -102,23 +106,59 @@ class MySearchDelegate extends SearchDelegate<String> {
   }
 
   // Action buttons at the right of search bar.
+  // voice to text
+  SpeechToText speechToText = SpeechToText();
   @override
   List<Widget> buildActions(BuildContext context) {
+    Widget buttonMic = Obx(
+      () => AvatarGlow(
+        endRadius: 24.0,
+        animate: controller.isListening.value,
+        duration: const Duration(microseconds: 2000),
+        showTwoGlows: true,
+        glowColor: AppColors.black,
+        repeat: true,
+        repeatPauseDuration: const Duration(microseconds: 100),
+        child: GestureDetector(
+          onTapDown: (details) async {
+            //query = 'TODO: implement voice input';
+            if (!controller.isListening.value) {
+              var available = await speechToText.initialize();
+              if (available) {
+                controller.toggleListening(true);
+                speechToText.listen(
+                  onResult: (result) {
+                    query = result.recognizedWords;
+                  },
+                );
+              }
+            }
+          },
+          onTapUp: (details) {
+            controller.toggleListening(false);
+            speechToText.stop();
+          },
+          child: CircleAvatar(
+            backgroundColor: Colors.transparent,
+            child: Icon(
+              controller.isListening.value ? Icons.mic : Icons.mic_none,
+              color: Colors.black,
+            ),
+          ),
+        ),
+      ),
+    );
+
     return <Widget>[
       if (query.isEmpty)
-        IconButton(
-          tooltip: 'Voice Search',
-          icon: const Icon(Icons.mic),
-          onPressed: () {
-            query = 'TODO: implement voice input';
-          },
-        )
+        buttonMic
       else
         IconButton(
           tooltip: 'Clear',
           icon: const Icon(Icons.clear),
           onPressed: () {
             query = '';
+            controller.toggleListening(false);
             showSuggestions(context);
           },
         )

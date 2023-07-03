@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TextFormCustom extends StatelessWidget {
@@ -50,7 +49,7 @@ class TextFormCustom extends StatelessWidget {
         hintText: hint,
         labelText: label,
         border: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.black),
+          borderSide: const BorderSide(color: Colors.black),
           borderRadius: BorderRadius.circular(5),
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nha_gia_re/core/extensions/date_ex.dart';
 import 'package:nha_gia_re/data/models/properties/post.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/text_styles.dart';
@@ -35,7 +36,8 @@ class ListPostsExpried extends StatelessWidget {
             itemBuilder: (context, index) {
               return ItemPost(
                 statusCode: PostStatusMana.expired,
-                status: "Hiển thị đến 12:23 9/9/2023",
+                status:
+                    "Tin đã hết hạn từ ${controller.expiredPosts[index].expiryDate.toHMDMYString()}",
                 post: controller.expiredPosts[index],
                 funcs: const [
                   "Xóa tin",

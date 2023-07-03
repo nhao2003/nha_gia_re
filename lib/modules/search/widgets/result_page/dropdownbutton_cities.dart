@@ -1,14 +1,15 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nha_gia_re/data/enums/enums.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/text_styles.dart';
 import '../../../../core/values/filter_values.dart';
-import '../../search_controller.dart';
+import '../../my_search_controller.dart';
 
 class DropdownButtonCities extends StatelessWidget {
   DropdownButtonCities({super.key});
-  final SearchController searchController = Get.find<SearchController>();
+  final MySearchController searchController = Get.find<MySearchController>();
 
   /// data in fill city
   final List<DropdownMenuItem<String>> dropDownMenuItems =

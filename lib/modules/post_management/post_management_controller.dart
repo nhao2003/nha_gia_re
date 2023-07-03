@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import '../../data/models/properties/post.dart';
@@ -21,10 +22,10 @@ class PostManagementController extends GetxController {
     "Hết hạn",
   ];
 
-  PostRepository repository = PostRepository();
+  PostRepository repository = GetIt.instance<PostRepository>();
 
   Future<List<Post>> getAllPosts() async {
-    List<Post> datas = await repository.getUserPosts(AuthRepository().userID!);
+    List<Post> datas = await repository.getUserPosts(GetIt.instance<AuthRepository>().userID!);
     return datas;
   }
 
@@ -64,13 +65,11 @@ class PostManagementController extends GetxController {
   }
 
   void showPost(Post post) async {
-    print("Hien tin");
     await repository.hideOrUnHidePost(post.id, false);
     await getPostsInit();
   }
 
   void hidePost(Post post) async {
-    print("hide post");
     await repository.hideOrUnHidePost(post.id, true);
     await getPostsInit();
   }
@@ -86,13 +85,11 @@ class PostManagementController extends GetxController {
   }
 
   void deletePost(Post post) async {
-    print("delete post");
     await repository.deletePost(post.id);
     await getPostsInit();
   }
 
   void extensionPost(Post post) async {
-    print("gia han");
     await repository.extendPostExpiryDate(post.id, true);
     await getPostsInit();
   }

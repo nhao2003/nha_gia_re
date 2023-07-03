@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
+import 'package:nha_gia_re/data/services/onesignal_service.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -39,7 +40,7 @@ class LoginController extends GetxController {
   }
   Future<void> handleLogin()
   async {
-    final auth = AuthRepository();
+    final auth = GetIt.instance<AuthRepository>();
     if(loginFormGlobalKey.currentState!.validate())
     {
       print(loginEmail.text + ' ' + loginPassword.text);
@@ -48,6 +49,7 @@ class LoginController extends GetxController {
         isLoading.value = true;
         final res = await auth.signIn(email: loginEmail.text, password: loginPassword.text)
         .then((value) {
+          OneSignalService.addExternalId(value.uid);
           if(value.updatedDate == null)
           {
             Get.offAllNamed(AppRoutes.userProfile);
@@ -85,7 +87,7 @@ class LoginController extends GetxController {
   }
   Future<void> handleRegister()
   async {
-    final auth = AuthRepository();
+    final auth = GetIt.instance<AuthRepository>();
     if(registerFormGlobalKey.currentState!.validate())
     {
       try{
@@ -110,7 +112,7 @@ class LoginController extends GetxController {
   }
   Future<void> handleForgotPass()
   async {
-    final auth = AuthRepository();
+    final auth = GetIt.instance<AuthRepository>();
     if(forgotPassFormGlobalKey.currentState!.validate())
     {
       try

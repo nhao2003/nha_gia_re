@@ -11,11 +11,11 @@ import 'package:nha_gia_re/modules/search/widgets/filter_page/card_office.dart';
 import 'package:nha_gia_re/modules/search/widgets/filter_page/card_posted_by.dart';
 import 'package:nha_gia_re/modules/search/widgets/filter_page/card_rent.dart';
 import 'package:nha_gia_re/modules/search/widgets/filter_page/card_sort_by.dart';
-import '../search_controller.dart';
+import '../my_search_controller.dart';
 
 class FilterScreen extends StatelessWidget {
   FilterScreen({super.key});
-  final SearchController searchController = Get.find<SearchController>();
+  final MySearchController searchController = Get.find<MySearchController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

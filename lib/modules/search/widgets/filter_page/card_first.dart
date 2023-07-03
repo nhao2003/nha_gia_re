@@ -4,10 +4,10 @@ import 'package:nha_gia_re/modules/search/widgets/filter_page/category_box_radio
 import 'package:nha_gia_re/modules/search/widgets/filter_page/range_slider_custom.dart';
 
 import '../../../../core/values/filter_values.dart';
-import '../../search_controller.dart';
+import '../../my_search_controller.dart';
 
 class CardFirst extends StatelessWidget {
-  final SearchController searchController;
+  final MySearchController searchController;
   const CardFirst(this.searchController, {super.key});
 
   @override

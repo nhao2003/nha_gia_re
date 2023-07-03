@@ -50,6 +50,6 @@ class ListPostsPendding extends StatelessWidget {
               );
             },
           ));
-    ;
+    
   }
 }

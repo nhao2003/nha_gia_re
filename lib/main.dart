@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:nha_gia_re/core/di.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
+import 'package:nha_gia_re/data/services/onesignal_service.dart';
 import 'package:nha_gia_re/routers/app_pages.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/languages/localization_service.dart';
 import 'core/values/api_values.dart';
-import 'core/languages/localization_service.dart';
 import 'core/values/app_strings.dart';
-import 'data/repositories/auth_repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,16 +19,15 @@ Future<void> main() async {
     url: SUPABASE_URL,
     anonKey: SUPABASE_ANON_KEY,
   );
+  await initAppModule();
   await Hive.initFlutter();
-  runApp(MyApp());
+  OneSignalService.init();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
-  var auth = AuthRepository();
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     // khong cho man hinh xoay ngang
