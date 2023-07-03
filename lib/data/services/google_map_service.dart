@@ -1,53 +1,35 @@
 import 'dart:developer';
 import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:nha_gia_re/core/extensions/string_ex.dart';
 import '../models/province.dart';
 
 class GoogleMapService {
-  void test() async {
+  static void test() async {
     // ham nay demo test thu
-    Placemark? placemark = await GoogleMapService.getAddressFromLocation(
-        "15.582282", "108.522051");
+    Placemark? placemark = await GoogleMapService.getAddressFromLocation(const LatLng(15.582282, 108.522051));
     if (placemark != null) {
-      GoogleMapService.getProvinceByName(placemark.administrativeArea!);
-      GoogleMapService.getDistrictByName(placemark.locality!);
+      final pro = GoogleMapService.getProvinceByName(placemark.administrativeArea!);
+      final dis = GoogleMapService.getDistrictByName(placemark.locality!);
+      print(pro.toString());
+      print(dis.toString());
     }
   }
 
-  static Future<Placemark?> getAddressFromLocation(
-      String lat, String lon) async {
-    Placemark? placemark;
-
-    // converted the lat from string to double
-    double latData = double.parse(lat);
-    // converted the lon from string to double
-    double lonData = double.parse(lon);
-
+  static Future<Placemark?> getAddressFromLocation(LatLng pos) async {
+    Placemark? placeMark;
     // Passed the coordinates of latitude and longitude
     List<Placemark> placemarks =
-        await placemarkFromCoordinates(latData, lonData);
-
+        await placemarkFromCoordinates(pos.latitude, pos.longitude);
     if (placemarks.isNotEmpty) {
-      placemark = placemarks[0];
-
-      log("Name ${placemark.name!}");
-      log("street ${placemark.street!}");
-      log("isoCountryCode ${placemark.isoCountryCode!}");
-      log("isoCountryCode ${placemark.isoCountryCode!}");
-      log("postalCode ${placemark.postalCode!}");
-      log("administrativeArea ${placemark.administrativeArea!}");
-      log("subAdministrativeArea ${placemark.subAdministrativeArea!}");
-      log("locality ${placemark.locality!}");
-      log("subLocality ${placemark.subLocality!}");
-      log("thoroughfare ${placemark.thoroughfare!}");
-      log("subThoroughfare ${placemark.subThoroughfare!}");
+      placeMark = placemarks[0];
+      log(placeMark.toString());
     } else {
-      log("Google map rong");
+      log("getAddressFromLocation() get Null");
     }
-
-    return placemark;
+    return placeMark;
   }
 
   static Future<Province?> getProvinceByName(String name) async {
@@ -59,11 +41,11 @@ class GoogleMapService {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        final datas =
+        final data =
             await jsonDecode(const Utf8Decoder().convert(response.bodyBytes));
 
-        if (datas is List<dynamic>) {
-          for (var data in datas) {
+        if (data is List<dynamic>) {
+          for (var data in data) {
             String nameGet = data['name'];
             if (nameGet
                 .toLowerCase()
@@ -77,11 +59,9 @@ class GoogleMapService {
         }
       }
     } catch (e) {
-      print('Error: $e');
+      log('Error: $e');
     }
-    log("===================================");
-    log("name: ${province.name}");
-    log("code: ${province.code}");
+    log(province.toString());
     return province;
   }
 
@@ -94,11 +74,11 @@ class GoogleMapService {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        final datas =
+        final data =
             await jsonDecode(const Utf8Decoder().convert(response.bodyBytes));
 
-        if (datas is List<dynamic>) {
-          for (var data in datas) {
+        if (data is List<dynamic>) {
+          for (var data in data) {
             String nameGet = data['name'];
             if (nameGet
                 .toLowerCase()
@@ -112,11 +92,9 @@ class GoogleMapService {
         }
       }
     } catch (e) {
-      print('Error: $e');
+      log('Error: $e');
     }
-    log("===================================");
-    log("name: ${district.name}");
-    log("code: ${district.code}");
+    log(district.toString());
     return district;
   }
 
@@ -129,11 +107,11 @@ class GoogleMapService {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        final datas =
+        final data =
             await jsonDecode(const Utf8Decoder().convert(response.bodyBytes));
 
-        if (datas is List<dynamic>) {
-          for (var data in datas) {
+        if (data is List<dynamic>) {
+          for (var data in data) {
             String nameGet = data['name'];
             if (nameGet
                 .toLowerCase()
@@ -149,9 +127,7 @@ class GoogleMapService {
     } catch (e) {
       print('Error: $e');
     }
-    log("===================================");
-    log("name: ${ward.name}");
-    log("code: ${ward.code}");
+    log(ward.toString());
     return ward;
   }
 }

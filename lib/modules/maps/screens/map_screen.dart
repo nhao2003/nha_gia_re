@@ -28,7 +28,7 @@ class _MapViewScreenState extends State<MapViewScreen> {
     return Scaffold(
       appBar: AppBar(),
       body: FutureBuilder<Set<Marker>>(
-          future: _controller.initLocation(Get),
+          future: _controller.initLocation(Get.arguments),
           builder: (
             context,
             snapShot,
