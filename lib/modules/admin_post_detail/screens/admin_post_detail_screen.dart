@@ -138,10 +138,17 @@ class _AdminPostDetailScreenState extends State<AdminPostDetailScreen> {
                                 borderRadius: BorderRadius.circular(10.h),
                                 color: AppColors.secondary),
                             child: Center(
-                              child: Text(
-                                "Hoàn thành",
-                                style: AppTextStyles.roboto16semiBold
-                                    .apply(color: AppColors.primaryColor),
+                              child: GestureDetector(
+                                onTap: () {
+                                  _controller.rejectInfo =
+                                      messageController.text;
+                                  _controller.rejectPost();
+                                },
+                                child: Text(
+                                  "Hoàn thành",
+                                  style: AppTextStyles.roboto16semiBold
+                                      .apply(color: AppColors.primaryColor),
+                                ),
                               ),
                             ),
                           ),
@@ -331,12 +338,6 @@ class _AdminPostDetailScreenState extends State<AdminPostDetailScreen> {
                             ),
                           ),
                         ),
-                        InforCardList(
-                          title: 'Liên Quan',
-                          list: _controller.relatedPost,
-                          navType: TypeNavigate.province,
-                          province: _controller.post.address.cityName,
-                        )
                       ]),
                     );
                   }
@@ -378,10 +379,18 @@ class _AdminPostDetailScreenState extends State<AdminPostDetailScreen> {
                           borderRadius: BorderRadius.circular(14.h),
                           color: AppColors.secondary),
                       child: Center(
-                        child: Text(
-                          "Duyệt bài",
-                          style: AppTextStyles.roboto16semiBold
-                              .apply(color: AppColors.primaryColor),
+                        child: GestureDetector(
+                          onTap: () {
+                            if (!_controller.isExecute) {
+                              _controller.isExecute = true;
+                              _controller.approvePost();
+                            }
+                          },
+                          child: Text(
+                            "Duyệt bài",
+                            style: AppTextStyles.roboto16semiBold
+                                .apply(color: AppColors.primaryColor),
+                          ),
                         ),
                       ),
                     ),
@@ -392,66 +401,67 @@ class _AdminPostDetailScreenState extends State<AdminPostDetailScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: (!_controller.isYourPost)
-          ? BottomAppBar(
-              child: SizedBox(
-              height: 80,
-              child: Row(children: [
-                Expanded(
-                    child: MaterialButton(
-                        onPressed: _controller.launchPhone,
-                        color: AppColors.green,
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.phone_in_talk_outlined,
-                                size: 24,
-                                color: Colors.white,
-                              ),
-                              Text(
-                                'Gọi điện',
-                                style: AppTextStyles.roboto12regular
-                                    .copyWith(color: Colors.white),
-                              )
-                            ]))),
-                Expanded(
-                    child: MaterialButton(
-                        onPressed: _controller.navToChat,
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                Assets.messCircle,
-                                width: 24,
-                                color: AppColors.green,
-                              ),
-                              Text(
-                                'Chat',
-                                style: AppTextStyles.roboto12regular
-                                    .copyWith(color: AppColors.green),
-                              )
-                            ]))),
-                Expanded(
-                    child: MaterialButton(
-                        onPressed: _controller.launchSms,
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.sms_outlined,
-                                size: 24,
-                                color: AppColors.green,
-                              ),
-                              Text(
-                                'Tin nhắn sms',
-                                style: AppTextStyles.roboto12regular
-                                    .copyWith(color: AppColors.green),
-                              )
-                            ])))
-              ]),
-            ))
-          : null,
     );
   }
+  //   bottomNavigationBar: (!_controller.isYourPost)
+  //       ? BottomAppBar(
+  //           child: SizedBox(
+  //           height: 80,
+  //           child: Row(children: [
+  //             Expanded(
+  //                 child: MaterialButton(
+  //                     onPressed: _controller.launchPhone,
+  //                     color: AppColors.green,
+  //                     child: Column(
+  //                         mainAxisAlignment: MainAxisAlignment.center,
+  //                         children: [
+  //                           const Icon(
+  //                             Icons.phone_in_talk_outlined,
+  //                             size: 24,
+  //                             color: Colors.white,
+  //                           ),
+  //                           Text(
+  //                             'Gọi điện',
+  //                             style: AppTextStyles.roboto12regular
+  //                                 .copyWith(color: Colors.white),
+  //                           )
+  //                         ]))),
+  //             Expanded(
+  //                 child: MaterialButton(
+  //                     onPressed: _controller.navToChat,
+  //                     child: Column(
+  //                         mainAxisAlignment: MainAxisAlignment.center,
+  //                         children: [
+  //                           Image.asset(
+  //                             Assets.messCircle,
+  //                             width: 24,
+  //                             color: AppColors.green,
+  //                           ),
+  //                           Text(
+  //                             'Chat',
+  //                             style: AppTextStyles.roboto12regular
+  //                                 .copyWith(color: AppColors.green),
+  //                           )
+  //                         ]))),
+  //             Expanded(
+  //                 child: MaterialButton(
+  //                     onPressed: _controller.launchSms,
+  //                     child: Column(
+  //                         mainAxisAlignment: MainAxisAlignment.center,
+  //                         children: [
+  //                           Icon(
+  //                             Icons.sms_outlined,
+  //                             size: 24,
+  //                             color: AppColors.green,
+  //                           ),
+  //                           Text(
+  //                             'Tin nhắn sms',
+  //                             style: AppTextStyles.roboto12regular
+  //                                 .copyWith(color: AppColors.green),
+  //                           )
+  //                         ])))
+  //           ]),
+  //         ))
+  //       : null,
+  // );
 }

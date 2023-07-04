@@ -13,7 +13,7 @@ import 'package:nha_gia_re/modules/post_details/widget/motel_details.dart';
 import 'package:nha_gia_re/modules/post_details/widget/office_details.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import '../../data/repositories/admin_reposotory.dart';
 import '../../data/models/properties/post.dart';
 import '../../data/models/user_info.dart';
 import '../../data/repositories/user_repository.dart';
@@ -24,11 +24,13 @@ class AdminPostDetailController extends GetxController {
   late Post post;
   late UserInfo userInfo;
   late List<Post> relatedPost;
+  String rejectInfo = "";
   late bool isYourPost = false;
+  bool isExecute = false;
   bool isLoading = false;
   RxBool liked = false.obs;
   late RxInt numOfLikes = 0.obs;
-
+  AdminRepository repository = GetIt.instance<AdminRepository>();
   void initArg(dynamic arg) {
     if (arg is Post) {
       post = arg;
@@ -37,6 +39,30 @@ class AdminPostDetailController extends GetxController {
         isYourPost = true;
       }
     }
+  }
+
+  approvePost() async {
+    try {
+      await repository.approvePost(post.id);
+      Get.snackbar("Trạng thái", "Bài đăng đã được chấp nhận");
+    } catch (e) {
+      Get.snackbar("Trạng thái", "Đã có lỗi xảy ra");
+    }
+    isExecute = false;
+  }
+
+  rejectPost() async {
+    try {
+      if (rejectInfo.trim().isNotEmpty) {
+        await repository.rejectPost(post.id, rejectInfo);
+        Get.snackbar("Trạng thái", "Đã ẩn bài đăng");
+      } else {
+        Get.snackbar("Trạng thái", "Vui lòng thêm lý do từ chối");
+      }
+    } catch (e) {
+      Get.snackbar("Trạng thái", "Đã có lỗi xảy ra");
+    }
+    isExecute = false;
   }
 
   Widget postDetail(Post post) {

@@ -679,6 +679,14 @@ class RemoteDataSource {
     return List<Map<String, dynamic>>.from(res);
   }
 
+  Future<List<Map<String, dynamic>>> getRejectedPosts() async {
+    final res = await supabaseClient
+        .from(tablePost)
+        .select()
+        .eq('status', PostStatus.rejected);
+    return List<Map<String, dynamic>>.from(res);
+  }
+
   Future<void> approvePost(String id) async {
     await supabaseClient.rpc('approve_post', params: {'p_id ': id});
   }

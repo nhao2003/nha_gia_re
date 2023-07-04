@@ -267,7 +267,7 @@ class _AdminPostScreenState extends State<AdminPostScreen>
                       Container(
                         color: AppColors.backgroundColor,
                         child: FutureBuilder(
-                          future: controller.pendingPosts,
+                          future: controller.rejectedPosts,
                           builder: (context, snapshot) {
                             var posts = snapshot.data;
                             if (snapshot.connectionState ==
@@ -301,7 +301,7 @@ class _AdminPostScreenState extends State<AdminPostScreen>
                                     child: GestureDetector(
                                       onTap: () {
                                         controller.navigateToDetailSceen(
-                                            posts![index]);
+                                            posts[index]);
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(

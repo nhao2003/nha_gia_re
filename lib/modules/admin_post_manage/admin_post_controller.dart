@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:nha_gia_re/data/models/create_order.dart';
 import 'package:nha_gia_re/data/providers/remote/request/create_order_request.dart';
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
+import 'package:nha_gia_re/data/repositories/admin_reposotory.dart';
 import 'package:nha_gia_re/data/repositories/pay_repository.dart';
 
 import '../../data/enums/enums.dart';
@@ -18,9 +19,10 @@ import '../../data/repositories/post_repository.dart';
 import '../../routers/app_routes.dart';
 
 class AdminPostController extends GetxController {
-  PostRepository repository = GetIt.instance<PostRepository>();
+  AdminRepository repository = GetIt.instance<AdminRepository>();
   PayRepository payRepo = PayRepository();
   late Future<List<Post>> pendingPosts;
+  late Future<List<Post>> rejectedPosts;
   bool isAutoPost = false;
   bool isEditing = false;
   late String payResult;
@@ -29,7 +31,8 @@ class AdminPostController extends GetxController {
   int amount = 50000;
 
   getAllPosts() {
-    pendingPosts = repository.getUserPosts(authRepository.userID!);
+    pendingPosts = repository.getPendingPosts();
+    rejectedPosts = repository.getRejectedPosts();
   }
 
   handleEditAutoForm() {}
