@@ -16,11 +16,11 @@ class _ChangeLanguageScreenState extends State<ChangeLanguageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Ngôn ngữ")),
+      appBar: AppBar(title: Text('Language'.tr)),
       body: ListView.separated(
         itemCount: _controller.languages.length,
         itemBuilder: (context, index) {
-          String language = _controller.languages.values.elementAt(index);
+          String language = _controller.languages.values.elementAt(index).toString().tr;
           String languageCode = _controller.languages.keys.elementAt(index);
           return ListTile(
             title: Text(language),
@@ -30,8 +30,8 @@ class _ChangeLanguageScreenState extends State<ChangeLanguageScreen> {
               onChanged: (String? value) {},
             )),
             onTap: () {
-              _controller.changeLocale(languageCode);
               _controller.selectedLanguage.value = languageCode;
+              _controller.changeLocale(languageCode);
             },
           );
         },

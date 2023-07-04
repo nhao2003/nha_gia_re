@@ -137,7 +137,7 @@ class _InforCardListState extends State<InforCardList> {
             children: [
               ZoomTapAnimation( child: InkWell(
                 child: Text(
-                  'Xem tất cả',
+                  'See more'.tr,
                   style: AppTextStyles.roboto16regular
                       .copyWith(color: AppColors.blue),
                 ),

@@ -138,21 +138,21 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           CustomButton(
                             icon: Image.asset(Assets.coin),
-                            title: 'Mua bán',
+                            title: 'For Sale'.tr,
                             onPressed: () {
                               _controller.navToSell();
                             },
                           ),
                           CustomButton(
                             icon: Image.asset(Assets.key),
-                            title: 'Cho thuê',
+                            title: 'For Lease'.tr,
                             onPressed: () {
                               _controller.navToRent();
                             },
                           ),
                           CustomButton(
                             icon: Image.asset(Assets.edit_color),
-                            title: 'Đăng bài',
+                            title: 'Post'.tr,
                             onPressed: _controller.navToPost,
                           ),
                         ],
@@ -164,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Tỉnh thành',
+                            'Provinces'.tr,
                             style: AppTextStyles.roboto20Bold,
                           ),
                           const SizedBox(height: 10),
@@ -191,9 +191,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    InforCardList(title: 'Gần bạn', list: data[1], navType: TypeNavigate.province, province: _controller.userInfo?.address?.cityName,),
-                    InforCardList(title: 'Nhà cho thuê', list: data.first, navType: TypeNavigate.rent,),
-                    InforCardList(title: 'Nhà bán', list: data.last, navType: TypeNavigate.sell ,),
+                    InforCardList(title: 'Near you'.tr, list: data[1], navType: TypeNavigate.province, province: _controller.userInfo?.address?.cityName,),
+                    InforCardList(title: 'For Lease'.tr, list: data.first, navType: TypeNavigate.rent,),
+                    InforCardList(title: 'For Sale'.tr, list: data.last, navType: TypeNavigate.sell ,),
                     const SizedBox(height: 17,)
                   ],
                 ),

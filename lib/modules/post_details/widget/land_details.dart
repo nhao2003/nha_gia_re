@@ -7,63 +7,65 @@ import 'package:nha_gia_re/modules/post_details/widget/details.dart';
 import '../../../core/values/assets_image.dart';
 
 class LandDetails extends StatelessWidget {
-  const LandDetails({super.key, required this.land});
+  const LandDetails({Key? key, required this.land}) : super(key: key);
+
   final Land land;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.only(left: 10),
-        child: GridView.count(
-          physics: const NeverScrollableScrollPhysics(),
-          childAspectRatio: 4,
-          crossAxisCount: 2,
-          shrinkWrap: true,
-          children: [
-            if (land.isLease)
-              Detail(
-                iconAsset: Assets.ad_type,
-                value: 'Cho Thuê',
-              ),
-            if (land.deposit != null)
-              Detail(
-                  iconAsset: Assets.deposit,
-                  value: 'Tiền cọc: ${land.deposit?.toFormattedMoney()}'),
+      padding: const EdgeInsets.only(left: 10),
+      child: GridView.count(
+        physics: const NeverScrollableScrollPhysics(),
+        childAspectRatio: 4,
+        crossAxisCount: 2,
+        shrinkWrap: true,
+        children: [
+          if (land.isLease)
             Detail(
-              iconAsset: Assets.area,
-              value: 'Diện tích: ${land.area} m2',
+              iconAsset: Assets.ad_type,
+              value: 'For Lease'.tr,
             ),
+          if (land.deposit != null)
             Detail(
-              iconAsset: Assets.price_m2,
-              value: 'Giá/m2: ${(land.price / land.area).toFormattedMoney()}',
+              iconAsset: Assets.deposit,
+              value: '${'Deposit:'.tr} ${land.deposit?.toFormattedMoney()}',
             ),
-            if (land.width != null)
-              Detail(
-                iconAsset: Assets.width,
-                value: 'Chiều ngang: ${land.width}',
-              ),
-            if (land.length != null)
-              Detail(
-                iconAsset: Assets.length,
-                value: 'Chiều dài: ${land.length}',
-              ),
-            if (land.legalDocumentStatus != null)
-              Detail(
-                iconAsset: Assets.paper,
-                value:
-                    'Giấy tờ pháp lý: ${land.legalDocumentStatus.toString().tr}',
-              ),
-            if (land.landType != null)
-              Detail(
-                iconAsset: Assets.land_type,
-                value: 'Loại hình đất: ${land.landType.toString().tr}',
-              ),
-            if (land.landDirection != null)
-              Detail(
-                iconAsset: Assets.direction,
-                value: 'Hướng cửa chính: ${land.landDirection.toString().tr}',
-              ),
-          ],
-        ));
+          Detail(
+            iconAsset: Assets.area,
+            value: '${'Area:'.tr} ${land.area} m2',
+          ),
+          Detail(
+            iconAsset: Assets.price_m2,
+            value: '${'Price/m2:'.tr} ${(land.price / land.area).toFormattedMoney()}',
+          ),
+          if (land.width != null)
+            Detail(
+              iconAsset: Assets.width,
+              value: '${'Width:'.tr} ${land.width}',
+            ),
+          if (land.length != null)
+            Detail(
+              iconAsset: Assets.length,
+              value: '${'Length:'.tr} ${land.length}',
+            ),
+          if (land.legalDocumentStatus != null)
+            Detail(
+              iconAsset: Assets.paper,
+              value: '${'Legal Document:'.tr} ${land.legalDocumentStatus.toString().tr}',
+            ),
+          if (land.landType != null)
+            Detail(
+              iconAsset: Assets.land_type,
+              value: '${'Land Type:'.tr} ${land.landType.toString().tr}',
+            ),
+          if (land.landDirection != null)
+            Detail(
+              iconAsset: Assets.direction,
+              value: '${'Main Door Direction:'.tr} ${land.landDirection.toString().tr}',
+            ),
+        ],
+      ),
+    );
   }
 }

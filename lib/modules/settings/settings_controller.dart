@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
+import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/data/services/localization_service.dart';
@@ -41,7 +42,7 @@ class SettingsController extends GetxController {
           debugPrint(value.toString());
           isLoading.value = false;
           handleChangePassBack();
-          Get.snackbar("Thông báo", "Thay đổi mật khẩu thành công!");
+          Get.snackbar("Notification".tr, "Change password successfully!".tr);
         });
       } on PostgrestException catch (e) {
         if (e.code == 'P0001') {
@@ -57,9 +58,11 @@ class SettingsController extends GetxController {
     }
   }
   
-  void changeLocale(String languageCode)
+  void changeLocale(String languageCode) async
   {
-    LocalizationService.changeLocale(languageCode);
+    await LocalizationService.changeLocale(languageCode).then((value) {
+      Get.back();
+    });
   }
 
   void handleChangePassBack() {
@@ -70,10 +73,10 @@ class SettingsController extends GetxController {
 
   String? passValidate(String? value) {
     if (value == null || value.isEmpty) {
-      return 'This field cannot be empty.';
+      return 'This field cannot be empty.'.tr;
     } else {
       if (!isPasswordCorrect) {
-        return 'Incorrect password.';
+        return 'Incorrect password.'.tr;
       }
       return null;
     }
@@ -81,7 +84,7 @@ class SettingsController extends GetxController {
 
   String? newPassValidate(String? value) {
     if (oldPassword.text == value) {
-      return 'New password cannot be the same as the old password.';
+      return 'New password cannot be the same as the old password.'.tr;
     }
     return null;
   }
@@ -117,10 +120,14 @@ class SettingsController extends GetxController {
   
 
   void handleSignOut() async {
-    authRepo.signOut().then((value) {
+    Get.showOverlay(asyncFunction: ()
+    async {
+      return await authRepo.signOut().then((value) {
       OneSignalService.removeExternalId();
       Get.toNamed(AppRoutes.splashScreen);
     });
+    }, loadingWidget:const Center(child:  CircularProgressIndicator(),));
+    
   }
 
   void navToUserProfile() {

@@ -146,8 +146,8 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                   ),
                                   Text(
                                     (_controller.post.isProSeller)
-                                        ? "Môi giới"
-                                        : "Cá nhân",
+                                        ? "Agency".tr
+                                        : "Independence".tr,
                                     style: AppTextStyles.roboto14regular,
                                   ),
                                 ],
@@ -168,18 +168,18 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                                 BorderRadius.circular(18.0),
                                             side: BorderSide(
                                                 color: AppColors.primaryColor)))),
-                                child: const Text('Xem hồ sơ')),
+                                child: Text('View profile'.tr)),
                           ],
                         ),
                       ]),
                 ),
                 ExpandableContainer(
-                  title: 'Đặc điểm bất động sản',
+                  title: 'Real estate features'.tr,
                   minHeight: 130,
                   child: _controller.postDetail(_controller.post),
                 ),
                 ExpandableContainer(
-                  title: 'Mô tả',
+                  title: 'Description'.tr,
                   minHeight: 114,
                   child: SingleChildScrollView(
                     physics: const NeverScrollableScrollPhysics(),
@@ -189,7 +189,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                     ),
                   ),
                 ),
-                InforCardList(title: 'Liên Quan', list: _controller.relatedPost, navType: TypeNavigate.province, province: _controller.post.address.cityName,)
+                InforCardList(title: 'Related'.tr, list: _controller.relatedPost, navType: TypeNavigate.province, province: _controller.post.address.cityName,)
               ]),
             );
           }
@@ -214,7 +214,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                           color: Colors.white,
                         ),
                         Text(
-                          'Gọi điện',
+                          'Call'.tr,
                           style: AppTextStyles.roboto12regular
                               .copyWith(color: Colors.white),
                         )
@@ -231,7 +231,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                           color: AppColors.green,
                         ),
                         Text(
-                          'Chat',
+                          'Chat'.tr,
                           style: AppTextStyles.roboto12regular
                               .copyWith(color: AppColors.green),
                         )
@@ -248,7 +248,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                           color: AppColors.green,
                         ),
                         Text(
-                          'Tin nhắn sms',
+                          'SMS messages'.tr,
                           style: AppTextStyles.roboto12regular
                               .copyWith(color: AppColors.green),
                         )

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'package:get/get.dart';
+import 'package:nha_gia_re/core/extensions/string_ex.dart';
 import 'package:nha_gia_re/modules/settings/settings_controller.dart';
 
 class ChangePassScreen extends StatefulWidget {
@@ -19,7 +20,7 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: _controller.handleChangePassBack,),
-        title: Text("Đổi mật khẩu")
+        title: Text('Change password'.tr)
         ),
       body: Form(
         key: _controller.changePassFormKey,
@@ -77,6 +78,7 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                     controller: _controller.newPassword,
                     minLength: 8,
                     uppercaseCharCount: 1,
+                    strings: ValidateString(),
                     width: 400,
                     height: 70,
                     onSuccess: _controller.hideValidator,

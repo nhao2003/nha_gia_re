@@ -27,7 +27,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     ScreenUtil.init(context, designSize: const Size(411, 683));
     return Scaffold(
         appBar: AppBar(
-        title: Text("Cài đặt"),
+        title: Text('Settings'.tr),
         actions: [
           StreamBuilder(
               stream: GetIt.instance<ChatRepository>().conversationStream,
@@ -88,11 +88,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
             return Center(child: CircularProgressIndicator(),);
           }
           }),
-          SettingsItem(title: "Đã lưu", onPressed: (){}, icon: Icon(Icons.favorite,color: AppColors.red,),),
-          SettingsItem(title: "Cập nhật thông tin", onPressed: _controller.navToUserProfile, icon: Image.asset(Assets.person,width: 24,height: 24,),),
-          SettingsItem(title: "Đổi mật khẩu", onPressed: _controller.navToChangePass, icon: const Icon(Icons.lock_outline_rounded,),),
-          SettingsItem(title: "Ngôn ngữ", onPressed: _controller.navToChangeLang, icon: const Icon(Icons.language_outlined,),),
-          SettingsItem(title: "Đăng xuất", onPressed: _controller.handleSignOut, icon: const Icon(Icons.logout,),),
+          SettingsItem(title: 'Favorite'.tr, onPressed: (){}, icon: Icon(Icons.favorite,color: AppColors.red,),),
+          SettingsItem(title: 'Update information'.tr, onPressed: _controller.navToUserProfile, icon: Image.asset(Assets.person,width: 24,height: 24,),),
+          SettingsItem(title: 'Change password'.tr, onPressed: _controller.navToChangePass, icon: const Icon(Icons.lock_outline_rounded,),),
+          SettingsItem(title: 'Language'.tr, onPressed: _controller.navToChangeLang, icon: const Icon(Icons.language_outlined,),),
+          SettingsItem(title: 'Sign out'.tr, onPressed: _controller.handleSignOut, icon: const Icon(Icons.logout,),),
         ],
       ),
     );

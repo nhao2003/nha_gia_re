@@ -28,15 +28,15 @@ class LocalizationService extends Translations {
 
   // cái này là Map các language được support đi kèm với mã code của lang đó: cái này dùng để đổ data vào Dropdownbutton và set language mà không cần quan tâm tới language của hệ thống
   static final langs = LinkedHashMap.from({
-    'en': 'English'.tr,
-    'vi': 'Vietnamese'.tr,
+    'en': 'English',
+    'vi': 'Vietnamese',
   });
 
   // function change language nếu bạn không muốn phụ thuộc vào ngôn ngữ hệ thống
-  static void changeLocale(String languageCode) {
+  static Future<void> changeLocale(String languageCode) async {
     repo.saveLanguageCode(languageCode);
     locale = _getLocaleFromLanguage(languageCode: languageCode);
-    Get.updateLocale(locale);
+    await Get.updateLocale(locale);
   }
 
   @override
