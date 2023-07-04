@@ -17,6 +17,7 @@ import 'package:nha_gia_re/modules/post_details/post_detail_controller.dart';
 import 'package:nha_gia_re/modules/post_details/widget/expandable_container.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 
+import '../../../data/enums/enums.dart';
 import '../../../data/models/user_info.dart';
 import '../../../data/repositories/chat_repository.dart';
 
@@ -178,8 +179,11 @@ class _AdminPostDetailScreenState extends State<AdminPostDetailScreen> {
                       child: CircularProgressIndicator(),
                     );
                   } else {
-                    _controller.post = snapshot.data?.last;
+                    _controller.post = snapshot.data?[1];
+                    _controller.numOfLikes.value = _controller.post.numOfLikes;
+                    _controller.liked.value = snapshot.data?[2];
                     _controller.userInfo = snapshot.data?.first;
+                    _controller.relatedPost = snapshot.data?.last;
                     print(snapshot.data);
                     return SingleChildScrollView(
                       child: Column(children: [
@@ -188,7 +192,7 @@ class _AdminPostDetailScreenState extends State<AdminPostDetailScreen> {
                             aspectRatio: 1.72,
                             indicatorSize: 8),
                         Container(
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -206,12 +210,20 @@ class _AdminPostDetailScreenState extends State<AdminPostDetailScreen> {
                                     ),
                                     Text(' - ${_controller.post.area}m2',
                                         style: AppTextStyles.roboto20regular),
-                                    Spacer(),
-                                    IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(
-                                          Icons.favorite_border_outlined,
-                                        )),
+                                    const Spacer(),
+                                    Obx(() => IconButton(
+                                        onPressed: _controller.likePost,
+                                        icon: (_controller.liked.value)
+                                            ? Icon(
+                                                Icons.favorite,
+                                                color: AppColors.red,
+                                              )
+                                            : const Icon(
+                                                Icons.favorite_border_outlined,
+                                              ))),
+                                    Obx(() => Text(
+                                        _controller.numOfLikes.value.toString(),
+                                        style: AppTextStyles.roboto18regular)),
                                   ],
                                 ),
                                 Row(
@@ -233,7 +245,7 @@ class _AdminPostDetailScreenState extends State<AdminPostDetailScreen> {
                                         ))
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 12,
                                 ),
                                 Row(
@@ -287,7 +299,6 @@ class _AdminPostDetailScreenState extends State<AdminPostDetailScreen> {
                                     const Spacer(),
                                     TextButton(
                                         onPressed: _controller.navToUserProfile,
-                                        child: Text('Xem hồ sơ'),
                                         style: ButtonStyle(
                                             padding: MaterialStateProperty.all<
                                                     EdgeInsets>(
@@ -298,7 +309,8 @@ class _AdminPostDetailScreenState extends State<AdminPostDetailScreen> {
                                                 RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(18.0),
-                                                    side: BorderSide(color: AppColors.primaryColor))))),
+                                                    side: BorderSide(color: AppColors.primaryColor)))),
+                                        child: const Text('Xem hồ sơ')),
                                   ],
                                 ),
                               ]),
@@ -312,13 +324,19 @@ class _AdminPostDetailScreenState extends State<AdminPostDetailScreen> {
                           title: 'Mô tả',
                           minHeight: 114,
                           child: SingleChildScrollView(
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             child: Text(
                               _controller.post.description,
                               style: AppTextStyles.roboto16regular,
                             ),
                           ),
                         ),
+                        InforCardList(
+                          title: 'Liên Quan',
+                          list: _controller.relatedPost,
+                          navType: TypeNavigate.province,
+                          province: _controller.post.address.cityName,
+                        )
                       ]),
                     );
                   }

@@ -23,8 +23,12 @@ class AdminPostDetailController extends GetxController {
   // define variable and function
   late Post post;
   late UserInfo userInfo;
-
+  late List<Post> relatedPost;
   late bool isYourPost = false;
+  bool isLoading = false;
+  RxBool liked = false.obs;
+  late RxInt numOfLikes = 0.obs;
+
   void initArg(dynamic arg) {
     if (arg is Post) {
       post = arg;
@@ -46,8 +50,9 @@ class AdminPostDetailController extends GetxController {
       return OfficeDetails(office: post);
     } else if (post is Motel) {
       return MotelDetails(motel: post);
-    } else
-      return SizedBox();
+    } else {
+      return const SizedBox();
+    }
   }
 
   Future<List<dynamic>> init() async {
@@ -69,6 +74,25 @@ class AdminPostDetailController extends GetxController {
       )
     ]);
     return data;
+  }
+
+  void likePost() async {
+    PostRepository postRepo = GetIt.instance<PostRepository>();
+    if (!liked.value && !isLoading) {
+      isLoading = true;
+      await postRepo.likePost(post.id).then((value) {
+        liked.value = true;
+        isLoading = false;
+        numOfLikes.value++;
+      });
+    } else if (liked.value && !isLoading) {
+      isLoading = true;
+      await postRepo.unlikePost(post.id).then((value) {
+        liked.value = false;
+        isLoading = false;
+        numOfLikes.value--;
+      });
+    }
   }
 
   void navToChat() {
