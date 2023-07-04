@@ -4,8 +4,11 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
+import 'package:nha_gia_re/data/enums/enums.dart';
+import 'package:nha_gia_re/data/models/properties/post.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
+import 'package:nha_gia_re/data/repositories/post_repository.dart';
 import 'package:nha_gia_re/data/services/localization_service.dart';
 import 'package:nha_gia_re/data/services/onesignal_service.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
@@ -117,7 +120,14 @@ class SettingsController extends GetxController {
     return await userRepo.getUserInfo();
   }
 
-  
+  void navToFavorite() async
+  {
+    var data = {
+      "title": 'Favorite'.tr,
+      "type": TypeNavigate.favorite,
+    };
+    Get.toNamed(AppRoutes.resultArg, arguments: data);
+  }
 
   void handleSignOut() async {
     Get.showOverlay(asyncFunction: ()

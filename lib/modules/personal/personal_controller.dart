@@ -16,7 +16,6 @@ class PersonalController extends GetxController {
   var authId = GetIt.instance<AuthRepository>().userID;
   late RxBool isFollowing = true.obs;
   bool isLoading = false;
-  final remoteDataSourceImpl = RemoteDataSource();
 
   bool check() {
     return authId == userInfo.uid;
@@ -45,14 +44,14 @@ class PersonalController extends GetxController {
   void handleFollowUser() async {
     if (!isFollowing.value && !isLoading) {
       isLoading = true;
-      await remoteDataSourceImpl.followUser(userId: userInfo.uid).then((value) {
+      await userRepo.followUser(userInfo.uid).then((value) {
         isFollowing.value = true;
         isLoading = false;
       });
     } else if (isFollowing.value && !isLoading) {
       isLoading = true;
-      await remoteDataSourceImpl
-          .unfollowUser(userId: userInfo.uid)
+      await userRepo
+          .unFollowUser(userInfo.uid)
           .then((value) {
         isFollowing.value = false;
         isLoading = false;
@@ -67,7 +66,7 @@ class PersonalController extends GetxController {
     }
     if (arg is UserInfo) {
       isFollowing.value =
-          await remoteDataSourceImpl.isFollowing(userId: arg.uid);
+          await userRepo.isFollowing(arg.uid);
       return arg;
     } else {
       throw Exception('Arg ...');

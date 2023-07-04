@@ -399,4 +399,5 @@ enum TypeNavigate {
   rent,
   province,
   user,
+  favorite,
 }

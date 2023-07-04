@@ -39,7 +39,7 @@ class HomeController extends GetxController {
 
   void navToSell() {
     var data = {
-      "title": 'Mua bán',
+      "title": 'For Sale'.tr,
       "type": TypeNavigate.sell,
     };
     Get.toNamed(AppRoutes.resultArg, arguments: data);
@@ -47,7 +47,7 @@ class HomeController extends GetxController {
 
   void navToRent() {
     var data = {
-      "title": 'Cho thuê',
+      "title": 'For Lease'.tr,
       "type": TypeNavigate.rent,
     };
     Get.toNamed(AppRoutes.resultArg, arguments: data);
@@ -55,7 +55,7 @@ class HomeController extends GetxController {
 
   void navByProvince(String provider) {
     var data = {
-      "title": 'Tỉnh thành',
+      "title": 'Provinces'.tr,
       "type": TypeNavigate.province,
       "province": provider,
     };

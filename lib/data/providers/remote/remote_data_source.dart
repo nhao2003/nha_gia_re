@@ -135,7 +135,7 @@ class RemoteDataSource {
     }
   }
 
-  Future<void> followUser({required userId}) async {
+  Future<void> followUser({required String userId}) async {
     try {
       Map<String, dynamic> data = {
         'follower_id': supabaseClient.auth.currentUser?.id,
@@ -150,7 +150,7 @@ class RemoteDataSource {
     }
   }
 
-  Future<void> unfollowUser({required userId}) async {
+  Future<void> unfollowUser({required String userId}) async {
     try {
       await supabaseClient
           .from(tableUserFollow)
@@ -434,6 +434,41 @@ class RemoteDataSource {
       query = query.eq('address->city_code', filter.provinceCode);
     }
     return query;
+  }
+
+  Future<List<String>> getFavoritePostsId() async
+  {
+    try {
+      final postList = await supabaseClient
+          .from(tableUserLike)
+          .select('post_id')
+          .eq('user_id', supabaseClient.auth.currentUser?.id);
+
+      List<Map<String, dynamic>> postIds = List<Map<String, dynamic>>.from(postList);
+      List<String> allValues = postIds.expand((map) {
+        return map.values.where((value) => value is String).cast<String>();
+      }).toList();
+      return allValues;
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getFavoritePosts() async {
+    try {
+      List<String> favoriteList = await getFavoritePostsId();
+      final data =
+          await supabaseClient.from(tablePost).select().in_('id', favoriteList);
+      return List<Map<String, dynamic>>.from(data);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<List<Map<String, dynamic>>> getAllPosts(PostFilter filter) async {

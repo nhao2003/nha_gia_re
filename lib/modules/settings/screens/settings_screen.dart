@@ -88,7 +88,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             return Center(child: CircularProgressIndicator(),);
           }
           }),
-          SettingsItem(title: 'Favorite'.tr, onPressed: (){}, icon: Icon(Icons.favorite,color: AppColors.red,),),
+          SettingsItem(title: 'Favorite'.tr, onPressed: _controller.navToFavorite, icon: Icon(Icons.favorite,color: AppColors.red,),),
           SettingsItem(title: 'Update information'.tr, onPressed: _controller.navToUserProfile, icon: Image.asset(Assets.person,width: 24,height: 24,),),
           SettingsItem(title: 'Change password'.tr, onPressed: _controller.navToChangePass, icon: const Icon(Icons.lock_outline_rounded,),),
           SettingsItem(title: 'Language'.tr, onPressed: _controller.navToChangeLang, icon: const Icon(Icons.language_outlined,),),

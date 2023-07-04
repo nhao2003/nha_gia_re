@@ -9,6 +9,19 @@ class UserRepository {
 
   final Map<String, UserInfo> _userInfos = {};
 
+  Future<void> followUser(String uid)
+  {
+    return _remoteDataSource.followUser(userId: uid);
+  }  
+  Future<void> unFollowUser(String uid)
+  {
+    return _remoteDataSource.unfollowUser(userId: uid);
+  }  
+  Future<bool> isFollowing(String uid)
+  {
+    return _remoteDataSource.isFollowing(userId: uid);
+  }
+
   Future<UserInfo> getUserInfo([String? uid]) async {
     AuthRepository auth = GetIt.instance<AuthRepository>();
     if (uid == null && auth.isUserLoggedIn) {

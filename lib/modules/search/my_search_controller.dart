@@ -21,6 +21,7 @@ class MySearchController extends GetxController {
   TypeNavigate typeResult = TypeNavigate.search;
   String province = ""; // province when navigate
   String uid = "";
+  List<String> favoriteList = List.empty();
 
   void setTypeResult(TypeNavigate type) {
     typeResult = type;
@@ -77,6 +78,7 @@ class MySearchController extends GetxController {
     // có 2 tab: order by giá và thời gian
     // có 4 loại: search, sell, rent, province
     // khai báo 1 init filter
+    favoriteList = await repository.getFavoritePostsId();
     if (selectedTypeItem != FilterValues.instance.provinces[0].obs) {
       // for province
       changeSelectedItem(selectedTypeItem.value);
@@ -110,6 +112,10 @@ class MySearchController extends GetxController {
     {
       uid = Get.arguments["uid"];
       searchPosts.value = await repository.getUserPosts(uid);
+    }
+    else if(typeResult == TypeNavigate.favorite)
+    {
+      searchPosts.value = await repository.getFavoritePosts();
     }
     else
     {
