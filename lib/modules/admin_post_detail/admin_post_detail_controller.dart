@@ -47,6 +47,7 @@ class AdminPostDetailController extends GetxController {
       Get.snackbar("Trạng thái", "Bài đăng đã được chấp nhận");
     } catch (e) {
       Get.snackbar("Trạng thái", "Đã có lỗi xảy ra");
+      e.printError();
     }
     isExecute = false;
   }
@@ -61,6 +62,7 @@ class AdminPostDetailController extends GetxController {
       }
     } catch (e) {
       Get.snackbar("Trạng thái", "Đã có lỗi xảy ra");
+      e.printError();
     }
     isExecute = false;
   }

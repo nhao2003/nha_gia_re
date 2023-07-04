@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:nha_gia_re/data/models/properties/post.dart';
 import 'package:nha_gia_re/data/providers/remote/remote_data_source.dart';
 
@@ -15,10 +17,14 @@ class AdminRepository {
   }
 
   Future<void> approvePost(String id) async {
+    print("===========================");
+    log(id);
     await _remoteDataSource.approvePost(id);
   }
 
   Future<void> rejectPost(String id, String reason) async {
+    print("===========================");
+    log(id);
     await _remoteDataSource.rejectPost(id, reason);
   }
 }

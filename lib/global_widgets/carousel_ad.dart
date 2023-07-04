@@ -11,6 +11,7 @@ class CarouselAd extends StatefulWidget {
       required this.imgList,
       required this.aspectRatio,
       required this.indicatorSize});
+
   final List<String> imgList;
   final double aspectRatio;
   final double indicatorSize;
@@ -36,9 +37,13 @@ class _CarouselAdState extends State<CarouselAd> {
           child: CarouselSlider(
             items: widget.imgList
                 .map((item) => CachedNetworkImage(
-                    imageUrl: item,
-                    fit: BoxFit.cover,
-                    width: context.screenSize.width))
+                      imageUrl: item,
+                      fit: BoxFit.cover,
+                      width: context.screenSize.width,
+                      errorWidget: (context, _, __) {
+                        return Placeholder();
+                      },
+                    ))
                 .toList(),
             carouselController: _controller,
             options: CarouselOptions(
@@ -65,7 +70,8 @@ class _CarouselAdState extends State<CarouselAd> {
                 child: Container(
                   width: widget.indicatorSize,
                   height: widget.indicatorSize,
-                  margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                  margin: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 4.0),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: AppColors.white

@@ -688,13 +688,13 @@ class RemoteDataSource {
   }
 
   Future<void> approvePost(String id) async {
-    await supabaseClient.rpc('approve_post', params: {'p_id ': id});
+    await supabaseClient.rpc('approve_post', params: {'p_id': id});
   }
 
   Future<void> rejectPost(String id, String reason) async {
-    await supabaseClient.rpc('approve_post', params: {
-      'p_id  ': id,
-      'p_rejected_info ': reason,
+    await supabaseClient.rpc('reject_post', params: {
+      'p_id': id,
+      'p_rejected_info': reason,
     });
   }
 }
