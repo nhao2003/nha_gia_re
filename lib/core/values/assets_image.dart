@@ -1,6 +1,6 @@
 const imagePath = 'assets/images';
 const iconPath = 'assets/icons';
-
+const animationsPath = 'assets/animations';
 class Assets {
   Assets._();
   static const String landmark_81 = '$imagePath/landmark_81.png';
@@ -79,4 +79,7 @@ class Assets {
   // image
   static const String forgetPass = '$imagePath/rafiki.png';
   static const String nha = '$imagePath/nha.jpg';
+
+  static const String payment_failure = '$animationsPath/payment-failure.json';
+  static const String payment_success = '$animationsPath/payment_success.json';
 }

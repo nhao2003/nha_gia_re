@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:nha_gia_re/core/extensions/integer_ex.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../data/models/membership_package.dart';
+import 'discount_label.dart';
 
 class MembershipPackageCard extends StatelessWidget {
   late MembershipPackage package = MembershipPackage.createFakeData().first;
@@ -24,24 +26,7 @@ class MembershipPackageCard extends StatelessWidget {
     );
   }
 
-  String formatNumberWithCommas(int number) {
-    if (number >= 1000000) {
-      String strNumber = (number / 1000).toString();
-      String result = '';
-      for (int i = strNumber.length - 1; i >= 0; i--) {
-        result = strNumber[i] + result;
-        if ((strNumber.length - i) % 3 == 0 && i > 0) {
-          result = '.$result';
-        }
-      }
-      return "${result}K";
-    } else if (number >= 1000) {
-      double value = number / 1000;
-      return '${value.toStringAsFixed(value.truncateToDouble() == value ? 0 : 1)}K';
-    } else {
-      return number.toString();
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -68,16 +53,7 @@ class MembershipPackageCard extends StatelessWidget {
                 const SizedBox(
                   width: 5,
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-                  decoration: BoxDecoration(
-                      color: AppColors.red.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(15)),
-                  child: Text(
-                    "80%",
-                    style: TextStyle(color: AppColors.red),
-                  ),
-                )
+                DiscountLabel("-22%"),
               ],
             ),
             SizedBox(
@@ -85,7 +61,7 @@ class MembershipPackageCard extends StatelessWidget {
             ),
             RichText(
               text: TextSpan(
-                text: formatNumberWithCommas(package.price),
+                text: package.price.formatNumberWithCommasK,
                 style: TextStyle(
                     decoration: TextDecoration.lineThrough,
                     color: AppColors.grey
@@ -99,7 +75,7 @@ class MembershipPackageCard extends StatelessWidget {
             ),
             RichText(
               text: TextSpan(
-                text: formatNumberWithCommas(package.price),
+                text: package.price.formatNumberWithCommasK,
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,

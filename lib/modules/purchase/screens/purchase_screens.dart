@@ -102,11 +102,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                             child: MembershipPackageCard(
                               package: e,
                               onTapBuy: (package) {
-                                Get.bottomSheet(
-                                  PurchaseChoosePlanScreen(),
-                                  isScrollControlled: true,
-                                  ignoreSafeArea: false,
-                                );
+                                Get.to(PurchaseChoosePlanScreen(package));
                               },
                             ),
                           ))
