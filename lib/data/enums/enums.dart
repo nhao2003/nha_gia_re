@@ -393,6 +393,7 @@ enum NotificationType {
     throw Exception("Can't parse NotificationType! Your input value is \"$value\"");
   }
 }
+
 enum TypeNavigate {
   search,
   sell,
