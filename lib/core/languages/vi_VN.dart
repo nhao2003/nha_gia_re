@@ -3,9 +3,9 @@
 const Map<String, String> viLanguagePackage = {
   // tab
   'Home': 'Trang chủ',
-  'Account' : 'Tài khoản',
-  'Blog' : 'Blog',
-  'Posts management' : 'Quản lý tin',
+  'Account': 'Tài khoản',
+  'Blog': 'Blog',
+  'Posts management': 'Quản lý tin',
   // login
   'Login': 'Đăng nhập',
   'Forgot password?': 'Quên mật khẩu',
@@ -51,15 +51,15 @@ const Map<String, String> viLanguagePackage = {
   'Yesterday': 'Hôm qua',
   'Just now': 'Just now',
   'Search...': 'Tìm kiếm trên TiTro',
-  'For Sale' : 'Mua bán',
-  'For Lease' : 'Cho thuê',
-  'Post' : 'Đăng bài',
-  'Provinces' : 'Tỉnh thành',
-  'Near you' : 'Gần bạn',
-  'See more' : 'Xem thêm',
-  'thousand' : 'nghìn',
-  'million' : 'triệu',
-    'billion' : 'tỷ',
+  'For Sale': 'Mua bán',
+  'For Lease': 'Cho thuê',
+  'Post': 'Đăng bài',
+  'Provinces': 'Tỉnh thành',
+  'Near you': 'Gần bạn',
+  'See more': 'Xem thêm',
+  'thousand': 'nghìn',
+  'million': 'triệu',
+  'billion': 'tỷ',
   // app filter
   "Nha Gia Re": "Nhà Giá Rẻ",
 
@@ -125,8 +125,8 @@ const Map<String, String> viLanguagePackage = {
   'Language': 'Ngôn ngữ',
   'Sign out': 'Đăng xuất',
   // update profile
-  'Male' : 'Nam',
-  'Female' : 'Nữ',
+  'Male': 'Nam',
+  'Female': 'Nữ',
   'Full name': 'Họ và tên',
   'Phone number': 'Số điện thoại',
   'Address': 'Địa chỉ',
@@ -136,10 +136,10 @@ const Map<String, String> viLanguagePackage = {
   'Complete': 'Hoàn thành',
   'Choose address': 'Chọn địa chỉ',
   'Date of birth': 'Ngày sinh',
-  'Write something about you' :'Giới thiệu về bản thân' ,
+  'Write something about you': 'Giới thiệu về bản thân',
   'Bio': 'Giới thiệu',
-  'Save' : 'Lưu',
-    // post detail
+  'Save': 'Lưu',
+  // post detail
   'SMS messages': 'Tin nhắn SMS',
   'Real estate features': 'Đặc điểm bất động sản',
   'Description': 'Mô tả',
@@ -149,10 +149,10 @@ const Map<String, String> viLanguagePackage = {
   'View profile': 'Xem hồ sơ',
   'Agency': 'Môi giới',
   'Independence': 'Cá nhân',
-  'Expand' : 'Xem thêm',
-  'Collapse' : 'Thu gọn', 
+  'Expand': 'Xem thêm',
+  'Collapse': 'Thu gọn',
   //
-  'rooms' : 'phòng',
+  'rooms': 'phòng',
   'Deposit': 'Tiền cọc',
   'Property Status:': 'Tình trạng bất động sản:',
   'Not Handed Over': 'Chưa bàn giao',
@@ -169,7 +169,7 @@ const Map<String, String> viLanguagePackage = {
   'Main Door Direction': 'Hướng cửa chính',
   'Balcony Direction': 'Hướng ban công',
   'Corner Apartment': 'Căn góc',
-  'm3' : 'Khối',
+  'm3': 'Khối',
   'Deposit:': 'Tiền Đặt Cọc:',
   'Area:': 'Diện Tích:',
   'Price/m2:': 'Giá/m2:',
@@ -181,7 +181,7 @@ const Map<String, String> viLanguagePackage = {
   'Water Price:': 'Giá Nước:',
   'Electric Price:': 'Giá Điện:',
   'Furniture Status:': 'Tình Trạng Nội Thất:',
-    // personal 
+  // personal
   'Followers': 'Người theo dõi',
   'Following': 'Đang theo dõi',
   'Follow': 'Theo dõi',
@@ -189,6 +189,12 @@ const Map<String, String> viLanguagePackage = {
   'Edit Profile': 'Chỉnh sửa trang cá nhân',
   'Join date:': 'Ngày tham gia:',
   'Posted Properties': 'Tin đã đăng',
-    'Session expired.' : 'Phiên đã hết hạn.',
-  'Please log in again to refresh your session.' : 'Vui lòng đăng nhập lại để làm mới phiên của bạn.'
+  'Session expired.': 'Phiên đã hết hạn.',
+  'Please log in again to refresh your session.':
+      'Vui lòng đăng nhập lại để làm mới phiên của bạn.',
+  // noti
+  'suggest': 'Có thể bạn quan tâm',
+  "expirationWarning": "Tin của bạn sẽ hết hạn sau 1 ngày",
+  'rejectPost': 'Bị từ chối',
+  'acceptPost': 'Đã được duyệt',
 };

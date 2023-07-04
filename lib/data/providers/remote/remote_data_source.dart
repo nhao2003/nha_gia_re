@@ -21,6 +21,7 @@ class RemoteDataSource {
   static const String tableUserLike = 'user_like';
   static const String tableUserFollow = 'user_follow';
   static const String tablePost = 'post';
+  static const String tableNotification = 'notification';
   final SupabaseClient supabaseClient = Supabase.instance.client;
 
   void showSessionExpiredDialog(String? code) {
@@ -52,6 +53,21 @@ class RemoteDataSource {
     };
     try {
       return await supabaseClient.rpc('change_user_password', params: request);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getNotification() async {
+    try {
+      var data = await supabaseClient
+          .from(tableNotification)
+          .select()
+          .eq('user_id', supabaseClient.auth.currentUser?.id);
+      return List<Map<String, dynamic>>.from(data);
     } on PostgrestException catch (e) {
       showSessionExpiredDialog(e.code);
       rethrow;
@@ -436,15 +452,15 @@ class RemoteDataSource {
     return query;
   }
 
-  Future<List<String>> getFavoritePostsId() async
-  {
+  Future<List<String>> getFavoritePostsId() async {
     try {
       final postList = await supabaseClient
           .from(tableUserLike)
           .select('post_id')
           .eq('user_id', supabaseClient.auth.currentUser?.id);
 
-      List<Map<String, dynamic>> postIds = List<Map<String, dynamic>>.from(postList);
+      List<Map<String, dynamic>> postIds =
+          List<Map<String, dynamic>>.from(postList);
       List<String> allValues = postIds.expand((map) {
         return map.values.where((value) => value is String).cast<String>();
       }).toList();

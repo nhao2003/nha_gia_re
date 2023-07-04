@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
+import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/values/app_strings.dart';
 
 enum PropertyType {
@@ -379,10 +381,37 @@ enum NotificationType {
   rejectPost,
   acceptPost,
   advertise;
+
+  Color statusColor()
+  {
+    switch (this) {
+      case NotificationType.suggest:
+        return AppColors.grey;
+      case NotificationType.expirationWarning:
+        return AppColors.primaryColor;
+      case NotificationType.rejectPost:
+        return AppColors.red;
+      case NotificationType.acceptPost:
+        return  AppColors.green;
+      case NotificationType.advertise:
+        return AppColors.primaryColor;
+    }
+  }
+  
   @override
   String toString() {
-    super.toString();
-    return super.toString().split('.').last;
+    switch (this) {
+      case NotificationType.suggest:
+        return "suggest";
+      case NotificationType.expirationWarning:
+        return "expirationWarning";
+      case NotificationType.rejectPost:
+        return "rejectPost";
+      case NotificationType.acceptPost:
+        return "acceptPost";
+      case NotificationType.advertise:
+        return "advertise";
+    }
   }
   static NotificationType parse(String value) {
     for (NotificationType type in NotificationType.values) {

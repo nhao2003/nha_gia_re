@@ -1,54 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:nha_gia_re/modules/notification/notification_controller.dart';
 import 'package:nha_gia_re/modules/notification/widgets/item_noti.dart';
 
 import '../../../core/theme/app_colors.dart';
 
 class NotificationScreen extends StatelessWidget {
-  const NotificationScreen({super.key});
+  NotificationScreen({super.key});
+
+  final NotificationController _controller = Get.find<NotificationController>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.primaryColor,
-        title: const Text("Thông báo"),
-      ),
-      body: ListView(
-        children: [
-          ItemNoti(
-            colorStatus: AppColors.grey,
-            status: "Có thể bạn quan tâm",
-            title: "Trọ Quận Tân Bình",
-            address: "449/58 Trường Chinh P14 Tân Bình HCM",
-            urlImage:
-                "https://globalcastingresources.com/wp-content/uploads/2022/10/1664482232_How-much-does-the-anime-streaming-service-cost.jpg",
-          ),
-          ItemNoti(
-            colorStatus: AppColors.primaryColor,
-            status: "Tin của bạn sẽ hết hạn sau 1 ngày nữa",
-            title: "Trọ Quận Tân Bình",
-            address: "449/58 Trường Chinh P14 Tân Bình HCM",
-            urlImage:
-                "https://globalcastingresources.com/wp-content/uploads/2022/10/1664482232_How-much-does-the-anime-streaming-service-cost.jpg",
-          ),
-          ItemNoti(
-            colorStatus: AppColors.red,
-            status: "Bị từ chối",
-            title: "Trọ Quận Tân Bình",
-            address: "449/58 Trường Chinh P14 Tân Bình HCM",
-            urlImage:
-                "https://globalcastingresources.com/wp-content/uploads/2022/10/1664482232_How-much-does-the-anime-streaming-service-cost.jpg",
-          ),
-          ItemNoti(
-            colorStatus: AppColors.green,
-            status: "Đã được duyệt",
-            title: "Trọ Quận Tân Bình",
-            address: "449/58 Trường Chinh P14 Tân Bình HCM",
-            urlImage:
-                "https://globalcastingresources.com/wp-content/uploads/2022/10/1664482232_How-much-does-the-anime-streaming-service-cost.jpg",
-          ),
-        ],
-      ),
-    );
+    return FutureBuilder(
+        future: _controller.init(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            if (snapshot.error != null) {
+              return const Center(
+                child: Text('An error occured'),
+              );
+            } else {
+              return Scaffold(
+                  appBar: AppBar(
+                    backgroundColor: AppColors.primaryColor,
+                    title: const Text("Thông báo"),
+                  ),
+                  body: ListView.separated(
+                      separatorBuilder: (context, index) => Divider(),
+                      itemCount: _controller.notifications.length,
+                      itemBuilder: (context, index) {
+                        return ItemNoti(
+                          colorStatus: _controller.notifications[index].type.statusColor(),
+                          status:
+                              _controller.notifications[index].type.toString().tr,
+                          title: _controller.notifications[index].title,
+                          content: _controller.notifications[index].content,
+                          urlImage: _controller.notifications[index].image!,
+                        );
+                      }));
+            }
+          }
+        });
   }
 }

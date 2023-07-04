@@ -181,5 +181,10 @@ const Map<String, String> enLanguagePackage = {
   'Join date:': 'Join date:',
   'Posted Properties': 'Posted Properties',
   'Session expired.' : 'Session expired.',
-  'Please log in again to refresh your session.' : 'Please log in again to refresh your session.'
+  'Please log in again to refresh your session.' : 'Please log in again to refresh your session.',
+  // notification
+  'suggest' : 'You may be interested',
+   "expirationWarning" :  "Your post will expire in 1 days",
+   'rejectPost' : 'Rejected',
+   'acceptPost' : 'Approved',
 };

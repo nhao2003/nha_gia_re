@@ -7,14 +7,14 @@ class ItemNoti extends StatefulWidget {
   Color colorStatus;
   String status;
   String title;
-  String address;
+  String content;
   String urlImage;
 
   ItemNoti({
     required this.colorStatus,
     required this.status,
     required this.title,
-    required this.address,
+    required this.content,
     required this.urlImage,
     super.key,
   });
@@ -83,7 +83,7 @@ class _ItemNotiState extends State<ItemNoti> {
                   style: AppTextStyles.roboto16regular,
                 ),
                 const SizedBox(height: 5),
-                Text(widget.address,
+                Text(widget.content,
                     style: AppTextStyles.roboto14regular.copyWith(
                       color: const Color(0xff49454F),
                     )),
