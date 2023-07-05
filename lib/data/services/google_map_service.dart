@@ -7,16 +7,16 @@ import 'package:nha_gia_re/core/extensions/string_ex.dart';
 import '../models/province.dart';
 
 class GoogleMapService {
-  static void test() async {
-    // ham nay demo test thu
-    Placemark? placemark = await GoogleMapService.getAddressFromLocation(const LatLng(15.582282, 108.522051));
-    if (placemark != null) {
-      final pro = GoogleMapService.getProvinceByName(placemark.administrativeArea!);
-      final dis = GoogleMapService.getDistrictByName(placemark.locality!);
-      print(pro.toString());
-      print(dis.toString());
-    }
-  }
+  // static void test() async {
+  //   // ham nay demo test thu
+  //   Placemark? placemark = await GoogleMapService.getAddressFromLocation(const LatLng(15.582282, 108.522051));
+  //   if (placemark != null) {
+  //     final pro = GoogleMapService.getProvinceByName(placemark.administrativeArea!);
+  //     final dis = GoogleMapService.getDistrictByName(placemark.locality!);
+  //     print(pro.toString());
+  //     print(dis.toString());
+  //   }
+  // }
 
   static Future<Placemark?> getAddressFromLocation(LatLng pos) async {
     Placemark? placeMark;

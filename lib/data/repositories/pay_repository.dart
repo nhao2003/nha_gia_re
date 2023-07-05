@@ -1,10 +1,5 @@
 import 'dart:convert';
-
-import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/providers/remote/request/create_order_request.dart';
-import 'package:nha_gia_re/data/repositories/auth_repository.dart';
-import 'package:nha_gia_re/routers/app_routes.dart';
-import '../models/user_info.dart';
 import '../models/create_order.dart';
 import 'package:http/http.dart' as https;
 import 'package:nha_gia_re/core/values/api_values.dart';
