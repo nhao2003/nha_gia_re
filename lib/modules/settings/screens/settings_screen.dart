@@ -1,13 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/repositories/chat_repository.dart';
-import 'package:nha_gia_re/data/repositories/user_repository.dart';
 import 'package:nha_gia_re/modules/settings/settings_controller.dart';
-import 'package:nha_gia_re/modules/settings/widget/settings_item.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/values/assets_image.dart';
@@ -110,6 +106,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: Text('Update information'.tr),
             onTap: _controller.navToUserProfile,
             leading: Image.asset(Assets.person, width: 24, height: 24),
+          ),
+          ListTile(
+            title: Text('Account verification'.tr),
+            onTap: _controller.navToVerification,
+            leading: Icon(
+              Icons.admin_panel_settings_outlined,
+              color: AppColors.black,
+            ),
           ),
           ListTile(
             title: Text('Change password'.tr),

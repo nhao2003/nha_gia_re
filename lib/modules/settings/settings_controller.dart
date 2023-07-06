@@ -1,22 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:nha_gia_re/core/theme/app_colors.dart';
-import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
-import 'package:nha_gia_re/data/models/properties/post.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
-import 'package:nha_gia_re/data/repositories/post_repository.dart';
 import 'package:nha_gia_re/data/services/localization_service.dart';
 import 'package:nha_gia_re/data/services/onesignal_service.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../../core/values/assets_image.dart';
 import '../../data/repositories/user_repository.dart';
-import 'widget/settings_item.dart';
 
 class SettingsController extends GetxController {
   late UserInfo userInfo;
@@ -32,7 +24,7 @@ class SettingsController extends GetxController {
   RxBool isObscureRepeatPass = true.obs;
   bool isPasswordCorrect = true;
   RxString selectedLanguage = ''.obs;
-  
+
   late var languages;
 
   void handleChangePass() async {
@@ -60,9 +52,8 @@ class SettingsController extends GetxController {
       }
     }
   }
-  
-  void changeLocale(String languageCode) async
-  {
+
+  void changeLocale(String languageCode) async {
     await LocalizationService.changeLocale(languageCode).then((value) {
       Get.back();
     });
@@ -120,8 +111,7 @@ class SettingsController extends GetxController {
     return await userRepo.getUserInfo();
   }
 
-  void navToFavorite() async
-  {
+  void navToFavorite() async {
     var data = {
       "title": 'Favorite'.tr,
       "type": TypeNavigate.favorite,
@@ -130,14 +120,16 @@ class SettingsController extends GetxController {
   }
 
   void handleSignOut() async {
-    Get.showOverlay(asyncFunction: ()
-    async {
-      return await authRepo.signOut().then((value) {
-      OneSignalService.removeExternalId();
-      Get.toNamed(AppRoutes.splashScreen);
-    });
-    }, loadingWidget:const Center(child:  CircularProgressIndicator(),));
-    
+    Get.showOverlay(
+        asyncFunction: () async {
+          return await authRepo.signOut().then((value) {
+            OneSignalService.removeExternalId();
+            Get.toNamed(AppRoutes.splashScreen);
+          });
+        },
+        loadingWidget: const Center(
+          child: CircularProgressIndicator(),
+        ));
   }
 
   void navToUserProfile() {
@@ -151,8 +143,12 @@ class SettingsController extends GetxController {
   void navToChangePass() {
     Get.toNamed(AppRoutes.change_pass);
   }
-  void navToChangeLang()
-  {
+
+  void navToChangeLang() {
     Get.toNamed(AppRoutes.change_lang);
+  }
+
+  void navToVerification() {
+    Get.toNamed(AppRoutes.verification_screen);
   }
 }

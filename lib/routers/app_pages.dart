@@ -29,6 +29,8 @@ import 'package:nha_gia_re/modules/search/screens/filter_screen.dart';
 import 'package:nha_gia_re/modules/chat/chat_binding.dart';
 import 'package:nha_gia_re/modules/chat/screens/chat_screen.dart';
 import 'package:nha_gia_re/modules/search/screens/search_screen.dart';
+import 'package:nha_gia_re/modules/verification/screens/verification_screen.dart';
+import 'package:nha_gia_re/modules/verification/verification_binding.dart';
 import '../modules/blog/blog_binding.dart';
 import '../modules/conversations/conversation_binding.dart';
 import '../modules/conversations/screens/conversation_screen.dart';
@@ -99,9 +101,10 @@ abstract class AppPages {
       binding: PersonalBinding(),
     ),
     GetPage(
-        name: AppRoutes.userProfile,
-        page: () => const UserProfileScreen(),
-        binding: UserProfileBinding()),
+      name: AppRoutes.userProfile,
+      page: () => const UserProfileScreen(),
+      binding: UserProfileBinding(),
+    ),
     GetPage(
       name: AppRoutes.postManagement,
       page: () => PostManagementScreen(),
@@ -162,12 +165,25 @@ abstract class AppPages {
       page: () => const AdminPostDetailScreen(),
       binding: AdminPostDetailBinding(),
     ),
-    GetPage(name: AppRoutes.change_pass, page: () => ChangePassScreen(), binding: SettingsBinding()),
-    GetPage(name: AppRoutes.change_lang, page: () => ChangeLanguageScreen(), binding: SettingsBinding()),
+    GetPage(
+      name: AppRoutes.change_pass,
+      page: () => const ChangePassScreen(),
+      binding: SettingsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.change_lang,
+      page: () => const ChangeLanguageScreen(),
+      binding: SettingsBinding(),
+    ),
     GetPage(
       name: AppRoutes.purchase_screen,
       page: () => const PurchaseScreen(),
       binding: PurchaseBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.verification_screen,
+      page: () => const VerificationScreen(),
+      binding: VerificationBinding(),
     ),
   ];
 }

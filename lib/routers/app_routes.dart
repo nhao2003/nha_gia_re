@@ -40,10 +40,10 @@ abstract class AppRoutes {
   // setting
   static const change_pass = '/settings/changePass';
   static const change_lang = '/settings/changeLang';
+  static const verification_screen = '/setting/verification';
 
-  static String getPostRoute(String id)
-  {
-    return '/post_detail/${id}';
+  static String getPostRoute(String id) {
+    return '/post_detail/$id';
   }
 
   static const purchase_screen = '/purchase_screen';

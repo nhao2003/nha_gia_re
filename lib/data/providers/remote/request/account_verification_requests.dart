@@ -4,14 +4,14 @@ class AccountVerificationRequests {
   DateTime requestDate;
   String frontIdentityCardImageLink;
   String backIdentityCardImageLink;
-  String portraitImagePath;
+  String portraitImagePath; // anh mat
   String fullName;
   bool sex;
   String dob;
-  String identityCardNo;
-  DateTime identityCardIssuedDate;
-  String placeOfOrigin;
-  String placeOfResidence;
+  String identityCardNo; // so cccd
+  DateTime identityCardIssuedDate; // ngay cap cccd
+  String placeOfOrigin; // que quan
+  String placeOfResidence; // dia chi thuong tru
 
   AccountVerificationRequests({
     required this.id,
@@ -34,8 +34,10 @@ class AccountVerificationRequests {
       id: json['id'] as String,
       userId: json['user_id'] as String,
       requestDate: DateTime.parse(json['request_date']),
-      frontIdentityCardImageLink: json['front_identity_card_image_link'] as String,
-      backIdentityCardImageLink: json['back_identity_card_image_link'] as String,
+      frontIdentityCardImageLink:
+          json['front_identity_card_image_link'] as String,
+      backIdentityCardImageLink:
+          json['back_identity_card_image_link'] as String,
       portraitImagePath: json['portrait_image_path'] as String,
       fullName: json['full_name'] as String,
       sex: json['sex'] as bool,

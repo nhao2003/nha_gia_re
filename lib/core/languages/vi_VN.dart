@@ -197,4 +197,7 @@ const Map<String, String> viLanguagePackage = {
   "expirationWarning": "Tin của bạn sẽ hết hạn sau 1 ngày",
   'rejectPost': 'Bị từ chối',
   'acceptPost': 'Đã được duyệt',
+
+  // verification
+  'Account verification': 'Định danh tài khoản'
 };
