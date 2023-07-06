@@ -112,7 +112,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.splashScreen,
-      page: () => const SplashScreen(),
+      page: () => SplashScreen(),
       binding: SplashBinding(),
     ),
     GetPage(
