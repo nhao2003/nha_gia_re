@@ -1,8 +1,13 @@
 import 'dart:convert';
+import 'package:nha_gia_re/data/models/discount.dart';
+import 'package:nha_gia_re/data/providers/remote/remote_data_source.dart';
 import 'package:nha_gia_re/data/providers/remote/request/create_order_request.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/create_order.dart';
 import 'package:http/http.dart' as https;
 import 'package:nha_gia_re/core/values/api_values.dart';
+
+import '../models/membership_package.dart';
 
 class PayRepository {
   static var client = https.Client();
@@ -23,5 +28,14 @@ class PayRepository {
     } else {
       return null;
     }
+  }
+  RemoteDataSource remoteDataSource = RemoteDataSource();
+  Future<List<MembershipPackage>> getMembershipPackage() async {
+    final List<Map<String, dynamic>> data = await Supabase.instance.client.from('membership_package').select();
+    return data.map((e) => MembershipPackage.fromJson(e)).toList();
+  }
+  Future<List<Discount>> getDiscount() async {
+    final List<Map<String, dynamic>> data = await Supabase.instance.client.from('discount').select();
+    return data.map((e) => Discount.fromJson(e)).toList();
   }
 }

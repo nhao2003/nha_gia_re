@@ -27,12 +27,12 @@ class MembershipPackage {
       name: json['name'] as String,
       description: json['description'] as String,
       price: json['price'] as int,
-      monthlyPostLimit: json['monthlyPostLimit'] as int,
-      postApprovalPriority: json['postApprovalPriority'] as bool,
-      displayPriority: json['displayPriority'] as bool,
-      showVerifiedBadge: json['showVerifiedBadge'] as bool,
-      customerCarePriority: json['customerCarePriority'] as bool,
-      superFastApproval: json['superFastApproval'] as bool,
+      monthlyPostLimit: json['monthly_post_limit'] as int,
+      postApprovalPriority: json['post_approval_priority'] as bool,
+      displayPriority: json['display_priority'] as bool,
+      showVerifiedBadge: json['show_verified_badge'] as bool,
+      customerCarePriority: json['customer_care_priority'] as bool,
+      superFastApproval: json['super_fast_approval'] as bool,
     );
   }
   static List<MembershipPackage> createFakeData() {

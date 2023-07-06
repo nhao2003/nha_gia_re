@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:lottie/lottie.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
+import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -57,7 +60,9 @@ class _PurchasePaymentResultScreenState
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.green,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Get.offAllNamed(AppRoutes.tabScreen);
+            },
             child: Text(
               "Trở về màn hình chính",
               style: TextStyle(color: AppColors.white),

@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:nha_gia_re/core/extensions/integer_ex.dart';
+import 'package:nha_gia_re/data/models/discount.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../data/models/membership_package.dart';
 import 'discount_label.dart';
 
 class MembershipPackageCard extends StatelessWidget {
-  late MembershipPackage package = MembershipPackage.createFakeData().first;
-  Function(MembershipPackage package)? onTapBuy;
+  late final MembershipPackage package;
+  late final Discount? discount;
+  Function(MembershipPackage package, Discount? discount)? onTapBuy;
 
-  MembershipPackageCard({required this.package, this.onTapBuy, super.key});
+  MembershipPackageCard(
+      {required this.package, this.discount, this.onTapBuy, super.key});
 
   Widget textWithCheckIcon(String text, bool status) {
     return Padding(
@@ -25,8 +28,6 @@ class MembershipPackageCard extends StatelessWidget {
       ),
     );
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -53,29 +54,28 @@ class MembershipPackageCard extends StatelessWidget {
                 const SizedBox(
                   width: 5,
                 ),
-                DiscountLabel("-22%"),
+                if (discount != null)
+                  DiscountLabel("-${discount!.subscriptionDiscounts[1]}%"),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            RichText(
-              text: TextSpan(
-                text: package.price.formatNumberWithCommasK,
+            if (discount != null)
+              Text(
+                '${package.price.formatNumberWithCommasK}  VND/THÁNG',
                 style: TextStyle(
                     decoration: TextDecoration.lineThrough,
-                    color: AppColors.grey
-                ),
-                children: const <TextSpan>[
-                  TextSpan(
-                    text: ' VND/THÁNG',
-                  ),
-                ],
+                    color: AppColors.grey),
               ),
-            ),
             RichText(
               text: TextSpan(
-                text: package.price.formatNumberWithCommasK,
+                text: (discount != null)
+                    ? (package.price *
+                            (100 - discount!.subscriptionDiscounts[1]!) ~/
+                            100)
+                        .formatNumberWithCommasK
+                    : package.price.formatNumberWithCommasK,
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
@@ -109,7 +109,7 @@ class MembershipPackageCard extends StatelessWidget {
             FractionallySizedBox(
               widthFactor: 1,
               child: ElevatedButton(
-                onPressed: onTapBuy != null ? () =>  onTapBuy!(package) : null,
+                onPressed: onTapBuy != null ? () => onTapBuy!(package, discount) : null,
                 style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.green,
                     shape: const RoundedRectangleBorder(

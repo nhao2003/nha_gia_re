@@ -82,4 +82,5 @@ class Assets {
 
   static const String payment_failure = '$animationsPath/payment-failure.json';
   static const String payment_success = '$animationsPath/payment_success.json';
+  static const String loading = '$animationsPath/loading.json';
 }

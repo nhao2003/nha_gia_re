@@ -31,15 +31,8 @@ extension FormatMoneyExtension on int {
   }
   String get formatNumberWithCommasK {
     if (this >= 1000000) {
-      String strNumber = (this / 1000).toString();
-      String result = '';
-      for (int i = strNumber.length - 1; i >= 0; i--) {
-        result = strNumber[i] + result;
-        if ((strNumber.length - i) % 3 == 0 && i > 0) {
-          result = '.$result';
-        }
-      }
-      return "${result}K";
+      final tmp = (this~/1000).formatNumberWithCommas;
+      return "${tmp}K";
     } else if (this >= 1000) {
       double value = this / 1000;
       return '${value.toStringAsFixed(value.truncateToDouble() == value ? 0 : 1)}K';
