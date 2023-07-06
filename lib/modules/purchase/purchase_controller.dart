@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -14,9 +13,7 @@ import '../../data/repositories/auth_repository.dart';
 import '../../data/repositories/pay_repository.dart';
 
 class PurchaseController extends GetxController {
-  void showPaymentSheet(MembershipPackage package){
-
-  }
+  void showPaymentSheet(MembershipPackage package) {}
 
   void goToZaloPay(int amount) async {
     log("Hello");
@@ -29,11 +26,12 @@ class PurchaseController extends GetxController {
             property: "property info"));
     await PayRepository.createOrder(request).then((value) {
       if (value != null) {
-        FlutterZaloPaySdk.payOrder(zpToken: value.zptranstoken).listen((event) {
+        FlutterZaloPaySdk.payOrder(zpToken: value.data.zptranstoken)
+            .listen((event) {
           switch (event) {
             case FlutterZaloPayStatus.cancelled:
               payResult = "User Huỷ Thanh Toán";
-              Get.to(() =>  const PurchasePaymentResultScreen(false));
+              Get.to(() => const PurchasePaymentResultScreen(false));
               return;
               Future.delayed(const Duration(seconds: 2), () {
                 Get.snackbar("Trạng thái", payResult);
@@ -41,17 +39,17 @@ class PurchaseController extends GetxController {
               break;
             case FlutterZaloPayStatus.success:
               payResult = "Thanh toán thành công";
-              Get.to( () => const PurchasePaymentResultScreen(true));
+              Get.to(() => const PurchasePaymentResultScreen(true));
               return;
               break;
             case FlutterZaloPayStatus.failed:
               payResult = "Thanh toán thất bại";
-              Get.to(() =>  const PurchasePaymentResultScreen(false));
+              Get.to(() => const PurchasePaymentResultScreen(false));
               return;
               break;
             default:
               payResult = "Thanh toán thất bại";
-              Get.to(() =>  const PurchasePaymentResultScreen(false));
+              Get.to(() => const PurchasePaymentResultScreen(false));
               return;
               break;
           }
@@ -59,5 +57,4 @@ class PurchaseController extends GetxController {
       }
     });
   }
-
 }
