@@ -359,7 +359,7 @@ CREATE TABLE post
     title         VARCHAR(255) NOT NULL,
     description   TEXT         NOT NULL,
     posted_date   TIMESTAMP    NOT NULL             DEFAULT NOW(),
-    expiry_date   TIMESTAMP    NOT NULL,
+    expiry_date   TIMESTAMP    NOT NULL             DEFAULT NOW() + INTERVAL '14 days',
     images_url    TEXT[] NOT NULL,
     is_pro_seller BOOLEAN      NOT NULL,
     num_of_likes  INT          NOT NULL             DEFAULT 0,
@@ -731,3 +731,28 @@ BEGIN
   RETURN '{"data":true}';
 END;
 $$
+--Duyệt bài:
+CREATE OR REPLACE FUNCTION approve_post(p_id uuid) RETURNS VOID AS $$
+DECLARE
+    now_time TIMESTAMP := NOW();
+BEGIN
+    -- Lấy ngày hôm nay
+    now_time := NOW() + INTERVAL '14 days';
+
+    -- Cập nhật trạng thái và ngày hết hạn cho bài đăng
+    UPDATE post
+    SET status = 'approved', expiry_date = now_time + INTERVAL '14 days', rejected_info = null
+    WHERE id = p_id;
+END;
+$$ LANGUAGE plpgsql;
+
+--từ chối bài:
+CREATE OR REPLACE FUNCTION reject_post(p_id uuid, p_rejected_info VARCHAR) RETURNS VOID AS $$
+BEGIN
+    -- Cập nhật trạng thái và thông tin từ chối cho bài đăng
+    UPDATE post
+    SET status = 'rejected', rejected_info = p_rejected_info
+    WHERE id = p_id;
+
+END;
+$$ LANGUAGE plpgsql;

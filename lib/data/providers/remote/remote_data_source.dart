@@ -141,8 +141,9 @@ class RemoteDataSource {
           .limit(1);
       if (List<Map<String, dynamic>>.from(res).isNotEmpty) {
         return true;
-      } else
+      } else {
         return false;
+      }
     } on PostgrestException catch (e) {
       showSessionExpiredDialog(e.code);
       rethrow;
@@ -462,7 +463,7 @@ class RemoteDataSource {
       List<Map<String, dynamic>> postIds =
           List<Map<String, dynamic>>.from(postList);
       List<String> allValues = postIds.expand((map) {
-        return map.values.where((value) => value is String).cast<String>();
+        return map.values.whereType<String>().cast<String>();
       }).toList();
       return allValues;
     } on PostgrestException catch (e) {
@@ -902,5 +903,24 @@ class RemoteDataSource {
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<List<Map<String, dynamic>>> getPendingPosts() async {
+    final res = await supabaseClient
+        .from(tablePost)
+        .select()
+        .eq('status', PostStatus.pending);
+    return List<Map<String, dynamic>>.from(res);
+  }
+
+  Future<void> approvePost(String id) async {
+    await supabaseClient.rpc('approve_post', params: {'p_id ': id});
+  }
+
+  Future<void> rejectPost(String id, String reason) async {
+    await supabaseClient.rpc('approve_post', params: {
+      'p_id  ': id,
+      'p_rejected_info ': reason,
+    });
   }
 }
