@@ -104,7 +104,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.notification,
-      page: () => const NotificationScreen(),
+      page: () => NotificationScreen(),
       binding: NotificationBinding(),
     ),
     GetPage(
@@ -134,17 +134,17 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.blog_screen,
-      page: () => BlogListScreen(),
+      page: () => const BlogListScreen(),
       binding: BlogBinding(),
     ),
     GetPage(
       name: AppRoutes.blog_screen_detail,
-      page: () => BlogDetailScreen(),
+      page: () => const BlogDetailScreen(),
       binding: BlogBinding(),
     ),
     GetPage(
       name: AppRoutes.address,
-      page: () => AddressScreen(),
+      page: () => const AddressScreen(),
       binding: AddressBinding(),
     ),
     GetPage(
