@@ -63,21 +63,4 @@ class PayRepository {
         await Supabase.instance.client.from('discount').select();
     return data.map((e) => Discount.fromJson(e)).toList();
   }
-
-  static Future<bool?> createQuery(QueryOrder model) async {
-    Map<String, String> requestHeaders = {
-      'Content-Type': "application/json",
-      // 'token': "Bearer $token"
-    };
-    var url = Uri.https(APP_URL, QUERY_PAY_STATUS);
-    var response = await client.post(url,
-        headers: requestHeaders, body: jsonEncode(model));
-    if (response.statusCode == 200) {
-      // CreateOrderResponseModel model =
-      //     createOrderResponseModelFromJson(response.body);
-      return true;
-    } else {
-      return false;
-    }
-  }
 }

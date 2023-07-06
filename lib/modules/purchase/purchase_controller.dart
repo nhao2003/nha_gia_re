@@ -41,36 +41,18 @@ class PurchaseController extends GetxController {
               payResult = "Thanh toán thành công";
               Get.offAll(() => const PurchasePaymentResultScreen(true));
               return;
-              break;
             case FlutterZaloPayStatus.failed:
               payResult = "Thanh toán thất bại";
               Get.to(() => const PurchasePaymentResultScreen(false));
               return;
-              break;
             default:
               payResult = "Thanh toán thất bại";
               Get.to(() => const PurchasePaymentResultScreen(false));
               return;
-              break;
           }
         });
       }
     });
-  }
-
-  Future<Map<MembershipPackage, Discount?>>
-      getMembershipPackageAndDiscount() async {
-    final mps = await repository.getMembershipPackage();
-    final discounts = await repository.getDiscount();
-    final discountMap = Map<String, Discount?>.fromIterable(discounts,
-        key: (d) => d.membershipPackageId);
-    final res =
-        mps.fold<Map<MembershipPackage, Discount?>>({}, (result, package) {
-      final discount = discountMap[package.id];
-      result[package] = discount;
-      return result;
-    });
-    return res;
   }
 
   Future<Map<MembershipPackage, Discount?>>
