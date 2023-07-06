@@ -3,7 +3,6 @@ import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
-import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/data/repositories/post_repository.dart';
 import 'package:nha_gia_re/data/repositories/user_repository.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
@@ -37,9 +36,13 @@ class HomeController extends GetxController {
     Get.toNamed(AppRoutes.post);
   }
 
+  void navToNoti() {
+    Get.toNamed(AppRoutes.notification);
+  }
+
   void navToSell() {
     var data = {
-      "title": 'Mua bán',
+      "title": 'For Sale'.tr,
       "type": TypeNavigate.sell,
     };
     Get.toNamed(AppRoutes.resultArg, arguments: data);
@@ -47,7 +50,7 @@ class HomeController extends GetxController {
 
   void navToRent() {
     var data = {
-      "title": 'Cho thuê',
+      "title": 'For Lease'.tr,
       "type": TypeNavigate.rent,
     };
     Get.toNamed(AppRoutes.resultArg, arguments: data);
@@ -55,7 +58,7 @@ class HomeController extends GetxController {
 
   void navByProvince(String provider) {
     var data = {
-      "title": 'Tỉnh thành',
+      "title": 'Provinces'.tr,
       "type": TypeNavigate.province,
       "province": provider,
     };
@@ -75,9 +78,9 @@ class HomeController extends GetxController {
         to: 10,
       );
       userInfo = value;
-      data = await Future.wait([getLeasePosts(), repository.getAllPosts(filter),  getSellPosts()]);
-    }
-    );
+      data = await Future.wait(
+          [getLeasePosts(), repository.getAllPosts(filter), getSellPosts()]);
+    });
     print("Data Length: ${data.length}");
     return data;
   }

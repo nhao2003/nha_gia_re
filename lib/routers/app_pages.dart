@@ -13,7 +13,12 @@ import 'package:nha_gia_re/modules/post_details/post_detail_binding.dart';
 import 'package:nha_gia_re/modules/post_details/screen/post_details_screen.dart';
 import 'package:nha_gia_re/modules/notification/notification_binding.dart';
 import 'package:nha_gia_re/modules/notification/screens/notification_screen.dart';
+import 'package:nha_gia_re/modules/purchase/purchase_binding.dart';
+import 'package:nha_gia_re/modules/purchase/screens/purchase_screens.dart';
 import 'package:nha_gia_re/modules/search/screens/result_arg_screen.dart';
+import 'package:nha_gia_re/modules/settings/screens/change_language.dart';
+import 'package:nha_gia_re/modules/settings/screens/change_pass.dart';
+import 'package:nha_gia_re/modules/settings/settings_binding.dart';
 import 'package:nha_gia_re/modules/splash/screens/spash_screen.dart';
 import 'package:nha_gia_re/modules/splash/splash_binding.dart';
 import 'package:nha_gia_re/modules/tab/tab_binding.dart';
@@ -104,12 +109,12 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.notification,
-      page: () => const NotificationScreen(),
+      page: () => NotificationScreen(),
       binding: NotificationBinding(),
     ),
     GetPage(
       name: AppRoutes.splashScreen,
-      page: () => const SplashScreen(),
+      page: () => SplashScreen(),
       binding: SplashBinding(),
     ),
     GetPage(
@@ -134,17 +139,17 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.blog_screen,
-      page: () => BlogListScreen(),
+      page: () => const BlogListScreen(),
       binding: BlogBinding(),
     ),
     GetPage(
       name: AppRoutes.blog_screen_detail,
-      page: () => BlogDetailScreen(),
+      page: () => const BlogDetailScreen(),
       binding: BlogBinding(),
     ),
     GetPage(
       name: AppRoutes.address,
-      page: () => AddressScreen(),
+      page: () => const AddressScreen(),
       binding: AddressBinding(),
     ),
     GetPage(
@@ -156,6 +161,13 @@ abstract class AppPages {
       name: AppRoutes.admin_post_detail,
       page: () => const AdminPostDetailScreen(),
       binding: AdminPostDetailBinding(),
+    ),
+    GetPage(name: AppRoutes.change_pass, page: () => ChangePassScreen(), binding: SettingsBinding()),
+    GetPage(name: AppRoutes.change_lang, page: () => ChangeLanguageScreen(), binding: SettingsBinding()),
+    GetPage(
+      name: AppRoutes.purchase_screen,
+      page: () => const PurchaseScreen(),
+      binding: PurchaseBinding(),
     ),
   ];
 }

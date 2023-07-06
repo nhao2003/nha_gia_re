@@ -11,6 +11,7 @@ import 'package:nha_gia_re/data/providers/remote/request/create_order_request.da
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
 import 'package:nha_gia_re/data/repositories/admin_reposotory.dart';
 import 'package:nha_gia_re/data/repositories/pay_repository.dart';
+import 'package:nha_gia_re/data/providers/remote/request/query_order.dart';
 
 import '../../data/enums/enums.dart';
 import '../../data/models/properties/post.dart';
@@ -97,7 +98,8 @@ class AdminPostController extends GetxController {
             property: "property info"));
     PayRepository.createOrder(request).then((value) {
       if (value != null) {
-        FlutterZaloPaySdk.payOrder(zpToken: value.zptranstoken).listen((event) {
+        FlutterZaloPaySdk.payOrder(zpToken: value.data.zptranstoken)
+            .listen((event) {
           switch (event) {
             case FlutterZaloPayStatus.cancelled:
               payResult = "User Huỷ Thanh Toán";
@@ -107,7 +109,18 @@ class AdminPostController extends GetxController {
               break;
             case FlutterZaloPayStatus.success:
               payResult = "Thanh toán thành công";
-              Get.snackbar("Trạng thái", payResult);
+              QueryOrder query = QueryOrder(
+                  record: QueryRecord(
+                      userId: authRepository.userID!,
+                      apptransid: value.apptransid,
+                      postId: "dd"));
+              PayRepository.createQuery(query).then((value) {
+                if (value != null && value == true) {
+                  Get.snackbar("Trạng thái", payResult);
+                } else {
+                  Get.snackbar("Trạng thái", "Thanh toán thất bại");
+                }
+              });
               break;
             case FlutterZaloPayStatus.failed:
               payResult = "Thanh toán thất bại";

@@ -679,6 +679,8 @@ CREATE TABLE notification
     link TEXT,
     FOREIGN KEY (user_id) REFERENCES public.user_info (uid) ON DELETE CASCADE
 );
+alter
+publication supabase_realtime add table public.notification;
 CREATE TABLE blogs (
     id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
     create_at TIMESTAMP DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
@@ -690,6 +692,47 @@ CREATE TABLE blogs (
     view_count INTEGER DEFAULT 0
 );
 
+-- change password check function
+create or replace function change_user_password(current_plain_password varchar, new_plain_password varchar)
+returns json
+language plpgsql
+security definer
+as $$
+DECLARE
+_uid uuid; -- for checking by 'is not found'
+user_id uuid; -- to store the user id from the request
+BEGIN
+  -- First of all check the new password rules
+  -- not empty
+  IF (new_plain_password = '') IS NOT FALSE THEN
+    RAISE EXCEPTION 'new password is empty';
+  -- minimum 6 chars
+  ELSIF char_length(new_plain_password) < 6 THEN
+    RAISE EXCEPTION 'it must be at least 6 characters in length';
+  END IF;
+  
+  -- Get user by his current auth.uid and current password
+  user_id := auth.uid();
+  SELECT id INTO _uid
+  FROM auth.users
+  WHERE id = user_id
+  AND encrypted_password =
+  crypt(current_plain_password::text, auth.users.encrypted_password);
+
+  -- Check the currect password
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'incorrect password';
+  END IF;
+
+  -- Then set the new password
+  UPDATE auth.users SET 
+  encrypted_password =
+  crypt(new_plain_password, gen_salt('bf'))
+  WHERE id = user_id;
+  
+  RETURN '{"data":true}';
+END;
+$$
 --Duyệt bài:
 CREATE OR REPLACE FUNCTION approve_post(p_id uuid) RETURNS VOID AS $$
 DECLARE
@@ -715,3 +758,96 @@ BEGIN
 
 END;
 $$ LANGUAGE plpgsql;
+
+
+--monetization
+CREATE TABLE membership_package (
+  id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name VARCHAR(255) NOT NULL,
+  description TEXT NOT NULL,
+  price NUMERIC NOT NULL,
+  monthly_post_limit INTEGER NOT NULL,
+  post_approval_priority BOOLEAN NOT NULL,
+  display_priority BOOLEAN NOT NULL,
+  show_verified_badge BOOLEAN NOT NULL,
+  customer_care_priority BOOLEAN NOT NULL,
+  super_fast_approval BOOLEAN NOT NULL
+);
+
+CREATE TABLE discount (
+  id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+  membership_package_id UUID NOT NULL REFERENCES membership_package(id) ON DELETE CASCADE,
+  description TEXT NOT NULL,
+  start_date timestamp NOT NULL,
+  end_date timestamp NOT NULL,
+  subscription_discounts JSONB NOT NULL
+  --Map { "1": 30, "
+);
+
+CREATE OR REPLACE FUNCTION check_discount_dates() RETURNS TRIGGER AS $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM discount
+    WHERE
+      membership_package_id = NEW.membership_package_id AND
+      (NEW.start_date BETWEEN start_date AND end_date OR NEW.end_date BETWEEN start_date AND end_date)
+  ) THEN
+    RAISE EXCEPTION 'The discount dates overlap with existing discounts for the same membership.';
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_check_discount_dates
+BEFORE INSERT ON discount
+FOR EACH ROW
+EXECUTE FUNCTION check_discount_dates();
+
+CREATE TABLE account_verification_requests (
+  id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+  is_verified BOOLEAN DEFAULT FALSE,
+  reviewed_at TIMESTAMP,
+  rejected_info TEXT,
+  user_id UUID NOT NULL,
+  request_date TIMESTAMP NOT NULL,
+  front_identity_card_image_link TEXT NOT NULL,
+  back_identity_card_image_link TEXT NOT NULL,
+  portrait_image_path TEXT NOT NULL,
+  full_name TEXT NOT NULL,
+  sex BOOLEAN NOT NULL,
+  dob TIMESTAMP NOT NULL,
+  identity_card_no TEXT NOT NULL,
+  identity_card_issued_date TIMESTAMP NOT NULL,
+  place_of_origin TEXT NOT NULL,
+  place_of_residence TEXT NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES user_info(uid)
+);
+
+--Tạo transactions trên server
+--Yêu cầu user thanh toán.
+--User thanh toán thành công
+--Cập nhật transactions is_success = true
+--Tạo membership_package_subscription
+--Không thành công
+--Cập nhật transactions is_success = false
+CREATE TABLE transactions (
+    id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+    app_trans_id TEXT NOT NULL,
+    is_success BOOLEAN DEFAULT FALSE,
+    time_stamp TIMESTAMP NOT NULL DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
+    membership_package_id UUID NOT NULL REFERENCES membership_package(id),
+    discount_id UUID REFERENCES discount(id),
+    user_id UUID NOT NULL REFERENCES user_info(uid),
+    num_of_subscription_month INTEGER NOT NULL
+);
+CREATE TABLE membership_package_subscription (
+    id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+    transaction_id UUID NOT NULL REFERENCES transactions(id),
+    membership_package_id UUID NOT NULL REFERENCES membership_package(id),
+    user_id UUID NOT NULL REFERENCES user_info(uid),
+    start_date TIMESTAMP NOT NULL DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
+    end_date TIMESTAMP NOT NULL
+);
+
+
+

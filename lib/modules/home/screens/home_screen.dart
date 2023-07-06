@@ -8,6 +8,7 @@ import 'package:nha_gia_re/data/repositories/chat_repository.dart';
 import 'package:nha_gia_re/global_widgets/infor_card.dart';
 import 'package:nha_gia_re/modules/home/widgets/button.dart';
 import 'package:nha_gia_re/global_widgets/carousel_ad.dart';
+import 'package:nha_gia_re/modules/home/widgets/icon_notification.dart';
 import 'package:nha_gia_re/modules/home/widgets/image_button.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../../core/values/filter_values.dart';
@@ -109,9 +110,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               }),
+          GestureDetector(
+            onTap: () {
+              _controller.navToNoti();
+            },
+            child: const IconNotification(),
+          ),
           IconButton(onPressed: (){
-            Get.toNamed(AppRoutes.notification);
-          }, icon: Image.asset(Assets.bell))
+            Get.toNamed(AppRoutes.purchase_screen);
+          }, icon: Icon(Icons.wallet))
         ],
       ),
       body: FutureBuilder<List<List<Post>>>(
@@ -138,21 +145,21 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           CustomButton(
                             icon: Image.asset(Assets.coin),
-                            title: 'Mua bán',
+                            title: 'For Sale'.tr,
                             onPressed: () {
                               _controller.navToSell();
                             },
                           ),
                           CustomButton(
                             icon: Image.asset(Assets.key),
-                            title: 'Cho thuê',
+                            title: 'For Lease'.tr,
                             onPressed: () {
                               _controller.navToRent();
                             },
                           ),
                           CustomButton(
                             icon: Image.asset(Assets.edit_color),
-                            title: 'Đăng bài',
+                            title: 'Post'.tr,
                             onPressed: _controller.navToPost,
                           ),
                         ],
@@ -164,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Tỉnh thành',
+                            'Provinces'.tr,
                             style: AppTextStyles.roboto20Bold,
                           ),
                           const SizedBox(height: 10),

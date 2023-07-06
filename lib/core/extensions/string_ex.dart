@@ -1,3 +1,6 @@
+import 'package:flutter_pw_validator/Resource/Strings.dart';
+import 'package:get/get.dart';
+
 extension StringX on String {
   /// Viết hoa chữ cái đầu
   String capitalize() {
@@ -49,5 +52,22 @@ extension StringX on String {
     s = s.replaceAll(RegExp(r'[đ]'), 'd');
     return s;
   }
+
+}
+class ValidateString implements FlutterPwValidatorStrings {
+  @override
+  final String atLeast = 'At least - character'.tr;
+  @override
+  final String uppercaseLetters = '- Uppercase letter'.tr;
+  @override
+  final String numericCharacters = '- Numeric character'.tr;
+  @override
+  final String specialCharacters = '- Special character'.tr;
+  @override
+  final String lowercaseLetters = '- Lowercase letter'.tr;
+  
+  @override
+  // TODO: implement normalLetters
+  final String normalLetters = '- Normal letter'.tr;
 
 }

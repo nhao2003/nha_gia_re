@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nha_gia_re/modules/blog/screens/blog_list_screen.dart';
 import 'package:nha_gia_re/modules/home/screens/home_screen.dart';
-import 'package:nha_gia_re/modules/tab/hidden_draw_menu.dart';
+import 'package:nha_gia_re/modules/settings/screens/settings_screen.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/values/assets_image.dart';
 import 'package:nha_gia_re/modules/post_management/screens/post_management_screen.dart';
@@ -26,18 +26,18 @@ class TabScreen extends StatelessWidget {
       PostManagementScreen(),
       const Scaffold(),
       const BlogListScreen(),
-      const PersonalScreen(),
+      const SettingsScreen(),
     ];
     _tab = [
       TabItem(
         icon: Image.asset(Assets.home),
         activeIcon: Image.asset(Assets.home, color: AppColors.primaryColor),
-        title: 'Trang chủ',
+        title: 'Home'.tr,
       ),
       TabItem(
         icon: Image.asset(Assets.post),
         activeIcon: Image.asset(Assets.post, color: AppColors.primaryColor),
-        title: 'Quản lý tin',
+        title: 'Posts management'.tr,
       ),
       TabItem(
         icon: CircleAvatar(
@@ -52,12 +52,12 @@ class TabScreen extends StatelessWidget {
         icon: const Icon(Icons.newspaper_outlined),
         activeIcon:
             Icon(Icons.newspaper_outlined, color: AppColors.primaryColor),
-        title: 'Blog',
+        title: 'Blog'.tr,
       ),
       TabItem(
         icon: Image.asset(Assets.person),
         activeIcon: Image.asset(Assets.person, color: AppColors.primaryColor),
-        title: 'Tài khoản',
+        title: 'Account'.tr,
       ),
     ];
     return GetBuilder<TabNavController>(

@@ -57,7 +57,7 @@ class _RelatedListState extends State<RelatedList> {
                           Post prod = searchController.searchPosts[i];
                           return ItemProduct(
                             post: prod,
-                            isFavourited: false,
+                            isFavourited: searchController.favoriteList.contains(prod.id),
                             onTap: searchController.navigateToDetailSceen,
                           );
                         },
