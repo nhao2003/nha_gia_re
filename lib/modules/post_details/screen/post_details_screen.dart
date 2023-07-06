@@ -8,6 +8,7 @@ import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/values/assets_image.dart';
 import 'package:nha_gia_re/global_widgets/infor_card.dart';
 import 'package:nha_gia_re/global_widgets/carousel_ad.dart';
+import 'package:nha_gia_re/global_widgets/user_name_widget.dart';
 import 'package:nha_gia_re/modules/post_details/post_detail_controller.dart';
 import 'package:nha_gia_re/modules/post_details/widget/expandable_container.dart';
 
@@ -140,9 +141,8 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
+                                  UsernameWithTickLabel(
                                     _controller.userInfo.fullName!,
-                                    style: AppTextStyles.roboto16semiBold,
                                   ),
                                   Text(
                                     (_controller.post.isProSeller)

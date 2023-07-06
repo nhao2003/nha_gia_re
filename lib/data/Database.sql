@@ -851,6 +851,7 @@ CREATE TABLE transactions (
     time_stamp TIMESTAMP NOT NULL DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
     membership_package_id UUID NOT NULL REFERENCES membership_package(id),
     discount_id UUID REFERENCES discount(id),
+    amount NUMERIC NOT NULL,
     user_id UUID NOT NULL REFERENCES user_info(uid),
     num_of_subscription_month INTEGER NOT NULL
 );

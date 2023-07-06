@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nha_gia_re/core/extensions/date_ex.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/models/conversation.dart';
+import 'package:nha_gia_re/global_widgets/user_name_widget.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/text_styles.dart';
 import '../../../core/values/assets_image.dart';
@@ -48,34 +49,27 @@ class ConversationRow extends StatelessWidget {
       contentPadding: const EdgeInsets.all(10),
       leading: userInfo.avatarUrl != null
           ? CircleAvatar(
-        backgroundImage:
-        CachedNetworkImageProvider(userInfo.avatarUrl!),
-        radius: 30,
-      )
+              backgroundImage: CachedNetworkImageProvider(userInfo.avatarUrl!),
+              radius: 30,
+            )
           : const CircleAvatar(
-        backgroundImage: AssetImage(Assets.avatar_2),
-        radius: 30,
-      ),
-      title: Text(
-        userInfo.fullName!,
-        style: AppTextStyles.roboto16semiBold,
-        maxLines: 1,
-      ),
+              backgroundImage: AssetImage(Assets.avatar_2),
+              radius: 30,
+            ),
+      title: UsernameWithTickLabel(userInfo.fullName!),
       subtitle: Container(
         margin: const EdgeInsets.only(top: 15),
         child: Text(
           _getLastMessage(),
           style: conversation.numOfUnReadMessage != 0
               ? AppTextStyles.roboto14semiBold.copyWith(color: AppColors.black)
-              : AppTextStyles.roboto14regular
-              .copyWith(color: AppColors.grey),
+              : AppTextStyles.roboto14regular.copyWith(color: AppColors.grey),
           overflow: TextOverflow.ellipsis,
         ),
       ),
       trailing: Text(
         conversation.lastMessageSentAt.getTimeAgo(),
-        style:
-        AppTextStyles.roboto14regular.copyWith(color: AppColors.grey),
+        style: AppTextStyles.roboto14regular.copyWith(color: AppColors.grey),
         overflow: TextOverflow.ellipsis,
       ),
     );

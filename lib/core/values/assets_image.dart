@@ -3,6 +3,7 @@ const iconPath = 'assets/icons';
 const animationsPath = 'assets/animations';
 class Assets {
   Assets._();
+  static const String blue_tick = '$imagePath/blue_tick.png';
   static const String landmark_81 = '$imagePath/landmark_81.png';
   static const String emptyChat = '$imagePath/pana.png';
   static const String avatar_1 = '$imagePath/3D Avatars/1.png';
