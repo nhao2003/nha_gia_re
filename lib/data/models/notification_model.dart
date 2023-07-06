@@ -21,6 +21,10 @@ class NotificationModel {
     this.link,
   });
 
+  void setIsRead(bool check) {
+    isRead = check;
+  }
+
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
     return NotificationModel(
       id: json['id'],

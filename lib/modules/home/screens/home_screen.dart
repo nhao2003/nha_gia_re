@@ -8,6 +8,7 @@ import 'package:nha_gia_re/data/repositories/chat_repository.dart';
 import 'package:nha_gia_re/global_widgets/infor_card.dart';
 import 'package:nha_gia_re/modules/home/widgets/button.dart';
 import 'package:nha_gia_re/global_widgets/carousel_ad.dart';
+import 'package:nha_gia_re/modules/home/widgets/icon_notification.dart';
 import 'package:nha_gia_re/modules/home/widgets/image_button.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../../core/values/filter_values.dart';
@@ -109,9 +110,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               }),
-          IconButton(onPressed: (){
-            Get.toNamed(AppRoutes.notification);
-          }, icon: Image.asset(Assets.bell)),
+          GestureDetector(
+            onTap: () {
+              _controller.navToNoti();
+            },
+            child: const IconNotification(),
+          ),
           IconButton(onPressed: (){
             Get.toNamed(AppRoutes.purchase_screen);
           }, icon: Icon(Icons.wallet))

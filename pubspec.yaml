@@ -75,6 +75,9 @@ dependencies:
   flutter_markdown: ^0.6.15
   flutter_zalopay_sdk: ^0.1.13
   lottie: ^2.3.2
+  animations: ^2.0.7
+  badges: ^3.1.1
+  flutter_slidable: ^3.0.0
 
 
 
@@ -109,7 +112,7 @@ flutter:
     - assets/icons/message-circle.png
     - assets/images/rafiki.png
     - assets/icons/
-    - assets/animations/
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
