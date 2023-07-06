@@ -184,7 +184,7 @@ const Map<String, String> enLanguagePackage = {
   'Please log in again to refresh your session.' : 'Please log in again to refresh your session.',
   // notification
   'suggest' : 'You may be interested',
-   "expirationWarning" :  "Your post will expire in 1 days",
+   "expirationWarning" :  "Your post will expire in 1 day",
    'rejectPost' : 'Rejected',
    'acceptPost' : 'Approved',
 };
