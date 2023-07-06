@@ -16,6 +16,9 @@ import 'package:nha_gia_re/modules/notification/screens/notification_screen.dart
 import 'package:nha_gia_re/modules/purchase/purchase_binding.dart';
 import 'package:nha_gia_re/modules/purchase/screens/purchase_screens.dart';
 import 'package:nha_gia_re/modules/search/screens/result_arg_screen.dart';
+import 'package:nha_gia_re/modules/settings/screens/change_language.dart';
+import 'package:nha_gia_re/modules/settings/screens/change_pass.dart';
+import 'package:nha_gia_re/modules/settings/settings_binding.dart';
 import 'package:nha_gia_re/modules/splash/screens/spash_screen.dart';
 import 'package:nha_gia_re/modules/splash/splash_binding.dart';
 import 'package:nha_gia_re/modules/tab/tab_binding.dart';
@@ -159,6 +162,8 @@ abstract class AppPages {
       page: () => const AdminPostDetailScreen(),
       binding: AdminPostDetailBinding(),
     ),
+    GetPage(name: AppRoutes.change_pass, page: () => ChangePassScreen(), binding: SettingsBinding()),
+    GetPage(name: AppRoutes.change_lang, page: () => ChangeLanguageScreen(), binding: SettingsBinding()),
     GetPage(
       name: AppRoutes.purchase_screen,
       page: () => const PurchaseScreen(),

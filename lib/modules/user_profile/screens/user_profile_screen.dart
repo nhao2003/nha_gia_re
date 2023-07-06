@@ -18,7 +18,7 @@ class UserProfileScreen extends StatelessWidget {
     _controller.init(Get.arguments);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Cập nhật thông tin"),
+        title: Text('Update information'.tr),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -35,9 +35,9 @@ class UserProfileScreen extends StatelessWidget {
                   ),
                   TextFormField(
                     controller: _controller.fullNameTextController,
-                    decoration: const InputDecoration(
-                        hintText: 'Họ và tên',
-                        labelText: 'Họ và tên',
+                    decoration:  InputDecoration(
+                        hintText: 'Full name'.tr,
+                        labelText: 'Full name'.tr,
                         border: OutlineInputBorder()),
                     validator: _controller.validateTextField,
                   ),
@@ -50,9 +50,9 @@ class UserProfileScreen extends StatelessWidget {
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.digitsOnly
                     ],
-                    decoration: const InputDecoration(
-                        hintText: 'Số điện thoại',
-                        labelText: 'Số điện thoại',
+                    decoration: InputDecoration(
+                        hintText: 'Phone number'.tr,
+                        labelText: 'Phone number'.tr,
                         border: OutlineInputBorder()),
                     validator: _controller.validateTextField,
                   ),
@@ -65,7 +65,7 @@ class UserProfileScreen extends StatelessWidget {
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Vui lòng chọn địa chỉ';
+                        return 'This field cannot be empty.'.tr;
                       }
                       return null;
                     },
@@ -73,7 +73,7 @@ class UserProfileScreen extends StatelessWidget {
                     controller: addressController,
                     enabled: true,
                     decoration: InputDecoration(
-                      hintText: "Địa chỉ",
+                      hintText: 'Address'.tr,
                       hintStyle: AppTextStyles.roboto16regular
                           .copyWith(color: AppColors.grey),
                       disabledBorder: OutlineInputBorder(
@@ -96,7 +96,7 @@ class UserProfileScreen extends StatelessWidget {
                               onChanged: (value) =>
                                   _controller.gender.value = value.toString())),
                           Text(
-                            "Nam",
+                            'Male'.tr,
                             style: AppTextStyles.roboto16regular,
                           ),
                         ],
@@ -110,7 +110,7 @@ class UserProfileScreen extends StatelessWidget {
                               onChanged: (value) =>
                                   _controller.gender.value = value.toString())),
                           Text(
-                            "Nữ",
+                            'Female'.tr,
                             style: AppTextStyles.roboto16regular,
                           ),
                         ],
@@ -120,9 +120,9 @@ class UserProfileScreen extends StatelessWidget {
                   TextFormField(
                       controller: _controller.birthDayTextController,
                       readOnly: true,
-                      decoration: const InputDecoration(
-                          hintText: 'Ngày sinh',
-                          labelText: 'Ngày sinh',
+                      decoration: InputDecoration(
+                          hintText: 'Date of birth'.tr,
+                          labelText: 'Date of birth'.tr,
                           border: OutlineInputBorder()),
                       validator: _controller.validateTextField,
                       onTap: _controller.handleDatePicker),
@@ -132,10 +132,10 @@ class UserProfileScreen extends StatelessWidget {
                   TextFormField(
                     controller: _controller.bioTextController,
                     maxLines: 6,
-                    decoration: const InputDecoration(
-                        hintText: 'Giới thiệu về bản thân',
+                    decoration:  InputDecoration(
+                        hintText: 'Write something about you'.tr,
                         alignLabelWithHint: true,
-                        labelText: 'Giới thiệu',
+                        labelText: 'Bio'.tr,
                         border: OutlineInputBorder()),
                   ),
                   const SizedBox(
@@ -154,8 +154,8 @@ class UserProfileScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          child: const Text(
-                            "Lưu",
+                          child: Text(
+                            "Save".tr,
                             style: TextStyle(color: Colors.white),
                           )),
                     ],

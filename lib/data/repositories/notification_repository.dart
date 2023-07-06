@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
-import 'package:nha_gia_re/data/models/notification_model.dart';
+import 'package:nha_gia_re/data/models/notification.dart';
 
 class NotificationRepository {
   List getNotifications() {

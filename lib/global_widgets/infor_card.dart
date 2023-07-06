@@ -119,7 +119,7 @@ class _InforCardListState extends State<InforCardList> {
                       child:
                           InforCard(key: UniqueKey(), post: widget.list[index]),
                       onTap: () {
-                        Get.toNamed(AppRoutes.post_detail,
+                        Get.toNamed(AppRoutes.getPostRoute( widget.list[index].id),
                             arguments: widget.list[index]);
                       },
                     );
@@ -137,7 +137,7 @@ class _InforCardListState extends State<InforCardList> {
             children: [
               ZoomTapAnimation( child: InkWell(
                 child: Text(
-                  'Xem tất cả',
+                  'See more'.tr,
                   style: AppTextStyles.roboto16regular
                       .copyWith(color: AppColors.blue),
                 ),

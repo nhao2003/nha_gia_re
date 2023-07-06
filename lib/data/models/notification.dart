@@ -29,8 +29,8 @@ class NotificationModel {
     return NotificationModel(
       id: json['id'],
       type: NotificationType.parse(json['type']),
-      createAt: DateTime.parse(json['createAt']),
-      isRead: json['isRead'],
+      createAt: DateTime.parse(json['create_at']),
+      isRead: json['is_read'],
       title: json['title'],
       content: json['content'],
       image: json['image'],

@@ -1,7 +1,14 @@
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import '../../data/repositories/notification_repository.dart';
+import 'package:nha_gia_re/data/models/notification.dart';
+import 'package:nha_gia_re/data/repositories/notification_repository.dart';
+import 'package:nha_gia_re/data/repositories/user_repository.dart';
 
 class NotificationController extends GetxController {
+  UserRepository userRepository = GetIt.instance<UserRepository>();
   NotificationRepository notiRepo = GetIt.instance<NotificationRepository>();
+  List<NotificationModel> notifications = [];
+  Future<void> init() async {
+    notifications = await userRepository.getNotification();
+  }
 }

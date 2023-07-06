@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/values/assets_image.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/models/properties/post.dart';
 import 'package:nha_gia_re/global_widgets/infor_card.dart';
@@ -32,15 +33,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
             backgroundColor: AppColors.backgroundColor,
             appBar: AppBar(
               backgroundColor: AppColors.primaryColor,
-              title: Text(_controller.userInfo.fullName ?? "NULL"),
-              actions: [
-                IconButton(
-                  onPressed: () {
-                    _controller.navToSetting();
-                  },
-                  icon: const Icon(Icons.settings),
-                ),
-              ],
+              title: Text('Account'.tr),
             ),
             body: Column(children: [
               Container(
@@ -75,14 +68,14 @@ class _PersonalScreenState extends State<PersonalScreen> {
                             Row(
                               children: [
                                 Text(
-                                  "${_controller.userInfo.numOfFollowers} Người theo dõi",
+                                  "${_controller.userInfo.numOfFollowers} ${'Followers'.tr}",
                                   style: AppTextStyles.roboto12semiBold,
                                 ),
                                 SizedBox(
                                   width: 20.w,
                                 ),
                                 Text(
-                                  "${_controller.userInfo.numOfFollowings} Đang theo dõi",
+                                  "${_controller.userInfo.numOfFollowings} ${'Following'.tr}",
                                   style: AppTextStyles.roboto12semiBold,
                                 ),
                               ],
@@ -170,8 +163,8 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                       ),
                                       Text(
                                         (!_controller.isFollowing.value)
-                                            ? 'Theo dõi'
-                                            : 'Bỏ theo dõi',
+                                            ? 'Follow'.tr
+                                            : 'Unfollow'.tr,
                                         style: AppTextStyles.roboto14regular
                                             .copyWith(color: Colors.white),
                                       )
@@ -182,7 +175,6 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                 onTap: _controller.navToUserProfile,
                                 child: Container(
                                   height: 25.h,
-                                  width: 195.w,
                                   decoration: BoxDecoration(
                                     boxShadow: const [
                                       BoxShadow(
@@ -206,10 +198,11 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                             size: 15.h,
                                           ))),
                                       Text(
-                                        "Chỉnh sửa trang cá nhân",
+                                        "Edit Profile".tr,
                                         style: AppTextStyles.roboto14semiBold
                                             .copyWith(color: Colors.black),
-                                      )
+                                      ),
+                                      SizedBox(width: 10.w,)
                                     ],
                                   ),
                                 ),
@@ -255,7 +248,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                           width: 5.w,
                         ),
                         Text(
-                          "Ngày tham gia: ${DateFormat('dd-MM-yyyy').format(_controller.userInfo.createdDate!)}",
+                          "${'Join date:'.tr} ${DateFormat('dd-MM-yyyy').format(_controller.userInfo.createdDate!)}",
                           style: AppTextStyles.roboto14regular,
                         ),
                       ],
@@ -280,7 +273,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                   } else {
                     final List<Post> data = snapshot.data!;
                     return InforCardList(
-                      title: 'Tin đã đăng',
+                      title: 'Posted Properties'.tr,
                       list: data,
                       navType: TypeNavigate.user,
                       uid: _controller.userInfo.uid,

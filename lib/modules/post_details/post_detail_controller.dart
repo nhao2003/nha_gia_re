@@ -80,16 +80,16 @@ class PostDetailController extends GetxController {
     if (!liked.value && !isLoading) {
       isLoading = true;
       await postRepo.likePost(post.id).then((value) {
-        liked.value = true;
+          liked.value = true;
+          numOfLikes.value++;
         isLoading = false;
-        numOfLikes.value++;
       });
     } else if (liked.value && !isLoading) {
       isLoading = true;
       await postRepo.unlikePost(post.id).then((value) {
-        liked.value = false;
+          liked.value = false;  
+          numOfLikes.value--;
         isLoading = false;
-        numOfLikes.value--;
       });
     }
   }

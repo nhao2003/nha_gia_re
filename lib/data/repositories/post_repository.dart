@@ -104,6 +104,18 @@ class PostRepository {
     return await _remoteDataSource.hasLikePost(postId: postId);
   }
 
+  Future<List<String>> getFavoritePostsId() async
+  {
+    return await _remoteDataSource.getFavoritePostsId();
+  }
+
+  Future<List<Post>> getFavoritePosts() async
+  {
+    final List<Map<String, dynamic>> response;
+    response = await _remoteDataSource.getFavoritePosts();
+    return response.map((e) => Post.fromJson(e)).toList();
+  }
+
   Future<List<Post>> getUserPosts(String uid) async {
     final List<Map<String, dynamic>> response;
     response = await _remoteDataSource.getUserPosts(uid);
