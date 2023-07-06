@@ -756,3 +756,48 @@ BEGIN
 
 END;
 $$ LANGUAGE plpgsql;
+
+
+--monetization
+CREATE TABLE membership_package (
+  id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name VARCHAR(255) NOT NULL,
+  description TEXT NOT NULL,
+  price NUMERIC NOT NULL,
+  monthly_post_limit INTEGER NOT NULL,
+  post_approval_priority BOOLEAN NOT NULL,
+  display_priority BOOLEAN NOT NULL,
+  show_verified_badge BOOLEAN NOT NULL,
+  customer_care_priority BOOLEAN NOT NULL,
+  super_fast_approval BOOLEAN NOT NULL
+);
+
+CREATE TABLE discount (
+  id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+  membership_package_id UUID NOT NULL REFERENCES membership_package(id) ON DELETE CASCADE,
+  description TEXT NOT NULL,
+  start_date timestamp NOT NULL,
+  end_date timestamp NOT NULL,
+  subscription_discounts JSONB NOT NULL
+);
+
+CREATE OR REPLACE FUNCTION check_discount_dates() RETURNS TRIGGER AS $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM discount
+    WHERE
+      membership_package_id = NEW.membership_package_id AND
+      (NEW.start_date BETWEEN start_date AND end_date OR NEW.end_date BETWEEN start_date AND end_date)
+  ) THEN
+    RAISE EXCEPTION 'The discount dates overlap with existing discounts for the same membership.';
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_check_discount_dates
+BEFORE INSERT ON discount
+FOR EACH ROW
+EXECUTE FUNCTION check_discount_dates();
+
+

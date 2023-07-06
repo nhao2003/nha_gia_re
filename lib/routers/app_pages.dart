@@ -13,6 +13,8 @@ import 'package:nha_gia_re/modules/post_details/post_detail_binding.dart';
 import 'package:nha_gia_re/modules/post_details/screen/post_details_screen.dart';
 import 'package:nha_gia_re/modules/notification/notification_binding.dart';
 import 'package:nha_gia_re/modules/notification/screens/notification_screen.dart';
+import 'package:nha_gia_re/modules/purchase/purchase_binding.dart';
+import 'package:nha_gia_re/modules/purchase/screens/purchase_screens.dart';
 import 'package:nha_gia_re/modules/search/screens/result_arg_screen.dart';
 import 'package:nha_gia_re/modules/settings/screens/change_language.dart';
 import 'package:nha_gia_re/modules/settings/screens/change_pass.dart';
@@ -162,5 +164,10 @@ abstract class AppPages {
     ),
     GetPage(name: AppRoutes.change_pass, page: () => ChangePassScreen(), binding: SettingsBinding()),
     GetPage(name: AppRoutes.change_lang, page: () => ChangeLanguageScreen(), binding: SettingsBinding()),
+    GetPage(
+      name: AppRoutes.purchase_screen,
+      page: () => const PurchaseScreen(),
+      binding: PurchaseBinding(),
+    ),
   ];
 }

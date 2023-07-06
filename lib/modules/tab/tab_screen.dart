@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:nha_gia_re/modules/blog/screens/blog_list_screen.dart';
 import 'package:nha_gia_re/modules/home/screens/home_screen.dart';
 import 'package:nha_gia_re/modules/settings/screens/settings_screen.dart';
-import 'package:nha_gia_re/modules/tab/hidden_draw_menu.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/values/assets_image.dart';
 import 'package:nha_gia_re/modules/post_management/screens/post_management_screen.dart';

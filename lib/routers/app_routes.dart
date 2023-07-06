@@ -7,8 +7,6 @@ abstract class AppRoutes {
   static const home = '/home';
   // login
   static const login = '/login';
-  static const register = '/register';
-  static const forgotPass = '/forgotPass';
   // address form
   static const address = '/address';
   // search
@@ -20,8 +18,10 @@ abstract class AppRoutes {
   static const dashboard = '/dashboard';
   static const personal = '/personal';
   //chat
-  static const chat = '/chat';
   static const conversation = '/conversation';
+  static const chat = '/chat';
+  static const register = '/register';
+  static const forgotPass = '/forgotPass';
   static const test = '/test';
   static const userProfile = '/user_profile';
   // post management
@@ -37,7 +37,7 @@ abstract class AppRoutes {
 
   static const blog_screen = '/blog_screen';
   static const blog_screen_detail = '/blog_screen_detail';
-  // setting 
+  // setting
   static const change_pass = '/settings/changePass';
   static const change_lang = '/settings/changeLang';
 
@@ -45,4 +45,6 @@ abstract class AppRoutes {
   {
     return '/post_detail/${id}';
   }
+
+  static const purchase_screen = '/purchase_screen';
 }
