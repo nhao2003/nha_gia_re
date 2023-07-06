@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
@@ -89,24 +90,20 @@ class _ItemNotiState extends State<ItemNoti> {
                 width: sizeImage,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
+                  child: CachedNetworkImage(
+                    imageUrl:
                     widget.notiModel.image!,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
+                    errorWidget: (context, error, stackTrace) {
                       return Image.asset(
                         "assets/images/default_image.png",
                         fit: BoxFit.cover,
                       );
                     },
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) return child;
+                    progressIndicatorBuilder: ( context, string, loadingProgress) {
                       return Center(
                         child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                              : null,
+                          value: loadingProgress.progress,
                         ),
                       );
                     },

@@ -734,17 +734,31 @@ BEGIN
 END;
 $$
 --Duyệt bài:
+
 CREATE OR REPLACE FUNCTION approve_post(p_id uuid) RETURNS VOID AS $$
 DECLARE
     now_time TIMESTAMP := NOW();
 BEGIN
     -- Lấy ngày hôm nay
-    now_time := NOW() + INTERVAL '14 days';
+    now_time := timezone('Asia/Ho_Chi_Minh', now()) + INTERVAL '14 days';
 
     -- Cập nhật trạng thái và ngày hết hạn cho bài đăng
     UPDATE post
     SET status = 'approved', expiry_date = now_time + INTERVAL '14 days', rejected_info = null
     WHERE id = p_id;
+    WITH sq AS
+      (
+        SELECT *
+        FROM post
+        WHERE id = p_id
+      )
+      SELECT net.http_post(
+        url := 'https://ldgecfuqlicdeuqijmbr.supabase.co/functions/v1/post-notification',
+        headers := '{"Content-Type": "application/json", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkZ2VjZnVxbGljZGV1cWlqbWJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODAyMzYyNzEsImV4cCI6MTk5NTgxMjI3MX0.V5CnCUKROCJ8WHV5SXQQPbWsEYanK0sgEPI9PBPsvz4"}'::jsonb,
+        body := concat('{"record": ', to_jsonb(sq), '}')::jsonb
+      ) as re
+      FROM sq;
+
 END;
 $$ LANGUAGE plpgsql;
 
