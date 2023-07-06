@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:nha_gia_re/data/models/purchase/transaction.dart';
+
+import '../../../core/theme/app_colors.dart';
 
 class PurchaseHistoryScreen extends StatefulWidget {
   @override
@@ -6,21 +9,7 @@ class PurchaseHistoryScreen extends StatefulWidget {
 }
 
 class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
-  List<PurchaseHistory> purchaseHistory = [
-    PurchaseHistory(
-      id: '1',
-      product: 'Product 1',
-      date: '2023-07-01',
-      amount: 19.99,
-    ),
-    PurchaseHistory(
-      id: '2',
-      product: 'Product 2',
-      date: '2023-06-28',
-      amount: 9.99,
-    ),
-    // Thêm các giao dịch khác...
-  ];
+  List<Transaction> purchaseHistory = Transaction.generateFakeData();
 
   @override
   Widget build(BuildContext context) {
@@ -28,39 +17,31 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
       appBar: AppBar(
         title: Text('Purchase History'),
       ),
-      body: ListView.builder(
+      body: ListView.separated(
         itemCount: purchaseHistory.length,
         itemBuilder: (context, index) {
           final transaction = purchaseHistory[index];
-          return Card(
-            child: ListTile(
-              title: Text('Transaction ID: ${transaction.id}'),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Product: ${transaction.product}'),
-                  Text('Date: ${transaction.date}'),
-                  Text('Amount: \$${transaction.amount}'),
-                ],
-              ),
+          return ListTile(
+            leading: Icon(Icons.shopping_cart),
+            trailing: Icon(Icons.arrow_forward_ios),
+            title: Text('Gói cơ bản 12 tháng'),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text('Date: ${transaction.timeStamp}'),
+                Text(
+                  '\$${transaction.amount}',
+                  textAlign: TextAlign.end,
+                  style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.black),
+                ),
+              ],
             ),
           );
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return const Divider();
         },
       ),
     );
   }
-}
-
-class PurchaseHistory {
-  final String id;
-  final String product;
-  final String date;
-  final double amount;
-
-  PurchaseHistory({
-    required this.id,
-    required this.product,
-    required this.date,
-    required this.amount,
-  });
 }
