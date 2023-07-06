@@ -11,14 +11,6 @@ class UserRepository {
 
   final Map<String, UserInfo> _userInfos = {};
 
-  Future<List<NotificationModel>> getNotification() async
-  {
-    final List<Map<String, dynamic>> response;
-    response = await _remoteDataSource.getNotification();
-    debugPrint(response.toString());
-    return response.map((e) => NotificationModel.fromJson(e)).toList();
-  }
-
   Future<void> followUser(String uid)
   {
     return _remoteDataSource.followUser(userId: uid);

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
@@ -12,8 +14,15 @@ class IconNotification extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     NotificationRepository notiRepo = GetIt.instance<NotificationRepository>();
-    return FutureBuilder(
-      future: notiRepo.getLengthNotificationsIsNotRead(),
+      final StreamController<int> _controller = StreamController();
+
+    notiRepo.getUnreadNotificationCount().listen((count) {
+      _controller.sink.add(count);
+      notiRepo.numNotificationsIsNotRead.value = count;
+    });
+
+    return StreamBuilder(
+      stream: _controller.stream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Padding(

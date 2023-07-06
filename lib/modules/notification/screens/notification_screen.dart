@@ -7,9 +7,21 @@ import 'package:nha_gia_re/modules/notification/widgets/item_noti.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/text_styles.dart';
 
-class NotificationScreen extends StatelessWidget {
-  NotificationScreen({super.key});
+class NotificationScreen extends StatefulWidget {
+  const NotificationScreen({super.key});
+
+  @override
+  State<NotificationScreen> createState() => _NotificationScreenState();
+}
+
+class _NotificationScreenState extends State<NotificationScreen> {
   final NotificationController _controller = Get.find<NotificationController>();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controller.init();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +30,10 @@ class NotificationScreen extends StatelessWidget {
         backgroundColor: AppColors.primaryColor,
         title: const Text("Thông báo"),
       ),
-      body: FutureBuilder(
-        future: _controller.notiRepo.fetchNotification(),
+      body: StreamBuilder<List<NotificationModel>>(
+        stream: _controller.stream,
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+          if (!snapshot.hasData) {
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -33,22 +45,12 @@ class NotificationScreen extends StatelessWidget {
             } else {
               return Container(
                 color: AppColors.backgroundColor,
-                child: Obx(
-                  () => snapshot.data!.isEmpty
-                      ? Center(
-                          child: Text(
-                            "Không có thông báo nào",
-                            style: AppTextStyles.roboto20Bold
-                                .copyWith(color: AppColors.primaryColor),
-                          ),
-                        )
-                      : ListView.builder(
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (_, i) {
-                            NotificationModel noti = snapshot.data![i];
-                            return ItemNoti(notiModel: noti);
-                          },
-                        ),
+                child: ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (_, i) {
+                    NotificationModel noti = snapshot.data![i];
+                    return ItemNoti(notiModel: noti);
+                  },
                 ),
               );
             }
@@ -56,5 +58,6 @@ class NotificationScreen extends StatelessWidget {
         },
       ),
     );
+    ;
   }
 }

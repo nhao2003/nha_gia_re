@@ -57,8 +57,10 @@ class _ItemNotiState extends State<ItemNoti> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        notiRepo.setIsReadNotification(widget.notiModel.id);
+      onTap: () async {
+        widget.notiModel.isRead = true;
+        debugPrint('test');
+        await notiRepo.setIsReadNotification(widget.notiModel.id);
         setState(() {});
       },
       child: Slidable(
@@ -66,9 +68,9 @@ class _ItemNotiState extends State<ItemNoti> {
           motion: const ScrollMotion(),
           children: [
             SlidableAction(
-              onPressed: (context) {
+              onPressed: (context) async {
                 // delete task
-                notiRepo.deleteNotification(widget.notiModel.id);
+                await notiRepo.deleteNotification(widget.notiModel.id);
               },
               icon: Icons.delete,
               backgroundColor: AppColors.red,

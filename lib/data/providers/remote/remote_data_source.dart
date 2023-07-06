@@ -7,6 +7,7 @@ import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/models/conversation.dart';
 import 'package:nha_gia_re/data/models/message.dart';
+import 'package:nha_gia_re/data/models/notification.dart';
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -45,6 +46,36 @@ class RemoteDataSource {
     }
   }
 
+  Future<void> setIsReadNotification(String id) async {
+    try {
+      await supabaseClient
+          .from(tableNotification)
+          .update({'is_read': true})
+          .eq('id', id)
+          .select();
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> deleteNotification(String id) async {
+    try {
+      await supabaseClient
+          .from(tableNotification)
+          .delete()
+          .eq('id', id)
+          .select();
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<Map<String, dynamic>> changePassword(
       {required String currentPass, required String newPass}) async {
     Map<String, dynamic> request = {
@@ -61,13 +92,29 @@ class RemoteDataSource {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getNotification() async {
+  Future<void> updateBlogView(String id) async {
+    Map<String, dynamic> request = {
+      'b_id': id,
+    };
     try {
-      var data = await supabaseClient
+      await supabaseClient.rpc('update_view', params: request);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Stream<List<NotificationModel>> getNotification() {
+    try {
+      var data = supabaseClient
           .from(tableNotification)
-          .select()
-          .eq('user_id', supabaseClient.auth.currentUser?.id);
-      return List<Map<String, dynamic>>.from(data);
+          .stream(primaryKey: ['id'])
+          .eq('user_id', supabaseClient.auth.currentUser?.id)
+          .order('create_at', ascending: false)
+          .map((es) => es.map((e) => NotificationModel.fromJson(e)).toList());
+      return data;
     } on PostgrestException catch (e) {
       showSessionExpiredDialog(e.code);
       rethrow;
