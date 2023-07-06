@@ -659,7 +659,6 @@ class RemoteDataSource {
   }
 
   Future<void> extendPost(String id) async {
-    log(id);
     await supabaseClient
         .rpc('extend_post_expiry_date', params: {'post_id': id}).then((value) {
       log("Done");
@@ -670,5 +669,24 @@ class RemoteDataSource {
     await supabaseClient.from(tablePost).update({
       'is_hide': isHide,
     }).eq('id', id);
+  }
+
+  Future<List<Map<String, dynamic>>> getPendingPosts() async {
+    final res = await supabaseClient
+        .from(tablePost)
+        .select()
+        .eq('status', PostStatus.pending);
+    return List<Map<String, dynamic>>.from(res);
+  }
+
+  Future<void> approvePost(String id) async {
+    await supabaseClient.rpc('approve_post', params: {'p_id ': id});
+  }
+
+  Future<void> rejectPost(String id, String reason) async {
+    await supabaseClient.rpc('approve_post', params: {
+      'p_id  ': id,
+      'p_rejected_info ': reason,
+    });
   }
 }

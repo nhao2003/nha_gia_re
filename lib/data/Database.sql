@@ -359,7 +359,7 @@ CREATE TABLE post
     title         VARCHAR(255) NOT NULL,
     description   TEXT         NOT NULL,
     posted_date   TIMESTAMP    NOT NULL             DEFAULT NOW(),
-    expiry_date   TIMESTAMP    NOT NULL,
+    expiry_date   TIMESTAMP    NOT NULL             DEFAULT NOW() + INTERVAL '14 days',
     images_url    TEXT[] NOT NULL,
     is_pro_seller BOOLEAN      NOT NULL,
     num_of_likes  INT          NOT NULL             DEFAULT 0,
@@ -689,3 +689,74 @@ CREATE TABLE blogs (
     image_link text,
     view_count INTEGER DEFAULT 0
 );
+
+--Duyệt bài:
+CREATE OR REPLACE FUNCTION approve_post(p_id uuid) RETURNS VOID AS $$
+DECLARE
+    now_time TIMESTAMP := NOW();
+BEGIN
+    -- Lấy ngày hôm nay
+    now_time := NOW() + INTERVAL '14 days';
+
+    -- Cập nhật trạng thái và ngày hết hạn cho bài đăng
+    UPDATE post
+    SET status = 'approved', expiry_date = now_time + INTERVAL '14 days', rejected_info = null
+    WHERE id = p_id;
+END;
+$$ LANGUAGE plpgsql;
+
+--từ chối bài:
+CREATE OR REPLACE FUNCTION reject_post(p_id uuid, p_rejected_info VARCHAR) RETURNS VOID AS $$
+BEGIN
+    -- Cập nhật trạng thái và thông tin từ chối cho bài đăng
+    UPDATE post
+    SET status = 'rejected', rejected_info = p_rejected_info
+    WHERE id = p_id;
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+--monetization
+CREATE TABLE membership_package (
+  id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name VARCHAR(255) NOT NULL,
+  description TEXT NOT NULL,
+  price NUMERIC NOT NULL,
+  monthly_post_limit INTEGER NOT NULL,
+  post_approval_priority BOOLEAN NOT NULL,
+  display_priority BOOLEAN NOT NULL,
+  show_verified_badge BOOLEAN NOT NULL,
+  customer_care_priority BOOLEAN NOT NULL,
+  super_fast_approval BOOLEAN NOT NULL
+);
+
+CREATE TABLE discount (
+  id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+  membership_package_id UUID NOT NULL REFERENCES membership_package(id) ON DELETE CASCADE,
+  description TEXT NOT NULL,
+  start_date timestamp NOT NULL,
+  end_date timestamp NOT NULL,
+  subscription_discounts JSONB NOT NULL
+);
+
+CREATE OR REPLACE FUNCTION check_discount_dates() RETURNS TRIGGER AS $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM discount
+    WHERE
+      membership_package_id = NEW.membership_package_id AND
+      (NEW.start_date BETWEEN start_date AND end_date OR NEW.end_date BETWEEN start_date AND end_date)
+  ) THEN
+    RAISE EXCEPTION 'The discount dates overlap with existing discounts for the same membership.';
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_check_discount_dates
+BEFORE INSERT ON discount
+FOR EACH ROW
+EXECUTE FUNCTION check_discount_dates();
+
+
