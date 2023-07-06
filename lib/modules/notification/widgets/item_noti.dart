@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
-import 'package:nha_gia_re/data/models/notification_model.dart';
+import 'package:nha_gia_re/data/models/notification.dart';
 import 'package:nha_gia_re/data/repositories/notification_repository.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/text_styles.dart';

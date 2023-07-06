@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:nha_gia_re/data/models/notification_model.dart';
+import 'package:nha_gia_re/data/models/notification.dart';
 import 'package:nha_gia_re/modules/notification/notification_controller.dart';
 import 'package:nha_gia_re/modules/notification/widgets/item_noti.dart';
 
@@ -9,8 +9,6 @@ import '../../../core/theme/text_styles.dart';
 
 class NotificationScreen extends StatelessWidget {
   NotificationScreen({super.key});
-  final NotificationController _controller = Get.find<NotificationController>();
-
   final NotificationController _controller = Get.find<NotificationController>();
 
   @override
