@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -26,7 +27,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     ScreenUtil.init(context, designSize: const Size(411, 683));
     return Scaffold(
-        appBar: AppBar(
+      appBar: AppBar(
         title: Text('Settings'.tr),
         actions: [
           StreamBuilder(
@@ -75,25 +76,66 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ],
       ),
       body: Column(
-        children: [
+        children: ListTile.divideTiles(context: context, tiles: [
           FutureBuilder(
-            future: _controller.init(),
-            builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            _controller.userInfo = snapshot.data!;
-            return SettingsItem(title: _controller.userInfo.fullName!, onPressed: _controller.navToPersonal, imageUrl: _controller.userInfo.avatarUrl,);
-          }
-          else
-          {
-            return Center(child: CircularProgressIndicator(),);
-          }
-          }),
-          SettingsItem(title: 'Favorite'.tr, onPressed: _controller.navToFavorite, icon: Icon(Icons.favorite,color: AppColors.red,),),
-          SettingsItem(title: 'Update information'.tr, onPressed: _controller.navToUserProfile, icon: Image.asset(Assets.person,width: 24,height: 24,),),
-          SettingsItem(title: 'Change password'.tr, onPressed: _controller.navToChangePass, icon: const Icon(Icons.lock_outline_rounded,),),
-          SettingsItem(title: 'Language'.tr, onPressed: _controller.navToChangeLang, icon: const Icon(Icons.language_outlined,),),
-          SettingsItem(title: 'Sign out'.tr, onPressed: _controller.handleSignOut, icon: const Icon(Icons.logout,),),
-        ],
+              future: _controller.init(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  _controller.userInfo = snapshot.data!;
+                  return ListTile(
+                    title: Text(_controller.userInfo.fullName!),
+                    onTap: _controller.navToPersonal,
+                    leading: CircleAvatar(
+                      backgroundImage: CachedNetworkImageProvider(
+                          _controller.userInfo.avatarUrl!),
+                      radius: 20.0,
+                    ),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 18,
+                    ),
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              }),
+          ListTile(
+            title: Text('Favorite'.tr),
+            onTap: _controller.navToFavorite,
+            leading: Icon(Icons.favorite, color: AppColors.red),
+          ),
+          ListTile(
+            title: Text('Update information'.tr),
+            onTap: _controller.navToUserProfile,
+            leading: Image.asset(Assets.person, width: 24, height: 24),
+          ),
+          ListTile(
+            title: Text('Change password'.tr),
+            onTap: _controller.navToChangePass,
+            leading: Icon(
+              Icons.lock_outline_rounded,
+              color: AppColors.black,
+            ),
+          ),
+          ListTile(
+            title: Text('Language'.tr),
+            onTap: _controller.navToChangeLang,
+            leading: Icon(
+              Icons.language_outlined,
+              color: AppColors.black,
+            ),
+          ),
+          ListTile(
+            title: Text('Sign out'.tr),
+            onTap: _controller.handleSignOut,
+            leading: Icon(
+              Icons.logout,
+              color: AppColors.black,
+            ),
+          ),
+        ]).toList(),
       ),
     );
   }
