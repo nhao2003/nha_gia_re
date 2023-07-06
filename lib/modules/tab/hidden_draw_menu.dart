@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hidden_drawer_menu/hidden_drawer_menu.dart';
-import 'package:nha_gia_re/modules/personal/screens/setting_screen.dart';
+import 'package:nha_gia_re/modules/settings/screens/settings_screen.dart';
 import '../../core/theme/app_colors.dart';
 import '../personal/screens/personal_screen.dart';
 
@@ -44,7 +44,7 @@ class _HiddenDrawerState extends State<HiddenDrawer> {
           selectedStyle: myTextStyle,
           colorLineSelected: AppColors.gery2,
         ),
-        const SettingScreen(),
+        const SettingsScreen(),
       ),
     ];
   }

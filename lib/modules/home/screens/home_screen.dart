@@ -142,21 +142,21 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           CustomButton(
                             icon: Image.asset(Assets.coin),
-                            title: 'Mua bán',
+                            title: 'For Sale'.tr,
                             onPressed: () {
                               _controller.navToSell();
                             },
                           ),
                           CustomButton(
                             icon: Image.asset(Assets.key),
-                            title: 'Cho thuê',
+                            title: 'For Lease'.tr,
                             onPressed: () {
                               _controller.navToRent();
                             },
                           ),
                           CustomButton(
                             icon: Image.asset(Assets.edit_color),
-                            title: 'Đăng bài',
+                            title: 'Post'.tr,
                             onPressed: _controller.navToPost,
                           ),
                         ],
@@ -168,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Tỉnh thành',
+                            'Provinces'.tr,
                             style: AppTextStyles.roboto20Bold,
                           ),
                           const SizedBox(height: 10),

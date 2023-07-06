@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/data/models/properties/post.dart';
+import 'package:nha_gia_re/data/repositories/post_repository.dart';
 
 import '../../../../core/values/app_values.dart';
 
@@ -25,11 +27,26 @@ class ItemProduct extends StatefulWidget {
 
 class _ItemProductState extends State<ItemProduct> {
   double sizeImage = 100;
-
-  void toggleFav() {
-    setState(() {
-      widget.isFavourited = !widget.isFavourited;
-    });
+  bool isLoading = false;
+  Future<void> toggleFav() async {
+    PostRepository postRepo = GetIt.instance<PostRepository>();
+    if (!widget.isFavourited && !isLoading) {
+      isLoading = true;
+      await postRepo.likePost(widget.post.id).then((value) {
+        setState(() {          
+          widget.isFavourited = true;
+          isLoading = false;
+        });
+      });
+    } else if (widget.isFavourited && !isLoading) {
+      isLoading = true;
+      await postRepo.unlikePost(widget.post.id).then((value) {
+        setState(() {          
+          widget.isFavourited = false;
+          isLoading = false;
+        });
+      });
+    }
   }
 
   @override
@@ -61,7 +78,7 @@ class _ItemProductState extends State<ItemProduct> {
                           fit: BoxFit.cover,
                         );
                       },
-                      progressIndicatorBuilder: (ctx, str, prc){
+                      progressIndicatorBuilder: (ctx, str, prc) {
                         return Center(
                           child: CircularProgressIndicator(
                             value: prc.progress,

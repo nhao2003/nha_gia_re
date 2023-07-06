@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nha_gia_re/core/extensions/string_ex.dart';
 import 'package:nha_gia_re/modules/login/screens/forget_password.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import '../login_controller.dart';
@@ -70,6 +71,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       visible: _controller.validatorVisibility.value,
                       child: FlutterPwValidator(
                           controller: _controller.registerPassword,
+                          strings: ValidateString(),
                           minLength: 8,
                           uppercaseCharCount: 1,
                           width: 400,

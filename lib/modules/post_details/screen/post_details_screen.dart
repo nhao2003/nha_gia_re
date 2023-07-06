@@ -20,7 +20,7 @@ class PostDetailsScreen extends StatefulWidget {
 }
 
 class _PostDetailsScreenState extends State<PostDetailsScreen> {
-  final PostDetailController _controller = Get.find<PostDetailController>();
+  final PostDetailController _controller = PostDetailController();
   @override
   void initState() {
     super.initState();
@@ -45,8 +45,11 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
             );
           } else {
             _controller.post = snapshot.data?[1];
-            _controller.numOfLikes.value = _controller.post.numOfLikes;
-            _controller.liked.value = snapshot.data?[2];
+            Future.delayed(Duration.zero).then((value) {
+              // your obx var, eg. global_variables.appBarTitle.value = "Messages";   
+              _controller.numOfLikes.value = _controller.post.numOfLikes;
+              _controller.liked.value = snapshot.data?[2];
+            });
             _controller.userInfo = snapshot.data?.first;
             _controller.relatedPost = snapshot.data?.last;
             print(snapshot.data);
@@ -77,7 +80,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                 style: AppTextStyles.roboto20regular),
                             const Spacer(),
                             Obx(() => IconButton(
-                                onPressed: _controller.likePost,
+                                onPressed:( _controller.likePost),
                                 icon: (_controller.liked.value) 
                                   ? Icon(Icons.favorite, color: AppColors.red,)
                                   : const Icon(Icons.favorite_border_outlined,)
@@ -143,8 +146,8 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                   ),
                                   Text(
                                     (_controller.post.isProSeller)
-                                        ? "Môi giới"
-                                        : "Cá nhân",
+                                        ? "Agency".tr
+                                        : "Independence".tr,
                                     style: AppTextStyles.roboto14regular,
                                   ),
                                 ],
@@ -165,18 +168,18 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                                 BorderRadius.circular(18.0),
                                             side: BorderSide(
                                                 color: AppColors.primaryColor)))),
-                                child: const Text('Xem hồ sơ')),
+                                child: Text('View profile'.tr)),
                           ],
                         ),
                       ]),
                 ),
                 ExpandableContainer(
-                  title: 'Đặc điểm bất động sản',
+                  title: 'Real estate features'.tr,
                   minHeight: 130,
                   child: _controller.postDetail(_controller.post),
                 ),
                 ExpandableContainer(
-                  title: 'Mô tả',
+                  title: 'Description'.tr,
                   minHeight: 114,
                   child: SingleChildScrollView(
                     physics: const NeverScrollableScrollPhysics(),
@@ -186,7 +189,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                     ),
                   ),
                 ),
-                InforCardList(title: 'Liên Quan', list: _controller.relatedPost, navType: TypeNavigate.province, province: _controller.post.address.cityName,)
+                InforCardList(title: 'Related'.tr, list: _controller.relatedPost, navType: TypeNavigate.province, province: _controller.post.address.cityName,)
               ]),
             );
           }
@@ -211,7 +214,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                           color: Colors.white,
                         ),
                         Text(
-                          'Gọi điện',
+                          'Call'.tr,
                           style: AppTextStyles.roboto12regular
                               .copyWith(color: Colors.white),
                         )
@@ -228,7 +231,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                           color: AppColors.green,
                         ),
                         Text(
-                          'Chat',
+                          'Chat'.tr,
                           style: AppTextStyles.roboto12regular
                               .copyWith(color: AppColors.green),
                         )
@@ -245,7 +248,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                           color: AppColors.green,
                         ),
                         Text(
-                          'Tin nhắn sms',
+                          'SMS messages'.tr,
                           style: AppTextStyles.roboto12regular
                               .copyWith(color: AppColors.green),
                         )

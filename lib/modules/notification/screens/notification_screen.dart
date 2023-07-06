@@ -11,6 +11,8 @@ class NotificationScreen extends StatelessWidget {
   NotificationScreen({super.key});
   final NotificationController _controller = Get.find<NotificationController>();
 
+  final NotificationController _controller = Get.find<NotificationController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

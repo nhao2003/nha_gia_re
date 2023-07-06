@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:nha_gia_re/data/models/notification.dart';
 import 'package:nha_gia_re/data/providers/remote/remote_data_source.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import '../models/user_info.dart';
@@ -8,6 +10,27 @@ class UserRepository {
   UserRepository(this._remoteDataSource);
 
   final Map<String, UserInfo> _userInfos = {};
+
+  Future<List<NotificationModel>> getNotification() async
+  {
+    final List<Map<String, dynamic>> response;
+    response = await _remoteDataSource.getNotification();
+    debugPrint(response.toString());
+    return response.map((e) => NotificationModel.fromJson(e)).toList();
+  }
+
+  Future<void> followUser(String uid)
+  {
+    return _remoteDataSource.followUser(userId: uid);
+  }  
+  Future<void> unFollowUser(String uid)
+  {
+    return _remoteDataSource.unfollowUser(userId: uid);
+  }  
+  Future<bool> isFollowing(String uid)
+  {
+    return _remoteDataSource.isFollowing(userId: uid);
+  }
 
   Future<UserInfo> getUserInfo([String? uid]) async {
     AuthRepository auth = GetIt.instance<AuthRepository>();
