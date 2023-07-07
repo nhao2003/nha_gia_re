@@ -149,6 +149,10 @@ class SettingsController extends GetxController {
   }
 
   void navToVerification() {
-    Get.toNamed(AppRoutes.verification_card_screen);
+    Get.toNamed(AppRoutes.verification_info_screen);
+  }
+
+  void navToPurchase() {
+    Get.toNamed(AppRoutes.purchase_screen);
   }
 }

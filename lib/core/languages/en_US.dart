@@ -192,5 +192,6 @@ const Map<String, String> enLanguagePackage = {
 
   // verification
   'Account verification': 'Account verification',
-  'Continue': 'Continue'
+  'Continue': 'Continue',
+  'Premium': 'Premium'
 };

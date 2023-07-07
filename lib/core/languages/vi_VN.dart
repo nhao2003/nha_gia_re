@@ -200,5 +200,5 @@ const Map<String, String> viLanguagePackage = {
 
   // verification
   'Account verification': 'Định danh tài khoản',
-  'Continue': 'Tiếp tục'
+  'Premium': 'Gói Pro'
 };

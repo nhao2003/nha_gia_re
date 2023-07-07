@@ -116,9 +116,6 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: const IconNotification(),
           ),
-          IconButton(onPressed: (){
-            Get.toNamed(AppRoutes.purchase_screen);
-          }, icon: Icon(Icons.wallet))
         ],
       ),
       body: FutureBuilder<List<List<Post>>>(
@@ -198,10 +195,25 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    InforCardList(title: 'Gần bạn', list: data[1], navType: TypeNavigate.province, province: _controller.userInfo?.address?.cityName,),
-                    InforCardList(title: 'Nhà cho thuê', list: data.first, navType: TypeNavigate.rent,),
-                    InforCardList(title: 'Nhà bán', list: data.last, navType: TypeNavigate.sell ,),
-                    const SizedBox(height: 17,)
+                    InforCardList(
+                      title: 'Gần bạn',
+                      list: data[1],
+                      navType: TypeNavigate.province,
+                      province: _controller.userInfo?.address?.cityName,
+                    ),
+                    InforCardList(
+                      title: 'Nhà cho thuê',
+                      list: data.first,
+                      navType: TypeNavigate.rent,
+                    ),
+                    InforCardList(
+                      title: 'Nhà bán',
+                      list: data.last,
+                      navType: TypeNavigate.sell,
+                    ),
+                    const SizedBox(
+                      height: 17,
+                    )
                   ],
                 ),
               );

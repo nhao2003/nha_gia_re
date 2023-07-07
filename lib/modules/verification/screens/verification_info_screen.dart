@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/modules/verification/verification_controller.dart';
+import 'package:nha_gia_re/modules/verification/widgets/form_informations.dart';
 import 'package:nha_gia_re/modules/verification/widgets/stepper_identify.dart';
 
 class verificationInfoScreen extends StatelessWidget {
@@ -13,35 +14,39 @@ class verificationInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Nhập thông tin cá nhân"),
       ),
       // body
-      body: Column(
-        children: [
-// container steps
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(10),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // container steps
+            Container(
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              margin: const EdgeInsets.all(10),
+              padding: const EdgeInsets.only(
+                  left: 20, right: 20, top: 20, bottom: 10),
+              child: Column(
+                children: [
+                  Text(
+                    "Thông tin của bạn đã được mã hóa và bảo đảm an toàn theo quy định của pháp luật.",
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.roboto14Bold,
+                  ),
+                  const SizedBox(height: 10),
+                  StepperIdentify(2),
+                ],
+              ),
             ),
-            margin: const EdgeInsets.all(10),
-            padding:
-                const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 10),
-            child: Column(
-              children: [
-                Text(
-                  "Thông tin của bạn đã được mã hóa và bảo đảm an toàn theo quy định của pháp luật.",
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.roboto14Bold,
-                ),
-                const SizedBox(height: 10),
-                StepperIdentify(2),
-              ],
-            ),
-          ),
-// change type identity documents
-        ],
+            // form register
+            FormInfomations(_controller),
+          ],
+        ),
       ),
 
       // bottom button

@@ -105,13 +105,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             title: Text('Update information'.tr),
             onTap: _controller.navToUserProfile,
-            leading: Image.asset(Assets.person, width: 24, height: 24),
+            leading: Icon(
+              Icons.manage_accounts_outlined,
+              color: AppColors.black,
+            ),
           ),
           ListTile(
             title: Text('Account verification'.tr),
             onTap: _controller.navToVerification,
             leading: Icon(
               Icons.admin_panel_settings_outlined,
+              color: AppColors.black,
+            ),
+          ),
+          ListTile(
+            title: Text('Premium'.tr),
+            onTap: _controller.navToPurchase,
+            leading: Icon(
+              Icons.wallet,
               color: AppColors.black,
             ),
           ),
