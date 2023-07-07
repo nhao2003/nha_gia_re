@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
+import 'package:nha_gia_re/data/repositories/user_repository.dart';
 import 'package:nha_gia_re/data/services/onesignal_service.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -13,18 +14,40 @@ class LoginController extends GetxController {
   var forgotPassEmail = TextEditingController();
   var registerEmail = TextEditingController();
   var registerPassword = TextEditingController();
+  var newPassword = TextEditingController();
 
   final registerFormGlobalKey = GlobalKey<FormState>();
   final loginFormGlobalKey = GlobalKey<FormState>();
   final forgotPassFormGlobalKey = GlobalKey<FormState>();
+  final changePassFormKey = GlobalKey<FormState>();
 
   RxString loginError = RxString('');
   RxString registerError = RxString('');
   RxBool isLoading = false.obs;
+  RxBool isObscureNewPass = true.obs;
   RxBool isObscureLogin = true.obs;
   RxBool isObscureRegister = true.obs;
-  RxBool isObscureRepeatPass = true.obs;
+  RxBool isObscureRepeatPass = true.obs; 
+   RxBool isObscureRepeatPassReset = true.obs;
   RxBool validatorVisibility = true.obs;
+  RxBool validatorChangePassVisibility = true.obs;
+
+
+  void handleChangePass() async {
+    if(changePassFormKey.currentState!.validate())
+    {
+      UserRepository user = GetIt.instance<UserRepository>();
+      await user.updatePass(newPassword.text).then((value) {Get.offAllNamed(AppRoutes.login);});
+    }
+  }
+
+  void toggleNewPass() {
+    isObscureNewPass.value = !isObscureNewPass.value;
+  }
+
+  void toggleRepeatPass() {
+    isObscureRepeatPassReset.value = !isObscureRepeatPassReset.value;
+  }
 
   void togglePassword()
   {
@@ -75,6 +98,14 @@ class LoginController extends GetxController {
       }
     }
   }
+    void showChangePassValidator()
+  {
+    validatorChangePassVisibility.value = true;
+  }
+   void hideChangePassValidator()
+  {
+    validatorChangePassVisibility.value = false;
+  }
   void showValidator()
   {
     debugPrint(validatorVisibility.value.toString());
@@ -93,7 +124,10 @@ class LoginController extends GetxController {
       try{
         isLoading.value = true;
         print(registerEmail.text + ' ' + registerPassword.text);
-        var user = await auth.signUp(email: registerEmail.text, password: registerPassword.text);        //print(res);
+        var user = await auth.signUp(email: registerEmail.text, password: registerPassword.text).then((value) {
+          Get.back();
+          Get.snackbar('Notification'.tr, 'Register successfully. Check you email for confirmation mail.'.tr);
+        });        //print(res);
       }
       on AuthException catch (e)
       {
@@ -119,7 +153,10 @@ class LoginController extends GetxController {
       {
         isLoading.value = true;
         print(forgotPassEmail.text);
-        await auth.recoveryPassword(forgotPassEmail.text);
+        await auth.recoveryPassword(forgotPassEmail.text).then((value) {
+          Get.toNamed(AppRoutes.otp);
+          Get.snackbar('Notification'.tr, 'Please check your email for reset password mail.'.tr); 
+        });
       }
       catch (e)
       {

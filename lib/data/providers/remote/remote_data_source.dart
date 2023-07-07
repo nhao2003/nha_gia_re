@@ -64,6 +64,29 @@ class RemoteDataSource {
     }
   }
 
+  Future<AuthResponse> recoveryWithOtp(String email, String otp) async
+  {
+    try {
+      return await supabaseClient.auth.verifyOTP(email: email,token: otp, type: OtpType.recovery);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> updatePass(String newPass) async {
+    try {
+      await supabaseClient.auth.updateUser(UserAttributes(password: newPass));
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<void> deleteNotification(String id) async {
     try {
       await supabaseClient
@@ -1050,8 +1073,8 @@ class RemoteDataSource {
           .eq('user_id', userId)
           .limit(1);
       List<Map<String, dynamic>> data = List<Map<String, dynamic>>.from(res);
-      if (data.isEmpty || data.first.isEmpty) return true;
-      return false;
+      if (data.isEmpty || data.first.isEmpty) return false;
+      return true;
     } on PostgrestException catch (e) {
       showSessionExpiredDialog(e.code);
       rethrow;

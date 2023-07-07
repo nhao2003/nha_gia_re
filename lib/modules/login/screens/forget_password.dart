@@ -31,7 +31,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
           IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
         ],
         ),
-      body: Container(
+      body: SingleChildScrollView(
           padding: const EdgeInsets.all(35),
           child: Form(
             key: _controller.forgotPassFormGlobalKey,
@@ -49,7 +49,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     validator: (value) => (value!.isEmail) ? null : 'Invalid email address'.tr,
                   ),
                   const SizedBox(height: 20,),
-                  SizedBox(
+                  Obx(() => SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: _controller.handleForgotPass, 
@@ -62,7 +62,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                                 strokeWidth: 2,
                               ))
                           : Text('Reset password'.tr),),
-                    ),
+                    )),
               ]),
             ),
           )),

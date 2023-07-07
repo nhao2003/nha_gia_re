@@ -196,5 +196,11 @@ const Map<String, String> enLanguagePackage = {
   // verification
   'Account verification': 'Account verification',
   'Continue': 'Continue',
-  'Premium': 'Premium'
+  'Premium': 'Premium',
+  'Reviewing posts' : 'Reviewing posts',
+  'Register successfully. Please check your email for confirmation mail.' : 'Register successfully. Please check your email for confirmation mail.',
+  'Please check your email for reset password mail.' : 'Please check your email for reset password mail.',
+  'Enter 6 digits code' : 'Enter 6 digits code',
+  'Continute' : 'Continute',
+  'OTP has expired or incorrect' :'OTP has expired or incorrect'
 };

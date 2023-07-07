@@ -71,12 +71,11 @@ create
 or replace function handle_new_user() returns trigger as
 $$
 begin
-    set
-timezone = 'Asia/Ho_Chi_Minh';
-insert into public.user_info(uid, email, last_activity_at)
-values (new.id, new.email, now());
-return new;
-end;
+    set timezone = 'Asia/Ho_Chi_Minh';
+    insert into public.user_info(uid, email, last_activity_at, created_at)
+    values (new.id, new.email, now(), now());
+    return new;
+end
 $$
 language plpgsql security definer;
 
@@ -908,6 +907,56 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION check_verified_badge(uid UUID) RETURNS BOOLEAN AS $$
+DECLARE
+    is_verified BOOLEAN;
+    has_verified_badge BOOLEAN;
+    is_within_date_range BOOLEAN;
+BEGIN
+    SELECT COUNT(*) > 0 INTO is_verified
+    FROM account_verification_requests avr
+    WHERE avr.user_id = uid AND avr.is_verified = true;
 
+    SELECT COUNT(*) > 0 INTO has_verified_badge
+    FROM membership_package_subscription mps
+    INNER JOIN membership_package mp ON mp.id = mps.membership_package_id
+    WHERE mps.user_id = uid AND mp.show_verified_badge = true;
 
+    SELECT COUNT(*) > 0 INTO is_within_date_range
+    FROM membership_package_subscription mps
+    WHERE mps.user_id = uid
+        AND mps.start_date <= (now() AT TIME ZONE 'Asia/Ho_Chi_Minh')
+        AND mps.end_date >= (now() AT TIME ZONE 'Asia/Ho_Chi_Minh');
+
+    RETURN is_verified AND has_verified_badge AND is_within_date_range;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION verified_account(uid UUID) RETURNS VOID AS $$
+DECLARE
+    now_time TIMESTAMP := NOW();
+BEGIN
+    -- Lấy ngày hôm nay
+    now_time := timezone('Asia/Ho_Chi_Minh', now());
+
+    -- Cập nhật trạng thái và ngày hết hạn cho bài đăng
+    UPDATE account_verification_requests
+    SET is_verified = true, reviewed_at = now_time , rejected_info = null
+    WHERE user_id = uid;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION reject_account(uid UUID, reject_info TEXT) RETURNS VOID AS $$
+DECLARE
+    now_time TIMESTAMP := NOW();
+BEGIN
+    -- Lấy ngày hôm nay
+    now_time := timezone('Asia/Ho_Chi_Minh', now());
+
+    -- Cập nhật trạng thái và ngày hết hạn cho bài đăng
+    UPDATE account_verification_requests
+    SET is_verified = false, reviewed_at = now_time , rejected_info = reject_info
+    WHERE user_id = uid;
+END;
+$$ LANGUAGE plpgsql;
 
