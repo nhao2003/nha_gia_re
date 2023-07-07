@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
+import 'package:nha_gia_re/data/repositories/account_verification_requests_repository.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 
 import '../../data/services/upload_avatar_service.dart';
@@ -27,7 +29,7 @@ class VerificationController extends GetxController {
     "CỤC TRƯỞNG CỤC CẢNH SÁT QUẢN LÝ HÀNH CHÍNH VỀ TRẬT TỰ XÃ HỘI",
   ];
 
-  var userInfoFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> userInfoFormKey = GlobalKey<FormState>();
   var fullNameTextController = TextEditingController();
   var identityCardNoTextController = TextEditingController();
   var identityCardIssuedDateTextController = TextEditingController();
@@ -167,5 +169,13 @@ class VerificationController extends GetxController {
     return check;
   }
 
-  void finishVerification() {}
+  AccountVerificationRepository accountRepo =
+      GetIt.instance<AccountVerificationRepository>();
+
+  Future finishVerification() async {
+    if (userInfoFormKey.currentState!.validate()) {
+    } else {
+      print("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+    }
+  }
 }

@@ -26,6 +26,7 @@ class _FormInfomationsState extends State<FormInfomations> {
   @override
   void initState() {
     super.initState();
+    widget.controller.userInfoFormKey = GlobalKey<FormState>();
     widget.controller.countryTextController.text = "Việt Nam";
     widget.controller.issuedBy = widget.controller.issuedByList[0].obs;
   }

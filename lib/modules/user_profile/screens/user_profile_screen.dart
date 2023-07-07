@@ -6,7 +6,6 @@ import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/modules/user_profile/user_profile_controller.dart';
 import 'package:nha_gia_re/modules/user_profile/widgets/user_image_picker.dart';
-import 'package:nha_gia_re/routers/app_routes.dart';
 
 class UserProfileScreen extends StatelessWidget {
   const UserProfileScreen({super.key});
@@ -14,10 +13,7 @@ class UserProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserProfileController controller = Get.find<UserProfileController>();
-    final TextEditingController addressController = TextEditingController();
     controller.init(Get.arguments);
-    final UserProfileController _controller = Get.find<UserProfileController>();
-    _controller.init(Get.arguments);
     return Scaffold(
       appBar: AppBar(
         title: Text('Update information'.tr),
@@ -62,7 +58,7 @@ class UserProfileScreen extends StatelessWidget {
                     height: 20,
                   ),
                   TextFormField(
-                    onTap: _controller.handleAddress ,
+                    onTap: controller.handleAddress,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'This field cannot be empty.'.tr;
@@ -70,7 +66,7 @@ class UserProfileScreen extends StatelessWidget {
                       return null;
                     },
                     readOnly: true,
-                    controller: addressController,
+                    controller: controller.addressController,
                     enabled: true,
                     decoration: InputDecoration(
                       hintText: 'Address'.tr,

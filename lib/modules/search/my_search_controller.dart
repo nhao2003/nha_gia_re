@@ -63,7 +63,8 @@ class MySearchController extends GetxController {
   final RxList<String> searchStrings = <String>[].obs;
 
   Future<RxList<String>> getSearchString() async {
-    List<Post> datas = await repository.getUserPosts(GetIt.instance<AuthRepository>().userID!);
+    List<Post> datas =
+        await repository.getUserPosts(GetIt.instance<AuthRepository>().userID!);
     searchStrings.clear();
     for (var data in datas) {
       searchStrings.add(data.title);
@@ -108,17 +109,12 @@ class MySearchController extends GetxController {
       changeSelectedItem(province);
       return;
     }
-    if(typeResult == TypeNavigate.user) 
-    {
+    if (typeResult == TypeNavigate.user) {
       uid = Get.arguments["uid"];
       searchPosts.value = await repository.getUserPosts(uid);
-    }
-    else if(typeResult == TypeNavigate.favorite)
-    {
+    } else if (typeResult == TypeNavigate.favorite) {
       searchPosts.value = await repository.getFavoritePosts();
-    }
-    else
-    {
+    } else {
       searchPosts.value =
           await repository.getAllPosts(SearchService.instance.filter);
     }
@@ -330,7 +326,12 @@ class MySearchController extends GetxController {
   // all
   PostFilter getPostFilter() {
     return PostFilter(
-      textSearch: _query,
+      textSearch: typeResult == TypeNavigate.search ? _query : null,
+      isLease: typeResult == TypeNavigate.sell
+          ? false
+          : typeResult == TypeNavigate.rent
+              ? true
+              : null,
       orderBy: getOrderBy(),
       from: indexStartPost,
       to: indexStartPost + rangeGetPosts,
@@ -345,7 +346,12 @@ class MySearchController extends GetxController {
   // ApartmentFilter
   ApartmentFilter getApartmentFilter() {
     return ApartmentFilter(
-        textSearch: _query,
+        textSearch: typeResult == TypeNavigate.search ? _query : null,
+        isLease: typeResult == TypeNavigate.sell
+            ? false
+            : typeResult == TypeNavigate.rent
+                ? true
+                : null,
         orderBy: getOrderBy(),
         from: indexStartPost,
         to: indexStartPost + rangeGetPosts,
@@ -394,7 +400,12 @@ class MySearchController extends GetxController {
   // HouseFilter
   HouseFilter getHouseFilter() {
     return HouseFilter(
-        textSearch: _query,
+        textSearch: typeResult == TypeNavigate.search ? _query : null,
+        isLease: typeResult == TypeNavigate.sell
+            ? false
+            : typeResult == TypeNavigate.rent
+                ? true
+                : null,
         orderBy: getOrderBy(),
         from: indexStartPost,
         to: indexStartPost + rangeGetPosts,
@@ -436,7 +447,12 @@ class MySearchController extends GetxController {
   // LandFilter
   LandFilter getLandFilter() {
     return LandFilter(
-      textSearch: _query,
+      textSearch: typeResult == TypeNavigate.search ? _query : null,
+      isLease: typeResult == TypeNavigate.sell
+          ? false
+          : typeResult == TypeNavigate.rent
+              ? true
+              : null,
       orderBy: getOrderBy(),
       from: indexStartPost,
       to: indexStartPost + rangeGetPosts,
@@ -464,7 +480,12 @@ class MySearchController extends GetxController {
   // OfficeFilter
   OfficeFilter getOfficeFilter() {
     return OfficeFilter(
-      textSearch: _query,
+      textSearch: typeResult == TypeNavigate.search ? _query : null,
+      isLease: typeResult == TypeNavigate.sell
+          ? false
+          : typeResult == TypeNavigate.rent
+              ? true
+              : null,
       orderBy: getOrderBy(),
       from: indexStartPost,
       to: indexStartPost + rangeGetPosts,
@@ -493,7 +514,12 @@ class MySearchController extends GetxController {
   // MotelFilter
   MotelFilter getMotelFilter() {
     return MotelFilter(
-      textSearch: _query,
+      textSearch: typeResult == TypeNavigate.search ? _query : null,
+      isLease: typeResult == TypeNavigate.sell
+          ? false
+          : typeResult == TypeNavigate.rent
+              ? true
+              : null,
       orderBy: getOrderBy(),
       from: indexStartPost,
       to: indexStartPost + rangeGetPosts,

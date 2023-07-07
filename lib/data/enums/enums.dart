@@ -1,7 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
-import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/values/app_strings.dart';
 
 enum PropertyType {
@@ -383,21 +381,6 @@ enum NotificationType {
   acceptPost,
   newFollower,
   advertise;
-
-  Color statusColor() {
-    switch (this) {
-      case NotificationType.suggest:
-        return AppColors.grey;
-      case NotificationType.expirationWarning:
-        return AppColors.primaryColor;
-      case NotificationType.rejectPost:
-        return AppColors.red;
-      case NotificationType.acceptPost:
-        return AppColors.green;
-      case NotificationType.advertise:
-        return AppColors.primaryColor;
-    }
-  }
 
   @override
   String toString() {
