@@ -19,6 +19,7 @@ class PurchaseHistoryScreen extends StatefulWidget {
 
 class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
   PurchaseController controller = Get.find<PurchaseController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,51 +32,61 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
                       Transaction,
                       MapEntry<MembershipPackage,
                           MembershipPackageSubscription?>>>>(
-        future: controller.getUserTransactions(),
+          future: controller.getUserTransactions(),
           builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          const Center(
-            child: MyCircularProgressIndicator(),
-          );
-        }
-        final List<
-                MapEntry<
-                    Transaction,
-                    MapEntry<MembershipPackage,
-                        MembershipPackageSubscription?>>> data =
-            snapshot.data ?? [];
-        return ListView.separated(
-          itemCount: data.length,
-          itemBuilder: (context, index) {
-            final transaction = data[index].key;
-            final package = data[index].value.key;
-            final sub = data[index].value.value;
-            return ListTile(
-              onTap: (){
-                Get.to(() => PurchasePaymentResultScreen(data: data[index],));
-              },
-              leading: Icon(Icons.shopping_cart),
-              trailing: Icon(Icons.arrow_forward_ios),
-              title: Text("${package.name} ${transaction.numOfSubscriptionMonth} tháng"),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text('Thời gian giao dịch: ${transaction.timeStamp.toHMDMYString()}'),
-                  Text(
-                    '${transaction.amount.formatNumberWithCommas}đ',
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: AppColors.black),
+            if (!snapshot.hasData) {
+              const Center(
+                child: MyCircularProgressIndicator(),
+              );
+            }
+            final List<
+                    MapEntry<
+                        Transaction,
+                        MapEntry<MembershipPackage,
+                            MembershipPackageSubscription?>>> data =
+                snapshot.data ?? [];
+            return ListView.separated(
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                final transaction = data[index].key;
+                final package = data[index].value.key;
+                final sub = data[index].value.value;
+                return ListTile(
+                  onTap: () {
+                    Get.to(() => PurchasePaymentResultScreen(
+                          data: data[index],
+                        ));
+                  },
+                  leading: Icon(
+                    Icons.payment,
+                    color: AppColors.primaryColor,
                   ),
-                ],
-              ),
+                  trailing: Icon(Icons.arrow_forward_ios),
+                  title: Text(
+                      "${package.name} ${transaction.numOfSubscriptionMonth} tháng", style: TextStyle(
+                    color: transaction.isSuccess? AppColors.green: AppColors.red,
+                  ),),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                          'Thời gian giao dịch: ${transaction.timeStamp.toHMDMYString()}'),
+                      Text(
+                        '${transaction.amount.formatNumberWithCommas}đ',
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.black),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return const Divider();
+              },
             );
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return const Divider();
-          },
-        );
-      }),
+          }),
     );
   }
 }

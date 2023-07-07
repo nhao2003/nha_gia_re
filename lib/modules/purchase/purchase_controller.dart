@@ -30,18 +30,18 @@ class PurchaseController extends GetxController {
       membershipPackageId: packageId,
     ));
     Get.dialog(const Center(child: MyCircularProgressIndicator()));
-    await PayRepository.createOrder(request).then((value) {
-      if (value != null) {
-        FlutterZaloPaySdk.payOrder(zpToken: value.zptranstoken).listen((event) {
+    await PayRepository.createOrder(request).then((orderValue) {
+      if (orderValue != null) {
+        FlutterZaloPaySdk.payOrder(zpToken: orderValue.zptranstoken).listen((event) {
           QueryOrder query = QueryOrder(
               record: QueryRecord(
             userId: GetIt.instance<AuthRepository>().userID!,
-            apptransid: value.apptransid,
+            apptransid: orderValue.apptransid,
           ));
           PayRepository.createQuery(query).then((value) {
             var status = event;
             var data = value;
-            final String id = value!.transactionid;
+            final String id = orderValue.transactionId;
             Get.offAll(() => PurchasePaymentResultScreen(transId: id,));
           });
         });
@@ -79,9 +79,9 @@ class PurchaseController extends GetxController {
 
 
   Future<
-          List<
-              MapEntry<Transaction,
-                  MapEntry<MembershipPackage, MembershipPackageSubscription?>>>>
+      List<
+          MapEntry<Transaction,
+              MapEntry<MembershipPackage, MembershipPackageSubscription?>>>>
       getUserTransactions() async {
     return await repository.getUserTransactions();
   }

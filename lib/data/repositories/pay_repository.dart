@@ -95,12 +95,13 @@ class PayRepository {
                   MapEntry<MembershipPackage, MembershipPackageSubscription?>>>>
       getUserTransactions() async {
     final data = await remoteDataSource.getUserTransactions(authRepo.userID!);
-    return data.map((e) {
+    var tm = data;
+    final res =  data.map((e) {
       final transaction = Transaction.fromJson(e);
       final membershipPackage =
           MembershipPackage.fromJson(e['membership_package']);
       final membershipPackageSubscription =
-          e['membership_package_subscription'] != null
+          e['membership_package_subscription'] != null && e['membership_package_subscription'].isNotEmpty
               ? MembershipPackageSubscription.fromJson(
                   e['membership_package_subscription'].first)
               : null;
@@ -109,5 +110,6 @@ class PayRepository {
         MapEntry(membershipPackage, membershipPackageSubscription),
       );
     }).toList();
+    return res;
   }
 }

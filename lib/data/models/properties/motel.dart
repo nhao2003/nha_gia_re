@@ -30,6 +30,7 @@ class Motel extends Post {
     required int numOfLikes,
     required PostStatus status,
     required String? rejectedInfo,
+    required bool isPriority,
     required bool isHide,
   })  : assert(electricPrice == null || electricPrice > 0),
         assert(waterPrice == null || waterPrice > 0),
@@ -53,6 +54,7 @@ class Motel extends Post {
         status: status,
         rejectedInfo: rejectedInfo,
         isHide: isHide,
+        isPriority: isPriority,
         );
 
   factory Motel.fromJson(Map<String, dynamic> json) {
@@ -81,6 +83,7 @@ class Motel extends Post {
       status: PostStatus.parse(json['status']),
       rejectedInfo: json['rejected_info'],
       isHide: json['is_hide'],
+        isPriority: json['is_priority']
     );
   }
 }

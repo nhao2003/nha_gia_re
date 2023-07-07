@@ -8,8 +8,6 @@ import 'dart:convert';
 CreateOrderResponseModel createOrderResponseModelFromJson(String str) =>
     CreateOrderResponseModel.fromJson(json.decode(str));
 
-String createOrderResponseModelToJson(CreateOrderResponseModel data) =>
-    json.encode(data.toJson());
 
 class CreateOrderResponseModel {
   final String zptranstoken;
@@ -17,13 +15,14 @@ class CreateOrderResponseModel {
   final int returncode;
   final String returnmessage;
   final String apptransid;
-
+  final String transactionId;
   CreateOrderResponseModel({
     required this.zptranstoken,
     required this.orderurl,
     required this.returncode,
     required this.returnmessage,
     required this.apptransid,
+    required this.transactionId,
   });
 
   factory CreateOrderResponseModel.fromJson(Map<String, dynamic> json) =>
@@ -32,14 +31,6 @@ class CreateOrderResponseModel {
         orderurl: json["orderurl"],
         returncode: json["returncode"],
         returnmessage: json["returnmessage"],
-        apptransid: json["apptransid"],
+        apptransid: json["apptransid"], transactionId: json["transactionid"],
       );
-
-  Map<String, dynamic> toJson() => {
-        "zptranstoken": zptranstoken,
-        "orderurl": orderurl,
-        "returncode": returncode,
-        "returnmessage": returnmessage,
-        "apptransid": apptransid,
-      };
 }

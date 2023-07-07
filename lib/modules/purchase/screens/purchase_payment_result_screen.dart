@@ -60,27 +60,30 @@ class _PurchasePaymentResultScreenState
 
   PurchaseController controller = Get.find<PurchaseController>();
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      bottomSheet: FractionallySizedBox(
-        widthFactor: 1,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.green,
-            ),
-            onPressed: () {
-              Get.offAllNamed(AppRoutes.tabScreen);
-            },
-            child: Text(
-              "Trở về màn hình chính",
-              style: TextStyle(color: AppColors.white),
-            ),
+  Widget a() {
+    return FractionallySizedBox(
+      widthFactor: 1,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.green,
+          ),
+          onPressed: () {
+            Get.offAllNamed(AppRoutes.tabScreen);
+          },
+          child: Text(
+            "Trở về màn hình chính",
+            style: TextStyle(color: AppColors.white),
           ),
         ),
       ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: FutureBuilder<
               MapEntry<Transaction,
@@ -93,119 +96,147 @@ class _PurchasePaymentResultScreenState
             final trans = snapshot.data!.key;
             final package = snapshot.data!.value.key;
             final sub = snapshot.data!.value.value;
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Lottie.asset(
-                        trans.isSuccess
-                            ? Assets.payment_success
-                            : Assets.payment_failure,
-                      ),
-                    ),
-                    Text(
-                      'Giao dịch${trans.isSuccess ? "" : " không"} thành công',
-                      style: AppTextStyles.roboto20Bold,
-                    ),
-                    Text(
-                      "${trans.amount.formatNumberWithCommas}đ",
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color:
-                            trans.isSuccess ? AppColors.green : AppColors.red,
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(16.0),
-                      margin: EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 20.0),
-                      decoration: BoxDecoration(
-                        color: AppColors.white,
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(
-                          color: AppColors.secondary,
-                          width: 1,
-                        ),
-                      ),
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          customText("Mã giao dịch", trans.id),
-                          customText("Thời gian giao dịch",
-                              trans.timeStamp.toHMDMYString()),
-                          customText("Loại giao dịch",
-                              "Mua ${package.name} ${trans.numOfSubscriptionMonth} tháng"),
-                          customText("Ngày bắt đầu",
-                              sub?.startDate.toHMDMYString() ?? ""),
-                          customText("Ngày kết thúc",
-                              sub?.endDate.toHMDMYString() ?? ""),
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Lottie.asset(
+                              trans.isSuccess
+                                  ? Assets.payment_success
+                                  : Assets.payment_failure,
+                            ),
+                          ),
+                          Text(
+                            'Giao dịch${trans.isSuccess ? "" : " không"} thành công',
+                            style: AppTextStyles.roboto20Bold,
+                          ),
+                          Text(
+                            "${trans.amount.formatNumberWithCommas}đ",
+                            style: TextStyle(
+                              fontSize: 36,
+                              fontWeight: FontWeight.bold,
+                              color:
+                                  trans.isSuccess ? AppColors.green : AppColors.red,
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(16.0),
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 20.0, vertical: 20.0),
+                            decoration: BoxDecoration(
+                              color: AppColors.white,
+                              borderRadius: BorderRadius.circular(10.0),
+                              border: Border.all(
+                                color: AppColors.secondary,
+                                width: 1,
+                              ),
+                            ),
+                            child: Column(
+                              children: [
+                                customText("Mã giao dịch", trans.id),
+                                customText("Thời gian giao dịch",
+                                    trans.timeStamp.toHMDMYString()),
+                                customText("Loại giao dịch",
+                                    "Mua ${package.name} ${trans.numOfSubscriptionMonth} tháng"),
+                                customText("Ngày bắt đầu",
+                                    sub?.startDate.toHMDMYString() ?? ""),
+                                customText("Ngày kết thúc",
+                                    sub?.endDate.toHMDMYString() ?? ""),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20.0, vertical: 20.0),
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  WidgetSpan(
+                                    child: Icon(
+                                      Icons.info,
+                                      color: AppColors.grey,
+                                      size: 18,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                      text:
+                                          " Bạn có thể thể xem lại giao dịch trong lịch sử giao dịch. Nếu bạn cần giúp đỡ có thể liện hệ qua ",
+                                      style: TextStyle(
+                                        color: AppColors.black,
+                                      )),
+                                  WidgetSpan(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        launchUrl(Uri.parse("tel://0987654321"));
+                                      },
+                                      child: Text(
+                                        "0987654321",
+                                        style: TextStyle(
+                                          color: AppColors.primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  TextSpan(
+                                      text: " hoặc ",
+                                      style: TextStyle(
+                                        color: AppColors.black,
+                                      )),
+                                  WidgetSpan(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        launchUrl(Uri.parse("mailto://abc@abc.com"));
+                                      },
+                                      child: Text(
+                                        "abc@abc.com",
+                                        style: TextStyle(
+                                          color: AppColors.primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 20.0),
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            WidgetSpan(
-                              child: Icon(
-                                Icons.info,
-                                color: AppColors.grey,
-                                size: 18,
-                              ),
-                            ),
-                            TextSpan(
-                                text:
-                                    " Bạn có thể thể xem lại giao dịch trong lịch sử giao dịch. Nếu bạn cần giúp đỡ có thể liện hệ qua ",
-                                style: TextStyle(
-                                  color: AppColors.black,
-                                )),
-                            WidgetSpan(
-                              child: GestureDetector(
-                                onTap: () {
-                                  launchUrl(Uri.parse("tel://0987654321"));
-                                },
-                                child: Text(
-                                  "0987654321",
-                                  style: TextStyle(
-                                    color: AppColors.primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            TextSpan(
-                                text: " hoặc ",
-                                style: TextStyle(
-                                  color: AppColors.black,
-                                )),
-                            WidgetSpan(
-                              child: GestureDetector(
-                                onTap: () {
-                                  launchUrl(Uri.parse("mailto://abc@abc.com"));
-                                },
-                                child: Text(
-                                  "abc@abc.com",
-                                  style: TextStyle(
-                                    color: AppColors.primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                  ),
+                  FractionallySizedBox(
+                    widthFactor: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric( horizontal: 8),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.green,
+                        ),
+                        onPressed: () {
+                          if(widget.data == null) {
+                            Get.offAllNamed(AppRoutes.tabScreen);
+                          } else {
+                            Get.back();
+                          }
+                        },
+                        child: Text(
+                          (widget.data == null)?"Trở về màn hình chính":"Quay lại",
+                          style: TextStyle(color: AppColors.white),
                         ),
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
             );
           }),

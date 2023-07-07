@@ -31,6 +31,7 @@ class Office extends Post {
     required PostStatus status,
     required String? rejectedInfo,
     required bool isHide,
+    required bool isPriority,
     this.hasWideAlley = false,
     this.isFacade = false,
     this.officeType,
@@ -57,6 +58,7 @@ class Office extends Post {
         status: status,
         rejectedInfo: rejectedInfo,
         isHide: isHide,
+        isPriority: isPriority,
         );
 
   factory Office.fromJson(Map<String, dynamic> json) {
@@ -93,6 +95,7 @@ class Office extends Post {
       status: PostStatus.parse(json['status']),
       rejectedInfo: json['rejected_info'],
       isHide: json['is_hide'],
+        isPriority: json['is_priority']
     );
   }
   @override
