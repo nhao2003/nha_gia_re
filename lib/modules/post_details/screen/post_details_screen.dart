@@ -98,8 +98,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                             const SizedBox(
                               width: 5,
                             ),
-                            SizedBox(
-                                width: 320,
+                            Expanded(
                                 child: Text(
                                   _controller.post.address.toString(),
                                   maxLines: 2,
@@ -120,9 +119,11 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                             const SizedBox(
                               width: 5,
                             ),
-                            Text(
-                              _controller.post.postedDate.getTimeAgo(),
-                              style: AppTextStyles.roboto16regular,
+                            Expanded(
+                              child: Text(
+                                _controller.post.postedDate.getTimeAgo(),
+                                style: AppTextStyles.roboto16regular,
+                              ),
                             )
                           ],
                         ),
