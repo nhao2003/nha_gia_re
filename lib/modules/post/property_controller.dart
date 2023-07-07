@@ -60,6 +60,7 @@ class PropertyController extends GetxController {
           if (editPost.projectName != null) projectName = editPost.projectName!;
           electricPrice = editPost.electricPrice;
           waterPrice = editPost.waterPrice;
+          modelDeposit = editPost.deposit ?? 0;
         }
         if (editPost is Office) {
           hasWideAlley = editPost.hasWideAlley;
@@ -67,6 +68,8 @@ class PropertyController extends GetxController {
           officeType = editPost.officeType;
           directionDoor = editPost.mainDoorDirection;
           legalStatus = editPost.legalDocumentStatus;
+          furnitureStatus = editPost.furnitureStatus;
+          projectName = editPost.projectName ?? "";
         }
         if (editPost is Land) {
           if (editPost.projectName != null) projectName = editPost.projectName!;
@@ -269,7 +272,7 @@ class PropertyController extends GetxController {
   int price = 0;
   int? deposit;
   String projectName = "";
-  int floor = 0;
+  int floor = -1;
   int? numberOfFloor;
   String block = "";
   String? subdivisionName;
@@ -353,7 +356,7 @@ class PropertyController extends GetxController {
     OfficeType.shopHouse: 'Shophouse',
     OfficeType.officetel: 'Officetel',
   };
-  OfficeType? officeType = OfficeType.officetel;
+  OfficeType? officeType;
   final TextEditingController addressController = TextEditingController();
 
   void setAddress() {
@@ -539,7 +542,7 @@ class PropertyController extends GetxController {
           numOfToilets: (numberOfToilet),
           block: block.isEmpty ? null : block,
           legalDocumentStatus: legalStatus,
-          floor: (floor),
+          floor: floor == -1 ? 0 : floor,
           address: address,
           userID: authRepository.userID!,
           isLease: !isSale,

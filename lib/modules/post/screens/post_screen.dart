@@ -443,8 +443,11 @@ class PostScreenState extends State<PostScreen> {
                                                         .width *
                                                     0.46,
                                                 child: TextFormCustom(
-                                                  fieldValue: controller.floor
-                                                      .toString(),
+                                                  fieldValue:
+                                                      controller.floor != -1
+                                                          ? controller.floor
+                                                              .toString()
+                                                          : "",
                                                   label: "Tầng",
                                                   hint: "(Tầng)",
                                                   error: "Vui lòng nhập tầng",
@@ -729,9 +732,7 @@ class PostScreenState extends State<PostScreen> {
                                                   child: TextFormCustom(
                                                     fieldValue: controller
                                                             .subdivisionName ??
-                                                        controller
-                                                            .subdivisionName
-                                                            .toString(),
+                                                        "",
                                                     label: "Tên phân khu",
                                                     hint: "(Không bắt buộc)",
                                                     onSave: (v) {
@@ -748,8 +749,7 @@ class PostScreenState extends State<PostScreen> {
                                                   child: TextFormCustom(
                                                     fieldValue:
                                                         controller.landCode ??
-                                                            controller.landCode
-                                                                .toString(),
+                                                            "",
                                                     label: "Mã lô",
                                                     hint: "(Không bắt buộc)",
                                                     onSave: (v) {
@@ -1307,7 +1307,7 @@ class PostScreenState extends State<PostScreen> {
                                               ],
                                             )),
                                         Visibility(
-                                            visible: controller.isSale! ==
+                                            visible: controller.isSale ==
                                                     false &&
                                                 controller
                                                         .selectedPropertyType !=
@@ -1635,6 +1635,7 @@ class PostScreenState extends State<PostScreen> {
                                           Get.back();
                                         });
                                       } else {
+                                        controller.isPost = false;
                                         if (controller.isEdit) {
                                           Get.snackbar(
                                             "Chỉnh sửa thất bại",
