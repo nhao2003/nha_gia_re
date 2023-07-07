@@ -76,6 +76,20 @@ class RemoteDataSource {
     }
   }
 
+    Future<bool> isVerifiedBadge(String uid) async {
+    Map<String, dynamic> request = {
+      'uid': uid,
+    };
+    try {
+      return await supabaseClient.rpc('check_verified_badge', params: request);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<Map<String, dynamic>> changePassword(
       {required String currentPass, required String newPass}) async {
     Map<String, dynamic> request = {

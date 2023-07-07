@@ -10,6 +10,8 @@ class UserRepository {
   UserRepository(this._remoteDataSource);
 
   final Map<String, UserInfo> _userInfos = {};
+    final Map<String, bool> _isVerified = {};
+
 
   Future<void> followUser(String uid)
   {
@@ -36,6 +38,21 @@ class UserRepository {
       user = UserInfo.fromJson(data);
       _userInfos.putIfAbsent(user.uid, () => user!);
       return UserInfo.fromJson(data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+  Future<bool> isVerifiedBadge([String? uid]) async {
+    AuthRepository auth = GetIt.instance<AuthRepository>();
+    if (uid == null && auth.isUserLoggedIn) {
+      uid = auth.userID;
+    }
+    bool? result = _isVerified[uid];
+    if (result != null) return result;
+    try {
+      final data = await _remoteDataSource.isVerifiedBadge(uid!);
+      _isVerified.putIfAbsent(uid, () => data!);
+      return data;
     } catch (e) {
       rethrow;
     }

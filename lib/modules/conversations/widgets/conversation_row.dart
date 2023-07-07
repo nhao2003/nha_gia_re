@@ -56,7 +56,7 @@ class ConversationRow extends StatelessWidget {
               backgroundImage: AssetImage(Assets.avatar_2),
               radius: 30,
             ),
-      title: UsernameWithTickLabel(userInfo.fullName!),
+      title: UsernameWithTickLabel(userInfo.fullName!, uid: userInfo.uid,),
       subtitle: Container(
         margin: const EdgeInsets.only(top: 15),
         child: Text(

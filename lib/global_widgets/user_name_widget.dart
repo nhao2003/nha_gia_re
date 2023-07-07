@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:nha_gia_re/data/repositories/user_repository.dart';
+import 'package:nha_gia_re/data/repositories/user_repository.dart';
 
 import '../core/theme/app_colors.dart';
 import '../core/theme/text_styles.dart';
@@ -8,8 +11,11 @@ class UsernameWithTickLabel extends StatelessWidget {
   final String text;
   final TextStyle? style;
   final double labelSize;
-  const UsernameWithTickLabel(this.text, {this.style, this.labelSize = 16, super.key});
+  final String uid;
+  UsernameWithTickLabel(this.text,
+      {this.style, this.labelSize = 16, super.key, required this.uid});
 
+  final UserRepository userRepo = GetIt.instance<UserRepository>();
   @override
   Widget build(BuildContext context) {
     return RichText(
@@ -30,7 +36,28 @@ class UsernameWithTickLabel extends StatelessWidget {
           ),
           WidgetSpan(
               child: SizedBox(
-                  height: labelSize, width: labelSize, child: Image.asset(Assets.blueTick)))
+                  height: labelSize,
+                  width: labelSize,
+                  child: FutureBuilder(
+                    future: userRepo.isVerifiedBadge(uid),
+                    builder: (context,snapshot) {
+                      if(!snapshot.hasData)
+                      {
+                        return const CircularProgressIndicator();
+                      }
+                      else
+                      {
+                        if(snapshot.data == true)
+                        {
+                          return Image.asset(Assets.blueTick);
+                        }
+                        else
+                        {
+                          return const Text(' ');
+                        }
+                      }
+                  },)
+                  ))
         ]));
   }
 }
