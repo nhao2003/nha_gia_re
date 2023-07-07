@@ -8,6 +8,7 @@ import 'package:nha_gia_re/modules/splash/splash_controller.dart';
 import 'dart:async';
 import 'package:animations/animations.dart';
 
+import '../../../core/values/app_strings.dart';
 import '../../../core/values/assets_image.dart';
 import '../../../data/repositories/auth_repository.dart';
 import '../../../routers/app_routes.dart';
@@ -107,7 +108,7 @@ class _SplashScreenState extends State<SplashScreen>
     double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: AppColors.primaryColor,
+      backgroundColor: AppColors.white,
       body: Stack(
         children: [
           Column(
@@ -121,9 +122,9 @@ class _SplashScreenState extends State<SplashScreen>
                 duration: Duration(milliseconds: 1000),
                 opacity: _textOpacity,
                 child: Text(
-                  'YOUR APP\'S NAME',
+                  AppStrings.appName.tr,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: AppColors.fromHex("120037"),
                     fontWeight: FontWeight.bold,
                     fontSize: animation1.value,
                   ),
@@ -143,11 +144,10 @@ class _SplashScreenState extends State<SplashScreen>
                 width: width / _containerSize,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Colors.white,
                   borderRadius: BorderRadius.circular(30),
                 ),
                 // child: Image.asset('assets/images/file_name.png')
-                child: Image.asset(Assets.coin),
+                child: ClipRRect(borderRadius: BorderRadius.circular(30),child: Image.asset(Assets.appLogoLight)),
               ),
             ),
           ),

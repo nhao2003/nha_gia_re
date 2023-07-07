@@ -30,7 +30,7 @@ class UsernameWithTickLabel extends StatelessWidget {
           ),
           WidgetSpan(
               child: SizedBox(
-                  height: labelSize, width: labelSize, child: Image.asset(Assets.blue_tick)))
+                  height: labelSize, width: labelSize, child: Image.asset(Assets.blueTick)))
         ]));
   }
 }
