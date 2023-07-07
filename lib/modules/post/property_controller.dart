@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
@@ -59,6 +60,7 @@ class PropertyController extends GetxController {
           if (editPost.projectName != null) projectName = editPost.projectName!;
           electricPrice = editPost.electricPrice;
           waterPrice = editPost.waterPrice;
+          modelDeposit = editPost.deposit ?? 0;
         }
         if (editPost is Office) {
           hasWideAlley = editPost.hasWideAlley;
@@ -66,6 +68,8 @@ class PropertyController extends GetxController {
           officeType = editPost.officeType;
           directionDoor = editPost.mainDoorDirection;
           legalStatus = editPost.legalDocumentStatus;
+          furnitureStatus = editPost.furnitureStatus;
+          projectName = editPost.projectName ?? "";
         }
         if (editPost is Land) {
           if (editPost.projectName != null) projectName = editPost.projectName!;
@@ -268,7 +272,7 @@ class PropertyController extends GetxController {
   int price = 0;
   int? deposit;
   String projectName = "";
-  int floor = 0;
+  int floor = -1;
   int? numberOfFloor;
   String block = "";
   String? subdivisionName;
@@ -352,7 +356,7 @@ class PropertyController extends GetxController {
     OfficeType.shopHouse: 'Shophouse',
     OfficeType.officetel: 'Officetel',
   };
-  OfficeType? officeType = OfficeType.officetel;
+  OfficeType? officeType;
   final TextEditingController addressController = TextEditingController();
 
   void setAddress() {
@@ -360,7 +364,8 @@ class PropertyController extends GetxController {
         selectedDistrict != null &&
         selectedWard != null) {
       addressController.text =
-          "${selectedProvince!.name} ${selectedDistrict!.name} ${selectedWard!.name}";
+          "${selectedWard!.name} ${selectedDistrict!.name} ${selectedProvince!.name}";
+      addressDisplay = addressController.text;
       address = Address(
           cityCode:
               (selectedProvince!.code != null ? selectedProvince!.code! : 0),
@@ -404,8 +409,18 @@ class PropertyController extends GetxController {
     update();
   }
 
+  Future<void> translateAddress() async {
+    if (addressDisplay.isEmpty) return;
+    List<Location> locations = await locationFromAddress(addressDisplay);
+    if (locations.isNotEmpty && locations[0] != null) {
+      address.latitude = locations[0].latitude;
+      address.longitude = locations[0].longitude;
+    }
+  }
+
   Future<void> addPost() async {
     if (authRepository.userID == null) return;
+
     final imageUrls = await uploadPostImages(photo);
     imageUrlList.addAll(imageUrls);
     // Future<String> x =
@@ -414,6 +429,7 @@ class PropertyController extends GetxController {
     //     imageUrls.length.toString() +
     //     "  " +
     //     photo.length.toString());
+    await translateAddress();
     PostRequest post;
     DateTime now = DateTime.now();
     switch (selectedPropertyType) {
@@ -526,7 +542,7 @@ class PropertyController extends GetxController {
           numOfToilets: (numberOfToilet),
           block: block.isEmpty ? null : block,
           legalDocumentStatus: legalStatus,
-          floor: (floor),
+          floor: floor == -1 ? 0 : floor,
           address: address,
           userID: authRepository.userID!,
           isLease: !isSale,
