@@ -18,15 +18,19 @@ import 'dart:developer';
 import '../../data/enums/enums.dart';
 import '../../data/models/properties/post.dart';
 import '../../data/providers/remote/request/office_request.dart';
+import '../../routers/app_routes.dart';
 
 class PropertyController extends GetxController {
   PropertyController();
+
   // @override
   // void () {
   //   // TODO: implement onInit
   //   super.onInit();
   // }
   //
+  bool isReachLimitPost = false;
+
   @override
   Future<void> onInit() async {
     // TODO: implement onInit
@@ -119,27 +123,58 @@ class PropertyController extends GetxController {
         isLoading = false;
       }
     } else {
+      isReachLimitPost = await postRepository.checkMonthlyPostLimit();
+      log('them moi');
+      log(isReachLimitPost.toString());
+      if (isReachLimitPost) {
+        Get.dialog(
+            AlertDialog(
+              title: Text('Thông báo'),
+              content: Text('Bạn đã đạt số lượng bài viết trong tháng. Mua gói Pro để tăng số lượng bài viết trong tháng.'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('Mua gói Pro'),
+                  onPressed: () {
+                    Get.toNamed(AppRoutes.purchase_screen);
+                  },
+                ),
+                TextButton(
+                  child: Text('Đóng'),
+                  onPressed: () {
+                    Get.back(); // Đóng dialog
+                  },
+                ),
+              ],
+            ), barrierDismissible: false,
+        );
+      }
       getProvince(0, 0, 0);
       isLoading = false;
     }
   }
 
   bool _isLoading = false;
+
   bool get isLoading => _isLoading;
+
   set isLoading(bool value) {
     _isLoading = value;
     update();
   }
 
   bool _isPost = false;
+
   bool get isPost => _isPost;
+
   set isPost(bool value) {
     _isPost = value;
     update();
   }
 
   bool _isEdit = false;
+
   bool get isEdit => _isEdit;
+
   set isEdit(bool value) {
     _isEdit = value;
     update();
@@ -216,6 +251,7 @@ class PropertyController extends GetxController {
   }
 
   bool? photoController;
+
   void checkLengthPhoto() {
     int length = photo.length + imageUrlList.length;
     if (length >= 3 && length <= 10) {
@@ -228,6 +264,7 @@ class PropertyController extends GetxController {
   List<File> photo = [];
   List<String> imageUrlList = [];
   final ImagePicker _picker = ImagePicker();
+
   Future imgFromGallery() async {
     final pickedImages = await _picker.pickMultiImage();
     for (int i = 0; i < pickedImages.length; i++) {
@@ -265,6 +302,7 @@ class PropertyController extends GetxController {
   District? selectedDistrict;
   Ward? selectedWard;
   String? selectedPropertyCertificate;
+
   //post
   String title = "";
   String description = "";

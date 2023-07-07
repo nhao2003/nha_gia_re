@@ -91,7 +91,7 @@ class _PurchasePaymentResultScreenState
           future: controller.initPurchaseResultScreen(
               transId: widget.transId, data: widget.data),
           builder: (context, snapshot) {
-            if (!snapshot.hasData) return const CircularProgressIndicator();
+            if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
             final data = snapshot.data;
             final trans = snapshot.data!.key;
             final package = snapshot.data!.value.key;

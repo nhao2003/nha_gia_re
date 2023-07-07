@@ -208,4 +208,9 @@ const Map<String, String> enLanguagePackage = {
   'Your password has change successfully.':
       'Your password has change successfully.',
   'Reviewing users verified': 'Reviewing users verified',
+  'A 6 digits code has been sent to ' : 'A 6 digits code has been sent to ',
+  "Didn't received the code? " : "Didn't received the code? ",
+  'Resend in: ' : 'Resend in: ',
+  'RESEND' : 'RESEND',
+  'Verify OTP' : 'Verify OTP',
 };

@@ -213,5 +213,11 @@ const Map<String, String> viLanguagePackage = {
   'OTP has expired or incorrect': 'OTP đã hết hạn hoặc không chính xác',
   'Your password has change successfully.':
       'Mật khẩu của bạn đã thay đổi thành công.',
-  'Reviewing users verified': 'Duyệt yêu cầu định danh'
+  'Reviewing users verified': 'Duyệt yêu cầu định danh',
+  'A 6 digits code has been sent to ' : 'Một mã 6 chữ số đã được gửi đến ',
+  "Didn't received the code? " : "Không nhận được mã? ",
+  'Resend in: ' : 'Gửi lại trong: ',
+  'RESEND' : 'Gửi lại',
+  'Verify OTP' : 'Xác nhận',
+
 };

@@ -947,3 +947,37 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION check_monthly_post_limit(uid UUID)
+  RETURNS BOOLEAN AS
+$$
+DECLARE
+  post_count INTEGER;
+  limit_count INTEGER;
+BEGIN
+  -- Lấy số lượng bài viết trong tháng của người dùng
+  SELECT COUNT(*) INTO post_count
+  FROM post
+  WHERE post.user_id = uid
+    AND EXTRACT(MONTH FROM posted_date) = EXTRACT(MONTH FROM timezone('Asia/Ho_Chi_Minh', NOW()))
+    AND EXTRACT(YEAR FROM posted_date) = EXTRACT(YEAR FROM timezone('Asia/Ho_Chi_Minh', NOW()));
+
+  -- Lấy số lượng bài viết giới hạn từ gói thành viên người dùng đăng ký (nếu có)
+  SELECT COALESCE((
+    SELECT COALESCE(mp.monthly_post_limit, 3)
+    FROM membership_package_subscription AS mps
+    LEFT JOIN membership_package AS mp ON mps.membership_package_id = mp.id
+    WHERE mps.user_id = uid
+      AND mps.start_date < timezone('Asia/Ho_Chi_Minh', NOW())
+      AND timezone('Asia/Ho_Chi_Minh', NOW()) < mps.end_date
+  ), 3) INTO limit_count;
+
+  -- Kiểm tra nếu số lượng bài viết trong tháng vượt quá giới hạn
+  IF post_count >= limit_count THEN
+    RETURN TRUE;
+  ELSE
+    RETURN FALSE;
+  END IF;
+
+END;
+$$
+LANGUAGE plpgsql;

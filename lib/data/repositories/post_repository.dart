@@ -174,4 +174,7 @@ class PostRepository {
   Future<void> extendPostExpiryDate(String postId, bool isHide) async {
     await _remoteDataSource.extendPost(postId);
   }
+  Future<bool> checkMonthlyPostLimit() async{
+    return await _remoteDataSource.checkMonthlyPostLimit();
+  }
 }
