@@ -70,23 +70,6 @@ class _OTPScreenState extends State<OTPScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                ElevatedButton(
-                  onPressed: (){
-                    AuthRepository auth = GetIt.instance<AuthRepository>();
-                    auth.recoveryWithOtp(_controller.forgotPassEmail.text, OTPpin).then((value) {
-                      Get.toNamed(AppRoutes.recoveryPass);
-                    });
-                  },
-                  child: _controller.isLoading.value
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            color: Colors.black,
-                            strokeWidth: 2,
-                          ))
-                      : Text('Continute'.tr),
-                ),
               ],
             ),
           )),

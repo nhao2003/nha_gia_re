@@ -30,6 +30,10 @@ class AuthRepository {
       {
         Get.snackbar('Notification'.tr, 'OTP has expired or incorrect'.tr);
       }
+      else
+      {
+        rethrow;
+      }
     }
      catch (e) {
       rethrow;

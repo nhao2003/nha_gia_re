@@ -37,7 +37,10 @@ class LoginController extends GetxController {
     if(changePassFormKey.currentState!.validate())
     {
       UserRepository user = GetIt.instance<UserRepository>();
-      await user.updatePass(newPassword.text).then((value) {Get.offAllNamed(AppRoutes.login);});
+      await user.updatePass(newPassword.text).then((value) {
+        Get.offAllNamed(AppRoutes.login);
+        Get.snackbar('Notification'.tr, 'Your password has change successfully.'.tr);
+        });
     }
   }
 

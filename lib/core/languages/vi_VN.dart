@@ -209,5 +209,6 @@ const Map<String, String> viLanguagePackage = {
   'Enter 6 digits code' : 'Nhập mã gồm 6 chữ số',
   'Continute' : 'Tiếp tục',
   'OTP has expired or incorrect' : 'OTP đã hết hạn hoặc không chính xác',
+  'Your password has change successfully.' : 'Mật khẩu của bạn đã thay đổi thành công.',
   
 };

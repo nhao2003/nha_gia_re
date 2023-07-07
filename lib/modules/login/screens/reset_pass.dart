@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'package:get/get.dart';
@@ -18,8 +17,7 @@ class _RecoveryPassScreenState extends State<RecoveryPassScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-          title: Text('Change password'.tr)),
+          automaticallyImplyLeading: false, title: Text('Change password'.tr)),
       body: Form(
         key: _controller.changePassFormKey,
         child: Padding(

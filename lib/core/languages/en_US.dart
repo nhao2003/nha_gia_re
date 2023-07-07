@@ -202,5 +202,6 @@ const Map<String, String> enLanguagePackage = {
   'Please check your email for reset password mail.' : 'Please check your email for reset password mail.',
   'Enter 6 digits code' : 'Enter 6 digits code',
   'Continute' : 'Continute',
-  'OTP has expired or incorrect' :'OTP has expired or incorrect'
+  'OTP has expired or incorrect' :'OTP has expired or incorrect',
+  'Your password has change successfully.' : 'Your password has change successfully.',
 };
