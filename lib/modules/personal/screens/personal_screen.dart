@@ -230,9 +230,13 @@ class _PersonalScreenState extends State<PersonalScreen> {
                         SizedBox(
                           width: 5.w,
                         ),
-                        Text(
-                          _controller.userInfo.address.toString(),
-                          style: AppTextStyles.roboto14regular,
+                        Expanded(
+                          child: Text(
+                            _controller.userInfo.address.toString(),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyles.roboto14regular,
+                          ),
                         ),
                       ],
                     ),

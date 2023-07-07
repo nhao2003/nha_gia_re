@@ -14,15 +14,14 @@ class IconNotification extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     NotificationRepository notiRepo = GetIt.instance<NotificationRepository>();
-      final StreamController<int> _controller = StreamController();
 
     notiRepo.getUnreadNotificationCount().listen((count) {
-      _controller.sink.add(count);
       notiRepo.numNotificationsIsNotRead.value = count;
     });
+    ;
 
     return StreamBuilder(
-      stream: _controller.stream,
+      stream: notiRepo.getUnreadNotificationCount().asBroadcastStream(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Padding(

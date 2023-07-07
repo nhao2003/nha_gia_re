@@ -10,11 +10,13 @@ class AddressController extends GetxController{
 
   Future<void> getProvince() async{
     final response = await http.get(Uri.parse('https://provinces.open-api.vn/api/?depth=3'));
+    
     print(response.statusCode);
     if(response.statusCode == 200){
       print("200 ok");
       provinceList = [];
-      final List<dynamic> data = json.decode(response.body);
+      final List<dynamic> data =
+          await jsonDecode(Utf8Decoder().convert(response.bodyBytes));
       provinceList = data.map((json) => Province.fromJson(json)).toList();
       print("So luong " + provinceList.length.toString());
       update();
@@ -59,8 +61,12 @@ class AddressController extends GetxController{
       print("Press on submit address");
       Address address = Address(
         cityCode: (selectedProvince!.code != null ? selectedProvince!.code! : 0), 
+        cityName: (selectedProvince?.name),
         districtCode: (selectedDistrict!.code != null ? selectedDistrict!.code! : 0) , 
-        wardCode: (selectedWard!.code!) ,);
+        districtName: (selectedDistrict?.name),
+        wardCode: (selectedWard!.code!) ,
+        wardName: (selectedWard?.name)
+        );
       Get.back(result: address);
     }
   }

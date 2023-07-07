@@ -33,7 +33,11 @@ class PersonalController extends GetxController {
     return await repository.getAllPosts(filter);
   }
 
-  Future<UserInfo> getAuthUserInfo() async {
+  Future<UserInfo> getAuthUserInfo([String? uid]) async {
+    if(uid != null)
+    {
+     return await userRepo.getUserInfo(uid);
+    }
     return await userRepo.getUserInfo();
   }
 
@@ -64,7 +68,11 @@ class PersonalController extends GetxController {
     if (arg == null) {
       return await getAuthUserInfo();
     }
-    if (arg is UserInfo) {
+    if(arg is String)
+    {
+      return await getAuthUserInfo(arg);
+    }
+    else if (arg is UserInfo) {
       isFollowing.value =
           await userRepo.isFollowing(arg.uid);
       return arg;

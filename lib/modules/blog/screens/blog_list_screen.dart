@@ -51,7 +51,9 @@ class _BlogListScreenState extends State<BlogListScreen> {
                     child: InkWell(
                       onTap: () {
                         _controller.updateViewBlog(data[index].id);
-                        data[index].view++;
+                        setState(() {
+                          data[index].view++;
+                        });
                         debugPrint(data[index].view.toString());
                         Get.toNamed(
                           AppRoutes.blog_screen_detail,

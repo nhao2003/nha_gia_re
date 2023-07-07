@@ -535,6 +535,21 @@ class RemoteDataSource {
     }
   }
 
+  Future<Map<String, dynamic>> getPostById(String id) async {
+    try {
+      debugPrint(id);
+      final data = await supabaseClient.from(tablePost).select().eq('id', id).limit(1);
+      debugPrint(data.toString());
+      return Map<String, dynamic>.from(data.first);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
   Future<List<Map<String, dynamic>>> getAllPosts(PostFilter filter) async {
     try {
       var query = _defaultFilter(tablePost, filter)

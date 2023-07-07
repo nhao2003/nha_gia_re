@@ -187,4 +187,7 @@ const Map<String, String> enLanguagePackage = {
    "expirationWarning" :  "Your post will expire in 1 days",
    'rejectPost' : 'Rejected',
    'acceptPost' : 'Approved',
+   'newFollower' : 'You just have a new follower',
+   'Posts Management' : 'Posts Management',
+    "No news has been posted." :  "No news has been posted.",
 };

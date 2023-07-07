@@ -380,23 +380,8 @@ enum NotificationType {
   expirationWarning,
   rejectPost,
   acceptPost,
+  newFollower,
   advertise;
-
-  Color statusColor()
-  {
-    switch (this) {
-      case NotificationType.suggest:
-        return AppColors.grey;
-      case NotificationType.expirationWarning:
-        return AppColors.primaryColor;
-      case NotificationType.rejectPost:
-        return AppColors.red;
-      case NotificationType.acceptPost:
-        return  AppColors.green;
-      case NotificationType.advertise:
-        return AppColors.primaryColor;
-    }
-  }
   
   @override
   String toString() {
@@ -411,6 +396,8 @@ enum NotificationType {
         return "acceptPost";
       case NotificationType.advertise:
         return "advertise";
+      case NotificationType.newFollower:
+        return "newFollower";
     }
   }
   static NotificationType parse(String value) {

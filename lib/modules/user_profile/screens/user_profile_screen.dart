@@ -14,7 +14,6 @@ class UserProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserProfileController _controller = Get.find<UserProfileController>();
-    final TextEditingController addressController = TextEditingController();
     _controller.init(Get.arguments);
     return Scaffold(
       appBar: AppBar(
@@ -60,9 +59,7 @@ class UserProfileScreen extends StatelessWidget {
                     height: 20,
                   ),
                   TextFormField(
-                    onTap: () async {
-                      addressController.text = await Get.toNamed(AppRoutes.address)!.then((value) => value.toString());
-                    },
+                    onTap: _controller.handleAddress ,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'This field cannot be empty.'.tr;
@@ -70,7 +67,7 @@ class UserProfileScreen extends StatelessWidget {
                       return null;
                     },
                     readOnly: true,
-                    controller: addressController,
+                    controller: _controller.addressController,
                     enabled: true,
                     decoration: InputDecoration(
                       hintText: 'Address'.tr,
