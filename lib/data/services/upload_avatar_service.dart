@@ -30,9 +30,32 @@ Future<void> uploadAvatar(File avatar) async {
     rethrow;
   }
 }
-Future<void> deletePostImage() async{
 
+Future<String> uploadPortrait(File portrait) async {
+  try {
+    var uid = Supabase.instance.client.auth.currentUser!.id;
+    String fileName = portrait.path.split('/').last;
+    fileName = "${const Uuid().v4()}.${fileName.split('.').last}";
+    var path = '$uid/$fileName';
+    return await uploadFileToSupabaseStorage(portrait, 'portrait', path);
+  } catch (e) {
+    rethrow;
+  }
 }
+
+Future<String> uploadIDCard(File imageCard) async {
+  try {
+    var uid = Supabase.instance.client.auth.currentUser!.id;
+    String fileName = imageCard.path.split('/').last;
+    fileName = "${const Uuid().v4()}.${fileName.split('.').last}";
+    var path = '$uid/$fileName';
+    return await uploadFileToSupabaseStorage(imageCard, 'id_card', path);
+  } catch (e) {
+    rethrow;
+  }
+}
+
+Future<void> deletePostImage() async {}
 
 Future<List<String>> uploadPostImages(List<File> images) async {
   try {
@@ -56,7 +79,6 @@ Future<List<String>> uploadPostImages(List<File> images) async {
     rethrow;
   }
 }
-
 
 Future<List<String>> uploadMessageMedia(
     List<File> medias, String conversationID) async {

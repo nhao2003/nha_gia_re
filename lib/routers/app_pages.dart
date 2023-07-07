@@ -29,6 +29,8 @@ import 'package:nha_gia_re/modules/search/screens/filter_screen.dart';
 import 'package:nha_gia_re/modules/chat/chat_binding.dart';
 import 'package:nha_gia_re/modules/chat/screens/chat_screen.dart';
 import 'package:nha_gia_re/modules/search/screens/search_screen.dart';
+import 'package:nha_gia_re/modules/verification/screens/verification_card_screen.dart';
+import 'package:nha_gia_re/modules/verification/verification_binding.dart';
 import '../modules/blog/blog_binding.dart';
 import '../modules/conversations/conversation_binding.dart';
 import '../modules/conversations/screens/conversation_screen.dart';
@@ -45,6 +47,8 @@ import '../modules/personal/screens/personal_screen.dart';
 import '../modules/post/post_binding.dart';
 import '../modules/post/screens/post_screen.dart';
 import '../modules/search/search_binding.dart';
+import '../modules/verification/screens/verification_info_screen.dart';
+import '../modules/verification/screens/verification_portrait_screen.dart';
 import 'app_routes.dart';
 
 abstract class AppPages {
@@ -99,9 +103,10 @@ abstract class AppPages {
       binding: PersonalBinding(),
     ),
     GetPage(
-        name: AppRoutes.userProfile,
-        page: () => const UserProfileScreen(),
-        binding: UserProfileBinding()),
+      name: AppRoutes.userProfile,
+      page: () => const UserProfileScreen(),
+      binding: UserProfileBinding(),
+    ),
     GetPage(
       name: AppRoutes.postManagement,
       page: () => PostManagementScreen(),
@@ -162,12 +167,35 @@ abstract class AppPages {
       page: () => const AdminPostDetailScreen(),
       binding: AdminPostDetailBinding(),
     ),
-    GetPage(name: AppRoutes.change_pass, page: () => ChangePassScreen(), binding: SettingsBinding()),
-    GetPage(name: AppRoutes.change_lang, page: () => ChangeLanguageScreen(), binding: SettingsBinding()),
+    GetPage(
+      name: AppRoutes.change_pass,
+      page: () => const ChangePassScreen(),
+      binding: SettingsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.change_lang,
+      page: () => const ChangeLanguageScreen(),
+      binding: SettingsBinding(),
+    ),
     GetPage(
       name: AppRoutes.purchase_screen,
       page: () => const PurchaseScreen(),
       binding: PurchaseBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.verification_card_screen,
+      page: () => VerificationCardScreen(),
+      binding: VerificationBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.verification_portrait_screen,
+      page: () => verificationPortraitScreen(),
+      binding: VerificationBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.verification_info_screen,
+      page: () => verificationInfoScreen(),
+      binding: VerificationBinding(),
     ),
   ];
 }

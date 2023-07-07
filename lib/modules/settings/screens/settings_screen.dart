@@ -1,13 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/repositories/chat_repository.dart';
-import 'package:nha_gia_re/data/repositories/user_repository.dart';
 import 'package:nha_gia_re/modules/settings/settings_controller.dart';
-import 'package:nha_gia_re/modules/settings/widget/settings_item.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/theme/app_colors.dart';
@@ -60,12 +56,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     top: -8, start: 18),
                                 badgeContent: Text(
                                   unreadCount.value.toString(),
-                                  style: AppTextStyles.roboto11Bold.copyWith(color: AppColors.white),
+                                  style: AppTextStyles.roboto11Bold
+                                      .copyWith(color: AppColors.white),
                                 ),
                                 badgeStyle: badges.BadgeStyle(
                                   badgeColor: AppColors.red,
                                 ),
-                                child: Image.asset(Assets.messCircle, width: 25),
+                                child:
+                                    Image.asset(Assets.messCircle, width: 25),
                               ),
                             ),
                     ));
@@ -106,7 +104,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             title: Text('Update information'.tr),
             onTap: _controller.navToUserProfile,
-            leading: Image.asset(Assets.person, width: 24, height: 24),
+            leading: Icon(
+              Icons.manage_accounts_outlined,
+              color: AppColors.black,
+            ),
+          ),
+          ListTile(
+            title: Text('Account verification'.tr),
+            onTap: _controller.navToVerification,
+            leading: Icon(
+              Icons.admin_panel_settings_outlined,
+              color: AppColors.black,
+            ),
+          ),
+          ListTile(
+            title: Text('Premium'.tr),
+            onTap: _controller.navToPurchase,
+            leading: Icon(
+              Icons.wallet,
+              color: AppColors.black,
+            ),
           ),
           ListTile(
             title: Text('Change password'.tr),

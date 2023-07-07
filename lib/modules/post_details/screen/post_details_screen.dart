@@ -158,6 +158,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                   children: [
                                     UsernameWithTickLabel(
                                       _controller.userInfo.fullName!,
+                                      uid: _controller.userInfo.uid,
                                     ),
                                     Text(
                                       (_controller.post!.isProSeller)

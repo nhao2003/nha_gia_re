@@ -64,7 +64,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                               _controller.userInfo.fullName!,
                               style: AppTextStyles.roboto20semiBold.copyWith(
                                 color: AppColors.black,
-                              ),
+                              ), uid: _controller.userInfo.uid,
                             ),
                             SizedBox(
                               height: 7.h,

@@ -6,15 +6,14 @@ import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/modules/user_profile/user_profile_controller.dart';
 import 'package:nha_gia_re/modules/user_profile/widgets/user_image_picker.dart';
-import 'package:nha_gia_re/routers/app_routes.dart';
 
 class UserProfileScreen extends StatelessWidget {
   const UserProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final UserProfileController _controller = Get.find<UserProfileController>();
-    _controller.init(Get.arguments);
+    final UserProfileController controller = Get.find<UserProfileController>();
+    controller.init(Get.arguments);
     return Scaffold(
       appBar: AppBar(
         title: Text('Update information'.tr),
@@ -23,28 +22,28 @@ class UserProfileScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Form(
-            key: _controller.userProfileFormKey,
+            key: controller.userProfileFormKey,
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Obx(() => UserImagePicker(_controller.handelUploadAvatar,
-                      _controller.isUploadAvatar.value, _controller.avatarUrl)),
+                  Obx(() => UserImagePicker(controller.handelUploadAvatar,
+                      controller.isUploadAvatar.value, controller.avatarUrl)),
                   const SizedBox(
                     height: 25,
                   ),
                   TextFormField(
-                    controller: _controller.fullNameTextController,
-                    decoration:  InputDecoration(
+                    controller: controller.fullNameTextController,
+                    decoration: InputDecoration(
                         hintText: 'Full name'.tr,
                         labelText: 'Full name'.tr,
-                        border: OutlineInputBorder()),
-                    validator: _controller.validateTextField,
+                        border: const OutlineInputBorder()),
+                    validator: controller.validateTextField,
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   TextFormField(
-                    controller: _controller.phoneNumberTextController,
+                    controller: controller.phoneNumberTextController,
                     keyboardType: TextInputType.phone,
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.digitsOnly
@@ -52,14 +51,14 @@ class UserProfileScreen extends StatelessWidget {
                     decoration: InputDecoration(
                         hintText: 'Phone number'.tr,
                         labelText: 'Phone number'.tr,
-                        border: OutlineInputBorder()),
-                    validator: _controller.validateTextField,
+                        border: const OutlineInputBorder()),
+                    validator: controller.validateTextField,
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   TextFormField(
-                    onTap: _controller.handleAddress ,
+                    onTap: controller.handleAddress,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'This field cannot be empty.'.tr;
@@ -67,7 +66,7 @@ class UserProfileScreen extends StatelessWidget {
                       return null;
                     },
                     readOnly: true,
-                    controller: _controller.addressController,
+                    controller: controller.addressController,
                     enabled: true,
                     decoration: InputDecoration(
                       hintText: 'Address'.tr,
@@ -89,9 +88,9 @@ class UserProfileScreen extends StatelessWidget {
                         children: [
                           Obx(() => Radio(
                               value: "male",
-                              groupValue: _controller.gender.value,
+                              groupValue: controller.gender.value,
                               onChanged: (value) =>
-                                  _controller.gender.value = value.toString())),
+                                  controller.gender.value = value.toString())),
                           Text(
                             'Male'.tr,
                             style: AppTextStyles.roboto16regular,
@@ -103,9 +102,9 @@ class UserProfileScreen extends StatelessWidget {
                         children: [
                           Obx(() => Radio(
                               value: "female",
-                              groupValue: _controller.gender.value,
+                              groupValue: controller.gender.value,
                               onChanged: (value) =>
-                                  _controller.gender.value = value.toString())),
+                                  controller.gender.value = value.toString())),
                           Text(
                             'Female'.tr,
                             style: AppTextStyles.roboto16regular,
@@ -115,47 +114,45 @@ class UserProfileScreen extends StatelessWidget {
                     ],
                   ),
                   TextFormField(
-                      controller: _controller.birthDayTextController,
+                      controller: controller.birthDayTextController,
                       readOnly: true,
                       decoration: InputDecoration(
                           hintText: 'Date of birth'.tr,
                           labelText: 'Date of birth'.tr,
-                          border: OutlineInputBorder()),
-                      validator: _controller.validateTextField,
-                      onTap: _controller.handleDatePicker),
+                          border: const OutlineInputBorder()),
+                      validator: controller.validateTextField,
+                      onTap: controller.handleDatePicker),
                   const SizedBox(
                     height: 20,
                   ),
                   TextFormField(
-                    controller: _controller.bioTextController,
+                    controller: controller.bioTextController,
                     maxLines: 6,
-                    decoration:  InputDecoration(
+                    decoration: InputDecoration(
                         hintText: 'Write something about you'.tr,
                         alignLabelWithHint: true,
                         labelText: 'Bio'.tr,
-                        border: OutlineInputBorder()),
+                        border: const OutlineInputBorder()),
                   ),
                   const SizedBox(
                     height: 15,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                          onPressed: _controller.handleSubmit,
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        onPressed: controller.handleSubmit,
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
                             ),
                           ),
-                          child: Text(
-                            "Save".tr,
-                            style: TextStyle(color: Colors.white),
-                          )),
-                    ],
+                        ),
+                        child: Text(
+                          "Save".tr,
+                          style: const TextStyle(color: Colors.white),
+                        )),
                   ),
                 ]),
           ),
