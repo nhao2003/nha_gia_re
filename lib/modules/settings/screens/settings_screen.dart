@@ -71,169 +71,171 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         ],
       ),
-      body: Column(
-        children: ListTile.divideTiles(context: context, tiles: [
-          FutureBuilder(
-              future: _controller.init(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  _controller.userInfo = snapshot.data!;
-                  return ListTile(
-                    title: Text(_controller.userInfo.fullName!),
-                    onTap: _controller.navToPersonal,
-                    leading: CircleAvatar(
-                      backgroundImage: CachedNetworkImageProvider(
-                          _controller.userInfo.avatarUrl!),
-                      radius: 20.0,
-                    ),
-                    trailing: const Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 18,
-                    ),
-                  );
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              }),
-          FutureBuilder(
-              future: authRepo.isAdmin(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data == true) {
+      body: SingleChildScrollView(
+        child: Column(
+          children: ListTile.divideTiles(context: context, tiles: [
+            FutureBuilder(
+                future: _controller.init(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    _controller.userInfo = snapshot.data!;
                     return ListTile(
-                      title: Text('Reviewing posts'.tr),
-                      onTap: _controller.navToReviewPost,
-                      leading: Image.asset(
-                        Assets.edit,
-                        width: 20,
+                      title: Text(_controller.userInfo.fullName!),
+                      onTap: _controller.navToPersonal,
+                      leading: CircleAvatar(
+                        backgroundImage: CachedNetworkImageProvider(
+                            _controller.userInfo.avatarUrl!),
+                        radius: 20.0,
+                      ),
+                      trailing: const Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 18,
                       ),
                     );
                   } else {
-                    return const SizedBox();
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
                   }
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              }),
-          FutureBuilder(
-              future: authRepo.isAdmin(),
+                }),
+            FutureBuilder(
+                future: authRepo.isAdmin(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data == true) {
+                      return ListTile(
+                        title: Text('Reviewing posts'.tr),
+                        onTap: _controller.navToReviewPost,
+                        leading: Image.asset(
+                          Assets.edit,
+                          width: 20,
+                        ),
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                }),
+            FutureBuilder(
+                future: authRepo.isAdmin(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data == true) {
+                      return ListTile(
+                        title: Text('Reviewing users verified'.tr),
+                        onTap: _controller.navToVerificationList,
+                        leading: Icon(
+                          Icons.switch_account_outlined,
+                          color: AppColors.black,
+                        ),
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                }),
+            ListTile(
+              title: Text('Favorite'.tr),
+              onTap: _controller.navToFavorite,
+              leading: Icon(Icons.favorite, color: AppColors.red),
+            ),
+            ListTile(
+              title: Text('Update information'.tr),
+              onTap: _controller.navToUserProfile,
+              leading: Icon(
+                Icons.manage_accounts_outlined,
+                color: AppColors.black,
+              ),
+            ),
+            FutureBuilder<String>(
+              future: _controller.checkUserIsWaiting(),
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data == true) {
-                    return ListTile(
-                      title: Text('Reviewing users verified'.tr),
-                      onTap: _controller.navToVerificationList,
-                      leading: Icon(
-                        Icons.switch_account_outlined,
-                        color: AppColors.black,
-                      ),
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else {
+                  if (snapshot.error != null) {
+                    return const Center(
+                      child: Text("error"),
                     );
                   } else {
-                    return const SizedBox();
-                  }
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              }),
-          ListTile(
-            title: Text('Favorite'.tr),
-            onTap: _controller.navToFavorite,
-            leading: Icon(Icons.favorite, color: AppColors.red),
-          ),
-          ListTile(
-            title: Text('Update information'.tr),
-            onTap: _controller.navToUserProfile,
-            leading: Icon(
-              Icons.manage_accounts_outlined,
-              color: AppColors.black,
-            ),
-          ),
-          FutureBuilder<String>(
-            future: _controller.checkUserIsWaiting(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              } else {
-                if (snapshot.error != null) {
-                  return const Center(
-                    child: Text("error"),
-                  );
-                } else {
-                  _controller.verifyRepo.checkResult = snapshot.data!;
-                  if (_controller.verifyRepo.checkResult == "2") {
-                    // duyet duoc roi
-                    return Container();
-                  } else {
-                    return ListTile(
-                      title: Text('Account verification'.tr),
-                      onTap: () {
-                        // if (_controller.verifyRepo.checkResult == "0") {
-                        //   //chua co
-                        //   _controller.navToVerification().then((value) {
-                        //     setState(() {});
-                        //   });
-                        // } else if (_controller.verifyRepo.checkResult == "1") {
-                        //   // dang cho duyet
-                        //   _controller.navToWaitingVerification().then((value) {
-                        //     setState(() {});
-                        //   });
-                        // } else {
-                        //   // tu choi
-                        //   _controller.navToRejectVerification(snapshot.data!);
-                        // }
-                        _controller.navToVerification().then((value) {
-                          setState(() {});
-                        });
-                      },
-                      leading: Icon(
-                        Icons.admin_panel_settings_outlined,
-                        color: AppColors.black,
-                      ),
-                    );
+                    _controller.verifyRepo.checkResult = snapshot.data!;
+                    if (_controller.verifyRepo.checkResult == "2") {
+                      // duyet duoc roi
+                      return Container();
+                    } else {
+                      return ListTile(
+                        title: Text('Account verification'.tr),
+                        onTap: () {
+                          // if (_controller.verifyRepo.checkResult == "0") {
+                          //   //chua co
+                          //   _controller.navToVerification().then((value) {
+                          //     setState(() {});
+                          //   });
+                          // } else if (_controller.verifyRepo.checkResult == "1") {
+                          //   // dang cho duyet
+                          //   _controller.navToWaitingVerification().then((value) {
+                          //     setState(() {});
+                          //   });
+                          // } else {
+                          //   // tu choi
+                          //   _controller.navToRejectVerification(snapshot.data!);
+                          // }
+                          _controller.navToVerification().then((value) {
+                            setState(() {});
+                          });
+                        },
+                        leading: Icon(
+                          Icons.admin_panel_settings_outlined,
+                          color: AppColors.black,
+                        ),
+                      );
+                    }
                   }
                 }
-              }
-            },
-          ),
-          ListTile(
-            title: Text('Premium'.tr),
-            onTap: _controller.navToPurchase,
-            leading: Icon(
-              Icons.wallet,
-              color: AppColors.black,
+              },
             ),
-          ),
-          ListTile(
-            title: Text('Change password'.tr),
-            onTap: _controller.navToChangePass,
-            leading: Icon(
-              Icons.lock_outline_rounded,
-              color: AppColors.black,
+            ListTile(
+              title: Text('Premium'.tr),
+              onTap: _controller.navToPurchase,
+              leading: Icon(
+                Icons.wallet,
+                color: AppColors.black,
+              ),
             ),
-          ),
-          ListTile(
-            title: Text('Language'.tr),
-            onTap: _controller.navToChangeLang,
-            leading: Icon(
-              Icons.language_outlined,
-              color: AppColors.black,
+            ListTile(
+              title: Text('Change password'.tr),
+              onTap: _controller.navToChangePass,
+              leading: Icon(
+                Icons.lock_outline_rounded,
+                color: AppColors.black,
+              ),
             ),
-          ),
-          ListTile(
-            title: Text('Sign out'.tr),
-            onTap: _controller.handleSignOut,
-            leading: Icon(
-              Icons.logout,
-              color: AppColors.black,
+            ListTile(
+              title: Text('Language'.tr),
+              onTap: _controller.navToChangeLang,
+              leading: Icon(
+                Icons.language_outlined,
+                color: AppColors.black,
+              ),
             ),
-          ),
-        ]).toList(),
+            ListTile(
+              title: Text('Sign out'.tr),
+              onTap: _controller.handleSignOut,
+              leading: Icon(
+                Icons.logout,
+                color: AppColors.black,
+              ),
+            ),
+          ]).toList(),
+        ),
       ),
     );
   }

@@ -87,22 +87,35 @@ class _OTPScreenState extends State<OTPScreen> {
               height: 30,
             ),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text("Didn't receive the code? ",
+              Text("Didn't received the code? ",
                   style: AppTextStyles.roboto14regular),
-              Countdown(
-                controller: _controller.countdownController,
-                seconds: 60,
-                build: (_, double time) => Text(
-                  time.toString(),
-                  style: const TextStyle(
-                    fontSize: 14,
+              Obx(() => (_controller.isCountDown.value) ? Row(
+                children: [
+                  Text ('Resend in: '.tr ,style: AppTextStyles.roboto14regular),
+                  Countdown(
+                    controller: _controller.countdownController,
+                    seconds: 60,
+                    build: (_, double time) => Text(
+                      '${time.toStringAsFixed(time.truncateToDouble() == time ? 0 : 1)}s',
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                    interval: const Duration(seconds: 1),
+                    onFinished: () {
+                        _controller.isCountDown.value = false;
+                    },
                   ),
-                ),
-                interval: const Duration(seconds: 1),
-                onFinished: () {
-                    _controller.isCountDown.value = false;
-                },
-              ),
+                ],
+              ) : 
+              TextButton(onPressed: ()
+              {
+                _controller.countdownController.restart();
+                _controller.isCountDown.value = true;
+                _controller.handleForgotPass();
+              }, child: Text('RESEND'.tr))
+              )
+              
             ]),
             const SizedBox(
               height: 20,
