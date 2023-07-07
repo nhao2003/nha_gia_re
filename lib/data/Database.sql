@@ -850,8 +850,7 @@ CREATE TABLE account_verification_requests (
   dob TIMESTAMP NOT NULL,
   identity_card_no TEXT NOT NULL,
   identity_card_issued_date TIMESTAMP NOT NULL,
-  place_of_origin TEXT NOT NULL,
-  place_of_residence TEXT NOT NULL,
+  issued_by TEXT NOT NULL,
   FOREIGN KEY (user_id) REFERENCES user_info(uid)
 );
 
