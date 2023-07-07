@@ -62,9 +62,15 @@ class AuthRepository {
     }
   }
 
-  Future<Map<String, dynamic>> changePass(String currentPass, String newPass)
-  async {
-    var data = await _remoteDataSource.changePassword(currentPass: currentPass, newPass: newPass);
+  Future<Map<String, dynamic>> changePass(
+      String currentPass, String newPass) async {
+    var data = await _remoteDataSource.changePassword(
+        currentPass: currentPass, newPass: newPass);
     return data;
+  }
+
+  Future<bool> isAdmin() async {
+    final res = await _remoteDataSource.isAdmin(userID!);
+    return res ?? false;
   }
 }

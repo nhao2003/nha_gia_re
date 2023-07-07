@@ -538,7 +538,8 @@ class RemoteDataSource {
   Future<Map<String, dynamic>> getPostById(String id) async {
     try {
       debugPrint(id);
-      final data = await supabaseClient.from(tablePost).select().eq('id', id).limit(1);
+      final data =
+          await supabaseClient.from(tablePost).select().eq('id', id).limit(1);
       debugPrint(data.toString());
       return Map<String, dynamic>.from(data.first);
     } on PostgrestException catch (e) {
@@ -992,5 +993,23 @@ class RemoteDataSource {
       'p_id': id,
       'p_rejected_info': reason,
     });
+  }
+
+  Future<bool?> isAdmin(String userId) async {
+    try {
+      final res = await supabaseClient
+          .from('admins')
+          .select()
+          .eq('user_id', userId)
+          .limit(1);
+      List<Map<String, dynamic>> data = List<Map<String, dynamic>>.from(res);
+      if (data.isEmpty || data.first.isEmpty) return true;
+      return false;
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
   }
 }
