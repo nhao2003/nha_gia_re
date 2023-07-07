@@ -3,7 +3,7 @@ import 'package:nha_gia_re/core/extensions/integer_ex.dart';
 import 'package:nha_gia_re/data/models/discount.dart';
 
 import '../../../core/theme/app_colors.dart';
-import '../../../data/models/membership_package.dart';
+import '../../../data/models/purchase/membership_package.dart';
 import 'discount_label.dart';
 
 class MembershipPackageCard extends StatelessWidget {

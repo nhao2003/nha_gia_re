@@ -881,5 +881,33 @@ CREATE TABLE membership_package_subscription (
     end_date TIMESTAMP NOT NULL
 );
 
+CREATE OR REPLACE FUNCTION insert_subscription(
+    p_transaction_id UUID,
+    p_membership_package_id UUID,
+    p_user_id UUID,
+    p_number_of_months INT
+) RETURNS VOID AS $$
+DECLARE
+    v_start_date TIMESTAMP := timezone('Asia/Ho_Chi_Minh', now());
+    v_end_date TIMESTAMP := v_start_date + (p_number_of_months || ' months')::INTERVAL;
+BEGIN
+    INSERT INTO membership_package_subscription (
+        transaction_id,
+        membership_package_id,
+        user_id,
+        start_date,
+        end_date
+    )
+    VALUES (
+        p_transaction_id,
+        p_membership_package_id,
+        p_user_id,
+        v_start_date,
+        v_end_date
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+
 
 

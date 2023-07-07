@@ -6,10 +6,13 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/models/discount.dart';
-import 'package:nha_gia_re/data/models/membership_package.dart';
+import 'package:nha_gia_re/data/models/purchase/membership_package.dart';
+import 'package:nha_gia_re/data/models/purchase/membership_package_subscription.dart';
 import 'package:nha_gia_re/global_widgets/my_circular_process_indicator.dart';
 import 'package:nha_gia_re/modules/purchase/screens/purchase_payment_result_screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../data/models/purchase/transaction.dart';
 import '../../data/providers/remote/request/create_order_request.dart';
 import '../../data/providers/remote/request/query_order.dart';
 import '../../data/repositories/auth_repository.dart';
@@ -20,8 +23,6 @@ class PurchaseController extends GetxController {
   PayRepository repository = PayRepository();
 
   void goToZaloPay(String packageId, int numOfMonth) async {
-    log("Hello");
-    String payResult = "";
     CreateOrderRequest request = CreateOrderRequest(
         record: Record(
       userId: GetIt.instance<AuthRepository>().userID!,
@@ -32,37 +33,17 @@ class PurchaseController extends GetxController {
     await PayRepository.createOrder(request).then((value) {
       if (value != null) {
         FlutterZaloPaySdk.payOrder(zpToken: value.zptranstoken).listen((event) {
-          switch (event) {
-            case FlutterZaloPayStatus.cancelled:
-              payResult = "User Huỷ Thanh Toán";
-              Get.to(() => const PurchasePaymentResultScreen(false));
-              return;
-            case FlutterZaloPayStatus.success:
-              payResult = "Thanh toán thành công";
-              QueryOrder query = QueryOrder(
-                  record: QueryRecord(
-                userId: GetIt.instance<AuthRepository>().userID!,
-                apptransid: value.apptransid,
-              ));
-              PayRepository.createQuery(query).then((value) {
-                if (value != null) {
-                  Get.snackbar("Trạng thái", payResult);
-                } else {
-                  Get.snackbar("Trạng thái", "Thanh toán thất bại");
-                }
-              });
-
-              Get.offAll(() => const PurchasePaymentResultScreen(true));
-              return;
-            case FlutterZaloPayStatus.failed:
-              payResult = "Thanh toán thất bại";
-              Get.to(() => const PurchasePaymentResultScreen(false));
-              return;
-            default:
-              payResult = "Thanh toán thất bại";
-              Get.to(() => const PurchasePaymentResultScreen(false));
-              return;
-          }
+          QueryOrder query = QueryOrder(
+              record: QueryRecord(
+            userId: GetIt.instance<AuthRepository>().userID!,
+            apptransid: value.apptransid,
+          ));
+          PayRepository.createQuery(query).then((value) {
+            var status = event;
+            var data = value;
+            final String id = value!.transactionid;
+            Get.offAll(() => PurchasePaymentResultScreen(transId: id,));
+          });
         });
       }
     });
@@ -81,5 +62,27 @@ class PurchaseController extends GetxController {
       return result;
     });
     return res;
+  }
+
+  Future<
+          MapEntry<Transaction,
+              MapEntry<MembershipPackage, MembershipPackageSubscription?>>>
+      initPurchaseResultScreen({String? transId, dynamic data}) async {
+
+    if(data is MapEntry<Transaction,
+        MapEntry<MembershipPackage, MembershipPackageSubscription?>>){
+      return data;
+    } else {
+      return  await repository.getDetailTransaction(transId!);
+    }
+  }
+
+
+  Future<
+          List<
+              MapEntry<Transaction,
+                  MapEntry<MembershipPackage, MembershipPackageSubscription?>>>>
+      getUserTransactions() async {
+    return await repository.getUserTransactions();
   }
 }

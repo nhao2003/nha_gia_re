@@ -5,7 +5,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/core/extensions/integer_ex.dart';
 import 'package:nha_gia_re/data/models/discount.dart';
-import 'package:nha_gia_re/data/models/membership_package.dart';
+import 'package:nha_gia_re/data/models/purchase/membership_package.dart';
 import 'package:nha_gia_re/data/providers/remote/request/create_order_request.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/data/repositories/pay_repository.dart';

@@ -993,4 +993,19 @@ class RemoteDataSource {
       'p_rejected_info': reason,
     });
   }
+
+  Future<Map<String, dynamic>> getDetailTransaction(String id) async {
+    final data = List<Map<String, dynamic>>.from(await Supabase.instance.client
+        .from('transactions')
+        .select('*, membership_package(*), membership_package_subscription(*)')
+        .eq('id', id)
+        .limit(1));
+    return data.first;
+  }
+  Future<List<Map<String, dynamic>>> getUserTransactions(String uid) async {
+    return List<Map<String, dynamic>>.from(await Supabase.instance.client
+        .from('transactions')
+        .select('*, membership_package(*), membership_package_subscription(*)')
+        .eq('user_id', uid));
+  }
 }
