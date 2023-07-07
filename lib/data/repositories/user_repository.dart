@@ -32,7 +32,7 @@ class UserRepository {
       uid = auth.userID;
     }
     UserInfo? user = _userInfos[uid];
-    if (user != null) return user;
+    if (user != null && user.updatedDate != null) return user;
     try {
       final data = await _remoteDataSource.getUserInfo(uid!);
       user = UserInfo.fromJson(data);
@@ -54,6 +54,15 @@ class UserRepository {
       _isVerified.putIfAbsent(uid, () => data!);
       return data;
     } catch (e) {
+      rethrow;
+    }
+  }
+  Future<void> updatePass(String newPass)
+  async {
+    try
+    {
+      await _remoteDataSource.updatePass(newPass);
+    }catch (e) {
       rethrow;
     }
   }

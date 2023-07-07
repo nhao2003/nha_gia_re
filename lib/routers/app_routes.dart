@@ -7,6 +7,9 @@ abstract class AppRoutes {
   static const home = '/home';
   // login
   static const login = '/login';
+  static const otp = '/otp';
+    static const recoveryPass = '/recovery_pass';
+
   // address form
   static const address = '/address';
   // search

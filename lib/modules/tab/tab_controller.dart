@@ -8,12 +8,7 @@ class TabNavController extends GetxController {
 
   void changeTabIndex(int index) async {
     if (index == 2) {
-      bool isAdmin = await GetIt.instance<AuthRepository>().isAdmin();
-      if (isAdmin == true) {
-        Get.toNamed(AppRoutes.admin_post);
-      } else {
         Get.toNamed(AppRoutes.post);
-      }
     } else {
       tabIndex = index;
     }

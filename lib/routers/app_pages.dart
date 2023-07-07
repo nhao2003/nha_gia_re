@@ -7,6 +7,8 @@ import 'package:nha_gia_re/modules/address_form/address_binding.dart';
 import 'package:nha_gia_re/modules/address_form/screens/address.dart';
 import 'package:nha_gia_re/modules/blog/screens/blog_detail_screen.dart';
 import 'package:nha_gia_re/modules/blog/screens/blog_list_screen.dart';
+import 'package:nha_gia_re/modules/login/screens/otp_screen.dart';
+import 'package:nha_gia_re/modules/login/screens/reset_pass.dart';
 import 'package:nha_gia_re/modules/maps/screens/map_picker_screen.dart';
 import 'package:nha_gia_re/modules/maps/screens/map_screen.dart';
 import 'package:nha_gia_re/modules/post_details/post_detail_binding.dart';
@@ -86,6 +88,14 @@ abstract class AppPages {
     GetPage(
       name: AppRoutes.register,
       page: () => const RegisterScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.recoveryPass,
+      page: () => const RecoveryPassScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.otp,
+      page: () => const OTPScreen(),
     ),
     GetPage(
       name: AppRoutes.post,
