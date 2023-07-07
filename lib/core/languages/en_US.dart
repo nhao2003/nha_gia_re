@@ -168,7 +168,7 @@ const Map<String, String> enLanguagePackage = {
   'Legal Document': 'Legal Document',
   'Apartment Type': 'Apartment Type',
   'Floor': 'Floor',
-  'Main Door Direction': 'Main Door Direction',
+  'Main Door Direction': 'Main Door Direction', 
   'Balcony Direction': 'Balcony Direction',
   'Corner Apartment': 'Corner Apartment',
   'm3' : 'm3',

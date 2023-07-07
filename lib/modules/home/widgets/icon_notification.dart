@@ -55,12 +55,15 @@ class IconNotification extends StatelessWidget {
                       child: badges.Badge(
                         position:
                             badges.BadgePosition.topStart(top: -8, start: 18),
-                        badgeContent: Text(
-                          notiRepo.numNotificationsIsNotRead.value.toString(),
-                          style: AppTextStyles.roboto11Bold,
-                        ),
+                        badgeContent: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Text(
+                              notiRepo.numNotificationsIsNotRead.value.toString(),
+                              style: AppTextStyles.roboto11Bold.copyWith(color: AppColors.white),
+                            ),
+                          ),
                         badgeStyle: badges.BadgeStyle(
-                          badgeColor: AppColors.white,
+                          badgeColor: AppColors.red,
                         ),
                         child: const Icon(
                           Icons.notifications_none_outlined,
