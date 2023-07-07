@@ -47,9 +47,11 @@ class _PurchaseChoosePlanScreenState extends State<PurchaseChoosePlanScreen> {
     final List<int> months = unionLists(
         widget.discount?.subscriptionDiscounts.keys.toList() ?? [],
         [1, 3, 6, 12]);
-    final percentage = months.map((e) => (widget.discount != null)
-        ? widget.discount?.subscriptionDiscounts[e] ?? 0
-        : 0).toList();
+    final percentage = months
+        .map((e) => (widget.discount != null)
+            ? widget.discount?.subscriptionDiscounts[e] ?? 0
+            : 0)
+        .toList();
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.package.name),
@@ -63,8 +65,8 @@ class _PurchaseChoosePlanScreenState extends State<PurchaseChoosePlanScreen> {
               backgroundColor: AppColors.green,
             ),
             onPressed: selectedRadio != -1
-                ? () => controller
-                    .goToZaloPay(widget.package.price * months[selectedRadio])
+                ? () => controller.goToZaloPay(
+                    widget.package.id, months[selectedRadio])
                 : null,
             child: Text(
               "Mua ngay",
