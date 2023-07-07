@@ -8,10 +8,9 @@ class AccountVerificationRequests {
   String fullName;
   bool sex;
   String dob;
-  String identityCardNo; // so cccd
-  DateTime identityCardIssuedDate; // ngay cap cccd
-  String placeOfOrigin; // que quan
-  String placeOfResidence; // dia chi thuong tru
+  String identityCardNo;
+  DateTime identityCardIssuedDate;
+  String issuedBy;
 
   AccountVerificationRequests({
     required this.id,
@@ -25,8 +24,7 @@ class AccountVerificationRequests {
     required this.dob,
     required this.identityCardNo,
     required this.identityCardIssuedDate,
-    required this.placeOfOrigin,
-    required this.placeOfResidence,
+    required this.issuedBy,
   });
 
   factory AccountVerificationRequests.fromJson(Map<String, dynamic> json) {
@@ -44,8 +42,7 @@ class AccountVerificationRequests {
       dob: json['dob'] as String,
       identityCardNo: json['identity_card_no'] as String,
       identityCardIssuedDate: DateTime.parse(json['identity_card_issued_date']),
-      placeOfOrigin: json['place_of_origin'] as String,
-      placeOfResidence: json['place_of_residence'] as String,
+      issuedBy: json['issued_by'] as String,
     );
   }
 
@@ -61,8 +58,7 @@ class AccountVerificationRequests {
       'dob': dob,
       'identity_card_no': identityCardNo,
       'identity_card_issued_date': identityCardIssuedDate.toIso8601String(),
-      'place_of_origin': placeOfOrigin,
-      'place_of_residence': placeOfResidence,
+      'issued_by': issuedBy,
     };
   }
 }

@@ -1,58 +1,31 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/models/notification.dart';
+import 'package:nha_gia_re/data/providers/remote/remote_data_source.dart';
 
 class NotificationRepository {
-  List getNotifications() {
-    return [...listNotifications];
+  final RemoteDataSource _remoteDataSource;
+  NotificationRepository(this._remoteDataSource);
+
+  Stream<int> getUnreadNotificationCount() {
+    return _remoteDataSource.getNotification().map((list) {
+      return list.where((notification) => !notification.isRead).length;
+    });
   }
 
-  int getLengthNotifications() {
-    if (listNotifications.isNotEmpty) {
-      return listNotifications.length;
-    } else {
-      return 0;
-    }
+  Stream<List<NotificationModel>> getNotification() {
+    return _remoteDataSource.getNotification();
   }
 
-  Future<int> getLengthNotificationsIsNotRead() async {
-    numNotificationsIsNotRead.value = 0;
-    if (listNotifications.isNotEmpty) {
-      for (NotificationModel noti in listNotifications) {
-        if (!noti.isRead) numNotificationsIsNotRead.value++;
-      }
-    }
-    return numNotificationsIsNotRead.value;
+  Future<void> setIsReadNotification(String id) async {
+    await _remoteDataSource.setIsReadNotification(id);
+    //getLengthNotificationsIsNotRead();
+    return;
   }
 
-  void setNotifications(List<NotificationModel> notis) {
-    listNotifications = [...notis].obs;
-  }
-
-  Future<List<NotificationModel>> fetchNotification() async {
-    //TODO: Viết hàm lấy noti ở đây
-    // listNotifications = ...
-    return listNotifications;
-  }
-
-  Future setIsReadNotification(String id) async {
-    for (NotificationModel noti in listNotifications) {
-      if (noti.id == id) {
-        noti.setIsRead(true);
-        getLengthNotificationsIsNotRead();
-        return;
-      }
-    }
-  }
-
-  void deleteNotification(String id) {
-    for (NotificationModel noti in listNotifications) {
-      if (noti.id == id) {
-        listNotifications.remove(noti);
-        getLengthNotificationsIsNotRead();
-        return;
-      }
-    }
+  Future<void> deleteNotification(String id) async {
+    await _remoteDataSource.deleteNotification(id);
   }
 
   RxInt numNotificationsIsNotRead = 0.obs;

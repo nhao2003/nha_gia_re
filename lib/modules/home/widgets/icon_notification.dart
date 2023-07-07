@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
@@ -12,8 +14,14 @@ class IconNotification extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     NotificationRepository notiRepo = GetIt.instance<NotificationRepository>();
-    return FutureBuilder(
-      future: notiRepo.getLengthNotificationsIsNotRead(),
+
+    notiRepo.getUnreadNotificationCount().listen((count) {
+      notiRepo.numNotificationsIsNotRead.value = count;
+    });
+    ;
+
+    return StreamBuilder(
+      stream: notiRepo.getUnreadNotificationCount().asBroadcastStream(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Padding(
@@ -47,12 +55,15 @@ class IconNotification extends StatelessWidget {
                       child: badges.Badge(
                         position:
                             badges.BadgePosition.topStart(top: -8, start: 18),
-                        badgeContent: Text(
-                          notiRepo.numNotificationsIsNotRead.value.toString(),
-                          style: AppTextStyles.roboto11Bold,
-                        ),
+                        badgeContent: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Text(
+                              notiRepo.numNotificationsIsNotRead.value.toString(),
+                              style: AppTextStyles.roboto11Bold.copyWith(color: AppColors.white),
+                            ),
+                          ),
                         badgeStyle: badges.BadgeStyle(
-                          badgeColor: AppColors.white,
+                          badgeColor: AppColors.red,
                         ),
                         child: const Icon(
                           Icons.notifications_none_outlined,

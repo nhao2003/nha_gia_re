@@ -381,6 +381,7 @@ enum NotificationType {
   expirationWarning,
   rejectPost,
   acceptPost,
+  newFollower,
   advertise;
 
   Color statusColor() {
@@ -411,6 +412,8 @@ enum NotificationType {
         return "acceptPost";
       case NotificationType.advertise:
         return "advertise";
+      case NotificationType.newFollower:
+        return "newFollower";
     }
   }
 

@@ -3,7 +3,7 @@ import '../enums/enums.dart';
 class NotificationModel {
   String id;
   NotificationType type;
-  DateTime createAt;
+  DateTime? createAt;
   bool isRead;
   String title;
   String content;
@@ -29,7 +29,7 @@ class NotificationModel {
     return NotificationModel(
       id: json['id'],
       type: NotificationType.parse(json['type']),
-      createAt: DateTime.parse(json['create_at']),
+      createAt: (json['create_at'] == null)  ? DateTime.now() : DateTime.parse(json['create_at']),
       isRead: json['is_read'],
       title: json['title'],
       content: json['content'],

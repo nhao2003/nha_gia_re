@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/models/notification.dart';
 import 'package:nha_gia_re/data/repositories/notification_repository.dart';
+import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/text_styles.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -36,29 +38,26 @@ class _ItemNotiState extends State<ItemNoti> {
         return AppColors.green;
       case NotificationType.advertise:
         return const Color(0xff49454F);
-    }
-  }
-
-  String getStatus() {
-    switch (widget.notiModel.type) {
-      case NotificationType.suggest:
-        return "Có thể bạn qua tâm";
-      case NotificationType.expirationWarning:
-        return "Tin của bạn gần hết hạn";
-      case NotificationType.rejectPost:
-        return "Tin của bạn bị từ chối";
-      case NotificationType.acceptPost:
-        return "Tin của bạn đã được duyệt";
-      case NotificationType.advertise:
-        return "Quảng cáo dành cho bạn";
+      case NotificationType.newFollower:
+        return AppColors.green;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        notiRepo.setIsReadNotification(widget.notiModel.id);
+      onTap: () async {
+        widget.notiModel.isRead = true;
+        debugPrint('test');
+        if(widget.notiModel.type == NotificationType.newFollower)
+        {
+          Get.toNamed(AppRoutes.personal,arguments: widget.notiModel.link);
+        }
+        else
+        {
+          Get.toNamed(AppRoutes.post_detail,arguments: widget.notiModel.link);
+        }
+        await notiRepo.setIsReadNotification(widget.notiModel.id);
         setState(() {});
       },
       child: Slidable(
@@ -66,9 +65,9 @@ class _ItemNotiState extends State<ItemNoti> {
           motion: const ScrollMotion(),
           children: [
             SlidableAction(
-              onPressed: (context) {
+              onPressed: (context) async {
                 // delete task
-                notiRepo.deleteNotification(widget.notiModel.id);
+                await notiRepo.deleteNotification(widget.notiModel.id);
               },
               icon: Icons.delete,
               backgroundColor: AppColors.red,
@@ -116,7 +115,7 @@ class _ItemNotiState extends State<ItemNoti> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      getStatus(),
+                      widget.notiModel.type.toString().tr,
                       style: AppTextStyles.roboto12semiBold
                           .copyWith(color: getColorStatus()),
                     ),

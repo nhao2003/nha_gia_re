@@ -75,6 +75,15 @@ class PostRepository {
     }
   }
 
+  Future<Post> getPostFromId(String id) async
+  {
+    try {
+      return Post.fromJson(await _remoteDataSource.getPostById(id));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<Post> getPostDetail(String id, PropertyType type) async {
     Map<String, dynamic> data =
         await _remoteDataSource.getPostDetails(id, type);

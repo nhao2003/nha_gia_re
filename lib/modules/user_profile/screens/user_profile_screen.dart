@@ -16,6 +16,8 @@ class UserProfileScreen extends StatelessWidget {
     final UserProfileController controller = Get.find<UserProfileController>();
     final TextEditingController addressController = TextEditingController();
     controller.init(Get.arguments);
+    final UserProfileController _controller = Get.find<UserProfileController>();
+    _controller.init(Get.arguments);
     return Scaffold(
       appBar: AppBar(
         title: Text('Update information'.tr),
@@ -60,11 +62,7 @@ class UserProfileScreen extends StatelessWidget {
                     height: 20,
                   ),
                   TextFormField(
-                    onTap: () async {
-                      addressController.text =
-                          await Get.toNamed(AppRoutes.address)!
-                              .then((value) => value.toString());
-                    },
+                    onTap: _controller.handleAddress ,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'This field cannot be empty.'.tr;

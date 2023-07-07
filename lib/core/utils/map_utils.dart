@@ -31,7 +31,7 @@ class MapUtils {
     assert(zoom >= 0 && zoom <= 21, 'Invalid zoom level');
     assert(height >= 0 && width >= 0, 'Invalid map size');
     const apiKey =
-        'AIzaSyBg8RtAbXyLYcRpQOe2KPwCuNNvW-Rrq70'; // Thay YOUR_API_KEY bằng API key của bạn
+        'AIzaSyATj_CC4_aSPMod2MfeAmz67Ek2t_rhrwc';
     const baseUrl = 'https://maps.googleapis.com/maps/api/staticmap';
     final center = '${latLng.latitude},${latLng.longitude}';
     const size = '400x400';

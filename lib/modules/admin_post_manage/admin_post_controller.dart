@@ -89,52 +89,52 @@ class AdminPostController extends GetxController {
     Get.toNamed(AppRoutes.admin_post_detail, arguments: post);
   }
 
-  pay() async {
-    CreateOrderRequest request = CreateOrderRequest(
-        record: Record(
-            userId: authRepository.userID!,
-            amount: amount,
-            embeddata: "embeddata",
-            property: "property info"));
-    PayRepository.createOrder(request).then((value) {
-      if (value != null) {
-        FlutterZaloPaySdk.payOrder(zpToken: value.data.zptranstoken)
-            .listen((event) {
-          switch (event) {
-            case FlutterZaloPayStatus.cancelled:
-              payResult = "User Huỷ Thanh Toán";
-              Future.delayed(const Duration(seconds: 2), () {
-                Get.snackbar("Trạng thái", payResult);
-              });
-              break;
-            case FlutterZaloPayStatus.success:
-              payResult = "Thanh toán thành công";
-              QueryOrder query = QueryOrder(
-                  record: QueryRecord(
-                      userId: authRepository.userID!,
-                      apptransid: value.apptransid,
-                      postId: "dd"));
-              PayRepository.createQuery(query).then((value) {
-                if (value != null && value == true) {
-                  Get.snackbar("Trạng thái", payResult);
-                } else {
-                  Get.snackbar("Trạng thái", "Thanh toán thất bại");
-                }
-              });
-              break;
-            case FlutterZaloPayStatus.failed:
-              payResult = "Thanh toán thất bại";
-              Future.delayed(const Duration(seconds: 2), () {
-                Get.snackbar("Trạng thái", payResult);
-              });
-              break;
-            default:
-              payResult = "Thanh toán thất bại";
-              Get.snackbar("Trạng thái", payResult);
-              break;
-          }
-        });
-      }
-    });
-  }
+  // pay() async {
+  // CreateOrderRequest request = CreateOrderRequest(
+  //     record: Record(
+  //         userId: authRepository.userID!,
+  //         amount: amount,
+  //         embeddata: "embeddata",
+  //         property: "property info"))
+  //         Record(userId: authRepository.userID!, membershipPackageId: membershipPackageId, numOfSubscriptionMonth: numOfSubscriptionMonth)
+  // PayRepository.createOrder(request).then((value) {
+  //   if (value != null) {
+  //     FlutterZaloPaySdk.payOrder(zpToken: value.data.zptranstoken)
+  //         .listen((event) {
+  //       switch (event) {
+  //         case FlutterZaloPayStatus.cancelled:
+  //           payResult = "User Huỷ Thanh Toán";
+  //           Future.delayed(const Duration(seconds: 2), () {
+  //             Get.snackbar("Trạng thái", payResult);
+  //           });
+  //           break;
+  //         case FlutterZaloPayStatus.success:
+  //           payResult = "Thanh toán thành công";
+  //           QueryOrder query = QueryOrder(
+  //               record: QueryRecord(
+  //                   userId: authRepository.userID!,
+  //                   apptransid: value.apptransid,
+  //                   postId: "dd"));
+  //           PayRepository.createQuery(query).then((value) {
+  //             if (value != null && value == true) {
+  //               Get.snackbar("Trạng thái", payResult);
+  //             } else {
+  //               Get.snackbar("Trạng thái", "Thanh toán thất bại");
+  //             }
+  //           });
+  //           break;
+  //         case FlutterZaloPayStatus.failed:
+  //           payResult = "Thanh toán thất bại";
+  //           Future.delayed(const Duration(seconds: 2), () {
+  //             Get.snackbar("Trạng thái", payResult);
+  //           });
+  //           break;
+  //         default:
+  //           payResult = "Thanh toán thất bại";
+  //           Get.snackbar("Trạng thái", payResult);
+  //           break;
+  //       }
+  //     });
+  //   }
+  // });
 }

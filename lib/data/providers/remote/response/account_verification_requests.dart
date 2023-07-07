@@ -13,8 +13,7 @@ class AccountVerificationResponse {
   String dob;
   String identityCardNo;
   DateTime identityCardIssuedDate;
-  String placeOfOrigin;
-  String placeOfResidence;
+  String issuedBy;
 
   AccountVerificationResponse({
     required this.id,
@@ -31,8 +30,7 @@ class AccountVerificationResponse {
     required this.dob,
     required this.identityCardNo,
     required this.identityCardIssuedDate,
-    required this.placeOfOrigin,
-    required this.placeOfResidence,
+    required this.issuedBy,
   });
 
   factory AccountVerificationResponse.fromJson(Map<String, dynamic> json) {
@@ -51,8 +49,7 @@ class AccountVerificationResponse {
       dob: json['dob'] as String,
       identityCardNo: json['identity_card_no'] as String,
       identityCardIssuedDate: DateTime.parse(json['identity_card_issued_date']),
-      placeOfOrigin: json['place_of_origin'] as String,
-      placeOfResidence: json['place_of_residence'] as String,
+      issuedBy: json['issued_by'] as String,
     );
   }
 }

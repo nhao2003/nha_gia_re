@@ -75,7 +75,7 @@ class _AdminPostScreenState extends State<AdminPostScreen>
                             setState(() {
                               controller.isAutoPost = val;
                             });
-                            controller.pay();
+                            // controller.pay();
                           }),
                     ]),
               ),

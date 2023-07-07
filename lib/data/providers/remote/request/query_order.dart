@@ -29,7 +29,7 @@ class QueryRecord {
   QueryRecord({
     required this.userId,
     required this.apptransid,
-    required this.postId,
+    this.postId = "",
   });
 
   factory QueryRecord.fromJson(Map<String, dynamic> json) => QueryRecord(

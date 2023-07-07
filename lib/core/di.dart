@@ -16,6 +16,6 @@ Future<void> initAppModule() async {
   GetIt.instance.registerLazySingleton(() => UserRepository(remoteDataSource));
   GetIt.instance.registerLazySingleton(() => PostRepository(remoteDataSource));
   GetIt.instance.registerLazySingleton(() => AdminRepository(remoteDataSource));
-  GetIt.instance.registerLazySingleton(() => NotificationRepository());
+  GetIt.instance.registerLazySingleton(() => NotificationRepository(remoteDataSource));
   GetIt.instance.registerLazySingleton(() => SettingsRepository());
 }

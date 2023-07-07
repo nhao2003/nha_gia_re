@@ -4,13 +4,18 @@ const animationsPath = 'assets/animations';
 
 class Assets {
   Assets._();
+  static const String appLogoLight = '$imagePath/ic_app_logo_light.png';
+  static const String appLogoDark = '$imagePath/ic_app_logo_dark.png';
+  static const String logoLight = '$imagePath/logo_light.png';
+  static const String logoDark = '$imagePath/logo_dark.png';
+  static const String blueTick = '$imagePath/blue_tick.png';
   static const String landmark_81 = '$imagePath/landmark_81.png';
   static const String emptyChat = '$imagePath/pana.png';
   static const String avatar_1 = '$imagePath/3D Avatars/1.png';
   static const String avatar_2 = '$imagePath/3D Avatars/2.png';
   static const String avatar_3 = '$imagePath/3D Avatars/3.png';
   static const String avatar_4 = '$imagePath/3D Avatars/4.png';
-  static const String avatar_5 = '$imagePath/3D Avatars/5.png';
+  static const String avatar_5 = '$imagePath/3D Avatars/logo_dark.png';
   static const String avatar_6 = '$imagePath/3D Avatars/6.png';
   static const String avatar_7 = '$imagePath/3D Avatars/7.png';
   static const String avatar_8 = '$imagePath/3D Avatars/8.png';

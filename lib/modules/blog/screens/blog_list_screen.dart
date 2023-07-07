@@ -40,7 +40,7 @@ class _BlogListScreenState extends State<BlogListScreen> {
                 child: CircularProgressIndicator(),
               );
             }
-            List<Blog> data = snapshot.data!;
+            RxList<Blog> data = snapshot.data!.obs;
             return ListView.builder(
               itemCount: data.length,
               itemBuilder: (BuildContext context, int index) {
@@ -50,6 +50,11 @@ class _BlogListScreenState extends State<BlogListScreen> {
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     child: InkWell(
                       onTap: () {
+                        _controller.updateViewBlog(data[index].id);
+                        setState(() {
+                          data[index].view++;
+                        });
+                        debugPrint(data[index].view.toString());
                         Get.toNamed(
                           AppRoutes.blog_screen_detail,
                           arguments: data[index],
@@ -109,11 +114,11 @@ class _BlogListScreenState extends State<BlogListScreen> {
                                     const SizedBox(
                                       width: 5,
                                     ),
-                                    Text(
+                                    Obx(() =>Text(
                                       "${data[index].view} lượt xem",
                                       style: AppTextStyles.roboto12regular
                                           .copyWith(color: AppColors.grey),
-                                    )
+                                    )),
                                   ],
                                 ),
                                 const SizedBox(height: 4),

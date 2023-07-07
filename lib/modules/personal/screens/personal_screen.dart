@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/models/properties/post.dart';
 import 'package:nha_gia_re/global_widgets/infor_card.dart';
+import 'package:nha_gia_re/global_widgets/user_name_widget.dart';
 import 'package:nha_gia_re/modules/personal/personal_controller.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -58,9 +59,12 @@ class _PersonalScreenState extends State<PersonalScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            UsernameWithTickLabel(
+                              labelSize: 18,
                               _controller.userInfo.fullName!,
-                              style: AppTextStyles.roboto20semiBold,
+                              style: AppTextStyles.roboto20semiBold.copyWith(
+                                color: AppColors.black,
+                              ),
                             ),
                             SizedBox(
                               height: 7.h,
@@ -226,9 +230,13 @@ class _PersonalScreenState extends State<PersonalScreen> {
                         SizedBox(
                           width: 5.w,
                         ),
-                        Text(
-                          _controller.userInfo.address.toString(),
-                          style: AppTextStyles.roboto14regular,
+                        Expanded(
+                          child: Text(
+                            _controller.userInfo.address.toString(),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyles.roboto14regular,
+                          ),
                         ),
                       ],
                     ),

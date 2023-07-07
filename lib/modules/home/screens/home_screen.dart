@@ -16,6 +16,7 @@ import '../../../data/enums/enums.dart';
 import '../../../data/models/properties/post.dart';
 import '../../search/widgets/my_search_delegate.dart';
 import '../home_controller.dart';
+import 'package:badges/badges.dart' as badges;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -75,40 +76,35 @@ class _HomeScreenState extends State<HomeScreen> {
                     .where(
                         (conversation) => conversation.numOfUnReadMessage != 0)
                     .toList();
-                final unreadCount = unreadConversations.length;
+                RxInt unreadCount = unreadConversations.length.obs;
 
-                return IconButton(
-                  onPressed: () {
-                    Get.toNamed(AppRoutes.conversation);
-                  },
-                  padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
-                  constraints: const BoxConstraints(),
-                  icon: Stack(
-                    children: [
-                      Image.asset(Assets.messCircle, width: 36),
-                      if (unreadCount > 0)
-                        Positioned(
-                          top: 0,
-                          right: 0,
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: AppColors.red,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Text(
-                              unreadCount.toString(),
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
+                return GestureDetector(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.conversation);
+                    },
+                    child: Obx(
+                      () => unreadCount.value == 0
+                          ? Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Image.asset(Assets.messCircle, width: 25),
+                            )
+                          : Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 13, right: 13),
+                              child: badges.Badge(
+                                position: badges.BadgePosition.topStart(
+                                    top: -8, start: 18),
+                                badgeContent: Text(
+                                  unreadCount.value.toString(),
+                                  style: AppTextStyles.roboto11Bold.copyWith(color: AppColors.white),
+                                ),
+                                badgeStyle: badges.BadgeStyle(
+                                  badgeColor: AppColors.red,
+                                ),
+                                child: Image.asset(Assets.messCircle, width: 25),
                               ),
                             ),
-                          ),
-                        ),
-                    ],
-                  ),
-                );
+                    ));
               }),
           GestureDetector(
             onTap: () {

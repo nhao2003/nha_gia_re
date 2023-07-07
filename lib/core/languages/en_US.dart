@@ -169,7 +169,7 @@ const Map<String, String> enLanguagePackage = {
   'Legal Document': 'Legal Document',
   'Apartment Type': 'Apartment Type',
   'Floor': 'Floor',
-  'Main Door Direction': 'Main Door Direction',
+  'Main Door Direction': 'Main Door Direction', 
   'Balcony Direction': 'Balcony Direction',
   'Corner Apartment': 'Corner Apartment',
   'm3': 'm3',
@@ -185,10 +185,13 @@ const Map<String, String> enLanguagePackage = {
   'Please log in again to refresh your session.':
       'Please log in again to refresh your session.',
   // notification
-  'suggest': 'You may be interested',
-  "expirationWarning": "Your post will expire in 1 days",
-  'rejectPost': 'Rejected',
-  'acceptPost': 'Approved',
+  'suggest' : 'You may be interested',
+   "expirationWarning" :  "Your post will expire in 1 days",
+   'rejectPost' : 'Rejected',
+   'acceptPost' : 'Approved',
+   'newFollower' : 'You just have a new follower',
+   'Posts Management' : 'Posts Management',
+    "No news has been posted." :  "No news has been posted.",
 
   // verification
   'Account verification': 'Account verification',

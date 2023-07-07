@@ -20,7 +20,7 @@ import '../../data/repositories/user_repository.dart';
 class PostDetailController extends GetxController {
   // code controller here
   // define variable and function
-  late Post post;
+  Post? post;
   late UserInfo userInfo;
   late List<Post> relatedPost;
   late bool isYourPost = false;
@@ -28,15 +28,6 @@ class PostDetailController extends GetxController {
   RxBool liked = false.obs;
   late RxInt numOfLikes = 0.obs;
 
-  void initArg(dynamic arg) {
-    if (arg is Post) {
-      post = arg;
-      var auth = GetIt.instance<AuthRepository>();
-      if (post.userID == auth.userID) {
-        isYourPost = true;
-      }
-    }
-  }
 
   Widget postDetail(Post post) {
     if (post is Apartment) {
@@ -54,7 +45,8 @@ class PostDetailController extends GetxController {
     }
   }
 
-  Future<List<dynamic>> init() async {
+  Future<List<dynamic>> init(dynamic arg) async {
+
     final repo = GetIt.instance<UserRepository>();
     PostRepository postRepo = GetIt.instance<PostRepository>();
     PostFilter filter = PostFilter(
@@ -62,12 +54,19 @@ class PostDetailController extends GetxController {
       postedBy: PostedBy.all,
       from: 0,
       to: 10,
-      provinceCode: post.address.cityCode,
+      provinceCode: post?.address.cityCode,
     );
+    if (arg is Post) {
+      post = arg;
+    }
+    if(arg is String)
+    {
+      post = await postRepo.getPostFromId(arg);
+    }
     final data = Future.wait([
-      repo.getUserInfo(post.userID),
-      postRepo.getPostDetail(post.id, post.type),
-      postRepo.hasLikePost(post.id),
+      repo.getUserInfo(post?.userID),
+      postRepo.getPostDetail(post!.id, post!.type),
+      postRepo.hasLikePost(post!.id),
       postRepo.getAllPosts(
         filter,
       )
@@ -79,14 +78,14 @@ class PostDetailController extends GetxController {
     PostRepository postRepo = GetIt.instance<PostRepository>();
     if (!liked.value && !isLoading) {
       isLoading = true;
-      await postRepo.likePost(post.id).then((value) {
+      await postRepo.likePost(post!.id).then((value) {
           liked.value = true;
           numOfLikes.value++;
         isLoading = false;
       });
     } else if (liked.value && !isLoading) {
       isLoading = true;
-      await postRepo.unlikePost(post.id).then((value) {
+      await postRepo.unlikePost(post!.id).then((value) {
           liked.value = false;  
           numOfLikes.value--;
         isLoading = false;

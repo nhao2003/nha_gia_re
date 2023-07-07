@@ -738,6 +738,7 @@ $$
 CREATE OR REPLACE FUNCTION approve_post(p_id uuid) RETURNS VOID AS $$
 DECLARE
     now_time TIMESTAMP := NOW();
+    sq RECORD;
 BEGIN
     -- Lấy ngày hôm nay
     now_time := timezone('Asia/Ho_Chi_Minh', now()) + INTERVAL '14 days';
@@ -746,31 +747,48 @@ BEGIN
     UPDATE post
     SET status = 'approved', expiry_date = now_time + INTERVAL '14 days', rejected_info = null
     WHERE id = p_id;
-    WITH sq AS
-      (
-        SELECT *
-        FROM post
-        WHERE id = p_id
-      )
-      SELECT net.http_post(
-        url := 'https://ldgecfuqlicdeuqijmbr.supabase.co/functions/v1/post-notification',
-        headers := '{"Content-Type": "application/json", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkZ2VjZnVxbGljZGV1cWlqbWJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODAyMzYyNzEsImV4cCI6MTk5NTgxMjI3MX0.V5CnCUKROCJ8WHV5SXQQPbWsEYanK0sgEPI9PBPsvz4"}'::jsonb,
-        body := concat('{"record": ', to_jsonb(sq), '}')::jsonb
-      ) as re
-      FROM sq;
+      SELECT *
+  INTO sq
+  FROM post
+  WHERE id = p_id;
+
+  PERFORM net.http_post(
+    url := 'https://ldgecfuqlicdeuqijmbr.supabase.co/functions/v1/post-notification',
+    headers := '{"Content-Type": "application/json", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkZ2VjZnVxbGljZGV1cWlqbWJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODAyMzYyNzEsImV4cCI6MTk5NTgxMjI3MX0.V5CnCUKROCJ8WHV5SXQQPbWsEYanK0sgEPI9PBPsvz4"}'::jsonb,
+    body := concat('{"record": ', to_jsonb(sq), '}')::jsonb
+  );
 
 END;
 $$ LANGUAGE plpgsql;
 
 --từ chối bài:
 CREATE OR REPLACE FUNCTION reject_post(p_id uuid, p_rejected_info VARCHAR) RETURNS VOID AS $$
+DECLARE
+    sq RECORD;
 BEGIN
     -- Cập nhật trạng thái và thông tin từ chối cho bài đăng
     UPDATE post
     SET status = 'rejected', rejected_info = p_rejected_info
     WHERE id = p_id;
+WITH sq AS
+  (
+    SELECT *
+    FROM post
+    WHERE id = p_id
+  )
+  SELECT *
+  INTO sq
+  FROM post
+  WHERE id = p_id;
+
+  PERFORM net.http_post(
+    url := 'https://ldgecfuqlicdeuqijmbr.supabase.co/functions/v1/post-notification',
+    headers := '{"Content-Type": "application/json", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkZ2VjZnVxbGljZGV1cWlqbWJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODAyMzYyNzEsImV4cCI6MTk5NTgxMjI3MX0.V5CnCUKROCJ8WHV5SXQQPbWsEYanK0sgEPI9PBPsvz4"}'::jsonb,
+    body := concat('{"record": ', to_jsonb(sq), '}')::jsonb
+  );
 
 END;
+
 $$ LANGUAGE plpgsql;
 
 
@@ -832,8 +850,7 @@ CREATE TABLE account_verification_requests (
   dob TIMESTAMP NOT NULL,
   identity_card_no TEXT NOT NULL,
   identity_card_issued_date TIMESTAMP NOT NULL,
-  place_of_origin TEXT NOT NULL,
-  place_of_residence TEXT NOT NULL,
+  issued_by TEXT NOT NULL,
   FOREIGN KEY (user_id) REFERENCES user_info(uid)
 );
 
@@ -851,6 +868,7 @@ CREATE TABLE transactions (
     time_stamp TIMESTAMP NOT NULL DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
     membership_package_id UUID NOT NULL REFERENCES membership_package(id),
     discount_id UUID REFERENCES discount(id),
+    amount NUMERIC NOT NULL,
     user_id UUID NOT NULL REFERENCES user_info(uid),
     num_of_subscription_month INTEGER NOT NULL
 );

@@ -11,6 +11,7 @@ import 'package:nha_gia_re/global_widgets/my_circular_process_indicator.dart';
 import 'package:nha_gia_re/modules/purchase/screens/purchase_payment_result_screen.dart';
 
 import '../../data/providers/remote/request/create_order_request.dart';
+import '../../data/providers/remote/request/query_order.dart';
 import '../../data/repositories/auth_repository.dart';
 import '../../data/repositories/pay_repository.dart';
 
@@ -18,20 +19,19 @@ class PurchaseController extends GetxController {
   void showPaymentSheet(MembershipPackage package) {}
   PayRepository repository = PayRepository();
 
-  void goToZaloPay(int amount) async {
+  void goToZaloPay(String packageId, int numOfMonth) async {
     log("Hello");
     String payResult = "";
     CreateOrderRequest request = CreateOrderRequest(
         record: Record(
-            userId: GetIt.instance<AuthRepository>().userID!,
-            amount: amount,
-            embeddata: "embeddata",
-            property: "property info"));
+      userId: GetIt.instance<AuthRepository>().userID!,
+      numOfSubscriptionMonth: numOfMonth,
+      membershipPackageId: packageId,
+    ));
     Get.dialog(const Center(child: MyCircularProgressIndicator()));
     await PayRepository.createOrder(request).then((value) {
       if (value != null) {
-        FlutterZaloPaySdk.payOrder(zpToken: value.data.zptranstoken)
-            .listen((event) {
+        FlutterZaloPaySdk.payOrder(zpToken: value.zptranstoken).listen((event) {
           switch (event) {
             case FlutterZaloPayStatus.cancelled:
               payResult = "User Huỷ Thanh Toán";
@@ -39,6 +39,19 @@ class PurchaseController extends GetxController {
               return;
             case FlutterZaloPayStatus.success:
               payResult = "Thanh toán thành công";
+              QueryOrder query = QueryOrder(
+                  record: QueryRecord(
+                userId: GetIt.instance<AuthRepository>().userID!,
+                apptransid: value.apptransid,
+              ));
+              PayRepository.createQuery(query).then((value) {
+                if (value != null) {
+                  Get.snackbar("Trạng thái", payResult);
+                } else {
+                  Get.snackbar("Trạng thái", "Thanh toán thất bại");
+                }
+              });
+
               Get.offAll(() => const PurchasePaymentResultScreen(true));
               return;
             case FlutterZaloPayStatus.failed:

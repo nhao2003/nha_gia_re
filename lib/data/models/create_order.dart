@@ -1,3 +1,8 @@
+// To parse this JSON data, do
+//
+//     final createOrderResponseModel = createOrderResponseModelFromJson(jsonString);
+
+import 'package:meta/meta.dart';
 import 'dart:convert';
 
 CreateOrderResponseModel createOrderResponseModelFromJson(String str) =>
@@ -7,44 +12,27 @@ String createOrderResponseModelToJson(CreateOrderResponseModel data) =>
     json.encode(data.toJson());
 
 class CreateOrderResponseModel {
-  final Data data;
+  final String zptranstoken;
+  final String orderurl;
+  final int returncode;
+  final String returnmessage;
   final String apptransid;
 
   CreateOrderResponseModel({
-    required this.data,
+    required this.zptranstoken,
+    required this.orderurl,
+    required this.returncode,
+    required this.returnmessage,
     required this.apptransid,
   });
 
   factory CreateOrderResponseModel.fromJson(Map<String, dynamic> json) =>
       CreateOrderResponseModel(
-        data: Data.fromJson(json["data"]),
-        apptransid: json["apptransid"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "data": data.toJson(),
-        "apptransid": apptransid,
-      };
-}
-
-class Data {
-  final String zptranstoken;
-  final String orderurl;
-  final int returncode;
-  final String returnmessage;
-
-  Data({
-    required this.zptranstoken,
-    required this.orderurl,
-    required this.returncode,
-    required this.returnmessage,
-  });
-
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
         zptranstoken: json["zptranstoken"],
         orderurl: json["orderurl"],
         returncode: json["returncode"],
         returnmessage: json["returnmessage"],
+        apptransid: json["apptransid"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -52,5 +40,6 @@ class Data {
         "orderurl": orderurl,
         "returncode": returncode,
         "returnmessage": returnmessage,
+        "apptransid": apptransid,
       };
 }
