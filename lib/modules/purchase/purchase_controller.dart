@@ -41,9 +41,9 @@ class PurchaseController extends GetxController {
               payResult = "Thanh toán thành công";
               QueryOrder query = QueryOrder(
                   record: QueryRecord(
-                      userId: GetIt.instance<AuthRepository>().userID!,
-                      apptransid: value.apptransid,
-                      postId: "dd"));
+                userId: GetIt.instance<AuthRepository>().userID!,
+                apptransid: value.apptransid,
+              ));
               PayRepository.createQuery(query).then((value) {
                 if (value != null) {
                   Get.snackbar("Trạng thái", payResult);
