@@ -16,6 +16,7 @@ class AdminPostController extends GetxController {
   late Future<List<Post>> rejectedPosts;
   bool isAutoPost = false;
   bool isEditing = false;
+  bool isLoading = false;
   late String payResult;
   GlobalKey formkey = GlobalKey();
   final authRepository = GetIt.instance<AuthRepository>();
@@ -83,8 +84,10 @@ class AdminPostController extends GetxController {
   //   }
   // }
 
-  void navigateToDetailSceen(Post post) {
-    Get.to(AppRoutes.admin_post_detail, arguments: post);
+  void navigateToDetailSceen(Post post, Function fun) {
+    Get.toNamed(AppRoutes.admin_post_detail, arguments: post)!.then((value) {
+      fun();
+    });
   }
 
   void navToVerification() {

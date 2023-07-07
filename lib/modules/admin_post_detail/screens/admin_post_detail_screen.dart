@@ -7,6 +7,7 @@ import 'package:nha_gia_re/core/extensions/integer_ex.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/values/assets_image.dart';
+import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/global_widgets/carousel_ad.dart';
 import 'package:nha_gia_re/modules/admin_post_detail/admin_post_detail_controller.dart';
 import 'package:nha_gia_re/modules/admin_post_manage/admin_post_controller.dart';
@@ -132,11 +133,19 @@ class _AdminPostDetailScreenState extends State<AdminPostDetailScreen> {
                             child: Center(
                               child: GestureDetector(
                                 onTap: () {
-                                  _controller.rejectInfo =
-                                      messageController.text;
-                                  _controller.rejectPost();
-                                  parentController.getRejectedPost();
-                                  Get.back();
+                                  if (!_controller.isExecute) {
+                                    _controller.rejectInfo =
+                                        messageController.text;
+                                    if (_controller.rejectInfo.trim().isEmpty) {
+                                      Get.snackbar("Trạng thái",
+                                          "Vui lòng thêm lý do từ chối");
+                                    } else {
+                                      _controller.isExecute = true;
+                                      Navigator.pop(context);
+                                      _controller.rejectPost();
+                                      Get.back();
+                                    }
+                                  }
                                 },
                                 child: Text(
                                   "Hoàn thành",
@@ -343,25 +352,27 @@ class _AdminPostDetailScreenState extends State<AdminPostDetailScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      _displayBottomSheet(context);
-                    },
-                    child: Container(
-                      height: 35.h,
-                      width: 150.w,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14.h),
-                          color: AppColors.backgroundColor),
-                      child: Center(
-                        child: Text(
-                          "Từ chối",
-                          style: AppTextStyles.roboto16semiBold
-                              .apply(color: AppColors.gery2),
-                        ),
-                      ),
-                    ),
-                  ),
+                  _controller.post.status == PostStatus.pending
+                      ? GestureDetector(
+                          onTap: () {
+                            _displayBottomSheet(context);
+                          },
+                          child: Container(
+                            height: 35.h,
+                            width: 150.w,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(14.h),
+                                color: AppColors.backgroundColor),
+                            child: Center(
+                              child: Text(
+                                "Từ chối",
+                                style: AppTextStyles.roboto16semiBold
+                                    .apply(color: AppColors.gery2),
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox.shrink(),
                   SizedBox.square(
                     dimension: 20.h,
                   ),
@@ -376,17 +387,25 @@ class _AdminPostDetailScreenState extends State<AdminPostDetailScreen> {
                         child: GestureDetector(
                           onTap: () {
                             if (!_controller.isExecute) {
-                              _controller.isExecute = true;
+                              setState(() {
+                                _controller.isExecute = true;
+                              });
                               _controller.approvePost();
-                              parentController.getPendingPost();
+                              setState(() {
+                                _controller.isExecute = false;
+                              });
+
+                              // parentController.getAllPosts();
                               Get.back();
                             }
                           },
-                          child: Text(
-                            "Duyệt bài",
-                            style: AppTextStyles.roboto16semiBold
-                                .apply(color: AppColors.primaryColor),
-                          ),
+                          child: _controller.isExecute
+                              ? CircularProgressIndicator()
+                              : Text(
+                                  "Duyệt bài",
+                                  style: AppTextStyles.roboto16semiBold
+                                      .apply(color: AppColors.primaryColor),
+                                ),
                         ),
                       ),
                     ),
