@@ -77,7 +77,7 @@ class PayRepository {
     final membershipPackage =
         MembershipPackage.fromJson(data['membership_package']);
     final membershipPackageSubscription =
-        data['membership_package_subscription'] != null
+    data['membership_package_subscription'] != null && data['membership_package_subscription'].isNotEmpty
             ? MembershipPackageSubscription.fromJson(
                 data['membership_package_subscription'].first)
             : null;

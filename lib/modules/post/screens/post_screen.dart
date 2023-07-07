@@ -114,9 +114,9 @@ class PostScreenState extends State<PostScreen> {
                                     child: Text(entry.value),
                                   );
                                 }).toList(),
-                                onChanged: (value) {
+                                onChanged: controller.isReachLimitPost ? null : (value) {
                                   if (value != null) {
-                                    controller.setVisibility(value);
+                                    controller.setVisibility(value as PropertyType);
                                   }
                                 },
                                 onSaved: (value) {

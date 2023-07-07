@@ -1046,7 +1046,6 @@ class RemoteDataSource {
         .limit(1));
     return data.first;
   }
-
   Future<List<Map<String, dynamic>>> getUserTransactions(String uid) async {
     return List<Map<String, dynamic>>.from(await Supabase.instance.client
         .from('transactions')
@@ -1119,5 +1118,12 @@ class RemoteDataSource {
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<bool> checkMonthlyPostLimit() async {
+    final data = await supabaseClient.rpc('check_monthly_post_limit', params: {
+      'uid': supabaseClient.auth.currentUser!.id,
+    });
+    return data;
   }
 }
