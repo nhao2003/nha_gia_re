@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:nha_gia_re/core/extensions/double_ex.dart';
-import 'package:nha_gia_re/core/extensions/integer_ex.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
-import 'package:nha_gia_re/data/models/properties/post.dart';
 import 'package:nha_gia_re/modules/admin_post_manage/screens/auto_post_form.dart';
 import 'package:nha_gia_re/modules/post_details/widget/details.dart';
 
@@ -17,7 +14,7 @@ class AutoPost extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           left: 8,
           top: 15,
         ),
@@ -33,14 +30,14 @@ class AutoPost extends StatelessWidget {
                   "Nội dung thanh toán mặc định",
                   style: AppTextStyles.roboto14regular,
                 ),
-                SizedBox.square(
+                const SizedBox.square(
                   dimension: 25,
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => AuToFormScreen());
+                    Get.to(() => const AuToFormScreen());
                   },
-                  child: Icon(
+                  child: const Icon(
                     Icons.edit_note,
                     color: Colors.grey,
                     size: 30,
@@ -48,11 +45,11 @@ class AutoPost extends StatelessWidget {
                 )
               ],
             ),
-            SizedBox.square(
+            const SizedBox.square(
               dimension: 10,
             ),
             GridView.count(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               childAspectRatio: 4,
               crossAxisCount: 2,
               shrinkWrap: true,

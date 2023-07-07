@@ -1,5 +1,4 @@
 class AccountVerificationRequests {
-  String id;
   String userId;
   DateTime requestDate;
   String frontIdentityCardImageLink;
@@ -13,7 +12,6 @@ class AccountVerificationRequests {
   String issuedBy;
 
   AccountVerificationRequests({
-    required this.id,
     required this.userId,
     required this.requestDate,
     required this.frontIdentityCardImageLink,
@@ -29,7 +27,6 @@ class AccountVerificationRequests {
 
   factory AccountVerificationRequests.fromJson(Map<String, dynamic> json) {
     return AccountVerificationRequests(
-      id: json['id'] as String,
       userId: json['user_id'] as String,
       requestDate: DateTime.parse(json['request_date']),
       frontIdentityCardImageLink:

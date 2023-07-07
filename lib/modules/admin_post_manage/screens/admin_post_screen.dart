@@ -1,25 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
-import 'package:nha_gia_re/data/models/province.dart';
 import 'package:nha_gia_re/modules/admin_post_manage/admin_post_controller.dart';
 import 'package:nha_gia_re/modules/admin_post_manage/widgets/auto_post.dart';
-import 'package:nha_gia_re/modules/post/property_controller.dart';
-import 'package:nha_gia_re/modules/post/screens/post_screen.dart';
-import 'package:nha_gia_re/modules/post/widgets/dropdownfied.dart';
-
-import '../../post_management/post_management_controller.dart';
 
 class AdminPostScreen extends StatefulWidget {
-  AdminPostScreen({Key? key}) : super(key: key);
+  const AdminPostScreen({Key? key}) : super(key: key);
 
   @override
   State<AdminPostScreen> createState() => _AdminPostScreenState();
@@ -48,17 +38,25 @@ class _AdminPostScreenState extends State<AdminPostScreen>
           style: AppTextStyles.roboto16regular,
         ),
         backgroundColor: AppColors.primaryColor,
+        actions: [
+          IconButton(
+            onPressed: () {
+              controller.navToVerification();
+            },
+            icon: const Icon(Icons.switch_account),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
           decoration: BoxDecoration(color: AppColors.white),
-          child: ListView(
+          child: Column(
             children: [
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12.w),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
                   color: AppColors.backgroundColor,
                 ),
                 child: Row(
@@ -82,7 +80,9 @@ class _AdminPostScreenState extends State<AdminPostScreen>
               SizedBox.square(
                 dimension: 10.h,
               ),
-              controller.isAutoPost ? AutoPost() : const SizedBox.shrink(),
+              controller.isAutoPost
+                  ? const AutoPost()
+                  : const SizedBox.shrink(),
               SizedBox.square(
                 dimension: 10.h,
               ),
@@ -99,11 +99,12 @@ class _AdminPostScreenState extends State<AdminPostScreen>
                   indicatorSize: TabBarIndicatorSize.label,
                   indicator: BoxDecoration(
                       color: AppColors.secondary,
-                      borderRadius: BorderRadius.all(Radius.circular(12))),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(12))),
                   controller: tabController,
                   tabs: [
                     Tab(
-                      child: Container(
+                      child: SizedBox(
                         // color: AppColors.backgroundColor,
                         height: height * 0.3,
                         child: Center(
@@ -115,7 +116,7 @@ class _AdminPostScreenState extends State<AdminPostScreen>
                       ),
                     ),
                     Tab(
-                      child: Container(
+                      child: SizedBox(
                         // color: AppColors.backgroundColor,
                         height: height * 0.3,
                         child: Center(
@@ -132,11 +133,9 @@ class _AdminPostScreenState extends State<AdminPostScreen>
               SizedBox.square(
                 dimension: 10.h,
               ),
-              SizedBox(
-                height: height * 0.5,
-                width: double.maxFinite,
+              Expanded(
                 child: ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
                   child: TabBarView(
                     controller: tabController,
                     children: [
@@ -148,7 +147,8 @@ class _AdminPostScreenState extends State<AdminPostScreen>
                             var posts = snapshot.data;
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return Center(child: CircularProgressIndicator());
+                              return const Center(
+                                  child: CircularProgressIndicator());
                             } else if (snapshot.hasError) {
                               return Center(
                                 child: Text(
@@ -177,7 +177,7 @@ class _AdminPostScreenState extends State<AdminPostScreen>
                                     child: GestureDetector(
                                       onTap: () {
                                         controller.navigateToDetailSceen(
-                                            posts![index]);
+                                            posts[index]);
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(
@@ -227,7 +227,7 @@ class _AdminPostScreenState extends State<AdminPostScreen>
                                                 style: AppTextStyles
                                                     .roboto16semiBold,
                                               ),
-                                              SizedBox.square(
+                                              const SizedBox.square(
                                                 dimension: 10,
                                               ),
                                               Text(post.description,
@@ -250,7 +250,7 @@ class _AdminPostScreenState extends State<AdminPostScreen>
                                                 style: AppTextStyles
                                                     .roboto12regular,
                                               ),
-                                              Icon(Ionicons
+                                              const Icon(Ionicons
                                                   .arrow_forward_circle_outline),
                                             ],
                                           ),
@@ -272,7 +272,8 @@ class _AdminPostScreenState extends State<AdminPostScreen>
                             var posts = snapshot.data;
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return Center(child: CircularProgressIndicator());
+                              return const Center(
+                                  child: CircularProgressIndicator());
                             } else if (snapshot.hasError) {
                               return Center(
                                 child: Text(
@@ -351,7 +352,7 @@ class _AdminPostScreenState extends State<AdminPostScreen>
                                                 style: AppTextStyles
                                                     .roboto16semiBold,
                                               ),
-                                              SizedBox.square(
+                                              const SizedBox.square(
                                                 dimension: 10,
                                               ),
                                               Text(post.description,
@@ -374,7 +375,7 @@ class _AdminPostScreenState extends State<AdminPostScreen>
                                                 style: AppTextStyles
                                                     .roboto12regular,
                                               ),
-                                              Icon(Ionicons
+                                              const Icon(Ionicons
                                                   .arrow_forward_circle_outline),
                                             ],
                                           ),
@@ -391,6 +392,9 @@ class _AdminPostScreenState extends State<AdminPostScreen>
                     ],
                   ),
                 ),
+              ),
+              SizedBox.square(
+                dimension: 10.h,
               ),
             ],
           ),

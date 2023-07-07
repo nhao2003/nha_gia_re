@@ -95,7 +95,10 @@ class Assets {
   static const String hochieu_front = '$imagePath/hochieu_front.png';
   static const String hochieu_back = '$imagePath/hochieu_back.png';
 
+  // loti
   static const String payment_failure = '$animationsPath/payment-failure.json';
   static const String payment_success = '$animationsPath/payment_success.json';
   static const String loading = '$animationsPath/loading.json';
+  static const String waiting = '$animationsPath/waiting_loti.json';
+  static const String card_reject = '$animationsPath/card-rejected_loti.json';
 }

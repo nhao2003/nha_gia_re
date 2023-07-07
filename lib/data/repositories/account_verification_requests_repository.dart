@@ -6,13 +6,41 @@ import '../providers/remote/request/account_verification_requests.dart';
 class AccountVerificationRepository {
   final RemoteDataSource _remoteDataSource;
   AccountVerificationRepository(this._remoteDataSource);
-
+  String checkResult = "";
   Future<void> createNewRequest(AccountVerificationRequests request) async {
     await _remoteDataSource.sendAccountVerificationRequest(request);
   }
 
   Future<List<AccountVerificationResponse>> getNewRequests() async {
-    final data = await _remoteDataSource.getAccountVerificationRequest();
+    final data = await _remoteDataSource.getNewAccountVerificationRequest();
     return data.map((e) => AccountVerificationResponse.fromJson(e)).toList();
+  }
+
+  Future<List<AccountVerificationResponse>> getUserRequests() async {
+    final data = await _remoteDataSource.getUserAccountVerificationRequest();
+    return data.map((e) => AccountVerificationResponse.fromJson(e)).toList();
+  }
+
+  Future<String> checkUserIsWaiting() async {
+    // 0: la chua co
+    // 1: la dang duyet
+    // 2: la duyet duoc roi
+    // chuoi ly do: la duyet tu choi
+    List<AccountVerificationResponse> requests = await getUserRequests();
+    if (requests.isEmpty) {
+      //chua co
+      return "0";
+    } else {
+      final req = requests.first;
+      if (req.reviewedAt == null) {
+        return "1";
+      } else {
+        if (req.isVerified == true) {
+          return "2";
+        } else {
+          return req.rejectedInfo!;
+        }
+      }
+    }
   }
 }

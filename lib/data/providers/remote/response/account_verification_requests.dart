@@ -1,7 +1,7 @@
 class AccountVerificationResponse {
   String id;
   bool isVerified;
-  DateTime reviewedAt;
+  DateTime? reviewedAt;
   String? rejectedInfo;
   String userId;
   DateTime requestDate;
@@ -36,13 +36,15 @@ class AccountVerificationResponse {
   factory AccountVerificationResponse.fromJson(Map<String, dynamic> json) {
     return AccountVerificationResponse(
       id: json['id'] as String,
-      isVerified: json['is_verified '] as bool,
-      reviewedAt: DateTime.parse(json['reviewed_at '] as String),
-      rejectedInfo: json['rejectedInfo '] as String,
+      isVerified: json['is_verified'] as bool,
+      reviewedAt: DateTime.tryParse(json['reviewed_at']??""),
+      rejectedInfo: json['rejected_info'],
       userId: json['user_id'] as String,
       requestDate: DateTime.parse(json['request_date']),
-      frontIdentityCardImageLink: json['front_identity_card_image_link'] as String,
-      backIdentityCardImageLink: json['back_identity_card_image_link'] as String,
+      frontIdentityCardImageLink:
+          json['front_identity_card_image_link'] as String,
+      backIdentityCardImageLink:
+          json['back_identity_card_image_link'] as String,
       portraitImagePath: json['portrait_image_path'] as String,
       fullName: json['full_name'] as String,
       sex: json['sex'] as bool,

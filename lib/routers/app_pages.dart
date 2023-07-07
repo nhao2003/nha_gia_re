@@ -5,6 +5,8 @@ import 'package:nha_gia_re/modules/admin_post_manage/admin_post_binding.dart';
 import 'package:nha_gia_re/modules/admin_post_manage/screens/admin_post_screen.dart';
 import 'package:nha_gia_re/modules/address_form/address_binding.dart';
 import 'package:nha_gia_re/modules/address_form/screens/address.dart';
+import 'package:nha_gia_re/modules/admin_verification/admin_verification_binding.dart';
+import 'package:nha_gia_re/modules/admin_verification/screens/admin_verification_screen.dart';
 import 'package:nha_gia_re/modules/blog/screens/blog_detail_screen.dart';
 import 'package:nha_gia_re/modules/blog/screens/blog_list_screen.dart';
 import 'package:nha_gia_re/modules/maps/screens/map_picker_screen.dart';
@@ -30,6 +32,8 @@ import 'package:nha_gia_re/modules/chat/chat_binding.dart';
 import 'package:nha_gia_re/modules/chat/screens/chat_screen.dart';
 import 'package:nha_gia_re/modules/search/screens/search_screen.dart';
 import 'package:nha_gia_re/modules/verification/screens/verification_card_screen.dart';
+import 'package:nha_gia_re/modules/verification/screens/verification_reject_screen.dart';
+import 'package:nha_gia_re/modules/verification/screens/verification_waiting_screen.dart';
 import 'package:nha_gia_re/modules/verification/verification_binding.dart';
 import '../modules/blog/blog_binding.dart';
 import '../modules/conversations/conversation_binding.dart';
@@ -114,7 +118,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.notification,
-      page: () => NotificationScreen(),
+      page: () => const NotificationScreen(),
       binding: NotificationBinding(),
     ),
     GetPage(
@@ -159,7 +163,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.admin_post,
-      page: () => AdminPostScreen(),
+      page: () => const AdminPostScreen(),
       binding: AdminPostBinding(),
     ),
     GetPage(
@@ -196,6 +200,21 @@ abstract class AppPages {
       name: AppRoutes.verification_info_screen,
       page: () => verificationInfoScreen(),
       binding: VerificationBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.verification_waiting_screen,
+      page: () => const VerificationWaitingScreen(),
+      binding: VerificationBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.verification_reject_screen,
+      page: () => VerificationRejectScreen(),
+      binding: VerificationBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.admin_verification,
+      page: () => AdminVerificationScreen(),
+      binding: AdminVerificationBinding(),
     ),
   ];
 }

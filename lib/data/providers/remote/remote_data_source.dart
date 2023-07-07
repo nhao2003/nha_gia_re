@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/core/extensions/string_ex.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
@@ -12,6 +13,8 @@ import 'package:nha_gia_re/data/providers/remote/request/account_verification_re
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../repositories/auth_repository.dart';
 
 class RemoteDataSource {
   static const String tableApartments = 'apartments';
@@ -79,7 +82,7 @@ class RemoteDataSource {
     }
   }
 
-    Future<bool> isVerifiedBadge(String uid) async {
+  Future<bool> isVerifiedBadge(String uid) async {
     Map<String, dynamic> request = {
       'uid': uid,
     };
@@ -1019,11 +1022,22 @@ class RemoteDataSource {
         .insert(request.toJson());
   }
 
-  Future<List<Map<String, dynamic>>> getAccountVerificationRequest() async {
+  Future<List<Map<String, dynamic>>> getNewAccountVerificationRequest() async {
     final res = await supabaseClient
         .from(tableAccountVerificationRequest)
         .select()
-        .eq("reviewed_at", null);
+        .eq("reviewed_at", null)
+        .order('request_date', ascending: false);
+    return List<Map<String, dynamic>>.from(res);
+  }
+
+  Future<List<Map<String, dynamic>>> getUserAccountVerificationRequest() async {
+    final auth = GetIt.instance<AuthRepository>();
+    final res = await supabaseClient
+        .from(tableAccountVerificationRequest)
+        .select()
+        .eq("user_id", auth.userID)
+        .order('request_date', ascending: false).limit(1);
     return List<Map<String, dynamic>>.from(res);
   }
 }

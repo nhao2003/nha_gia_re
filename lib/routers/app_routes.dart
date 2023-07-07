@@ -31,6 +31,7 @@ abstract class AppRoutes {
   static const post_detail = '/post_detail/:id';
   static const admin_post = '/admin_post';
   static const admin_post_detail = '/admin_post_detail';
+  static const admin_verification = '/admin_verification';
 
   static const map_view_screen = '/map_view_screen';
   static const map_picker_screen = '/map_picker_screen';
@@ -43,6 +44,8 @@ abstract class AppRoutes {
   static const verification_card_screen = '/setting/verification_card';
   static const verification_portrait_screen = '/setting/verification_portrait';
   static const verification_info_screen = '/setting/verification_info';
+  static const verification_waiting_screen = '/setting/verification_waiting';
+  static const verification_reject_screen = '/setting/verification_reject';
   static String getPostRoute(String id) {
     return '/post_detail/$id';
   }

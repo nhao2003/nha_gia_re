@@ -8,6 +8,7 @@ import 'package:nha_gia_re/data/services/localization_service.dart';
 import 'package:nha_gia_re/data/services/onesignal_service.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../data/repositories/account_verification_requests_repository.dart';
 import '../../data/repositories/user_repository.dart';
 
 class SettingsController extends GetxController {
@@ -132,6 +133,13 @@ class SettingsController extends GetxController {
         ));
   }
 
+  AccountVerificationRepository verifyRepo =
+      GetIt.instance<AccountVerificationRepository>();
+
+  Future<String> checkUserIsWaiting() async {
+    return await verifyRepo.checkUserIsWaiting();
+  }
+
   void navToUserProfile() {
     Get.toNamed(AppRoutes.userProfile, arguments: userInfo);
   }
@@ -148,8 +156,18 @@ class SettingsController extends GetxController {
     Get.toNamed(AppRoutes.change_lang);
   }
 
-  void navToVerification() {
-    Get.toNamed(AppRoutes.verification_info_screen);
+  Future<String?> navToVerification() async {
+    var data = await Get.toNamed(AppRoutes.verification_card_screen);
+    return data;
+  }
+
+  Future<String?> navToWaitingVerification() async {
+    var data = await Get.toNamed(AppRoutes.verification_waiting_screen);
+    return data;
+  }
+
+  void navToRejectVerification(String rejectInfo) {
+    Get.toNamed(AppRoutes.verification_reject_screen, arguments: rejectInfo);
   }
 
   void navToPurchase() {

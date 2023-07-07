@@ -29,45 +29,44 @@ class _SettingsScreenState extends State<SettingsScreen> {
         title: Text('Settings'.tr),
         actions: [
           StreamBuilder(
-              stream: GetIt.instance<ChatRepository>().conversationStream,
-              builder: (context, snapShot) {
-                final conversations = snapShot.data ?? [];
-                final unreadConversations = conversations
-                    .where(
-                        (conversation) => conversation.numOfUnReadMessage != 0)
-                    .toList();
-                RxInt unreadCount = unreadConversations.length.obs;
+            stream: GetIt.instance<ChatRepository>().conversationStream,
+            builder: (context, snapShot) {
+              final conversations = snapShot.data ?? [];
+              final unreadConversations = conversations
+                  .where((conversation) => conversation.numOfUnReadMessage != 0)
+                  .toList();
+              RxInt unreadCount = unreadConversations.length.obs;
 
-                return GestureDetector(
-                    onTap: () {
-                      Get.toNamed(AppRoutes.conversation);
-                    },
-                    child: Obx(
-                      () => unreadCount.value == 0
-                          ? Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: Image.asset(Assets.messCircle, width: 25),
-                            )
-                          : Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 13, right: 13),
-                              child: badges.Badge(
-                                position: badges.BadgePosition.topStart(
-                                    top: -8, start: 18),
-                                badgeContent: Text(
-                                  unreadCount.value.toString(),
-                                  style: AppTextStyles.roboto11Bold
-                                      .copyWith(color: AppColors.white),
-                                ),
-                                badgeStyle: badges.BadgeStyle(
-                                  badgeColor: AppColors.red,
-                                ),
-                                child:
-                                    Image.asset(Assets.messCircle, width: 25),
-                              ),
+              return GestureDetector(
+                onTap: () {
+                  Get.toNamed(AppRoutes.conversation);
+                },
+                child: Obx(
+                  () => unreadCount.value == 0
+                      ? Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: Image.asset(Assets.messCircle, width: 25),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.only(top: 13, right: 13),
+                          child: badges.Badge(
+                            position: badges.BadgePosition.topStart(
+                                top: -8, start: 18),
+                            badgeContent: Text(
+                              unreadCount.value.toString(),
+                              style: AppTextStyles.roboto11Bold
+                                  .copyWith(color: AppColors.white),
                             ),
-                    ));
-              }),
+                            badgeStyle: badges.BadgeStyle(
+                              badgeColor: AppColors.red,
+                            ),
+                            child: Image.asset(Assets.messCircle, width: 25),
+                          ),
+                        ),
+                ),
+              );
+            },
+          ),
         ],
       ),
       body: Column(
@@ -109,13 +108,49 @@ class _SettingsScreenState extends State<SettingsScreen> {
               color: AppColors.black,
             ),
           ),
-          ListTile(
-            title: Text('Account verification'.tr),
-            onTap: _controller.navToVerification,
-            leading: Icon(
-              Icons.admin_panel_settings_outlined,
-              color: AppColors.black,
-            ),
+          FutureBuilder<String>(
+            future: _controller.checkUserIsWaiting(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              } else {
+                if (snapshot.error != null) {
+                  return const Center(
+                    child: Text("error"),
+                  );
+                } else {
+                  _controller.verifyRepo.checkResult = snapshot.data!;
+                  if (_controller.verifyRepo.checkResult == "2") {
+                    // duyet duoc roi
+                    return Container();
+                  } else {
+                    return ListTile(
+                      title: Text('Account verification'.tr),
+                      onTap: () {
+                        if (_controller.verifyRepo.checkResult == "0") {
+                          //chua co
+                          _controller.navToVerification().then((value) {
+                            setState(() {});
+                          });
+                        } else if (_controller.verifyRepo.checkResult == "1") {
+                          // dang cho duyet
+                          _controller.navToWaitingVerification().then((value) {
+                            setState(() {});
+                          });
+                        } else {
+                          // tu choi
+                          _controller.navToRejectVerification(snapshot.data!);
+                        }
+                      },
+                      leading: Icon(
+                        Icons.admin_panel_settings_outlined,
+                        color: AppColors.black,
+                      ),
+                    );
+                  }
+                }
+              }
+            },
           ),
           ListTile(
             title: Text('Premium'.tr),
