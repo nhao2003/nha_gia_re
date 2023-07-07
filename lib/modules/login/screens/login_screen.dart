@@ -34,9 +34,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(Assets.logoLight, width: 150,height: 150,),
-                  const SizedBox(
-                    height: 50,
-                  ),
                   Obx(() => TextFormField(
                         controller: _controller.loginEmail,
                         decoration: InputDecoration(
@@ -106,25 +103,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text('Forgot password?'.tr)),
                     ],
                   ),
-                  Text(
-                    "or login with".tr,
-                    style: AppTextStyles.roboto16regular,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: Image.asset(Assets.facebook),
-                      ),
-                      IconButton(
-                          onPressed: () {}, icon: Image.asset(Assets.google))
-                    ],
-                  )
                 ]),
           ),
         ),

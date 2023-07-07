@@ -29,7 +29,7 @@ class NotificationModel {
     return NotificationModel(
       id: json['id'],
       type: NotificationType.parse(json['type']),
-      createAt: (json['create_at'] == null)  ? DateTime.now() : DateTime.parse(json['create_at']),
+      createAt: DateTime.now() ,
       isRead: json['is_read'],
       title: json['title'],
       content: json['content'],

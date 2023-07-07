@@ -16,24 +16,13 @@ class AuthRepository {
 
   String? get userID => Supabase.instance.client.auth.currentUser?.id;
 
-  Future<void> recoveryWithOtp(String email, String otp) async
+  Future<AuthResponse> recoveryWithOtp(String email, String otp) async
   {
     try {
       final response =
           await _remoteDataSource.recoveryWithOtp(email,otp);
       debugPrint(response.toString());
-      
-    }
-    on AuthException catch (e)
-    {
-      if(e.statusCode == '401')
-      {
-        Get.snackbar('Notification'.tr, 'OTP has expired or incorrect'.tr);
-      }
-      else
-      {
-        rethrow;
-      }
+      return response;
     }
      catch (e) {
       rethrow;

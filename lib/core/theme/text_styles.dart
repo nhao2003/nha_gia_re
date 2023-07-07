@@ -92,8 +92,4 @@ class AppTextStyles {
     fontSize: 20,
     fontWeight: FontWeight.w700,
   );
-  static TextStyle roboto24Bold = const TextStyle(
-    fontSize: 24,
-    fontWeight: FontWeight.w700,
-  );
 }
