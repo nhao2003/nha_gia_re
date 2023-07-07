@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/core/extensions/string_ex.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
@@ -12,6 +13,8 @@ import 'package:nha_gia_re/data/providers/remote/request/account_verification_re
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../repositories/auth_repository.dart';
 
 class RemoteDataSource {
   static const String tableApartments = 'apartments';
@@ -64,10 +67,10 @@ class RemoteDataSource {
     }
   }
 
-  Future<AuthResponse> recoveryWithOtp(String email, String otp) async
-  {
+  Future<AuthResponse> recoveryWithOtp(String email, String otp) async {
     try {
-      return await supabaseClient.auth.verifyOTP(email: email,token: otp, type: OtpType.recovery);
+      return await supabaseClient.auth
+          .verifyOTP(email: email, token: otp, type: OtpType.recovery);
     } on PostgrestException catch (e) {
       showSessionExpiredDialog(e.code);
       rethrow;
@@ -1043,6 +1046,7 @@ class RemoteDataSource {
         .limit(1));
     return data.first;
   }
+
   Future<List<Map<String, dynamic>>> getUserTransactions(String uid) async {
     return List<Map<String, dynamic>>.from(await Supabase.instance.client
         .from('transactions')
@@ -1057,12 +1061,46 @@ class RemoteDataSource {
         .insert(request.toJson());
   }
 
-  Future<List<Map<String, dynamic>>> getAccountVerificationRequest() async {
+  Future<List<Map<String, dynamic>>> getNewAccountVerificationRequest() async {
     final res = await supabaseClient
         .from(tableAccountVerificationRequest)
         .select()
-        .eq("reviewed_at", null);
+        .is_("reviewed_at", null)
+        .order('request_date', ascending: false);
     return List<Map<String, dynamic>>.from(res);
+  }
+
+  Future<List<Map<String, dynamic>>> getOldAccountVerificationRequest() async {
+    final res = await supabaseClient
+        .from(tableAccountVerificationRequest)
+        .select()
+        .not("reviewed_at", "is", null)
+        .order('request_date', ascending: false);
+    return List<Map<String, dynamic>>.from(res);
+  }
+
+  Future<List<Map<String, dynamic>>> getUserAccountVerificationRequest() async {
+    final auth = GetIt.instance<AuthRepository>();
+    final res = await supabaseClient
+        .from(tableAccountVerificationRequest)
+        .select()
+        .eq("user_id", auth.userID)
+        .order('request_date', ascending: false)
+        .limit(1);
+    return List<Map<String, dynamic>>.from(res);
+  }
+
+  Future<void> acceptAcountVerifiedRequest(String id) async {
+    await supabaseClient.rpc('verified_account', params: {
+      'uid': id,
+    });
+  }
+
+  Future<void> rejectAcountVerifiedRequest(String id, String reason) async {
+    await supabaseClient.rpc('reject_account', params: {
+      'uid': id,
+      'reject_info': reason,
+    });
   }
 
   Future<bool?> isAdmin(String userId) async {

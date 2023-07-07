@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/text_styles.dart';
@@ -20,7 +17,7 @@ class AutoTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         TextFormField(
@@ -31,7 +28,7 @@ class AutoTextField extends StatelessWidget {
           style: AppTextStyles.roboto16regular.apply(color: AppColors.black),
           decoration: InputDecoration(
             isDense: true,
-            contentPadding: EdgeInsets.all(15),
+            contentPadding: const EdgeInsets.all(15),
             filled: true,
             fillColor: Colors.white,
             hintText: hint,
@@ -51,7 +48,7 @@ class AutoTextField extends StatelessWidget {
           validator: validator,
         ),
         SizedBox.fromSize(
-          size: Size(10, 10),
+          size: const Size(10, 10),
         ),
       ],
     );

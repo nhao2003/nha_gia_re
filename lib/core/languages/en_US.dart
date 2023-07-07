@@ -169,7 +169,7 @@ const Map<String, String> enLanguagePackage = {
   'Legal Document': 'Legal Document',
   'Apartment Type': 'Apartment Type',
   'Floor': 'Floor',
-  'Main Door Direction': 'Main Door Direction', 
+  'Main Door Direction': 'Main Door Direction',
   'Balcony Direction': 'Balcony Direction',
   'Corner Apartment': 'Corner Apartment',
   'm3': 'm3',
@@ -185,23 +185,27 @@ const Map<String, String> enLanguagePackage = {
   'Please log in again to refresh your session.':
       'Please log in again to refresh your session.',
   // notification
-  'suggest' : 'You may be interested',
-   "expirationWarning" :  "Your post will expire in 1 days",
-   'rejectPost' : 'Rejected',
-   'acceptPost' : 'Approved',
-   'newFollower' : 'You just have a new follower',
-   'Posts Management' : 'Posts Management',
-    "No news has been posted." :  "No news has been posted.",
+  'suggest': 'You may be interested',
+  "expirationWarning": "Your post will expire in 1 days",
+  'rejectPost': 'Rejected',
+  'acceptPost': 'Approved',
+  'newFollower': 'You just have a new follower',
+  'Posts Management': 'Posts Management',
+  "No news has been posted.": "No news has been posted.",
 
   // verification
   'Account verification': 'Account verification',
   'Continue': 'Continue',
   'Premium': 'Premium',
-  'Reviewing posts' : 'Reviewing posts',
-  'Register successfully. Please check your email for confirmation mail.' : 'Register successfully. Please check your email for confirmation mail.',
-  'Please check your email for reset password mail.' : 'Please check your email for reset password mail.',
-  'Enter 6 digits code' : 'Enter 6 digits code',
-  'Continute' : 'Continute',
-  'OTP has expired or incorrect' :'OTP has expired or incorrect',
-  'Your password has change successfully.' : 'Your password has change successfully.',
+  'Reviewing posts': 'Reviewing posts',
+  'Register successfully. Please check your email for confirmation mail.':
+      'Register successfully. Please check your email for confirmation mail.',
+  'Please check your email for reset password mail.':
+      'Please check your email for reset password mail.',
+  'Enter 6 digits code': 'Enter 6 digits code',
+  'Continute': 'Continute',
+  'OTP has expired or incorrect': 'OTP has expired or incorrect',
+  'Your password has change successfully.':
+      'Your password has change successfully.',
+  'Reviewing users verified': 'Reviewing users verified',
 };

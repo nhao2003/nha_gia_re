@@ -21,7 +21,10 @@ class _ChooseImagePortraitState extends State<ChooseImagePortrait> {
 
   void _pickImageFromCamera() async {
     final pickedImageFile = await ImagePicker().pickImage(
-        source: ImageSource.camera, imageQuality: 100, maxWidth: 150);
+        source: ImageSource.camera,
+        preferredCameraDevice: CameraDevice.front,
+        imageQuality: 100,
+        maxWidth: 150);
     if (pickedImageFile != null) {
       _pickedImage = File(pickedImageFile.path);
       widget.verifyController.handelUploadPortrait(File(_pickedImage!.path));

@@ -1,25 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:nha_gia_re/core/extensions/date_ex.dart';
 import 'package:nha_gia_re/core/extensions/integer_ex.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/core/values/assets_image.dart';
-import 'package:nha_gia_re/data/models/properties/post.dart';
-import 'package:nha_gia_re/global_widgets/infor_card.dart';
 import 'package:nha_gia_re/global_widgets/carousel_ad.dart';
 import 'package:nha_gia_re/modules/admin_post_detail/admin_post_detail_controller.dart';
-import 'package:nha_gia_re/modules/post_details/post_detail_controller.dart';
+import 'package:nha_gia_re/modules/admin_post_manage/admin_post_controller.dart';
 import 'package:nha_gia_re/modules/post_details/widget/expandable_container.dart';
-import 'package:nha_gia_re/routers/app_routes.dart';
-
-import '../../../data/enums/enums.dart';
-import '../../../data/models/user_info.dart';
-import '../../../data/repositories/chat_repository.dart';
 
 class AdminPostDetailScreen extends StatefulWidget {
   const AdminPostDetailScreen({super.key});
@@ -29,6 +20,7 @@ class AdminPostDetailScreen extends StatefulWidget {
 }
 
 class _AdminPostDetailScreenState extends State<AdminPostDetailScreen> {
+  final AdminPostController parentController = Get.find<AdminPostController>();
   final AdminPostDetailController _controller =
       Get.find<AdminPostDetailController>();
   TextEditingController messageController = TextEditingController();
@@ -48,7 +40,7 @@ class _AdminPostDetailScreenState extends State<AdminPostDetailScreen> {
   Future _displayBottomSheet(BuildContext context) {
     return showModalBottomSheet(
       context: context,
-      barrierColor: Color.fromARGB(0, 217, 11, 11),
+      barrierColor: const Color.fromARGB(0, 217, 11, 11),
       builder: (context) {
         return AnimatedPadding(
           padding: MediaQuery.of(context).viewInsets,
@@ -87,7 +79,7 @@ class _AdminPostDetailScreenState extends State<AdminPostDetailScreen> {
                       style: AppTextStyles.roboto20semiBold
                           .apply(color: AppColors.black),
                     ),
-                    SizedBox.square(
+                    const SizedBox.square(
                       dimension: 15,
                     ),
                     Padding(
@@ -124,7 +116,7 @@ class _AdminPostDetailScreenState extends State<AdminPostDetailScreen> {
                         ),
                       ),
                     ),
-                    SizedBox.square(
+                    const SizedBox.square(
                       dimension: 15,
                     ),
                     Row(
@@ -143,6 +135,8 @@ class _AdminPostDetailScreenState extends State<AdminPostDetailScreen> {
                                   _controller.rejectInfo =
                                       messageController.text;
                                   _controller.rejectPost();
+                                  parentController.getRejectedPost();
+                                  Get.back();
                                 },
                                 child: Text(
                                   "Hoàn thành",
@@ -384,6 +378,8 @@ class _AdminPostDetailScreenState extends State<AdminPostDetailScreen> {
                             if (!_controller.isExecute) {
                               _controller.isExecute = true;
                               _controller.approvePost();
+                              parentController.getPendingPost();
+                              Get.back();
                             }
                           },
                           child: Text(

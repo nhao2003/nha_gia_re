@@ -1,22 +1,12 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_zalopay_sdk/flutter_zalopay_sdk.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
-import 'package:nha_gia_re/data/models/create_order.dart';
-import 'package:nha_gia_re/data/providers/remote/request/create_order_request.dart';
-import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
 import 'package:nha_gia_re/data/repositories/admin_reposotory.dart';
 import 'package:nha_gia_re/data/repositories/pay_repository.dart';
-import 'package:nha_gia_re/data/providers/remote/request/query_order.dart';
 
-import '../../data/enums/enums.dart';
 import '../../data/models/properties/post.dart';
 import '../../data/repositories/auth_repository.dart';
-import '../../data/repositories/post_repository.dart';
 import '../../routers/app_routes.dart';
 
 class AdminPostController extends GetxController {
@@ -33,6 +23,14 @@ class AdminPostController extends GetxController {
 
   getAllPosts() {
     pendingPosts = repository.getPendingPosts();
+    rejectedPosts = repository.getRejectedPosts();
+  }
+
+  getPendingPost() {
+    pendingPosts = repository.getPendingPosts();
+  }
+
+  getRejectedPost() {
     rejectedPosts = repository.getRejectedPosts();
   }
 
@@ -86,9 +84,12 @@ class AdminPostController extends GetxController {
   // }
 
   void navigateToDetailSceen(Post post) {
-    Get.toNamed(AppRoutes.admin_post_detail, arguments: post);
+    Get.to(AppRoutes.admin_post_detail, arguments: post);
   }
 
+  void navToVerification() {
+    Get.toNamed(AppRoutes.admin_verification);
+  }
   // pay() async {
   // CreateOrderRequest request = CreateOrderRequest(
   //     record: Record(

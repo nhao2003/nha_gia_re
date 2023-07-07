@@ -4,9 +4,11 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
+import 'package:nha_gia_re/data/providers/remote/request/account_verification_requests.dart';
 import 'package:nha_gia_re/data/repositories/account_verification_requests_repository.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 
+import '../../data/repositories/auth_repository.dart';
 import '../../data/services/upload_avatar_service.dart';
 
 class VerificationController extends GetxController {
@@ -97,6 +99,10 @@ class VerificationController extends GetxController {
     }
   }
 
+  void navToVerification() {
+    Get.toNamed(AppRoutes.verification_card_screen);
+  }
+
   String? validateTextField(String? value) {
     if (value!.trim().isEmpty) {
       return 'Required field must not be blank';
@@ -112,8 +118,8 @@ class VerificationController extends GetxController {
     input = input.replaceAll(RegExp(r'\s+'), '');
 
     // Kiểm tra độ dài chuỗi
-    if (input.length != 13) {
-      return "Căn cước phải đủ 13 số";
+    if (input.length != 12) {
+      return "Căn cước phải đủ 12 số";
     }
 
     // Kiểm tra chuỗi có chứa ký tự không phải số hay không
@@ -174,8 +180,27 @@ class VerificationController extends GetxController {
 
   Future finishVerification() async {
     if (userInfoFormKey.currentState!.validate()) {
+      final auth = GetIt.instance<AuthRepository>();
+      AccountVerificationRequests requests = AccountVerificationRequests(
+        userId: auth.userID!,
+        requestDate: DateTime.now(),
+        frontIdentityCardImageLink: urlImageCardFront,
+        backIdentityCardImageLink: urlImageCardBack,
+        portraitImagePath: urlImagePortrait,
+        fullName: fullNameTextController.text,
+        sex: isMale.value,
+        dob: birthday.toIso8601String(),
+        identityCardNo: identityCardNoTextController.text,
+        identityCardIssuedDate: identityCardIssuedDate,
+        issuedBy: issuedBy.value,
+      );
+      await accountRepo.createNewRequest(requests);
+      Get.back(result: "1");
+      Get.back(result: "1");
+      Get.back(result: "1");
+      accountRepo.checkResult == "1";
     } else {
-      print("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+      Get.snackbar("Thông tin không hợp lệ", "Vui lòng kiểm tra thông tin");
     }
   }
 }
