@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/repositories/chat_repository.dart';
 import 'package:nha_gia_re/modules/settings/settings_controller.dart';
-import 'package:nha_gia_re/modules/settings/widget/settings_item.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/theme/app_colors.dart';
@@ -57,12 +56,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     top: -8, start: 18),
                                 badgeContent: Text(
                                   unreadCount.value.toString(),
-                                  style: AppTextStyles.roboto11Bold.copyWith(color: AppColors.white),
+                                  style: AppTextStyles.roboto11Bold
+                                      .copyWith(color: AppColors.white),
                                 ),
                                 badgeStyle: badges.BadgeStyle(
                                   badgeColor: AppColors.red,
                                 ),
-                                child: Image.asset(Assets.messCircle, width: 25),
+                                child:
+                                    Image.asset(Assets.messCircle, width: 25),
                               ),
                             ),
                     ));
