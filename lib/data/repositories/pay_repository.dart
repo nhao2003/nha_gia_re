@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:nha_gia_re/data/models/discount.dart';
+import 'package:nha_gia_re/data/models/query_order.dart';
 import 'package:nha_gia_re/data/providers/remote/remote_data_source.dart';
 import 'package:nha_gia_re/data/providers/remote/request/create_order_request.dart';
 import 'package:nha_gia_re/data/providers/remote/request/query_order.dart';
@@ -34,7 +35,7 @@ class PayRepository {
     }
   }
 
-  static Future<bool?> createQuery(QueryOrder model) async {
+  static Future<QueryOrderResponse?> createQuery(QueryOrder model) async {
     Map<String, String> requestHeaders = {
       'Content-Type': "application/json",
       // 'token': "Bearer $token"
@@ -43,11 +44,10 @@ class PayRepository {
     var response = await client.post(url,
         headers: requestHeaders, body: jsonEncode(model));
     if (response.statusCode == 200) {
-      // CreateOrderResponseModel model =
-      //     createOrderResponseModelFromJson(response.body);
-      return true;
+      QueryOrderResponse query = queryOrderResponseFromJson(response.body);
+      return query;
     } else {
-      return false;
+      return null;
     }
   }
 

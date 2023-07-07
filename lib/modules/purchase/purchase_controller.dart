@@ -45,7 +45,7 @@ class PurchaseController extends GetxController {
                       apptransid: value.apptransid,
                       postId: "dd"));
               PayRepository.createQuery(query).then((value) {
-                if (value != null && value == true) {
+                if (value != null) {
                   Get.snackbar("Trạng thái", payResult);
                 } else {
                   Get.snackbar("Trạng thái", "Thanh toán thất bại");
