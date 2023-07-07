@@ -127,20 +127,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     return ListTile(
                       title: Text('Account verification'.tr),
                       onTap: () {
-                        if (_controller.verifyRepo.checkResult == "0") {
-                          //chua co
-                          _controller.navToVerification().then((value) {
-                            setState(() {});
-                          });
-                        } else if (_controller.verifyRepo.checkResult == "1") {
-                          // dang cho duyet
-                          _controller.navToWaitingVerification().then((value) {
-                            setState(() {});
-                          });
-                        } else {
-                          // tu choi
-                          _controller.navToRejectVerification(snapshot.data!);
-                        }
+                        // if (_controller.verifyRepo.checkResult == "0") {
+                        //   //chua co
+                        //   _controller.navToVerification().then((value) {
+                        //     setState(() {});
+                        //   });
+                        // } else if (_controller.verifyRepo.checkResult == "1") {
+                        //   // dang cho duyet
+                        //   _controller.navToWaitingVerification().then((value) {
+                        //     setState(() {});
+                        //   });
+                        // } else {
+                        //   // tu choi
+                        //   _controller.navToRejectVerification(snapshot.data!);
+                        // }
+                        _controller.navToVerification().then((value) {
+                          setState(() {});
+                        });
                       },
                       leading: Icon(
                         Icons.admin_panel_settings_outlined,

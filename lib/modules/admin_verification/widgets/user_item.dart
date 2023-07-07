@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:nha_gia_re/modules/admin_verification/screens/user_verification_screen.dart';
 
 import '../../../core/theme/text_styles.dart';
 import '../../../data/providers/remote/response/account_verification_requests.dart';
@@ -9,7 +11,8 @@ import 'package:flutter/material.dart';
 
 class UserItem extends StatelessWidget {
   AccountVerificationResponse response;
-  UserItem(this.response, {super.key});
+  Function fUpdate;
+  UserItem(this.response, this.fUpdate, {super.key});
 
   String formatTime(DateTime timestamp) {
     DateTime now = DateTime.now();
@@ -34,8 +37,8 @@ class UserItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: GestureDetector(
-        onTap: () {
-          //controller.navigateToDetailSceen(posts[index]);
+        onTap: () async {
+          Get.to(UserVerificationScreen(response))!.then((value) => fUpdate());
         },
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),

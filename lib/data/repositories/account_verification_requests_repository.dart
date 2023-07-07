@@ -16,9 +16,22 @@ class AccountVerificationRepository {
     return data.map((e) => AccountVerificationResponse.fromJson(e)).toList();
   }
 
+  Future<List<AccountVerificationResponse>> getVerifiedRequests() async {
+    final data = await _remoteDataSource.getOldAccountVerificationRequest();
+    return data.map((e) => AccountVerificationResponse.fromJson(e)).toList();
+  }
+
   Future<List<AccountVerificationResponse>> getUserRequests() async {
     final data = await _remoteDataSource.getUserAccountVerificationRequest();
     return data.map((e) => AccountVerificationResponse.fromJson(e)).toList();
+  }
+
+  Future<void> acceptAcountVerifiedRequest(String id) async {
+    await _remoteDataSource.acceptAcountVerifiedRequest(id);
+  }
+
+  Future<void> rejectAcountVerifiedRequest(String id, String reason) async {
+    await _remoteDataSource.rejectAcountVerifiedRequest(id, reason);
   }
 
   Future<String> checkUserIsWaiting() async {

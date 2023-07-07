@@ -1031,6 +1031,15 @@ class RemoteDataSource {
     return List<Map<String, dynamic>>.from(res);
   }
 
+  Future<List<Map<String, dynamic>>> getOldAccountVerificationRequest() async {
+    final res = await supabaseClient
+        .from(tableAccountVerificationRequest)
+        .select()
+        .not("reviewed_at", "is", null)
+        .order('request_date', ascending: false);
+    return List<Map<String, dynamic>>.from(res);
+  }
+
   Future<List<Map<String, dynamic>>> getUserAccountVerificationRequest() async {
     final auth = GetIt.instance<AuthRepository>();
     final res = await supabaseClient
@@ -1040,5 +1049,18 @@ class RemoteDataSource {
         .order('request_date', ascending: false)
         .limit(1);
     return List<Map<String, dynamic>>.from(res);
+  }
+
+  Future<void> acceptAcountVerifiedRequest(String id) async {
+    await supabaseClient.rpc('verified_account', params: {
+      'uid': id,
+    });
+  }
+
+  Future<void> rejectAcountVerifiedRequest(String id, String reason) async {
+    await supabaseClient.rpc('reject_account', params: {
+      'uid': id,
+      'reject_info': reason,
+    });
   }
 }
