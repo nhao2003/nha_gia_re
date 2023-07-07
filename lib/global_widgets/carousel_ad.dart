@@ -41,7 +41,7 @@ class _CarouselAdState extends State<CarouselAd> {
                       fit: BoxFit.cover,
                       width: context.screenSize.width,
                       errorWidget: (context, _, __) {
-                        return Placeholder();
+                        return const Placeholder();
                       },
                     ))
                 .toList(),
