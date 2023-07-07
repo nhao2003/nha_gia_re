@@ -39,7 +39,7 @@ class VerificationCardScreen extends StatelessWidget {
                   style: AppTextStyles.roboto14Bold,
                 ),
                 const SizedBox(height: 10),
-                StepperIdentify(_controller),
+                StepperIdentify(0),
               ],
             ),
           ),
@@ -75,9 +75,9 @@ class VerificationCardScreen extends StatelessWidget {
           height: 50,
           margin: const EdgeInsets.all(10),
           child: ElevatedButton(
-            onPressed: _controller.isCanClick.value
+            onPressed: _controller.isCanClickCard.value
                 ? () {
-                    _controller.continueVerify();
+                    _controller.navToPortraitSceen();
                   }
                 : null,
             child: Center(

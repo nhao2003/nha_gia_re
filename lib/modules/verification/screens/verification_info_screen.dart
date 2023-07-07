@@ -14,7 +14,7 @@ class verificationInfoScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
-        title: const Text("Chụp ảnh chân dung"),
+        title: const Text("Nhập thông tin cá nhân"),
       ),
       // body
       body: Column(
@@ -31,12 +31,12 @@ class verificationInfoScreen extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  "Vui lòng gửi hình ảnh giấy tờ còn hạn, hình gốc không scan hay photocopy.",
+                  "Thông tin của bạn đã được mã hóa và bảo đảm an toàn theo quy định của pháp luật.",
                   textAlign: TextAlign.center,
                   style: AppTextStyles.roboto14Bold,
                 ),
                 const SizedBox(height: 10),
-                StepperIdentify(_controller),
+                StepperIdentify(2),
               ],
             ),
           ),
@@ -51,14 +51,14 @@ class verificationInfoScreen extends StatelessWidget {
           height: 50,
           margin: const EdgeInsets.all(10),
           child: ElevatedButton(
-            onPressed: _controller.isCanClick.value
+            onPressed: _controller.isCanClickInfo.value
                 ? () {
-                    _controller.continueVerify();
+                    _controller.finishVerification();
                   }
                 : null,
             child: Center(
               child: Text(
-                'Continue'.tr,
+                'Hoàn tất',
                 style: AppTextStyles.roboto16Bold,
               ),
             ),

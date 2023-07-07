@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/modules/verification/verification_controller.dart';
+import 'package:nha_gia_re/modules/verification/widgets/choose_image_portrait.dart';
 import 'package:nha_gia_re/modules/verification/widgets/stepper_identify.dart';
 
 class verificationPortraitScreen extends StatelessWidget {
@@ -31,16 +32,29 @@ class verificationPortraitScreen extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  "Vui lòng gửi hình ảnh giấy tờ còn hạn, hình gốc không scan hay photocopy.",
+                  "Vui lòng cung cấp cho chúng tôi hình ảnh thật chân dung của bạn.",
                   textAlign: TextAlign.center,
                   style: AppTextStyles.roboto14Bold,
                 ),
                 const SizedBox(height: 10),
-                StepperIdentify(_controller),
+                StepperIdentify(1),
               ],
             ),
           ),
 // change type identity documents
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            margin: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(
+              vertical: 20,
+              horizontal: 20,
+            ),
+            width: double.infinity,
+            child: ChooseImagePortrait(_controller),
+          ),
         ],
       ),
 
@@ -51,9 +65,9 @@ class verificationPortraitScreen extends StatelessWidget {
           height: 50,
           margin: const EdgeInsets.all(10),
           child: ElevatedButton(
-            onPressed: _controller.isCanClick.value
+            onPressed: _controller.isCanClickPortrait.value
                 ? () {
-                    _controller.continueVerify();
+                    _controller.navToInforScreen();
                   }
                 : null,
             child: Center(

@@ -1,11 +1,14 @@
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
+import 'package:nha_gia_re/routers/app_routes.dart';
 
 import '../../data/services/upload_avatar_service.dart';
 
 class VerificationController extends GetxController {
-  RxBool isCanClick = false.obs;
+  RxBool isCanClickCard = false.obs;
+  RxBool isCanClickPortrait = false.obs;
+  RxBool isCanClickInfo = false.obs;
   RxInt activeStep = 0.obs;
   int selectedRadio = 0;
 
@@ -14,14 +17,14 @@ class VerificationController extends GetxController {
   RxBool isUploadCardFront = false.obs;
   RxBool isUploadCardBack = false.obs;
 
+  String urlImagePortrait = "";
+
   final typeIndetificationDocument =
       TypeIndetificationDocument.chungMinhNhanDan.obs;
 
   void changeStep(int step) {
     activeStep.value = step;
   }
-
-  void continueVerify() {}
 
   void changeTypeIdentityDocuments(TypeIndetificationDocument type) {
     typeIndetificationDocument.value = type;
@@ -32,20 +35,41 @@ class VerificationController extends GetxController {
     if (isFront) {
       urlImageCardFront = await uploadIDCard(file);
       isUploadCardFront.value = true;
-      print("urlImageCardFront: $urlImageCardFront");
     } else {
       urlImageCardBack = await uploadIDCard(file);
       isUploadCardBack.value = true;
-      print("urlImageCardBack: $urlImageCardBack");
     }
-    checkCanClickContinue();
+    checkCanClickContinueCard();
   }
 
-  void checkCanClickContinue() {
+  Future<void> handelUploadPortrait(File file) async {
+    urlImagePortrait = await uploadPortrait(file);
+    isCanClickPortrait.value = true;
+  }
+
+  void checkCanClickContinueCard() {
     if (isUploadCardFront.value && isUploadCardBack.value) {
-      isCanClick.value = true;
+      isCanClickCard.value = true;
     } else {
-      isCanClick.value = false;
+      isCanClickCard.value = false;
     }
   }
+
+  void navToPortraitSceen() {
+    if (isCanClickCard.value) {
+      Get.toNamed(AppRoutes.verification_portrait_screen);
+      isCanClickPortrait.value = false;
+      changeStep(1);
+    }
+  }
+
+  void navToInforScreen() {
+    if (isCanClickPortrait.value) {
+      Get.toNamed(AppRoutes.verification_info_screen);
+      isCanClickInfo.value = false;
+      changeStep(2);
+    }
+  }
+
+  void finishVerification() {}
 }

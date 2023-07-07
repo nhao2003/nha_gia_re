@@ -81,6 +81,7 @@ class Assets {
   // image
   static const String forgetPass = '$imagePath/rafiki.png';
   static const String nha = '$imagePath/nha.jpg';
+  static const String portrait = '$imagePath/portrait.png';
 
   static const String cccd_front = '$imagePath/cccd_front.png';
   static const String cccd_back = '$imagePath/cccd_back.png';

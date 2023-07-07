@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -64,24 +63,27 @@ class _ChooseImageState extends State<ChooseImage> {
       child: Column(
         children: [
           Obx(
-            () => Container(
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(10),
+            () => InkWell(
+              onTap: () => _pickImageFromCamera(),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: const EdgeInsets.all(10),
+                height: 130,
+                width: double.infinity,
+                child: _pickedImage != null
+                    ? Image.file(
+                        _pickedImage!,
+                        fit: BoxFit.cover,
+                      )
+                    : Image.asset(
+                        fit: BoxFit.cover,
+                        getAssetImage(widget
+                            .verifyController.typeIndetificationDocument.value),
+                      ),
               ),
-              padding: const EdgeInsets.all(10),
-              height: 130,
-              width: double.infinity,
-              child: _pickedImage != null
-                  ? Image.file(
-                      _pickedImage!,
-                      fit: BoxFit.cover,
-                    )
-                  : Image.asset(
-                      fit: BoxFit.cover,
-                      getAssetImage(widget
-                          .verifyController.typeIndetificationDocument.value),
-                    ),
             ),
           ),
           const SizedBox(height: 12),
