@@ -10,7 +10,7 @@
         android:label="Nha gia re"
         android:name="${applicationName}"
         android:requestLegacyExternalStorage="true"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@drawable/logo">
        <meta-data android:name="com.google.android.geo.API_KEY"
                   android:value="AIzaSyATj_CC4_aSPMod2MfeAmz67Ek2t_rhrwc"/>
         <activity
