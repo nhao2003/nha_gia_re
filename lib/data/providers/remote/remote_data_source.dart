@@ -871,7 +871,7 @@ class RemoteDataSource {
             cons.add(Conversation.fromJson(element));
           }
         }
-        if (cons.isNotEmpty) sink.add(cons);
+        sink.add(cons);
       }),
     );
   }
