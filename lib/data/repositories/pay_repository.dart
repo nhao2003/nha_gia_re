@@ -35,7 +35,7 @@ class PayRepository {
     }
   }
 
-  static Future<QueryOrderResponse?> createQuery(QueryOrder model) async {
+  static Future<QueryRecordResponse?> createQuery(QueryOrder model) async {
     Map<String, String> requestHeaders = {
       'Content-Type': "application/json",
       // 'token': "Bearer $token"
@@ -44,7 +44,7 @@ class PayRepository {
     var response = await client.post(url,
         headers: requestHeaders, body: jsonEncode(model));
     if (response.statusCode == 200) {
-      QueryOrderResponse query = queryOrderResponseFromJson(response.body);
+      QueryRecordResponse query = queryRecordResponseFromJson(response.body);
       return query;
     } else {
       return null;

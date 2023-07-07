@@ -1,41 +1,44 @@
 // To parse this JSON data, do
 //
-//     final queryOrderResponse = queryOrderResponseFromJson(jsonString);
+//     final queryRecordResponse = queryRecordResponseFromJson(jsonString);
 
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-QueryOrderResponse queryOrderResponseFromJson(String str) =>
-    QueryOrderResponse.fromJson(json.decode(str));
+QueryRecordResponse queryRecordResponseFromJson(String str) =>
+    QueryRecordResponse.fromJson(json.decode(str));
 
-String queryOrderResponseToJson(QueryOrderResponse data) =>
+String queryRecordResponseToJson(QueryRecordResponse data) =>
     json.encode(data.toJson());
 
-class QueryOrderResponse {
+class QueryRecordResponse {
   final int amount;
   final String userId;
   final int returncode;
   final String postId;
-  final int zptransid;
+  final String zptransid;
   final String returnmessage;
+  final String transactionid;
 
-  QueryOrderResponse({
+  QueryRecordResponse({
     required this.amount,
     required this.userId,
     required this.returncode,
     required this.postId,
     required this.zptransid,
     required this.returnmessage,
+    required this.transactionid,
   });
 
-  factory QueryOrderResponse.fromJson(Map<String, dynamic> json) =>
-      QueryOrderResponse(
+  factory QueryRecordResponse.fromJson(Map<String, dynamic> json) =>
+      QueryRecordResponse(
         amount: json["amount"],
         userId: json["userId"],
         returncode: json["returncode"],
         postId: json["postId"],
         zptransid: json["zptransid"],
         returnmessage: json["returnmessage"],
+        transactionid: json["transactionid"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -45,5 +48,6 @@ class QueryOrderResponse {
         "postId": postId,
         "zptransid": zptransid,
         "returnmessage": returnmessage,
+        "transactionid": transactionid,
       };
 }
