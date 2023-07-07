@@ -1026,7 +1026,7 @@ class RemoteDataSource {
     final res = await supabaseClient
         .from(tableAccountVerificationRequest)
         .select()
-        .eq("reviewed_at", null)
+        .is_("reviewed_at", null)
         .order('request_date', ascending: false);
     return List<Map<String, dynamic>>.from(res);
   }
@@ -1037,7 +1037,8 @@ class RemoteDataSource {
         .from(tableAccountVerificationRequest)
         .select()
         .eq("user_id", auth.userID)
-        .order('request_date', ascending: false).limit(1);
+        .order('request_date', ascending: false)
+        .limit(1);
     return List<Map<String, dynamic>>.from(res);
   }
 }
