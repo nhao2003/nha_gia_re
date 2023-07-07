@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
@@ -360,7 +361,8 @@ class PropertyController extends GetxController {
         selectedDistrict != null &&
         selectedWard != null) {
       addressController.text =
-          "${selectedProvince!.name} ${selectedDistrict!.name} ${selectedWard!.name}";
+          "${selectedWard!.name} ${selectedDistrict!.name} ${selectedProvince!.name}";
+      addressDisplay = addressController.text;
       address = Address(
           cityCode:
               (selectedProvince!.code != null ? selectedProvince!.code! : 0),
@@ -404,8 +406,18 @@ class PropertyController extends GetxController {
     update();
   }
 
+  Future<void> translateAddress() async {
+    if (addressDisplay.isEmpty) return;
+    List<Location> locations = await locationFromAddress(addressDisplay);
+    if (locations.isNotEmpty && locations[0] != null) {
+      address.latitude = locations[0].latitude;
+      address.longitude = locations[0].longitude;
+    }
+  }
+
   Future<void> addPost() async {
     if (authRepository.userID == null) return;
+
     final imageUrls = await uploadPostImages(photo);
     imageUrlList.addAll(imageUrls);
     // Future<String> x =
@@ -414,6 +426,7 @@ class PropertyController extends GetxController {
     //     imageUrls.length.toString() +
     //     "  " +
     //     photo.length.toString());
+    await translateAddress();
     PostRequest post;
     DateTime now = DateTime.now();
     switch (selectedPropertyType) {
