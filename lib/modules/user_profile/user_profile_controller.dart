@@ -34,12 +34,18 @@ class UserProfileController extends GetxController {
       bioTextController.text = arg.description!;
       addressController.text = arg.address.toString();
       address = arg.address!;
+    } else {
+      avatarUrl =
+          'https://th.bing.com/th/id/OIP.IinrjlpXbDCJt28EGzYHfQHaHa?pid=ImgDet&rs=1';
     }
   }
 
   Future<void> handelUploadAvatar(File file) async {
     isUploadAvatar.value = true;
-    await uploadAvatar(file).then((value) => isUploadAvatar.value = false);
+    avatarUrl = await uploadAvatar(file).then((value) {
+      isUploadAvatar.value = false;
+      return value;
+    });
   }
 
   String? validateTextField(String? value) {
@@ -51,12 +57,10 @@ class UserProfileController extends GetxController {
 
   void handleAddress() async {
     address = await Get.toNamed(AppRoutes.address)!.then((value) {
-      if(value != null)
-      {
+      if (value != null) {
         addressController.text = value.toString();
         return value;
-      }
-      else
+      } else
         return address;
     });
   }

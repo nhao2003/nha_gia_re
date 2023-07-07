@@ -36,7 +36,7 @@ class QueryRecordResponse {
         userId: json["userId"],
         returncode: json["returncode"],
         postId: json["postId"],
-        zptransid: json["zptransid"],
+        zptransid: json["zptransid"].toString(),
         returnmessage: json["returnmessage"],
         transactionid: json["transactionid"],
       );

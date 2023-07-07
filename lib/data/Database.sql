@@ -71,12 +71,11 @@ create
 or replace function handle_new_user() returns trigger as
 $$
 begin
-    set
-timezone = 'Asia/Ho_Chi_Minh';
-insert into public.user_info(uid, email, last_activity_at)
-values (new.id, new.email, now());
-return new;
-end;
+    set timezone = 'Asia/Ho_Chi_Minh';
+    insert into public.user_info(uid, email, last_activity_at, created_at)
+    values (new.id, new.email, now(), now());
+    return new;
+end
 $$
 language plpgsql security definer;
 
@@ -125,21 +124,6 @@ CREATE TABLE user_follow
     FOREIGN KEY (followed_id) REFERENCES public.user_info (uid) ON DELETE CASCADE
 );
 
-insert into user_follow (follower_id, followed_id)
-values ('de23a0b3-262b-4982-aa55-084dcb08961a'::uuid, 'f8a68af6-f0d7-45c8-8b9f-666f6e4f1314'::uuid)
-    insert
-into user_follow (follower_id, followed_id)
-values ('f7f7631f-667b-4b38-924f-4a6d9e9db182'::uuid, '3ec257e0-0670-474d-bb8c-beb5178acd8c'::uuid)
-
-
-delete
-from auth.users
-where id = 'f8a68af6-f0d7-45c8-8b9f-666f6e4f1314' ::uuid
-
-delete
-
-from user_info
-where uid = '99785dd5-7516-4d5c-8310-d791a90256fc' ::uuid
 --follow trigger;
 CREATE
 OR REPLACE FUNCTION handle_follow()
@@ -206,7 +190,7 @@ CREATE TABLE conversations
     user1_joined_at                 TIMESTAMP                      DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
     user2_joined_at                 TIMESTAMP                      DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
     num_Of_unread_messages_of_user1 int       NOT NULL             DEFAULT 0,
-    num_Of_unread_messages_of_user2 int       NOT NULL             DEFAULT 0,
+    num _of_unread_messages_of_user2 int       NOT NULL             DEFAULT 0,
     CHECK (user1_id != user2_id
 ) ,
     FOREIGN KEY (user1_id) REFERENCES public.user_info (uid) ON DELETE CASCADE,
@@ -366,6 +350,7 @@ CREATE TABLE post
     is_hide       BOOLEAN      NOT NULL             DEFAULT FALSE,
     status        VARCHAR                           default 'pending',
     rejected_info VARCHAR,
+    is_priority       BOOLEAN      NOT NULL             DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES public.user_info (uid) on delete cascade,
     CHECK (area > 0),
     CHECK (property_type IN ('Apartment',
@@ -429,7 +414,8 @@ CREATE TABLE motels
     CHECK (furniture_status IS NULL
         OR furniture_status IN ('Empty',
                                 'Basic',
-                                'High end')),
+                                'High end',
+                                'Full')),
     CHECK (electric_price IS NULL
         OR electric_price > 0),
     CHECK (water_price IS NULL
@@ -881,5 +867,83 @@ CREATE TABLE membership_package_subscription (
     end_date TIMESTAMP NOT NULL
 );
 
+CREATE OR REPLACE FUNCTION insert_subscription(
+    p_transaction_id UUID,
+    p_membership_package_id UUID,
+    p_user_id UUID,
+    p_number_of_months INT
+) RETURNS VOID AS $$
+DECLARE
+    v_start_date TIMESTAMP := timezone('Asia/Ho_Chi_Minh', now());
+    v_end_date TIMESTAMP := v_start_date + (p_number_of_months || ' months')::INTERVAL;
+BEGIN
+    INSERT INTO membership_package_subscription (
+        transaction_id,
+        membership_package_id,
+        user_id,
+        start_date,
+        end_date
+    )
+    VALUES (
+        p_transaction_id,
+        p_membership_package_id,
+        p_user_id,
+        v_start_date,
+        v_end_date
+    );
+END;
+$$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION check_verified_badge(uid UUID) RETURNS BOOLEAN AS $$
+DECLARE
+    is_verified BOOLEAN;
+    has_verified_badge BOOLEAN;
+    is_within_date_range BOOLEAN;
+BEGIN
+    SELECT COUNT(*) > 0 INTO is_verified
+    FROM account_verification_requests avr
+    WHERE avr.user_id = uid AND avr.is_verified = true;
+
+    SELECT COUNT(*) > 0 INTO has_verified_badge
+    FROM membership_package_subscription mps
+    INNER JOIN membership_package mp ON mp.id = mps.membership_package_id
+    WHERE mps.user_id = uid AND mp.show_verified_badge = true;
+
+    SELECT COUNT(*) > 0 INTO is_within_date_range
+    FROM membership_package_subscription mps
+    WHERE mps.user_id = uid
+        AND mps.start_date <= (now() AT TIME ZONE 'Asia/Ho_Chi_Minh')
+        AND mps.end_date >= (now() AT TIME ZONE 'Asia/Ho_Chi_Minh');
+
+    RETURN is_verified AND has_verified_badge AND is_within_date_range;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION verified_account(uid UUID) RETURNS VOID AS $$
+DECLARE
+    now_time TIMESTAMP := NOW();
+BEGIN
+    -- Lấy ngày hôm nay
+    now_time := timezone('Asia/Ho_Chi_Minh', now());
+
+    -- Cập nhật trạng thái và ngày hết hạn cho bài đăng
+    UPDATE account_verification_requests
+    SET is_verified = true, reviewed_at = now_time , rejected_info = null
+    WHERE user_id = uid;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION reject_account(uid UUID, reject_info TEXT) RETURNS VOID AS $$
+DECLARE
+    now_time TIMESTAMP := NOW();
+BEGIN
+    -- Lấy ngày hôm nay
+    now_time := timezone('Asia/Ho_Chi_Minh', now());
+
+    -- Cập nhật trạng thái và ngày hết hạn cho bài đăng
+    UPDATE account_verification_requests
+    SET is_verified = false, reviewed_at = now_time , rejected_info = reject_info
+    WHERE user_id = uid;
+END;
+$$ LANGUAGE plpgsql;
 

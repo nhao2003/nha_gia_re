@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get_it/get_it.dart';
@@ -106,6 +107,7 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    ScreenUtil.init(context, designSize: const Size(411, 683));
 
     return Scaffold(
       backgroundColor: AppColors.white,

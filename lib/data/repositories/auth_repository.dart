@@ -1,4 +1,6 @@
 import 'dart:developer';
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/providers/remote/remote_data_source.dart';
 import 'package:nha_gia_re/data/providers/remote/request/update_profile_request.dart';
@@ -13,6 +15,30 @@ class AuthRepository {
   bool get isUserLoggedIn => _user.currentUser != null;
 
   String? get userID => Supabase.instance.client.auth.currentUser?.id;
+
+  Future<void> recoveryWithOtp(String email, String otp) async
+  {
+    try {
+      final response =
+          await _remoteDataSource.recoveryWithOtp(email,otp);
+      debugPrint(response.toString());
+      
+    }
+    on AuthException catch (e)
+    {
+      if(e.statusCode == '401')
+      {
+        Get.snackbar('Notification'.tr, 'OTP has expired or incorrect'.tr);
+      }
+      else
+      {
+        rethrow;
+      }
+    }
+     catch (e) {
+      rethrow;
+    }
+  }
 
   Future<UserInfo> signIn(
       {required String email, required String password}) async {
@@ -62,9 +88,16 @@ class AuthRepository {
     }
   }
 
-  Future<Map<String, dynamic>> changePass(String currentPass, String newPass)
-  async {
-    var data = await _remoteDataSource.changePassword(currentPass: currentPass, newPass: newPass);
+  Future<Map<String, dynamic>> changePass(
+      String currentPass, String newPass) async {
+    var data = await _remoteDataSource.changePassword(
+        currentPass: currentPass, newPass: newPass);
     return data;
   }
+
+  Future<bool> isAdmin() async {
+    final res = await _remoteDataSource.isAdmin(userID!);
+    return res ?? false;
+  }
+   
 }

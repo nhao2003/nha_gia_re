@@ -5,6 +5,8 @@ import 'package:nha_gia_re/core/values/assets_image.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../routers/app_routes.dart';
 import '../login_controller.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'forget_password.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -20,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+  ScreenUtil.init(context, designSize: const Size(411, 683));
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -30,8 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("LOGO",
-                      style: TextStyle(color: Colors.black, fontSize: 64)),
+                  Image.asset(Assets.logoLight, width: 150,height: 150,),
                   const SizedBox(
                     height: 50,
                   ),

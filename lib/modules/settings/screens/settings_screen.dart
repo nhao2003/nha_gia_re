@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
+import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import 'package:nha_gia_re/data/repositories/chat_repository.dart';
 import 'package:nha_gia_re/modules/settings/settings_controller.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
@@ -20,6 +21,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   final SettingsController _controller = Get.find<SettingsController>();
+  final AuthRepository authRepo = GetIt.instance<AuthRepository>();
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +91,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       size: 18,
                     ),
                   );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              }),
+          FutureBuilder(
+              future: authRepo.isAdmin(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if(snapshot.data == true)
+                  {
+                    return ListTile(
+                      title: Text('Reviewing posts'.tr),
+                      onTap: _controller.navToReviewPost,
+                      leading: Image.asset(Assets.edit, width: 20,),
+                    );
+                  }
+                  else
+                  {
+                    return const SizedBox();
+                  }
                 } else {
                   return const Center(
                     child: CircularProgressIndicator(),

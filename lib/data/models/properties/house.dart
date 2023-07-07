@@ -34,6 +34,7 @@ class House extends Post {
     required this.numOfFloors,
     required this.mainDoorDirection,
     required this.legalDocumentStatus,
+    required bool isPriority,
     required Address address,
     required PropertyType type,
     required String userID,
@@ -76,6 +77,7 @@ class House extends Post {
         status: status,
         rejectedInfo: rejectedInfo,
         isHide: isHide,
+        isPriority: isPriority,
         );
 
   factory House.fromJson(Map<String, dynamic> json) {
@@ -120,6 +122,7 @@ class House extends Post {
       status: PostStatus.parse(json['status']),
       rejectedInfo: json['rejected_info'],
       isHide: json['is_hide'],
+        isPriority: json['is_priority']
     );
   }
   @override

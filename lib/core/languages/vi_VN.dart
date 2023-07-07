@@ -202,5 +202,13 @@ const Map<String, String> viLanguagePackage = {
 
   // verification
   'Account verification': 'Định danh tài khoản',
-  'Premium': 'Gói Pro'
+  'Premium': 'Gói Pro',
+  'Reviewing posts' : 'Duyệt tin',
+    'Register successfully. Please check your email for confirmation mail.' :  'Đăng ký thành công. Vui lòng kiểm tra email',
+  'Please check your email for reset password mail.' : 'Vui lòng kiểm tra email.',
+  'Enter 6 digits code' : 'Nhập mã gồm 6 chữ số',
+  'Continute' : 'Tiếp tục',
+  'OTP has expired or incorrect' : 'OTP đã hết hạn hoặc không chính xác',
+  'Your password has change successfully.' : 'Mật khẩu của bạn đã thay đổi thành công.',
+  
 };

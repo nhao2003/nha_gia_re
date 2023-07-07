@@ -27,6 +27,7 @@ class Post {
   PostStatus status;
   String? rejectedInfo;
   bool isHide;
+  bool isPriority;
 
   Post({
     required this.id,
@@ -48,6 +49,7 @@ class Post {
     required this.status,
     required this.rejectedInfo,
     required this.isHide,
+    required this.isPriority,
   })  : assert(id.trim().isNotEmpty),
         assert(area >= 0),
         assert(projectName?.trim().isNotEmpty ?? true),
@@ -79,6 +81,7 @@ class Post {
       status: PostStatus.parse(json['status']),
       rejectedInfo: json['rejected_info'],
       isHide: json['is_hide'],
+      isPriority: json['is_priority']
     );
   }
 

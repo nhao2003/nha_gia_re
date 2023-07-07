@@ -9,6 +9,8 @@ import 'package:nha_gia_re/modules/admin_verification/admin_verification_binding
 import 'package:nha_gia_re/modules/admin_verification/screens/admin_verification_screen.dart';
 import 'package:nha_gia_re/modules/blog/screens/blog_detail_screen.dart';
 import 'package:nha_gia_re/modules/blog/screens/blog_list_screen.dart';
+import 'package:nha_gia_re/modules/login/screens/otp_screen.dart';
+import 'package:nha_gia_re/modules/login/screens/reset_pass.dart';
 import 'package:nha_gia_re/modules/maps/screens/map_picker_screen.dart';
 import 'package:nha_gia_re/modules/maps/screens/map_screen.dart';
 import 'package:nha_gia_re/modules/post_details/post_detail_binding.dart';
@@ -92,6 +94,14 @@ abstract class AppPages {
       page: () => const RegisterScreen(),
     ),
     GetPage(
+      name: AppRoutes.recoveryPass,
+      page: () => const RecoveryPassScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.otp,
+      page: () => const OTPScreen(),
+    ),
+    GetPage(
       name: AppRoutes.post,
       page: () => const PostScreen(),
       binding: PostBinding(),
@@ -168,7 +178,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.admin_post_detail,
-      page: () => const AdminPostDetailScreen(),
+      page: () => AdminPostDetailScreen(),
       binding: AdminPostDetailBinding(),
     ),
     GetPage(

@@ -67,6 +67,29 @@ class RemoteDataSource {
     }
   }
 
+  Future<AuthResponse> recoveryWithOtp(String email, String otp) async
+  {
+    try {
+      return await supabaseClient.auth.verifyOTP(email: email,token: otp, type: OtpType.recovery);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> updatePass(String newPass) async {
+    try {
+      await supabaseClient.auth.updateUser(UserAttributes(password: newPass));
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<void> deleteNotification(String id) async {
     try {
       await supabaseClient
@@ -82,6 +105,7 @@ class RemoteDataSource {
     }
   }
 
+  Future<bool> isVerifiedBadge(String uid) async {
   Future<bool> isVerifiedBadge(String uid) async {
     Map<String, dynamic> request = {
       'uid': uid,
@@ -874,7 +898,7 @@ class RemoteDataSource {
             cons.add(Conversation.fromJson(element));
           }
         }
-        if (cons.isNotEmpty) sink.add(cons);
+        sink.add(cons);
       }),
     );
   }
@@ -1015,6 +1039,21 @@ class RemoteDataSource {
     });
   }
 
+  Future<Map<String, dynamic>> getDetailTransaction(String id) async {
+    final data = List<Map<String, dynamic>>.from(await Supabase.instance.client
+        .from('transactions')
+        .select('*, membership_package(*), membership_package_subscription(*)')
+        .eq('id', id)
+        .limit(1));
+    return data.first;
+  }
+  Future<List<Map<String, dynamic>>> getUserTransactions(String uid) async {
+    return List<Map<String, dynamic>>.from(await Supabase.instance.client
+        .from('transactions')
+        .select('*, membership_package(*), membership_package_subscription(*)')
+        .eq('user_id', uid));
+  }
+
   Future<void> sendAccountVerificationRequest(
       AccountVerificationRequests request) async {
     await supabaseClient
@@ -1062,5 +1101,23 @@ class RemoteDataSource {
       'uid': id,
       'reject_info': reason,
     });
+  }
+
+  Future<bool?> isAdmin(String userId) async {
+    try {
+      final res = await supabaseClient
+          .from('admins')
+          .select()
+          .eq('user_id', userId)
+          .limit(1);
+      List<Map<String, dynamic>> data = List<Map<String, dynamic>>.from(res);
+      if (data.isEmpty || data.first.isEmpty) return false;
+      return true;
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
   }
 }

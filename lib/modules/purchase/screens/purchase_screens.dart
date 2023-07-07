@@ -13,7 +13,7 @@ import 'package:nha_gia_re/modules/purchase/widgets/membership_package_card.dart
 import 'package:nha_gia_re/routers/app_routes.dart';
 
 import '../../../data/models/discount.dart';
-import '../../../data/models/membership_package.dart';
+import '../../../data/models/purchase/membership_package.dart';
 import '../purchase_controller.dart';
 
 class PurchaseScreen extends StatefulWidget {

@@ -30,6 +30,7 @@ class Apartment extends Post {
     required this.block,
     required this.legalDocumentStatus,
     required this.floor,
+    required bool isPriority,
     required Address address,
     required PropertyType type,
     required String userID,
@@ -70,6 +71,7 @@ class Apartment extends Post {
           status: status,
           rejectedInfo: rejectedInfo,
         isHide: isHide,
+        isPriority: isPriority,
         );
 
   factory Apartment.fromJson(Map<String, dynamic> json) {
@@ -112,6 +114,7 @@ class Apartment extends Post {
       status: PostStatus.parse(json['status']),
       rejectedInfo: json['rejected_info'],
       isHide: json['is_hide'],
+        isPriority: json['is_priority']
     );
   }
 
