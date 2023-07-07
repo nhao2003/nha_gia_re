@@ -101,16 +101,38 @@ class _SettingsScreenState extends State<SettingsScreen> {
               future: authRepo.isAdmin(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  if(snapshot.data == true)
-                  {
+                  if (snapshot.data == true) {
                     return ListTile(
                       title: Text('Reviewing posts'.tr),
                       onTap: _controller.navToReviewPost,
-                      leading: Image.asset(Assets.edit, width: 20,),
+                      leading: Image.asset(
+                        Assets.edit,
+                        width: 20,
+                      ),
                     );
+                  } else {
+                    return const SizedBox();
                   }
-                  else
-                  {
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              }),
+          FutureBuilder(
+              future: authRepo.isAdmin(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data == true) {
+                    return ListTile(
+                      title: Text('Reviewing users verified'.tr),
+                      onTap: _controller.navToVerificationList,
+                      leading: Icon(
+                        Icons.switch_account_outlined,
+                        color: AppColors.black,
+                      ),
+                    );
+                  } else {
                     return const SizedBox();
                   }
                 } else {

@@ -201,37 +201,37 @@ class UserVerificationScreen extends StatelessWidget {
                         // ten
                         Text(
                           "Họ và tên:  ${response.fullName}",
-                          style: AppTextStyles.roboto16Bold,
+                          style: AppTextStyles.roboto16semiBold,
                         ),
                         const SizedBox(height: 10),
                         // gioi tinh
                         Text(
                           "Giới tính:  ${response.sex ? "Nam" : "Nữ"}",
-                          style: AppTextStyles.roboto16Bold,
+                          style: AppTextStyles.roboto16semiBold,
                         ),
                         const SizedBox(height: 10),
                         // ngay sinh
                         Text(
                           "Ngày sinh:  ${formatTime(DateTime.parse(response.dob))}",
-                          style: AppTextStyles.roboto16Bold,
+                          style: AppTextStyles.roboto16semiBold,
                         ),
                         const SizedBox(height: 10),
                         // so id
                         Text(
                           "Số căn cước công dân:  ${response.identityCardNo}",
-                          style: AppTextStyles.roboto16Bold,
+                          style: AppTextStyles.roboto16semiBold,
                         ),
                         const SizedBox(height: 10),
                         // ngay phat
                         Text(
                           "Ngày cấp:  ${formatTime(response.identityCardIssuedDate)}",
-                          style: AppTextStyles.roboto16Bold,
+                          style: AppTextStyles.roboto16semiBold,
                         ),
                         const SizedBox(height: 10),
                         // co quan ban hanh
                         Text(
                           "Cơ quan cấp:  ${response.issuedBy}",
-                          style: AppTextStyles.roboto16Bold,
+                          style: AppTextStyles.roboto16semiBold,
                         ),
                         const SizedBox(height: 10),
                       ],
@@ -303,7 +303,7 @@ class UserVerificationScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
                   if (response.rejectedInfo != null)
                     Row(
                       children: [
@@ -330,7 +330,7 @@ class UserVerificationScreen extends StatelessWidget {
                           // ten
                           Text(
                             response.rejectedInfo!,
-                            style: AppTextStyles.roboto16Bold
+                            style: AppTextStyles.roboto16semiBold
                                 .copyWith(color: AppColors.red),
                           ),
                         ],

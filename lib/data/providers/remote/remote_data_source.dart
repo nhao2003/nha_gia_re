@@ -67,10 +67,10 @@ class RemoteDataSource {
     }
   }
 
-  Future<AuthResponse> recoveryWithOtp(String email, String otp) async
-  {
+  Future<AuthResponse> recoveryWithOtp(String email, String otp) async {
     try {
-      return await supabaseClient.auth.verifyOTP(email: email,token: otp, type: OtpType.recovery);
+      return await supabaseClient.auth
+          .verifyOTP(email: email, token: otp, type: OtpType.recovery);
     } on PostgrestException catch (e) {
       showSessionExpiredDialog(e.code);
       rethrow;
@@ -105,7 +105,6 @@ class RemoteDataSource {
     }
   }
 
-  Future<bool> isVerifiedBadge(String uid) async {
   Future<bool> isVerifiedBadge(String uid) async {
     Map<String, dynamic> request = {
       'uid': uid,
@@ -1047,6 +1046,7 @@ class RemoteDataSource {
         .limit(1));
     return data.first;
   }
+
   Future<List<Map<String, dynamic>>> getUserTransactions(String uid) async {
     return List<Map<String, dynamic>>.from(await Supabase.instance.client
         .from('transactions')

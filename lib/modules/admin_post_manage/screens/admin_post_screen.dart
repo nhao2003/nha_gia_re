@@ -38,14 +38,6 @@ class _AdminPostScreenState extends State<AdminPostScreen>
           style: AppTextStyles.roboto16regular,
         ),
         backgroundColor: AppColors.primaryColor,
-        actions: [
-          IconButton(
-            onPressed: () {
-              controller.navToVerification();
-            },
-            icon: const Icon(Icons.switch_account),
-          ),
-        ],
       ),
       body: SafeArea(
         child: Container(

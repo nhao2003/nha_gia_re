@@ -148,8 +148,12 @@ class SettingsController extends GetxController {
     Get.toNamed(AppRoutes.personal);
   }
 
-   void navToReviewPost() {
+  void navToReviewPost() {
     Get.toNamed(AppRoutes.admin_post);
+  }
+
+  void navToVerificationList() {
+    Get.toNamed(AppRoutes.admin_verification);
   }
 
   void navToChangePass() {
