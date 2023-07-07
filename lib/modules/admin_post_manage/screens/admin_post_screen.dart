@@ -1,3 +1,5 @@
+import 'dart:isolate';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -45,33 +47,33 @@ class _AdminPostScreenState extends State<AdminPostScreen>
           decoration: BoxDecoration(color: AppColors.white),
           child: Column(
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 12.w),
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(12)),
-                  color: AppColors.backgroundColor,
-                ),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Thanh toán demo",
-                          style: AppTextStyles.roboto16semiBold
-                              .apply(color: AppColors.grey)
-                          // .apply(color: AppColors.black),
-                          ),
-                      Switch(
-                          value: controller.isAutoPost,
-                          onChanged: (val) async {
-                            setState(() {
-                              controller.isAutoPost = val;
-                            });
-                            // controller.pay();
-                          }),
-                    ]),
-              ),
-              SizedBox.square(
-                dimension: 10.h,
-              ),
+              // Container(
+              //   padding: EdgeInsets.symmetric(horizontal: 12.w),
+              //   decoration: BoxDecoration(
+              //     borderRadius: const BorderRadius.all(Radius.circular(12)),
+              //     color: AppColors.backgroundColor,
+              //   ),
+              //   child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //       children: [
+              //         Text("Thanh toán demo",
+              //             style: AppTextStyles.roboto16semiBold
+              //                 .apply(color: AppColors.grey)
+              //             // .apply(color: AppColors.black),
+              //             ),
+              //         Switch(
+              //             value: controller.isAutoPost,
+              //             onChanged: (val) async {
+              //               setState(() {
+              //                 controller.isAutoPost = val;
+              //               });
+              //               // controller.pay();
+              //             }),
+              //       ]),
+              // ),
+              // SizedBox.square(
+              //   dimension: 10.h,
+              // ),
               controller.isAutoPost
                   ? const AutoPost()
                   : const SizedBox.shrink(),
@@ -138,7 +140,8 @@ class _AdminPostScreenState extends State<AdminPostScreen>
                           builder: (context, snapshot) {
                             var posts = snapshot.data;
                             if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
+                                    ConnectionState.waiting ||
+                                controller.isLoading == true) {
                               return const Center(
                                   child: CircularProgressIndicator());
                             } else if (snapshot.hasError) {
@@ -169,7 +172,18 @@ class _AdminPostScreenState extends State<AdminPostScreen>
                                     child: GestureDetector(
                                       onTap: () {
                                         controller.navigateToDetailSceen(
-                                            posts[index]);
+                                            posts[index], () {
+                                          setState(() {
+                                            controller.isLoading = true;
+                                          });
+                                          Future.delayed(Duration(seconds: 3),
+                                              () {
+                                            setState(() {
+                                              controller.getAllPosts();
+                                              controller.isLoading = false;
+                                            });
+                                          });
+                                        });
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(
@@ -263,7 +277,8 @@ class _AdminPostScreenState extends State<AdminPostScreen>
                           builder: (context, snapshot) {
                             var posts = snapshot.data;
                             if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
+                                    ConnectionState.waiting ||
+                                controller.isLoading == true) {
                               return const Center(
                                   child: CircularProgressIndicator());
                             } else if (snapshot.hasError) {
@@ -294,7 +309,18 @@ class _AdminPostScreenState extends State<AdminPostScreen>
                                     child: GestureDetector(
                                       onTap: () {
                                         controller.navigateToDetailSceen(
-                                            posts[index]);
+                                            posts[index], () {
+                                          setState(() {
+                                            controller.isLoading = true;
+                                          });
+                                          Future.delayed(Duration(seconds: 3),
+                                              () {
+                                            setState(() {
+                                              controller.getAllPosts();
+                                              controller.isLoading = false;
+                                            });
+                                          });
+                                        });
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(

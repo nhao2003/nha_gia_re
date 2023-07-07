@@ -49,7 +49,6 @@ class AdminPostDetailController extends GetxController {
       Get.snackbar("Trạng thái", "Đã có lỗi xảy ra");
       e.printError();
     }
-    isExecute = false;
   }
 
   rejectPost() async {
@@ -57,9 +56,7 @@ class AdminPostDetailController extends GetxController {
       if (rejectInfo.trim().isNotEmpty) {
         await repository.rejectPost(post.id, rejectInfo);
         Get.snackbar("Trạng thái", "Đã ẩn bài đăng");
-      } else {
-        Get.snackbar("Trạng thái", "Vui lòng thêm lý do từ chối");
-      }
+      } else {}
     } catch (e) {
       Get.snackbar("Trạng thái", "Đã có lỗi xảy ra");
       e.printError();
