@@ -1677,7 +1677,7 @@ class PostScreenState extends State<PostScreen> {
                                                 )
                                               : Center(
                                                   child: Text(
-                                                  "Chỉnh sửa",
+                                                  "Hoàn thành",
                                                   style: AppTextStyles
                                                       .roboto20semiBold
                                                       .copyWith(
