@@ -1,7 +1,10 @@
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
+import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
 import 'package:nha_gia_re/data/repositories/post_repository.dart';
+import 'package:nha_gia_re/data/repositories/user_repository.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../data/models/properties/post.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -26,15 +29,20 @@ class HomeController extends GetxController {
     }
   }
 
-  PostRepository repository = PostRepository();
+  UserInfo? userInfo;
+  PostRepository repository = GetIt.instance<PostRepository>();
 
   void navToPost() {
     Get.toNamed(AppRoutes.post);
   }
 
+  void navToNoti() {
+    Get.toNamed(AppRoutes.notification);
+  }
+
   void navToSell() {
     var data = {
-      "title": 'Mua bán',
+      "title": 'For Sale'.tr,
       "type": TypeNavigate.sell,
     };
     Get.toNamed(AppRoutes.resultArg, arguments: data);
@@ -42,7 +50,7 @@ class HomeController extends GetxController {
 
   void navToRent() {
     var data = {
-      "title": 'Cho thuê',
+      "title": 'For Lease'.tr,
       "type": TypeNavigate.rent,
     };
     Get.toNamed(AppRoutes.resultArg, arguments: data);
@@ -50,7 +58,7 @@ class HomeController extends GetxController {
 
   void navByProvince(String provider) {
     var data = {
-      "title": 'Tỉnh thành',
+      "title": 'Provinces'.tr,
       "type": TypeNavigate.province,
       "province": provider,
     };
@@ -58,8 +66,21 @@ class HomeController extends GetxController {
   }
 
   Future<List<List<Post>>> init() async {
-    final List<List<Post>> data =
-        await Future.wait([getLeasePosts(), getSellPosts()]);
+    UserRepository userRepo = GetIt.instance<UserRepository>();
+    late List<List<Post>> data;
+    await userRepo.getUserInfo().then((value) async {
+      PostRepository repository = GetIt.instance<PostRepository>();
+      PostFilter filter = PostFilter(
+        orderBy: OrderBy.priceAsc,
+        postedBy: PostedBy.all,
+        provinceCode: value.address?.cityCode,
+        from: 0,
+        to: 10,
+      );
+      userInfo = value;
+      data = await Future.wait(
+          [getLeasePosts(), repository.getAllPosts(filter), getSellPosts()]);
+    });
     print("Data Length: ${data.length}");
     return data;
   }
@@ -69,6 +90,8 @@ class HomeController extends GetxController {
       isLease: true,
       orderBy: OrderBy.createdAtDesc,
       postedBy: PostedBy.all,
+      from: 0,
+      to: 10,
     ));
   }
 
@@ -77,6 +100,8 @@ class HomeController extends GetxController {
       isLease: false,
       orderBy: OrderBy.createdAtDesc,
       postedBy: PostedBy.all,
+      from: 0,
+      to: 10,
     ));
   }
 }

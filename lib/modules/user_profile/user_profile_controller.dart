@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:nha_gia_re/data/models/address.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
@@ -18,6 +19,8 @@ class UserProfileController extends GetxController {
   var fullNameTextController = TextEditingController();
   var phoneNumberTextController = TextEditingController();
   var bioTextController = TextEditingController();
+  late Address address;
+  final TextEditingController addressController = TextEditingController();
   var birthday = DateTime.now();
   var isUploadAvatar = false.obs;
 
@@ -29,12 +32,20 @@ class UserProfileController extends GetxController {
       gender.value = (arg.isMale!) ? 'male' : 'female';
       birthDayTextController.text = DateFormat('dd/MM/yyyy').format(arg.dob!);
       bioTextController.text = arg.description!;
+      addressController.text = arg.address.toString();
+      address = arg.address!;
+    } else {
+      avatarUrl =
+          'https://th.bing.com/th/id/OIP.IinrjlpXbDCJt28EGzYHfQHaHa?pid=ImgDet&rs=1';
     }
   }
 
   Future<void> handelUploadAvatar(File file) async {
     isUploadAvatar.value = true;
-    await uploadAvatar(file).then((value) => isUploadAvatar.value = false);
+    avatarUrl = await uploadAvatar(file).then((value) {
+      isUploadAvatar.value = false;
+      return value;
+    });
   }
 
   String? validateTextField(String? value) {
@@ -42,6 +53,16 @@ class UserProfileController extends GetxController {
       return 'Required field must not be blank';
     }
     return null;
+  }
+
+  void handleAddress() async {
+    address = await Get.toNamed(AppRoutes.address)!.then((value) {
+      if (value != null) {
+        addressController.text = value.toString();
+        return value;
+      } else
+        return address;
+    });
   }
 
   Future<void> handleDatePicker() async {
@@ -74,18 +95,12 @@ class UserProfileController extends GetxController {
 
   Future<void> handleSubmit() async {
     if (userProfileFormKey.currentState!.validate()) {
-      var auth = AuthRepository();
+      final auth = GetIt.instance<AuthRepository>();
       if (auth.isUserLoggedIn) {
         UpdateProfileRequest request = UpdateProfileRequest.name(
-            address: Address(
-                cityCode: 1,
-                cityName: '1',
-                districtCode: 1,
-                districtName: '1',
-                wardCode: 1,
-                wardName: '1'),
+            address: address,
             isMale: (gender.value == 'male'),
-            avatarUrl: "avatarUrl",
+            avatarUrl: avatarUrl,
             fullName: fullNameTextController.text,
             phoneNumber: phoneNumberTextController.text,
             dob: birthday,

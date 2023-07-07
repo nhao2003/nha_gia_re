@@ -374,9 +374,66 @@ enum MessageType {
   }
 }
 
+enum NotificationType {
+  suggest,
+  expirationWarning,
+  rejectPost,
+  acceptPost,
+  newFollower,
+  advertise;
+
+  @override
+  String toString() {
+    switch (this) {
+      case NotificationType.suggest:
+        return "suggest";
+      case NotificationType.expirationWarning:
+        return "expirationWarning";
+      case NotificationType.rejectPost:
+        return "rejectPost";
+      case NotificationType.acceptPost:
+        return "acceptPost";
+      case NotificationType.advertise:
+        return "advertise";
+      case NotificationType.newFollower:
+        return "newFollower";
+    }
+  }
+
+  static NotificationType parse(String value) {
+    for (NotificationType type in NotificationType.values) {
+      if (type.toString() == value) {
+        return type;
+      }
+    }
+    throw Exception(
+        "Can't parse NotificationType! Your input value is \"$value\"");
+  }
+}
+
 enum TypeNavigate {
   search,
   sell,
   rent,
   province,
+  user,
+  favorite,
+}
+
+enum TypeIndetificationDocument {
+  chungMinhNhanDan,
+  canCuocCongDan,
+  hoChieu;
+
+  @override
+  String toString() {
+    switch (this) {
+      case TypeIndetificationDocument.chungMinhNhanDan:
+        return "Chứng minh nhân dân";
+      case TypeIndetificationDocument.canCuocCongDan:
+        return "Căn cước công dân";
+      case TypeIndetificationDocument.hoChieu:
+        return "Hộ chiếu";
+    }
+  }
 }

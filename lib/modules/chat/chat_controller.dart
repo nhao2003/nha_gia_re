@@ -11,12 +11,10 @@ import 'package:nha_gia_re/data/models/conversation.dart';
 import 'package:nha_gia_re/data/models/user_info.dart';
 import 'package:nha_gia_re/data/providers/remote/request/messsage_request.dart';
 import 'package:nha_gia_re/data/repositories/chat_repository.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../data/models/message.dart';
 import '../../routers/app_routes.dart';
 
 class ChatController extends GetxController {
-  final supabase = Supabase.instance.client;
   RxList<File> mediaPicker = RxList<File>();
   late StreamSubscription<List<Message>> streamSubscription;
   final StreamController<List<Message>> _controller = StreamController();
@@ -60,8 +58,6 @@ class ChatController extends GetxController {
   void removeMedia(File file) {
     mediaPicker.remove(file);
   }
-
-  int i = 0;
 
   Future<void> initializeMessages(dynamic arg) async {
     if (arg is Conversation) {

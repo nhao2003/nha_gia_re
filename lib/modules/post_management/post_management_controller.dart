@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/repositories/auth_repository.dart';
 import '../../data/models/properties/post.dart';
@@ -21,10 +22,10 @@ class PostManagementController extends GetxController {
     "Hết hạn",
   ];
 
-  PostRepository repository = PostRepository();
+  PostRepository repository = GetIt.instance<PostRepository>();
 
   Future<List<Post>> getAllPosts() async {
-    List<Post> datas = await repository.getUserPosts(AuthRepository().userID!);
+    List<Post> datas = await repository.getUserPosts(GetIt.instance<AuthRepository>().userID!);
     return datas;
   }
 
@@ -76,6 +77,11 @@ class PostManagementController extends GetxController {
   void editPost(Post post) async {
     print("edit post");
     // edit post
+
+    Get.toNamed(AppRoutes.post, parameters: {
+      "id":  post.id,
+      'type': post.type.toString(),
+    });
   }
 
   void deletePost(Post post) async {

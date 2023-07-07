@@ -1,11 +1,28 @@
 import 'package:get/get.dart';
+import 'package:nha_gia_re/modules/admin_post_detail/admin_post_detail_binding.dart';
+import 'package:nha_gia_re/modules/admin_post_detail/screens/admin_post_detail_screen.dart';
+import 'package:nha_gia_re/modules/admin_post_manage/admin_post_binding.dart';
+import 'package:nha_gia_re/modules/admin_post_manage/screens/admin_post_screen.dart';
+import 'package:nha_gia_re/modules/address_form/address_binding.dart';
+import 'package:nha_gia_re/modules/address_form/screens/address.dart';
+import 'package:nha_gia_re/modules/admin_verification/admin_verification_binding.dart';
+import 'package:nha_gia_re/modules/admin_verification/screens/admin_verification_screen.dart';
+import 'package:nha_gia_re/modules/blog/screens/blog_detail_screen.dart';
+import 'package:nha_gia_re/modules/blog/screens/blog_list_screen.dart';
+import 'package:nha_gia_re/modules/login/screens/otp_screen.dart';
+import 'package:nha_gia_re/modules/login/screens/reset_pass.dart';
 import 'package:nha_gia_re/modules/maps/screens/map_picker_screen.dart';
 import 'package:nha_gia_re/modules/maps/screens/map_screen.dart';
 import 'package:nha_gia_re/modules/post_details/post_detail_binding.dart';
 import 'package:nha_gia_re/modules/post_details/screen/post_details_screen.dart';
 import 'package:nha_gia_re/modules/notification/notification_binding.dart';
 import 'package:nha_gia_re/modules/notification/screens/notification_screen.dart';
+import 'package:nha_gia_re/modules/purchase/purchase_binding.dart';
+import 'package:nha_gia_re/modules/purchase/screens/purchase_screens.dart';
 import 'package:nha_gia_re/modules/search/screens/result_arg_screen.dart';
+import 'package:nha_gia_re/modules/settings/screens/change_language.dart';
+import 'package:nha_gia_re/modules/settings/screens/change_pass.dart';
+import 'package:nha_gia_re/modules/settings/settings_binding.dart';
 import 'package:nha_gia_re/modules/splash/screens/spash_screen.dart';
 import 'package:nha_gia_re/modules/splash/splash_binding.dart';
 import 'package:nha_gia_re/modules/tab/tab_binding.dart';
@@ -16,6 +33,11 @@ import 'package:nha_gia_re/modules/search/screens/filter_screen.dart';
 import 'package:nha_gia_re/modules/chat/chat_binding.dart';
 import 'package:nha_gia_re/modules/chat/screens/chat_screen.dart';
 import 'package:nha_gia_re/modules/search/screens/search_screen.dart';
+import 'package:nha_gia_re/modules/verification/screens/verification_card_screen.dart';
+import 'package:nha_gia_re/modules/verification/screens/verification_reject_screen.dart';
+import 'package:nha_gia_re/modules/verification/screens/verification_waiting_screen.dart';
+import 'package:nha_gia_re/modules/verification/verification_binding.dart';
+import '../modules/blog/blog_binding.dart';
 import '../modules/conversations/conversation_binding.dart';
 import '../modules/conversations/screens/conversation_screen.dart';
 import 'package:nha_gia_re/modules/user_profile/screens/user_profile_screen.dart';
@@ -31,6 +53,8 @@ import '../modules/personal/screens/personal_screen.dart';
 import '../modules/post/post_binding.dart';
 import '../modules/post/screens/post_screen.dart';
 import '../modules/search/search_binding.dart';
+import '../modules/verification/screens/verification_info_screen.dart';
+import '../modules/verification/screens/verification_portrait_screen.dart';
 import 'app_routes.dart';
 
 abstract class AppPages {
@@ -70,8 +94,16 @@ abstract class AppPages {
       page: () => const RegisterScreen(),
     ),
     GetPage(
+      name: AppRoutes.recoveryPass,
+      page: () => const RecoveryPassScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.otp,
+      page: () => const OTPScreen(),
+    ),
+    GetPage(
       name: AppRoutes.post,
-      page: () => const MyCustomForm(),
+      page: () => const PostScreen(),
       binding: PostBinding(),
     ),
     GetPage(
@@ -85,9 +117,10 @@ abstract class AppPages {
       binding: PersonalBinding(),
     ),
     GetPage(
-        name: AppRoutes.userProfile,
-        page: () => const UserProfileScreen(),
-        binding: UserProfileBinding()),
+      name: AppRoutes.userProfile,
+      page: () => const UserProfileScreen(),
+      binding: UserProfileBinding(),
+    ),
     GetPage(
       name: AppRoutes.postManagement,
       page: () => PostManagementScreen(),
@@ -100,7 +133,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.splashScreen,
-      page: () => const SplashScreen(),
+      page: () => SplashScreen(),
       binding: SplashBinding(),
     ),
     GetPage(
@@ -115,13 +148,83 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.map_picker_screen,
-      page: () =>  MapPickerScreen(),
+      page: () => MapPickerScreen(),
       binding: MapsBinding(),
     ),
     GetPage(
       name: AppRoutes.resultArg,
       page: () => ResultArgScreen(),
       binding: SearchBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.blog_screen,
+      page: () => const BlogListScreen(),
+      binding: BlogBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.blog_screen_detail,
+      page: () => const BlogDetailScreen(),
+      binding: BlogBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.address,
+      page: () => const AddressScreen(),
+      binding: AddressBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.admin_post,
+      page: () => const AdminPostScreen(),
+      binding: AdminPostBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.admin_post_detail,
+      page: () => AdminPostDetailScreen(),
+      binding: AdminPostDetailBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.change_pass,
+      page: () => const ChangePassScreen(),
+      binding: SettingsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.change_lang,
+      page: () => const ChangeLanguageScreen(),
+      binding: SettingsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.purchase_screen,
+      page: () => const PurchaseScreen(),
+      binding: PurchaseBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.verification_card_screen,
+      page: () => VerificationCardScreen(),
+      binding: VerificationBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.verification_portrait_screen,
+      page: () => verificationPortraitScreen(),
+      binding: VerificationBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.verification_info_screen,
+      page: () => verificationInfoScreen(),
+      binding: VerificationBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.verification_waiting_screen,
+      page: () => const VerificationWaitingScreen(),
+      binding: VerificationBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.verification_reject_screen,
+      page: () => VerificationRejectScreen(),
+      binding: VerificationBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.admin_verification,
+      page: () => AdminVerificationScreen(),
+      binding: AdminVerificationBinding(),
     ),
   ];
 }

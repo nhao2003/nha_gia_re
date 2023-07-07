@@ -1,21 +1,21 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
+import 'package:nha_gia_re/data/enums/enums.dart';
+import 'package:nha_gia_re/data/models/notification.dart';
+import 'package:nha_gia_re/data/repositories/notification_repository.dart';
+import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/text_styles.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
+// ignore: must_be_immutable
 class ItemNoti extends StatefulWidget {
-  Color colorStatus;
-  String status;
-  String title;
-  String address;
-  String urlImage;
+  NotificationModel notiModel;
 
   ItemNoti({
-    required this.colorStatus,
-    required this.status,
-    required this.title,
-    required this.address,
-    required this.urlImage,
+    required this.notiModel,
     super.key,
   });
 
@@ -25,72 +25,120 @@ class ItemNoti extends StatefulWidget {
 
 class _ItemNotiState extends State<ItemNoti> {
   double sizeImage = 80;
-
-  int selectedMenu = 0;
+  NotificationRepository notiRepo = GetIt.instance<NotificationRepository>();
+  Color getColorStatus() {
+    switch (widget.notiModel.type) {
+      case NotificationType.suggest:
+        return AppColors.grey;
+      case NotificationType.expirationWarning:
+        return AppColors.primaryColor;
+      case NotificationType.rejectPost:
+        return AppColors.red;
+      case NotificationType.acceptPost:
+        return AppColors.green;
+      case NotificationType.advertise:
+        return const Color(0xff49454F);
+      case NotificationType.newFollower:
+        return AppColors.green;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      margin: const EdgeInsets.only(bottom: 8),
-      color: AppColors.white,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // image
-          SizedBox(
-            height: sizeImage,
-            width: sizeImage,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                widget.urlImage,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Image.asset(
-                    "assets/images/default_image.png",
+    return InkWell(
+      onTap: () async {
+        widget.notiModel.isRead = true;
+        debugPrint('test');
+        if(widget.notiModel.type == NotificationType.newFollower)
+        {
+          Get.toNamed(AppRoutes.personal,arguments: widget.notiModel.link);
+        }
+        else
+        {
+          Get.toNamed(AppRoutes.post_detail,arguments: widget.notiModel.link);
+        }
+        await notiRepo.setIsReadNotification(widget.notiModel.id);
+        setState(() {});
+      },
+      child: Slidable(
+        endActionPane: ActionPane(
+          motion: const ScrollMotion(),
+          children: [
+            SlidableAction(
+              onPressed: (context) async {
+                // delete task
+                await notiRepo.deleteNotification(widget.notiModel.id);
+              },
+              icon: Icons.delete,
+              backgroundColor: AppColors.red,
+            ),
+          ],
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(8.0),
+          margin: const EdgeInsets.only(bottom: 8),
+          color: !widget.notiModel.isRead
+              ? const Color.fromARGB(255, 250, 245, 227)
+              : AppColors.white,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // image
+              SizedBox(
+                height: sizeImage,
+                width: sizeImage,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: CachedNetworkImage(
+                    imageUrl:
+                    widget.notiModel.image!,
                     fit: BoxFit.cover,
-                  );
-                },
-                loadingBuilder: (BuildContext context, Widget child,
-                    ImageChunkEvent? loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Center(
-                    child: CircularProgressIndicator(
-                      value: loadingProgress.expectedTotalBytes != null
-                          ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
-                          : null,
-                    ),
-                  );
-                },
+                    errorWidget: (context, error, stackTrace) {
+                      return Image.asset(
+                        "assets/images/default_image.png",
+                        fit: BoxFit.cover,
+                      );
+                    },
+                    progressIndicatorBuilder: ( context, string, loadingProgress) {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.progress,
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
-            ),
-          ),
-          const SizedBox(width: 5),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.status,
-                  style: AppTextStyles.roboto12semiBold
-                      .copyWith(color: widget.colorStatus),
+              const SizedBox(width: 5),
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.notiModel.type.toString().tr,
+                      style: AppTextStyles.roboto12semiBold
+                          .copyWith(color: getColorStatus()),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      widget.notiModel.title,
+                      style: !widget.notiModel.isRead
+                          ? AppTextStyles.roboto16Bold
+                          : AppTextStyles.roboto16regular,
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      widget.notiModel.content,
+                      style: AppTextStyles.roboto14regular.copyWith(
+                        color: const Color(0xff49454F),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 5),
-                Text(
-                  widget.title,
-                  style: AppTextStyles.roboto16regular,
-                ),
-                const SizedBox(height: 5),
-                Text(widget.address,
-                    style: AppTextStyles.roboto14regular.copyWith(
-                      color: const Color(0xff49454F),
-                    )),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

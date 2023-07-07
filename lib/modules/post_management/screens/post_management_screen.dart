@@ -32,7 +32,7 @@ class _PostManagementScreenState extends State<PostManagementScreen> {
       child: Scaffold(
           appBar: AppBar(
             backgroundColor: AppColors.primaryColor,
-            title: const Text("Quản lý tin"),
+            title: Text('Posts Management'.tr),
             bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(50.0),
                 child: ColoredBox(

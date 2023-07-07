@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
-
 import '../../../core/theme/app_colors.dart';
 
 class ExpandableContainer extends StatefulWidget {
@@ -50,7 +50,6 @@ class _ExpandableContainerState extends State<ExpandableContainer>
             height: 10,
           ),
           AnimatedSize(
-            vsync: this,
             duration: const Duration(milliseconds: 200),
             curve: Curves.fastOutSlowIn,
             child: ConstrainedBox(
@@ -76,7 +75,7 @@ class _ExpandableContainerState extends State<ExpandableContainer>
             children: [
               InkWell(
                 child: Text(
-                  isExpanded ? 'Thu gọn' : 'Xem thêm',
+                  isExpanded ? 'Collapse'.tr : 'Expand'.tr,
                   style: AppTextStyles.roboto16regular.copyWith(
                     color: AppColors.blue,
                   ),

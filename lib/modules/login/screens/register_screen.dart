@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nha_gia_re/core/extensions/string_ex.dart';
 import 'package:nha_gia_re/modules/login/screens/forget_password.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import '../login_controller.dart';
+import 'package:nha_gia_re/core/values/assets_image.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -25,11 +27,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Text("LOGO",
-                      style: TextStyle(color: Colors.black, fontSize: 64)),
-                  const SizedBox(
-                    height: 50,
-                  ),
+                  Image.asset(Assets.logoLight, width: 150,height: 150,),
                   Obx(() => TextFormField(
                         controller: _controller.registerEmail,
                         decoration: InputDecoration(
@@ -70,6 +68,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       visible: _controller.validatorVisibility.value,
                       child: FlutterPwValidator(
                           controller: _controller.registerPassword,
+                          strings: ValidateString(),
                           minLength: 8,
                           uppercaseCharCount: 1,
                           width: 400,

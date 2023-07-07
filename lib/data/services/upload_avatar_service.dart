@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
@@ -8,9 +9,8 @@ Future<String> uploadFileToSupabaseStorage(
     File file, String bucketName, String path) async {
   final storage = Supabase.instance.client.storage;
   try {
-    final response = await storage
-        .from(bucketName)
-        .uploadBinary(path, file.readAsBytesSync());
+    final file1 = file.readAsBytesSync();
+    final response = await storage.from(bucketName).uploadBinary(path, file1);
     print(response);
     return storage.from(bucketName).getPublicUrl(path);
   } catch (e) {
@@ -18,32 +18,62 @@ Future<String> uploadFileToSupabaseStorage(
   }
 }
 
-Future<void> uploadAvatar(File avatar) async {
+Future<String> uploadAvatar(File avatar) async {
   try {
     var uid = Supabase.instance.client.auth.currentUser!.id;
     final fileName = avatar.path.split('/').last;
     var path = '$uid/$fileName';
     print('path $path');
     final url = await uploadFileToSupabaseStorage(avatar, 'avatar', path);
+    return url;
   } catch (e) {
     rethrow;
   }
 }
 
+Future<String> uploadPortrait(File portrait) async {
+  try {
+    var uid = Supabase.instance.client.auth.currentUser!.id;
+    String fileName = portrait.path.split('/').last;
+    fileName = "${const Uuid().v4()}.${fileName.split('.').last}";
+    var path = '$uid/$fileName';
+    return await uploadFileToSupabaseStorage(portrait, 'portrait', path);
+  } catch (e) {
+    rethrow;
+  }
+}
+
+Future<String> uploadIDCard(File imageCard) async {
+  try {
+    var uid = Supabase.instance.client.auth.currentUser!.id;
+    String fileName = imageCard.path.split('/').last;
+    fileName = "${const Uuid().v4()}.${fileName.split('.').last}";
+    var path = '$uid/$fileName';
+    return await uploadFileToSupabaseStorage(imageCard, 'id_card', path);
+  } catch (e) {
+    rethrow;
+  }
+}
+
+Future<void> deletePostImage() async {}
+
 Future<List<String>> uploadPostImages(List<File> images) async {
   try {
-    final List<Future<String>> futures = [];
+    log("Upload line 42:");
+    log(images.length.toString());
+    final List<String> urls = [];
     const uuid = Uuid();
-    images.map((image) {
+    for (var image in images) {
       var uid = Supabase.instance.client.auth.currentUser!.id;
       String fileName = image.path.split('/').last;
       fileName = "${uuid.v4()}.${fileName.split('.').last}";
       var path = '$uid/$fileName';
       print('path $path');
-      futures.add(uploadFileToSupabaseStorage(image, 'post_images', path));
-    });
-    final urls = await Future.wait(futures);
-    return List<String>.from(urls);
+      urls.add(await uploadFileToSupabaseStorage(image, 'post_images', path));
+    }
+    log("Upload line 56:");
+    log(urls.toString());
+    return urls;
   } catch (e) {
     rethrow;
   }

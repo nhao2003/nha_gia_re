@@ -36,7 +36,7 @@ class Address {
       };
   @override
   String toString() {
-    return '${wardName}, ${districtName}, ${cityName}';
+    return '${cityName}, ${districtName}, ${wardName}';
   }
 
   Address.fromJson(Map<String, dynamic> json)

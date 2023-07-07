@@ -1,22 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:ionicons/ionicons.dart';
 
 import '../../../core/theme/text_styles.dart';
 
 class Detail extends StatelessWidget {
-  Detail({super.key, required this.iconAsset, required this.value});
+  Detail({super.key, required this.iconAsset, required this.value, this.icon});
   final String iconAsset;
   final String value;
-
+  IoniconsData? icon;
   @override
   Widget build(BuildContext context) {
     return Wrap(
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
-        Image.asset(
-          iconAsset,
-          width: 24,
+        icon == null
+            ? Image.asset(
+                iconAsset,
+                width: 24,
+              )
+            : Icon(
+                icon,
+                size: 24,
+              ),
+        SizedBox(
+          width: 10,
         ),
-        const SizedBox(width: 10),
         SizedBox(
             width: MediaQuery.of(context).size.width * 0.35,
             child: Text(

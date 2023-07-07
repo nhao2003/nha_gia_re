@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/modules/user_profile/user_profile_controller.dart';
 import 'package:nha_gia_re/modules/user_profile/widgets/user_image_picker.dart';
@@ -10,47 +12,74 @@ class UserProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final UserProfileController _controller = Get.find<UserProfileController>();
-    _controller.init(Get.arguments);
+    final UserProfileController controller = Get.find<UserProfileController>();
+    controller.init(Get.arguments);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Cập nhật thông tin"),
+        title: Text('Update information'.tr),
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Form(
-            key: _controller.userProfileFormKey,
+            key: controller.userProfileFormKey,
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Obx(() => UserImagePicker(_controller.handelUploadAvatar,
-                      _controller.isUploadAvatar.value, _controller.avatarUrl)),
+                  Obx(() => UserImagePicker(controller.handelUploadAvatar,
+                      controller.isUploadAvatar.value, controller.avatarUrl)),
                   const SizedBox(
                     height: 25,
                   ),
                   TextFormField(
-                    controller: _controller.fullNameTextController,
-                    decoration: const InputDecoration(
-                        hintText: 'Họ và tên',
-                        labelText: 'Họ và tên',
-                        border: OutlineInputBorder()),
-                    validator: _controller.validateTextField,
+                    controller: controller.fullNameTextController,
+                    decoration: InputDecoration(
+                        hintText: 'Full name'.tr,
+                        labelText: 'Full name'.tr,
+                        border: const OutlineInputBorder()),
+                    validator: controller.validateTextField,
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   TextFormField(
-                    controller: _controller.phoneNumberTextController,
+                    controller: controller.phoneNumberTextController,
                     keyboardType: TextInputType.phone,
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.digitsOnly
                     ],
-                    decoration: const InputDecoration(
-                        hintText: 'Số điện thoại',
-                        labelText: 'Số điện thoại',
-                        border: OutlineInputBorder()),
-                    validator: _controller.validateTextField,
+                    decoration: InputDecoration(
+                        hintText: 'Phone number'.tr,
+                        labelText: 'Phone number'.tr,
+                        border: const OutlineInputBorder()),
+                    validator: controller.validateTextField,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    onTap: controller.handleAddress,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'This field cannot be empty.'.tr;
+                      }
+                      return null;
+                    },
+                    readOnly: true,
+                    controller: controller.addressController,
+                    enabled: true,
+                    decoration: InputDecoration(
+                      hintText: 'Address'.tr,
+                      hintStyle: AppTextStyles.roboto16regular
+                          .copyWith(color: AppColors.grey),
+                      disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                        borderSide: const BorderSide(color: Colors.grey),
+                      ),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                          borderSide: const BorderSide(color: Colors.grey)),
+                    ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -59,11 +88,11 @@ class UserProfileScreen extends StatelessWidget {
                         children: [
                           Obx(() => Radio(
                               value: "male",
-                              groupValue: _controller.gender.value,
+                              groupValue: controller.gender.value,
                               onChanged: (value) =>
-                                  _controller.gender.value = value.toString())),
+                                  controller.gender.value = value.toString())),
                           Text(
-                            "Nam",
+                            'Male'.tr,
                             style: AppTextStyles.roboto16regular,
                           ),
                         ],
@@ -73,11 +102,11 @@ class UserProfileScreen extends StatelessWidget {
                         children: [
                           Obx(() => Radio(
                               value: "female",
-                              groupValue: _controller.gender.value,
+                              groupValue: controller.gender.value,
                               onChanged: (value) =>
-                                  _controller.gender.value = value.toString())),
+                                  controller.gender.value = value.toString())),
                           Text(
-                            "Nữ",
+                            'Female'.tr,
                             style: AppTextStyles.roboto16regular,
                           ),
                         ],
@@ -85,47 +114,45 @@ class UserProfileScreen extends StatelessWidget {
                     ],
                   ),
                   TextFormField(
-                      controller: _controller.birthDayTextController,
+                      controller: controller.birthDayTextController,
                       readOnly: true,
-                      decoration: const InputDecoration(
-                          hintText: 'Ngày sinh',
-                          labelText: 'Ngày sinh',
-                          border: OutlineInputBorder()),
-                      validator: _controller.validateTextField,
-                      onTap: _controller.handleDatePicker),
+                      decoration: InputDecoration(
+                          hintText: 'Date of birth'.tr,
+                          labelText: 'Date of birth'.tr,
+                          border: const OutlineInputBorder()),
+                      validator: controller.validateTextField,
+                      onTap: controller.handleDatePicker),
                   const SizedBox(
                     height: 20,
                   ),
                   TextFormField(
-                    controller: _controller.bioTextController,
+                    controller: controller.bioTextController,
                     maxLines: 6,
-                    decoration: const InputDecoration(
-                        hintText: 'Giới thiệu về bản thân',
+                    decoration: InputDecoration(
+                        hintText: 'Write something about you'.tr,
                         alignLabelWithHint: true,
-                        labelText: 'Giới thiệu',
-                        border: OutlineInputBorder()),
+                        labelText: 'Bio'.tr,
+                        border: const OutlineInputBorder()),
                   ),
                   const SizedBox(
                     height: 15,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                          onPressed: _controller.handleSubmit,
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        onPressed: controller.handleSubmit,
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
                             ),
                           ),
-                          child: const Text(
-                            "Lưu",
-                            style: TextStyle(color: Colors.white),
-                          )),
-                    ],
+                        ),
+                        child: Text(
+                          "Save".tr,
+                          style: const TextStyle(color: Colors.white),
+                        )),
                   ),
                 ]),
           ),

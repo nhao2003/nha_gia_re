@@ -1,11 +1,20 @@
 import 'dart:developer';
 import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nha_gia_re/core/extensions/string_ex.dart';
+import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/models/conversation.dart';
 import 'package:nha_gia_re/data/models/message.dart';
+import 'package:nha_gia_re/data/models/notification.dart';
+import 'package:nha_gia_re/data/providers/remote/request/account_verification_requests.dart';
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
+import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../repositories/auth_repository.dart';
 
 class RemoteDataSource {
   static const String tableApartments = 'apartments';
@@ -17,12 +26,153 @@ class RemoteDataSource {
   static const String tableUserLike = 'user_like';
   static const String tableUserFollow = 'user_follow';
   static const String tablePost = 'post';
+  static const String tableNotification = 'notification';
+  static const String tableAccountVerificationRequest =
+      'account_verification_requests';
   final SupabaseClient supabaseClient = Supabase.instance.client;
+
+  void showSessionExpiredDialog(String? code) {
+    if (code == 'PGRST301') {
+      Get.defaultDialog(
+          title: 'Session expired.'.tr,
+          titleStyle: AppTextStyles.roboto20Bold,
+          content: Padding(
+            padding: const EdgeInsets.fromLTRB(12.0, 6, 12.0, 6),
+            child: Text(
+              'Please log in again to refresh your session.'.tr,
+              style: AppTextStyles.roboto18regular,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          textConfirm: 'OK',
+          confirmTextColor: Colors.white,
+          onConfirm: () {
+            Get.toNamed(AppRoutes.login);
+          });
+    }
+  }
+
+  Future<void> setIsReadNotification(String id) async {
+    try {
+      await supabaseClient
+          .from(tableNotification)
+          .update({'is_read': true})
+          .eq('id', id)
+          .select();
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<AuthResponse> recoveryWithOtp(String email, String otp) async {
+    try {
+      return await supabaseClient.auth
+          .verifyOTP(email: email, token: otp, type: OtpType.recovery);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> updatePass(String newPass) async {
+    try {
+      await supabaseClient.auth.updateUser(UserAttributes(password: newPass));
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> deleteNotification(String id) async {
+    try {
+      await supabaseClient
+          .from(tableNotification)
+          .delete()
+          .eq('id', id)
+          .select();
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> isVerifiedBadge(String uid) async {
+    Map<String, dynamic> request = {
+      'uid': uid,
+    };
+    try {
+      return await supabaseClient.rpc('check_verified_badge', params: request);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> changePassword(
+      {required String currentPass, required String newPass}) async {
+    Map<String, dynamic> request = {
+      'current_plain_password': currentPass,
+      'new_plain_password': newPass
+    };
+    try {
+      return await supabaseClient.rpc('change_user_password', params: request);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> updateBlogView(String id) async {
+    Map<String, dynamic> request = {
+      'b_id': id,
+    };
+    try {
+      await supabaseClient.rpc('update_view', params: request);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Stream<List<NotificationModel>> getNotification() {
+    try {
+      var data = supabaseClient
+          .from(tableNotification)
+          .stream(primaryKey: ['id'])
+          .eq('user_id', supabaseClient.auth.currentUser?.id)
+          .order('create_at', ascending: false)
+          .map((es) => es.map((e) => NotificationModel.fromJson(e)).toList());
+      return data;
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   Future<AuthResponse> signUp(
       {required String email, required String password}) async {
     try {
       return await supabaseClient.auth.signUp(email: email, password: password);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       rethrow;
     }
@@ -33,6 +183,9 @@ class RemoteDataSource {
     try {
       return await supabaseClient.auth
           .signInWithPassword(email: email, password: password);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       rethrow;
     }
@@ -45,6 +198,9 @@ class RemoteDataSource {
         'post_id': postId
       };
       await supabaseClient.from(tableUserLike).insert(data).select();
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       rethrow;
     }
@@ -57,6 +213,9 @@ class RemoteDataSource {
           .delete()
           .eq('user_id', supabaseClient.auth.currentUser?.id)
           .eq('post_id', postId);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       rethrow;
     }
@@ -72,32 +231,42 @@ class RemoteDataSource {
           .limit(1);
       if (List<Map<String, dynamic>>.from(res).isNotEmpty) {
         return true;
-      } else
+      } else {
         return false;
+      }
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<void> followUser({required userId}) async {
+  Future<void> followUser({required String userId}) async {
     try {
       Map<String, dynamic> data = {
         'follower_id': supabaseClient.auth.currentUser?.id,
         'followed_id': userId
       };
       await supabaseClient.from(tableUserFollow).insert(data);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<void> unfollowUser({required userId}) async {
+  Future<void> unfollowUser({required String userId}) async {
     try {
       await supabaseClient
           .from(tableUserFollow)
           .delete()
           .eq('follower_id', supabaseClient.auth.currentUser?.id)
           .eq('followed_id', userId);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       rethrow;
     }
@@ -116,6 +285,9 @@ class RemoteDataSource {
       } else {
         return false;
       }
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       rethrow;
     }
@@ -124,6 +296,9 @@ class RemoteDataSource {
   Future<void> signOut() async {
     try {
       await supabaseClient.auth.signOut();
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       rethrow;
     }
@@ -140,6 +315,9 @@ class RemoteDataSource {
           .select();
       inspect(res);
       return List<Map<String, dynamic>>.from(res).first;
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       rethrow;
     }
@@ -148,6 +326,9 @@ class RemoteDataSource {
   Future<void> deletePost(String id) async {
     try {
       await supabaseClient.from(tablePost).delete().eq('id', id);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       rethrow;
     }
@@ -158,6 +339,9 @@ class RemoteDataSource {
       final res =
           await supabaseClient.from(tableApartments).insert(data).select();
       return List<Map<String, dynamic>>.from(res).first;
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       rethrow;
     }
@@ -167,6 +351,9 @@ class RemoteDataSource {
     try {
       final res = await supabaseClient.from(tableHouses).insert(data).select();
       return List<Map<String, dynamic>>.from(res).first;
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       rethrow;
     }
@@ -185,6 +372,9 @@ class RemoteDataSource {
     try {
       final res = await supabaseClient.from(tableMotels).insert(data).select();
       return List<Map<String, dynamic>>.from(res).first;
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       rethrow;
     }
@@ -194,6 +384,9 @@ class RemoteDataSource {
     try {
       final res = await supabaseClient.from(tableOffices).insert(data).select();
       return List<Map<String, dynamic>>.from(res).first;
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       rethrow;
     }
@@ -204,6 +397,9 @@ class RemoteDataSource {
       final response =
           await supabaseClient.from(tableUserInfo).select().eq('uid', uid);
       return List<Map<String, dynamic>>.from(response).first;
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       rethrow;
     }
@@ -212,6 +408,9 @@ class RemoteDataSource {
   Future<void> recoveryPassword(String email) async {
     try {
       await supabaseClient.auth.resetPasswordForEmail(email);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       rethrow;
     }
@@ -226,6 +425,9 @@ class RemoteDataSource {
           .eq('id', postId)
           .select();
       return List<Map<String, dynamic>>.from(res).first;
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       rethrow;
     }
@@ -240,6 +442,9 @@ class RemoteDataSource {
           .eq('id', postId)
           .select();
       return List<Map<String, dynamic>>.from(res).first;
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       rethrow;
     }
@@ -254,6 +459,9 @@ class RemoteDataSource {
           .eq('id', postId)
           .select();
       return List<Map<String, dynamic>>.from(res).first;
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       rethrow;
     }
@@ -269,6 +477,9 @@ class RemoteDataSource {
           .eq('id', postId)
           .select();
       return List<Map<String, dynamic>>.from(res).first;
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       rethrow;
     }
@@ -284,6 +495,9 @@ class RemoteDataSource {
           .eq('id', postId)
           .select();
       return List<Map<String, dynamic>>.from(res).first;
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       rethrow;
     }
@@ -323,7 +537,61 @@ class RemoteDataSource {
     if (filter.postedBy != PostedBy.all) {
       query = query.eq('is_pro_seller', filter.postedBy == PostedBy.proSeller);
     }
+    if (filter.provinceCode != null) {
+      query = query.eq('address->city_code', filter.provinceCode);
+    }
     return query;
+  }
+
+  Future<List<String>> getFavoritePostsId() async {
+    try {
+      final postList = await supabaseClient
+          .from(tableUserLike)
+          .select('post_id')
+          .eq('user_id', supabaseClient.auth.currentUser?.id);
+
+      List<Map<String, dynamic>> postIds =
+          List<Map<String, dynamic>>.from(postList);
+      List<String> allValues = postIds.expand((map) {
+        return map.values.whereType<String>().cast<String>();
+      }).toList();
+      return allValues;
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getFavoritePosts() async {
+    try {
+      List<String> favoriteList = await getFavoritePostsId();
+      final data =
+          await supabaseClient.from(tablePost).select().in_('id', favoriteList);
+      return List<Map<String, dynamic>>.from(data);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> getPostById(String id) async {
+    try {
+      debugPrint(id);
+      final data =
+          await supabaseClient.from(tablePost).select().eq('id', id).limit(1);
+      debugPrint(data.toString());
+      return Map<String, dynamic>.from(data.first);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
   }
 
   Future<List<Map<String, dynamic>>> getAllPosts(PostFilter filter) async {
@@ -335,6 +603,9 @@ class RemoteDataSource {
       }
       final data = await query;
       return List<Map<String, dynamic>>.from(data);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       print(e.toString());
       rethrow;
@@ -393,6 +664,9 @@ class RemoteDataSource {
       final data = await queryOrder;
 
       return List<Map<String, dynamic>>.from(data);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       print(e.toString());
       rethrow;
@@ -450,6 +724,9 @@ class RemoteDataSource {
       final data = await queryOrder;
 
       return List<Map<String, dynamic>>.from(data);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       print(e.toString());
       rethrow;
@@ -491,6 +768,9 @@ class RemoteDataSource {
       final data = await queryOrder;
 
       return List<Map<String, dynamic>>.from(data);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       print(e.toString());
       rethrow;
@@ -526,6 +806,9 @@ class RemoteDataSource {
       final data = await queryOrder;
 
       return List<Map<String, dynamic>>.from(data);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       print(e.toString());
       rethrow;
@@ -549,6 +832,9 @@ class RemoteDataSource {
       final data = await queryOrder;
 
       return List<Map<String, dynamic>>.from(data);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
     } catch (e) {
       print(e.toString());
       rethrow;
@@ -558,29 +844,36 @@ class RemoteDataSource {
   Future<Map<String, dynamic>> getPostDetails(
       String postId, PropertyType propertyType) async {
     final response;
-    switch (propertyType) {
-      case PropertyType.apartment:
-        response = await supabaseClient
-            .from(tableApartments)
-            .select()
-            .eq('id', postId);
-        break;
-      case PropertyType.land:
-        response =
-            await supabaseClient.from(tableLands).select().eq('id', postId);
-        break;
-      case PropertyType.office:
-        response =
-            await supabaseClient.from(tableOffices).select().eq('id', postId);
-        break;
-      case PropertyType.motel:
-        response =
-            await supabaseClient.from(tableMotels).select().eq('id', postId);
-        break;
-      case PropertyType.house:
-        response =
-            await supabaseClient.from(tableHouses).select().eq('id', postId);
-        break;
+    try {
+      switch (propertyType) {
+        case PropertyType.apartment:
+          response = await supabaseClient
+              .from(tableApartments)
+              .select()
+              .eq('id', postId);
+          break;
+        case PropertyType.land:
+          response =
+              await supabaseClient.from(tableLands).select().eq('id', postId);
+          break;
+        case PropertyType.office:
+          response =
+              await supabaseClient.from(tableOffices).select().eq('id', postId);
+          break;
+        case PropertyType.motel:
+          response =
+              await supabaseClient.from(tableMotels).select().eq('id', postId);
+          break;
+        case PropertyType.house:
+          response =
+              await supabaseClient.from(tableHouses).select().eq('id', postId);
+          break;
+      }
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
     }
     return List<Map<String, dynamic>>.from(response).first;
   }
@@ -604,13 +897,20 @@ class RemoteDataSource {
             cons.add(Conversation.fromJson(element));
           }
         }
-        if (cons.isNotEmpty) sink.add(cons);
+        sink.add(cons);
       }),
     );
   }
 
   Future sendMessage(Map<String, dynamic> data) async {
-    await supabaseClient.from('messages').insert(data);
+    try {
+      await supabaseClient.from('messages').insert(data);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Stream<List<Message>> getMessages(Conversation conversation) {
@@ -631,41 +931,199 @@ class RemoteDataSource {
   /// Creates or returns an existing roomID of both participants
   Future<Map<String, dynamic>> getOrCreateConversation(
       String otherUserId) async {
-    final data = await supabaseClient.rpc('get_or_create_conversation',
-        params: {'user_info_id': otherUserId});
-    return data;
+    try {
+      final data = await supabaseClient.rpc('get_or_create_conversation',
+          params: {'user_info_id': otherUserId});
+      return data;
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> markMessagesRead(String conversationId) async {
-    await supabaseClient.rpc('mark_messages_read', params: {
-      'user_id': supabaseClient.auth.currentUser!.id,
-      'conv_id': conversationId,
-    });
+    try {
+      await supabaseClient.rpc('mark_messages_read', params: {
+        'user_id': supabaseClient.auth.currentUser!.id,
+        'conv_id': conversationId,
+      });
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future deleteConversation(String conversationId) async {
-    await supabaseClient.rpc('delete_conversation', params: {
-      'p_user_id': supabaseClient.auth.currentUser!.id,
-      'p_conversation_id': conversationId
-    });
+    try {
+      await supabaseClient.rpc('delete_conversation', params: {
+        'p_user_id': supabaseClient.auth.currentUser!.id,
+        'p_conversation_id': conversationId
+      });
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<List<Map<String, dynamic>>> getUserPosts(String uid) async {
-    final data = await supabaseClient.from('post').select().eq('user_id', uid);
-    return List<Map<String, dynamic>>.from(data);
+    try {
+      final data =
+          await supabaseClient.from('post').select().eq('user_id', uid);
+      return List<Map<String, dynamic>>.from(data);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> extendPost(String id) async {
-    log(id);
-    await supabaseClient
-        .rpc('extend_post_expiry_date', params: {'post_id': id}).then((value) {
-      log("Done");
-    });
+    try {
+      await supabaseClient.rpc('extend_post_expiry_date',
+          params: {'post_id': id}).then((value) {
+        log("Done");
+      });
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> hideOrUnHidePost(String id, bool isHide) async {
-    await supabaseClient.from(tablePost).update({
-      'is_hide': isHide,
-    }).eq('id', id);
+    try {
+      await supabaseClient.from(tablePost).update({
+        'is_hide': isHide,
+      }).eq('id', id);
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getPendingPosts() async {
+    final res = await supabaseClient
+        .from(tablePost)
+        .select()
+        .eq('status', PostStatus.pending);
+    return List<Map<String, dynamic>>.from(res);
+  }
+
+  Future<List<Map<String, dynamic>>> getRejectedPosts() async {
+    final res = await supabaseClient
+        .from(tablePost)
+        .select()
+        .eq('status', PostStatus.rejected);
+    return List<Map<String, dynamic>>.from(res);
+  }
+
+  Future<void> approvePost(String id) async {
+    await supabaseClient.rpc('approve_post', params: {'p_id': id});
+  }
+
+  Future<void> rejectPost(String id, String reason) async {
+    await supabaseClient.rpc('reject_post', params: {
+      'p_id': id,
+      'p_rejected_info': reason,
+    });
+  }
+
+  Future<Map<String, dynamic>> getDetailTransaction(String id) async {
+    final data = List<Map<String, dynamic>>.from(await Supabase.instance.client
+        .from('transactions')
+        .select('*, membership_package(*), membership_package_subscription(*)')
+        .eq('id', id)
+        .limit(1));
+    return data.first;
+  }
+  Future<List<Map<String, dynamic>>> getUserTransactions(String uid) async {
+    return List<Map<String, dynamic>>.from(await Supabase.instance.client
+        .from('transactions')
+        .select('*, membership_package(*), membership_package_subscription(*)')
+        .eq('user_id', uid));
+  }
+
+  Future<void> sendAccountVerificationRequest(
+      AccountVerificationRequests request) async {
+    await supabaseClient
+        .from(tableAccountVerificationRequest)
+        .insert(request.toJson());
+  }
+
+  Future<List<Map<String, dynamic>>> getNewAccountVerificationRequest() async {
+    final res = await supabaseClient
+        .from(tableAccountVerificationRequest)
+        .select()
+        .is_("reviewed_at", null)
+        .order('request_date', ascending: false);
+    return List<Map<String, dynamic>>.from(res);
+  }
+
+  Future<List<Map<String, dynamic>>> getOldAccountVerificationRequest() async {
+    final res = await supabaseClient
+        .from(tableAccountVerificationRequest)
+        .select()
+        .not("reviewed_at", "is", null)
+        .order('request_date', ascending: false);
+    return List<Map<String, dynamic>>.from(res);
+  }
+
+  Future<List<Map<String, dynamic>>> getUserAccountVerificationRequest() async {
+    final auth = GetIt.instance<AuthRepository>();
+    final res = await supabaseClient
+        .from(tableAccountVerificationRequest)
+        .select()
+        .eq("user_id", auth.userID)
+        .order('request_date', ascending: false)
+        .limit(1);
+    return List<Map<String, dynamic>>.from(res);
+  }
+
+  Future<void> acceptAcountVerifiedRequest(String id) async {
+    await supabaseClient.rpc('verified_account', params: {
+      'uid': id,
+    });
+  }
+
+  Future<void> rejectAcountVerifiedRequest(String id, String reason) async {
+    await supabaseClient.rpc('reject_account', params: {
+      'uid': id,
+      'reject_info': reason,
+    });
+  }
+
+  Future<bool?> isAdmin(String userId) async {
+    try {
+      final res = await supabaseClient
+          .from('admins')
+          .select()
+          .eq('user_id', userId)
+          .limit(1);
+      List<Map<String, dynamic>> data = List<Map<String, dynamic>>.from(res);
+      if (data.isEmpty || data.first.isEmpty) return false;
+      return true;
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> checkMonthlyPostLimit() async {
+    final data = await supabaseClient.rpc('check_monthly_post_limit', params: {
+      'uid': supabaseClient.auth.currentUser!.id,
+    });
+    return data;
   }
 }

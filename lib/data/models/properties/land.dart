@@ -29,6 +29,7 @@ class Land extends Post {
     required this.isFacade,
     required this.isWidensTowardsTheBack,
     required this.hasWideAlley,
+    required bool isPriority,
     required Address address,
     required PropertyType type,
     required String userID,
@@ -68,6 +69,7 @@ class Land extends Post {
         status: status,
         rejectedInfo: rejectedInfo,
         isHide: isHide,
+        isPriority: isPriority,
         );
 
   factory Land.fromJson(Map<String, dynamic> json) {
@@ -105,6 +107,7 @@ class Land extends Post {
       status: PostStatus.parse(json['status']),
       rejectedInfo: json['rejected_info'],
       isHide: json['is_hide'],
+        isPriority: json['is_priority']
     );
   }
   @override

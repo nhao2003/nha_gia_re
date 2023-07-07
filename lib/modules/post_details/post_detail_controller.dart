@@ -11,29 +11,23 @@ import 'package:nha_gia_re/modules/post_details/widget/motel_details.dart';
 import 'package:nha_gia_re/modules/post_details/widget/office_details.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../data/enums/enums.dart';
 import '../../data/models/properties/post.dart';
 import '../../data/models/user_info.dart';
+import '../../data/providers/remote/request/filter_request.dart';
+import '../../data/repositories/user_repository.dart';
 
 class PostDetailController extends GetxController {
   // code controller here
   // define variable and function
-  late Post post;
+  Post? post;
   late UserInfo userInfo;
-
+  late List<Post> relatedPost;
   late bool isYourPost = false;
   bool isLoading = false;
   RxBool liked = false.obs;
   late RxInt numOfLikes = 0.obs;
 
-  void initArg(dynamic arg) {
-    if (arg is Post) {
-      post = arg;
-      var auth = AuthRepository();
-      if (post.userID == auth.userID) {
-        isYourPost = true;
-      }
-    }
-  }
 
   Widget postDetail(Post post) {
     if (post is Apartment) {
@@ -51,32 +45,50 @@ class PostDetailController extends GetxController {
     }
   }
 
-  Future<List<dynamic>> init() async {
-    ChatRepository repo = GetIt.instance<ChatRepository>();
-    PostRepository postRepo = PostRepository();
+  Future<List<dynamic>> init(dynamic arg) async {
+
+    final repo = GetIt.instance<UserRepository>();
+    PostRepository postRepo = GetIt.instance<PostRepository>();
+    PostFilter filter = PostFilter(
+      orderBy: OrderBy.priceAsc,
+      postedBy: PostedBy.all,
+      from: 0,
+      to: 10,
+      provinceCode: post?.address.cityCode,
+    );
+    if (arg is Post) {
+      post = arg;
+    }
+    if(arg is String)
+    {
+      post = await postRepo.getPostFromId(arg);
+    }
     final data = Future.wait([
-      repo.getUserInfo(post.userID),
-      postRepo.getPostDetail(post),
-      postRepo.hasLikePost(post.id)
+      repo.getUserInfo(post?.userID),
+      postRepo.getPostDetail(post!.id, post!.type),
+      postRepo.hasLikePost(post!.id),
+      postRepo.getAllPosts(
+        filter,
+      )
     ]);
     return data;
   }
 
   void likePost() async {
-    PostRepository postRepo = PostRepository();
+    PostRepository postRepo = GetIt.instance<PostRepository>();
     if (!liked.value && !isLoading) {
       isLoading = true;
-      await postRepo.likePost(post.id).then((value) {
-        liked.value = true;
+      await postRepo.likePost(post!.id).then((value) {
+          liked.value = true;
+          numOfLikes.value++;
         isLoading = false;
-        numOfLikes.value++;
       });
     } else if (liked.value && !isLoading) {
       isLoading = true;
-      await postRepo.unlikePost(post.id).then((value) {
-        liked.value = false;
+      await postRepo.unlikePost(post!.id).then((value) {
+          liked.value = false;  
+          numOfLikes.value--;
         isLoading = false;
-        numOfLikes.value--;
       });
     }
   }

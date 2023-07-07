@@ -71,12 +71,11 @@ create
 or replace function handle_new_user() returns trigger as
 $$
 begin
-    set
-timezone = 'Asia/Ho_Chi_Minh';
-insert into public.user_info(uid, email, last_activity_at)
-values (new.id, new.email, now());
-return new;
-end;
+    set timezone = 'Asia/Ho_Chi_Minh';
+    insert into public.user_info(uid, email, last_activity_at, created_at)
+    values (new.id, new.email, now(), now());
+    return new;
+end
 $$
 language plpgsql security definer;
 
@@ -125,21 +124,6 @@ CREATE TABLE user_follow
     FOREIGN KEY (followed_id) REFERENCES public.user_info (uid) ON DELETE CASCADE
 );
 
-insert into user_follow (follower_id, followed_id)
-values ('de23a0b3-262b-4982-aa55-084dcb08961a'::uuid, 'f8a68af6-f0d7-45c8-8b9f-666f6e4f1314'::uuid)
-    insert
-into user_follow (follower_id, followed_id)
-values ('f7f7631f-667b-4b38-924f-4a6d9e9db182'::uuid, '3ec257e0-0670-474d-bb8c-beb5178acd8c'::uuid)
-
-
-delete
-from auth.users
-where id = 'f8a68af6-f0d7-45c8-8b9f-666f6e4f1314' ::uuid
-
-delete
-
-from user_info
-where uid = '99785dd5-7516-4d5c-8310-d791a90256fc' ::uuid
 --follow trigger;
 CREATE
 OR REPLACE FUNCTION handle_follow()
@@ -206,7 +190,7 @@ CREATE TABLE conversations
     user1_joined_at                 TIMESTAMP                      DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
     user2_joined_at                 TIMESTAMP                      DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
     num_Of_unread_messages_of_user1 int       NOT NULL             DEFAULT 0,
-    num_Of_unread_messages_of_user2 int       NOT NULL             DEFAULT 0,
+    num _of_unread_messages_of_user2 int       NOT NULL             DEFAULT 0,
     CHECK (user1_id != user2_id
 ) ,
     FOREIGN KEY (user1_id) REFERENCES public.user_info (uid) ON DELETE CASCADE,
@@ -233,37 +217,33 @@ CREATE TABLE messages
 ALTER
 publication supabase_realtime add table public.messages;
 
-CREATE
-OR REPLACE FUNCTION update_last_message()
+CREATE OR REPLACE FUNCTION update_last_message()
   RETURNS TRIGGER AS $$
 BEGIN
-    set
-timezone = 'Asia/Ho_Chi_Minh';
-UPDATE conversations
-SET last_message                    = NEW.message,
-    last_message_type               = NEW.message_type,
-    last_message_sent_at            = NEW.sent_at,
-    user1_joined_at                 = CASE
-                                          WHEN user1_joined_at IS NULL THEN timezone('Asia/Ho_Chi_Minh', now())
-                                          ELSE user1_joined_at END,
-    user2_joined_at                 = CASE
-                                          WHEN user2_joined_at IS NULL THEN timezone('Asia/Ho_Chi_Minh', now())
-                                          ELSE user2_joined_at END,
-    num_Of_unread_messages_of_user1 = CASE
-                                          WHEN user1_id = new.sender_id THEN 0
-                                          ELSE (SELECT COUNT(*)
-                                                FROM messages
-                                                WHERE messages.conversation_id = new.conversation_id
-                                                  AND messages.sender_id != new.sender_id AND
-                                      messages.is_receiver_read = false )
-END,
-  num_Of_unread_messages_of_user2 = CASE WHEN user2_id = new.sender_id THEN 0 ELSE (
-    SELECT COUNT(*) FROM messages
-    WHERE messages.conversation_id = new.conversation_id AND messages.sender_id != new.sender_id AND messages.is_receiver_read = false
-  )
-END
+  UPDATE conversations
+  SET
+    last_message = NEW.message,
+    last_message_type = NEW.message_type,
+    last_message_sent_at = NEW.sent_at,
+    user1_joined_at = COALESCE(user1_joined_at, timezone('Asia/Ho_Chi_Minh', now())),
+    user2_joined_at = COALESCE(user2_joined_at, timezone('Asia/Ho_Chi_Minh', now())),
+    num_of_unread_messages_of_user1 = (
+      SELECT COUNT(*)
+      FROM messages
+      WHERE conversation_id = NEW.conversation_id
+        AND sender_id != NEW.sender_id
+        AND is_receiver_read = FALSE
+    ),
+    num_of_unread_messages_of_user2 = (
+      SELECT COUNT(*)
+      FROM messages
+      WHERE conversation_id = NEW.conversation_id
+        AND sender_id != NEW.sender_id
+        AND is_receiver_read = FALSE
+    )
   WHERE id = NEW.conversation_id;
-RETURN NEW;
+
+  RETURN NEW;
 END;
 $$
 LANGUAGE plpgsql;
@@ -329,6 +309,21 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+CREATE OR REPLACE FUNCTION mark_messages_read(user_id uuid, conv_id uuid)
+  RETURNS void AS $$
+BEGIN
+  UPDATE conversations
+  SET
+    num_of_unread_messages_of_user1 = CASE WHEN user1_id = user_id THEN 0 ELSE num_of_unread_messages_of_user1 END,
+    num_of_unread_messages_of_user2 = CASE WHEN user2_id = user_id THEN 0 ELSE num_of_unread_messages_of_user2 END
+  WHERE id = conv_id;
+
+  UPDATE messages
+  SET
+    is_receiver_read = true
+  WHERE sender_id != user_id AND conversation_id = conv_id;
+END;
+$$ LANGUAGE plpgsql;
 
 
 
@@ -348,13 +343,14 @@ CREATE TABLE post
     title         VARCHAR(255) NOT NULL,
     description   TEXT         NOT NULL,
     posted_date   TIMESTAMP    NOT NULL             DEFAULT NOW(),
-    expiry_date   TIMESTAMP    NOT NULL,
+    expiry_date   TIMESTAMP    NOT NULL             DEFAULT NOW() + INTERVAL '14 days',
     images_url    TEXT[] NOT NULL,
     is_pro_seller BOOLEAN      NOT NULL,
     num_of_likes  INT          NOT NULL             DEFAULT 0,
     is_hide       BOOLEAN      NOT NULL             DEFAULT FALSE,
     status        VARCHAR                           default 'pending',
     rejected_info VARCHAR,
+    is_priority       BOOLEAN      NOT NULL             DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES public.user_info (uid) on delete cascade,
     CHECK (area > 0),
     CHECK (property_type IN ('Apartment',
@@ -418,7 +414,8 @@ CREATE TABLE motels
     CHECK (furniture_status IS NULL
         OR furniture_status IN ('Empty',
                                 'Basic',
-                                'High end')),
+                                'High end',
+                                'Full')),
     CHECK (electric_price IS NULL
         OR electric_price > 0),
     CHECK (water_price IS NULL
@@ -654,3 +651,333 @@ create function title_description(post) returns text as $$
 select unaccent($1.title) || ' ' || unaccent($1.description);
 $$
 language sql immutable;
+
+CREATE TABLE notification
+(
+    id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL,
+    type VARCHAR NOT NULL,
+    create_at TIMESTAMP NOT NULL DEFAULT,
+    is_read BOOLEAN DEFAULT FALSE,
+    title VARCHAR NOT NULL,
+    content TEXT NOT NULL,
+    image TEXT,
+    link TEXT,
+    FOREIGN KEY (user_id) REFERENCES public.user_info (uid) ON DELETE CASCADE
+);
+alter
+publication supabase_realtime add table public.notification;
+CREATE TABLE blogs (
+    id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+    create_at TIMESTAMP DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
+    title varchar(255),
+    short_description VARCHAR(255),
+    author VARCHAR DEFAULT 'Unknown',
+    link text,
+    image_link text,
+    view_count INTEGER DEFAULT 0
+);
+
+-- change password check function
+create or replace function change_user_password(current_plain_password varchar, new_plain_password varchar)
+returns json
+language plpgsql
+security definer
+as $$
+DECLARE
+_uid uuid; -- for checking by 'is not found'
+user_id uuid; -- to store the user id from the request
+BEGIN
+  -- First of all check the new password rules
+  -- not empty
+  IF (new_plain_password = '') IS NOT FALSE THEN
+    RAISE EXCEPTION 'new password is empty';
+  -- minimum 6 chars
+  ELSIF char_length(new_plain_password) < 6 THEN
+    RAISE EXCEPTION 'it must be at least 6 characters in length';
+  END IF;
+  
+  -- Get user by his current auth.uid and current password
+  user_id := auth.uid();
+  SELECT id INTO _uid
+  FROM auth.users
+  WHERE id = user_id
+  AND encrypted_password =
+  crypt(current_plain_password::text, auth.users.encrypted_password);
+
+  -- Check the currect password
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'incorrect password';
+  END IF;
+
+  -- Then set the new password
+  UPDATE auth.users SET 
+  encrypted_password =
+  crypt(new_plain_password, gen_salt('bf'))
+  WHERE id = user_id;
+  
+  RETURN '{"data":true}';
+END;
+$$
+--Duyệt bài:
+
+CREATE OR REPLACE FUNCTION approve_post(p_id uuid) RETURNS VOID AS $$
+DECLARE
+    now_time TIMESTAMP := NOW();
+    sq RECORD;
+BEGIN
+    -- Lấy ngày hôm nay
+    now_time := timezone('Asia/Ho_Chi_Minh', now()) + INTERVAL '14 days';
+
+    -- Cập nhật trạng thái và ngày hết hạn cho bài đăng
+    UPDATE post
+    SET status = 'approved', expiry_date = now_time + INTERVAL '14 days', rejected_info = null
+    WHERE id = p_id;
+      SELECT *
+  INTO sq
+  FROM post
+  WHERE id = p_id;
+
+  PERFORM net.http_post(
+    url := 'https://ldgecfuqlicdeuqijmbr.supabase.co/functions/v1/post-notification',
+    headers := '{"Content-Type": "application/json", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkZ2VjZnVxbGljZGV1cWlqbWJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODAyMzYyNzEsImV4cCI6MTk5NTgxMjI3MX0.V5CnCUKROCJ8WHV5SXQQPbWsEYanK0sgEPI9PBPsvz4"}'::jsonb,
+    body := concat('{"record": ', to_jsonb(sq), '}')::jsonb
+  );
+
+END;
+$$ LANGUAGE plpgsql;
+
+--từ chối bài:
+CREATE OR REPLACE FUNCTION reject_post(p_id uuid, p_rejected_info VARCHAR) RETURNS VOID AS $$
+DECLARE
+    sq RECORD;
+BEGIN
+    -- Cập nhật trạng thái và thông tin từ chối cho bài đăng
+    UPDATE post
+    SET status = 'rejected', rejected_info = p_rejected_info
+    WHERE id = p_id;
+WITH sq AS
+  (
+    SELECT *
+    FROM post
+    WHERE id = p_id
+  )
+  SELECT *
+  INTO sq
+  FROM post
+  WHERE id = p_id;
+
+  PERFORM net.http_post(
+    url := 'https://ldgecfuqlicdeuqijmbr.supabase.co/functions/v1/post-notification',
+    headers := '{"Content-Type": "application/json", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkZ2VjZnVxbGljZGV1cWlqbWJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODAyMzYyNzEsImV4cCI6MTk5NTgxMjI3MX0.V5CnCUKROCJ8WHV5SXQQPbWsEYanK0sgEPI9PBPsvz4"}'::jsonb,
+    body := concat('{"record": ', to_jsonb(sq), '}')::jsonb
+  );
+
+END;
+
+$$ LANGUAGE plpgsql;
+
+
+--monetization
+CREATE TABLE membership_package (
+  id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name VARCHAR(255) NOT NULL,
+  description TEXT NOT NULL,
+  price NUMERIC NOT NULL,
+  monthly_post_limit INTEGER NOT NULL,
+  post_approval_priority BOOLEAN NOT NULL,
+  display_priority BOOLEAN NOT NULL,
+  show_verified_badge BOOLEAN NOT NULL,
+  customer_care_priority BOOLEAN NOT NULL,
+  super_fast_approval BOOLEAN NOT NULL
+);
+
+CREATE TABLE discount (
+  id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+  membership_package_id UUID NOT NULL REFERENCES membership_package(id) ON DELETE CASCADE,
+  description TEXT NOT NULL,
+  start_date timestamp NOT NULL,
+  end_date timestamp NOT NULL,
+  subscription_discounts JSONB NOT NULL
+  --Map { "1": 30, "
+);
+
+CREATE OR REPLACE FUNCTION check_discount_dates() RETURNS TRIGGER AS $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM discount
+    WHERE
+      membership_package_id = NEW.membership_package_id AND
+      (NEW.start_date BETWEEN start_date AND end_date OR NEW.end_date BETWEEN start_date AND end_date)
+  ) THEN
+    RAISE EXCEPTION 'The discount dates overlap with existing discounts for the same membership.';
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_check_discount_dates
+BEFORE INSERT ON discount
+FOR EACH ROW
+EXECUTE FUNCTION check_discount_dates();
+
+CREATE TABLE account_verification_requests (
+  id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+  is_verified BOOLEAN DEFAULT FALSE,
+  reviewed_at TIMESTAMP,
+  rejected_info TEXT,
+  user_id UUID NOT NULL,
+  request_date TIMESTAMP NOT NULL,
+  front_identity_card_image_link TEXT NOT NULL,
+  back_identity_card_image_link TEXT NOT NULL,
+  portrait_image_path TEXT NOT NULL,
+  full_name TEXT NOT NULL,
+  sex BOOLEAN NOT NULL,
+  dob TIMESTAMP NOT NULL,
+  identity_card_no TEXT NOT NULL,
+  identity_card_issued_date TIMESTAMP NOT NULL,
+  issued_by TEXT NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES user_info(uid)
+);
+
+--Tạo transactions trên server
+--Yêu cầu user thanh toán.
+--User thanh toán thành công
+--Cập nhật transactions is_success = true
+--Tạo membership_package_subscription
+--Không thành công
+--Cập nhật transactions is_success = false
+CREATE TABLE transactions (
+    id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+    app_trans_id TEXT NOT NULL,
+    is_success BOOLEAN DEFAULT FALSE,
+    time_stamp TIMESTAMP NOT NULL DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
+    membership_package_id UUID NOT NULL REFERENCES membership_package(id),
+    discount_id UUID REFERENCES discount(id),
+    amount NUMERIC NOT NULL,
+    user_id UUID NOT NULL REFERENCES user_info(uid),
+    num_of_subscription_month INTEGER NOT NULL
+);
+CREATE TABLE membership_package_subscription (
+    id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+    transaction_id UUID NOT NULL REFERENCES transactions(id),
+    membership_package_id UUID NOT NULL REFERENCES membership_package(id),
+    user_id UUID NOT NULL REFERENCES user_info(uid),
+    start_date TIMESTAMP NOT NULL DEFAULT timezone('Asia/Ho_Chi_Minh', now()),
+    end_date TIMESTAMP NOT NULL
+);
+
+CREATE OR REPLACE FUNCTION insert_subscription(
+    p_transaction_id UUID,
+    p_membership_package_id UUID,
+    p_user_id UUID,
+    p_number_of_months INT
+) RETURNS VOID AS $$
+DECLARE
+    v_start_date TIMESTAMP := timezone('Asia/Ho_Chi_Minh', now());
+    v_end_date TIMESTAMP := v_start_date + (p_number_of_months || ' months')::INTERVAL;
+BEGIN
+    INSERT INTO membership_package_subscription (
+        transaction_id,
+        membership_package_id,
+        user_id,
+        start_date,
+        end_date
+    )
+    VALUES (
+        p_transaction_id,
+        p_membership_package_id,
+        p_user_id,
+        v_start_date,
+        v_end_date
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION check_verified_badge(uid UUID) RETURNS BOOLEAN AS $$
+DECLARE
+    is_verified BOOLEAN;
+    has_verified_badge BOOLEAN;
+    is_within_date_range BOOLEAN;
+BEGIN
+    SELECT COUNT(*) > 0 INTO is_verified
+    FROM account_verification_requests avr
+    WHERE avr.user_id = uid AND avr.is_verified = true;
+
+    SELECT COUNT(*) > 0 INTO has_verified_badge
+    FROM membership_package_subscription mps
+    INNER JOIN membership_package mp ON mp.id = mps.membership_package_id
+    WHERE mps.user_id = uid AND mp.show_verified_badge = true;
+
+    SELECT COUNT(*) > 0 INTO is_within_date_range
+    FROM membership_package_subscription mps
+    WHERE mps.user_id = uid
+        AND mps.start_date <= (now() AT TIME ZONE 'Asia/Ho_Chi_Minh')
+        AND mps.end_date >= (now() AT TIME ZONE 'Asia/Ho_Chi_Minh');
+
+    RETURN is_verified AND has_verified_badge AND is_within_date_range;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION verified_account(uid UUID) RETURNS VOID AS $$
+DECLARE
+    now_time TIMESTAMP := NOW();
+BEGIN
+    -- Lấy ngày hôm nay
+    now_time := timezone('Asia/Ho_Chi_Minh', now());
+
+    -- Cập nhật trạng thái và ngày hết hạn cho bài đăng
+    UPDATE account_verification_requests
+    SET is_verified = true, reviewed_at = now_time , rejected_info = null
+    WHERE user_id = uid;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION reject_account(uid UUID, reject_info TEXT) RETURNS VOID AS $$
+DECLARE
+    now_time TIMESTAMP := NOW();
+BEGIN
+    -- Lấy ngày hôm nay
+    now_time := timezone('Asia/Ho_Chi_Minh', now());
+
+    -- Cập nhật trạng thái và ngày hết hạn cho bài đăng
+    UPDATE account_verification_requests
+    SET is_verified = false, reviewed_at = now_time , rejected_info = reject_info
+    WHERE user_id = uid;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION check_monthly_post_limit(uid UUID)
+  RETURNS BOOLEAN AS
+$$
+DECLARE
+  post_count INTEGER;
+  limit_count INTEGER;
+BEGIN
+  -- Lấy số lượng bài viết trong tháng của người dùng
+  SELECT COUNT(*) INTO post_count
+  FROM post
+  WHERE post.user_id = uid
+    AND EXTRACT(MONTH FROM posted_date) = EXTRACT(MONTH FROM timezone('Asia/Ho_Chi_Minh', NOW()))
+    AND EXTRACT(YEAR FROM posted_date) = EXTRACT(YEAR FROM timezone('Asia/Ho_Chi_Minh', NOW()));
+
+  -- Lấy số lượng bài viết giới hạn từ gói thành viên người dùng đăng ký (nếu có)
+  SELECT COALESCE((
+    SELECT COALESCE(mp.monthly_post_limit, 3)
+    FROM membership_package_subscription AS mps
+    LEFT JOIN membership_package AS mp ON mps.membership_package_id = mp.id
+    WHERE mps.user_id = uid
+      AND mps.start_date < timezone('Asia/Ho_Chi_Minh', NOW())
+      AND timezone('Asia/Ho_Chi_Minh', NOW()) < mps.end_date
+  ), 3) INTO limit_count;
+
+  -- Kiểm tra nếu số lượng bài viết trong tháng vượt quá giới hạn
+  IF post_count >= limit_count THEN
+    RETURN TRUE;
+  ELSE
+    RETURN FALSE;
+  END IF;
+
+END;
+$$
+LANGUAGE plpgsql;

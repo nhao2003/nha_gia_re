@@ -1,14 +1,21 @@
 const imagePath = 'assets/images';
 const iconPath = 'assets/icons';
+const animationsPath = 'assets/animations';
 
 class Assets {
   Assets._();
+  static const String appLogoLight = '$imagePath/ic_app_logo_light.png';
+  static const String appLogoDark = '$imagePath/ic_app_logo_dark.png';
+  static const String logoLight = '$imagePath/logo_light.png';
+  static const String logoDark = '$imagePath/logo_dark.png';
+  static const String blueTick = '$imagePath/blue_tick.png';
+  static const String landmark_81 = '$imagePath/landmark_81.png';
   static const String emptyChat = '$imagePath/pana.png';
   static const String avatar_1 = '$imagePath/3D Avatars/1.png';
   static const String avatar_2 = '$imagePath/3D Avatars/2.png';
   static const String avatar_3 = '$imagePath/3D Avatars/3.png';
   static const String avatar_4 = '$imagePath/3D Avatars/4.png';
-  static const String avatar_5 = '$imagePath/3D Avatars/5.png';
+  static const String avatar_5 = '$imagePath/3D Avatars/logo_dark.png';
   static const String avatar_6 = '$imagePath/3D Avatars/6.png';
   static const String avatar_7 = '$imagePath/3D Avatars/7.png';
   static const String avatar_8 = '$imagePath/3D Avatars/8.png';
@@ -75,7 +82,23 @@ class Assets {
   static const String key = '$iconPath/key.png';
   static const String tag = '$iconPath/tag.png';
   static const String coin = '$iconPath/coin.png';
+  static const String id_card = '$iconPath/id-card.png';
   // image
   static const String forgetPass = '$imagePath/rafiki.png';
   static const String nha = '$imagePath/nha.jpg';
+  static const String portrait = '$imagePath/portrait.png';
+
+  static const String cccd_front = '$imagePath/cccd_front.png';
+  static const String cccd_back = '$imagePath/cccd_back.png';
+  static const String cmnd_front = '$imagePath/cmnd_front.png';
+  static const String cmnd_back = '$imagePath/cmnd_back.png';
+  static const String hochieu_front = '$imagePath/hochieu_front.png';
+  static const String hochieu_back = '$imagePath/hochieu_back.png';
+
+  // loti
+  static const String payment_failure = '$animationsPath/payment-failure.json';
+  static const String payment_success = '$animationsPath/payment_success.json';
+  static const String loading = '$animationsPath/loading.json';
+  static const String waiting = '$animationsPath/waiting_loti.json';
+  static const String card_reject = '$animationsPath/card-rejected_loti.json';
 }

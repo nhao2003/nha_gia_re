@@ -7,12 +7,12 @@ class Province {
   List<District?>? districts;
 
   Province(
-      { this.name,
-        this.code,
-        this.codename,
-        this.divisionType,
-        this.phoneCode,
-        this.districts});
+      {this.name,
+      this.code,
+      this.codename,
+      this.divisionType,
+      this.phoneCode,
+      this.districts});
 
   Province.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -52,11 +52,11 @@ class District {
 
   District(
       {this.name,
-        this.code,
-        this.codename,
-        this.divisionType,
-        this.shortCodename,
-        this.wards});
+      this.code,
+      this.codename,
+      this.divisionType,
+      this.shortCodename,
+      this.wards});
 
   District.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -96,10 +96,10 @@ class Ward {
 
   Ward(
       {this.name,
-        this.code,
-        this.codename,
-        this.divisionType,
-        this.shortCodename});
+      this.code,
+      this.codename,
+      this.divisionType,
+      this.shortCodename});
 
   Ward.fromJson(Map<String, dynamic> json) {
     name = json['name'];

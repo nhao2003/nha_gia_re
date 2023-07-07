@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:nha_gia_re/data/models/message.dart';
+import 'package:nha_gia_re/modules/maps/map_controller.dart';
 
 class MapViewScreen extends StatefulWidget {
   late List<Marker> markers;
@@ -14,19 +15,12 @@ class MapViewScreen extends StatefulWidget {
 }
 
 class _MapViewScreenState extends State<MapViewScreen> {
-  Future<Set<Marker>> initLocation() async {
-    Set<Marker> markers = {};
-    if (Get.arguments is Message) {
-      Message message = Get.arguments;
+  late final MapController _controller;
 
-      Marker marker = Marker(
-        markerId: MarkerId(message.id),
-        position: message.location!,
-      );
-      markers.add(marker);
-    }
-    log(markers.toString());
-    return markers;
+  @override
+  void initState() {
+    _controller = Get.find<MapController>();
+    super.initState();
   }
 
   @override
@@ -34,7 +28,7 @@ class _MapViewScreenState extends State<MapViewScreen> {
     return Scaffold(
       appBar: AppBar(),
       body: FutureBuilder<Set<Marker>>(
-          future: initLocation(),
+          future: _controller.initLocation(Get.arguments),
           builder: (
             context,
             snapShot,
@@ -42,7 +36,7 @@ class _MapViewScreenState extends State<MapViewScreen> {
             if (snapShot.hasData) {
               log("Markers: ${snapShot.data}");
               return GoogleMap(
-                markers: snapShot.data!,
+                  markers: snapShot.data!,
                   myLocationEnabled: true,
                   myLocationButtonEnabled: true,
                   initialCameraPosition: CameraPosition(

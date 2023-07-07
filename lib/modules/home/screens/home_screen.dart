@@ -8,12 +8,15 @@ import 'package:nha_gia_re/data/repositories/chat_repository.dart';
 import 'package:nha_gia_re/global_widgets/infor_card.dart';
 import 'package:nha_gia_re/modules/home/widgets/button.dart';
 import 'package:nha_gia_re/global_widgets/carousel_ad.dart';
+import 'package:nha_gia_re/modules/home/widgets/icon_notification.dart';
 import 'package:nha_gia_re/modules/home/widgets/image_button.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import '../../../core/values/filter_values.dart';
+import '../../../data/enums/enums.dart';
 import '../../../data/models/properties/post.dart';
 import '../../search/widgets/my_search_delegate.dart';
 import '../home_controller.dart';
+import 'package:badges/badges.dart' as badges;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -73,41 +76,42 @@ class _HomeScreenState extends State<HomeScreen> {
                     .where(
                         (conversation) => conversation.numOfUnReadMessage != 0)
                     .toList();
-                final unreadCount = unreadConversations.length;
+                RxInt unreadCount = unreadConversations.length.obs;
 
-                return IconButton(
-                  onPressed: () {
-                    Get.toNamed(AppRoutes.conversation);
-                  },
-                  padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
-                  constraints: const BoxConstraints(),
-                  icon: Stack(
-                    children: [
-                      Image.asset(Assets.messCircle, width: 36),
-                      if (unreadCount > 0)
-                        Positioned(
-                          top: 0,
-                          right: 0,
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: AppColors.red,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Text(
-                              unreadCount.toString(),
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
+                return GestureDetector(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.conversation);
+                    },
+                    child: Obx(
+                      () => unreadCount.value == 0
+                          ? Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Image.asset(Assets.messCircle, width: 25),
+                            )
+                          : Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 13, right: 13),
+                              child: badges.Badge(
+                                position: badges.BadgePosition.topStart(
+                                    top: -8, start: 18),
+                                badgeContent: Text(
+                                  unreadCount.value.toString(),
+                                  style: AppTextStyles.roboto11Bold.copyWith(color: AppColors.white),
+                                ),
+                                badgeStyle: badges.BadgeStyle(
+                                  badgeColor: AppColors.red,
+                                ),
+                                child: Image.asset(Assets.messCircle, width: 25),
                               ),
                             ),
-                          ),
-                        ),
-                    ],
-                  ),
-                );
-              })
+                    ));
+              }),
+          GestureDetector(
+            onTap: () {
+              _controller.navToNoti();
+            },
+            child: const IconNotification(),
+          ),
         ],
       ),
       body: FutureBuilder<List<List<Post>>>(
@@ -134,21 +138,21 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           CustomButton(
                             icon: Image.asset(Assets.coin),
-                            title: 'Mua bán',
+                            title: 'For Sale'.tr,
                             onPressed: () {
                               _controller.navToSell();
                             },
                           ),
                           CustomButton(
                             icon: Image.asset(Assets.key),
-                            title: 'Cho thuê',
+                            title: 'For Lease'.tr,
                             onPressed: () {
                               _controller.navToRent();
                             },
                           ),
                           CustomButton(
                             icon: Image.asset(Assets.edit_color),
-                            title: 'Đăng bài',
+                            title: 'Post'.tr,
                             onPressed: _controller.navToPost,
                           ),
                         ],
@@ -160,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Tỉnh thành',
+                            'Provinces'.tr,
                             style: AppTextStyles.roboto20Bold,
                           ),
                           const SizedBox(height: 10),
@@ -187,9 +191,25 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    const InforCardList(title: 'Gần bạn', list: []),
-                    InforCardList(title: 'Nhà bán', list: data.first),
-                    InforCardList(title: 'Nhà cho thuê', list: data.last),
+                    InforCardList(
+                      title: 'Gần bạn',
+                      list: data[1],
+                      navType: TypeNavigate.province,
+                      province: _controller.userInfo?.address?.cityName,
+                    ),
+                    InforCardList(
+                      title: 'Nhà cho thuê',
+                      list: data.first,
+                      navType: TypeNavigate.rent,
+                    ),
+                    InforCardList(
+                      title: 'Nhà bán',
+                      list: data.last,
+                      navType: TypeNavigate.sell,
+                    ),
+                    const SizedBox(
+                      height: 17,
+                    )
                   ],
                 ),
               );
