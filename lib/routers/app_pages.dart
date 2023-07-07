@@ -29,7 +29,7 @@ import 'package:nha_gia_re/modules/search/screens/filter_screen.dart';
 import 'package:nha_gia_re/modules/chat/chat_binding.dart';
 import 'package:nha_gia_re/modules/chat/screens/chat_screen.dart';
 import 'package:nha_gia_re/modules/search/screens/search_screen.dart';
-import 'package:nha_gia_re/modules/verification/screens/verification_screen.dart';
+import 'package:nha_gia_re/modules/verification/screens/verification_card_screen.dart';
 import 'package:nha_gia_re/modules/verification/verification_binding.dart';
 import '../modules/blog/blog_binding.dart';
 import '../modules/conversations/conversation_binding.dart';
@@ -47,6 +47,8 @@ import '../modules/personal/screens/personal_screen.dart';
 import '../modules/post/post_binding.dart';
 import '../modules/post/screens/post_screen.dart';
 import '../modules/search/search_binding.dart';
+import '../modules/verification/screens/verification_info_screen.dart';
+import '../modules/verification/screens/verification_portrait_screen.dart';
 import 'app_routes.dart';
 
 abstract class AppPages {
@@ -181,8 +183,18 @@ abstract class AppPages {
       binding: PurchaseBinding(),
     ),
     GetPage(
-      name: AppRoutes.verification_screen,
-      page: () => const VerificationScreen(),
+      name: AppRoutes.verification_card_screen,
+      page: () => VerificationCardScreen(),
+      binding: VerificationBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.verification_portrait_screen,
+      page: () => verificationPortraitScreen(),
+      binding: VerificationBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.verification_info_screen,
+      page: () => verificationInfoScreen(),
       binding: VerificationBinding(),
     ),
   ];

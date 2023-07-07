@@ -375,6 +375,7 @@ enum MessageType {
     throw Exception("Can't parse MessageType! Your input value is \"$value\"");
   }
 }
+
 enum NotificationType {
   suggest,
   expirationWarning,
@@ -382,8 +383,7 @@ enum NotificationType {
   acceptPost,
   advertise;
 
-  Color statusColor()
-  {
+  Color statusColor() {
     switch (this) {
       case NotificationType.suggest:
         return AppColors.grey;
@@ -392,12 +392,12 @@ enum NotificationType {
       case NotificationType.rejectPost:
         return AppColors.red;
       case NotificationType.acceptPost:
-        return  AppColors.green;
+        return AppColors.green;
       case NotificationType.advertise:
         return AppColors.primaryColor;
     }
   }
-  
+
   @override
   String toString() {
     switch (this) {
@@ -413,13 +413,15 @@ enum NotificationType {
         return "advertise";
     }
   }
+
   static NotificationType parse(String value) {
     for (NotificationType type in NotificationType.values) {
       if (type.toString() == value) {
         return type;
       }
     }
-    throw Exception("Can't parse NotificationType! Your input value is \"$value\"");
+    throw Exception(
+        "Can't parse NotificationType! Your input value is \"$value\"");
   }
 }
 
@@ -430,4 +432,22 @@ enum TypeNavigate {
   province,
   user,
   favorite,
+}
+
+enum TypeIndetificationDocument {
+  chungMinhNhanDan,
+  canCuocCongDan,
+  hoChieu;
+
+  @override
+  String toString() {
+    switch (this) {
+      case TypeIndetificationDocument.chungMinhNhanDan:
+        return "Chứng minh nhân dân";
+      case TypeIndetificationDocument.canCuocCongDan:
+        return "Căn cước công dân";
+      case TypeIndetificationDocument.hoChieu:
+        return "Hộ chiếu";
+    }
+  }
 }

@@ -191,5 +191,6 @@ const Map<String, String> enLanguagePackage = {
   'acceptPost': 'Approved',
 
   // verification
-  'Account verification': 'Account verification'
+  'Account verification': 'Account verification',
+  'Continue': 'Continue'
 };

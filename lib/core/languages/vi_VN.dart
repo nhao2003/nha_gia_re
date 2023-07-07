@@ -199,5 +199,6 @@ const Map<String, String> viLanguagePackage = {
   'acceptPost': 'Đã được duyệt',
 
   // verification
-  'Account verification': 'Định danh tài khoản'
+  'Account verification': 'Định danh tài khoản',
+  'Continue': 'Tiếp tục'
 };
