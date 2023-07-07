@@ -1,14 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/theme/text_styles.dart';
 import 'package:nha_gia_re/data/models/province.dart';
 import 'package:nha_gia_re/modules/post/property_controller.dart';
-import 'package:nha_gia_re/modules/post/screens/post_screen.dart';
-import 'package:nha_gia_re/modules/post/widgets/dropdownfied.dart';
 
 class PostAddressScreen extends StatefulWidget {
   const PostAddressScreen({Key? key}) : super(key: key);
@@ -25,7 +21,7 @@ class _PostAddressScreenState extends State<PostAddressScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _formkey = GlobalKey<FormState>();
+    final formkey = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -39,7 +35,7 @@ class _PostAddressScreenState extends State<PostAddressScreen> {
           return Container(
             margin: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
             child: Form(
-              key: _formkey,
+              key: formkey,
               child: Column(
                 children: [
                   DropdownButtonFormField(
@@ -112,7 +108,7 @@ class _PostAddressScreenState extends State<PostAddressScreen> {
                           borderRadius: BorderRadius.all(Radius.circular(5.r)),
                           borderSide: const BorderSide(color: Colors.black)),
                     ),
-                    hint: Text("Phường/ xã"),
+                    hint: const Text("Phường/ xã"),
                     items: controller.wardsList.map((value) {
                       return DropdownMenuItem(
                         value: value,
@@ -135,7 +131,7 @@ class _PostAddressScreenState extends State<PostAddressScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      if (_formkey.currentState!.validate()) {
+                      if (formkey.currentState!.validate()) {
                         print("Press on submit address");
                         controller.setAddress();
                         Get.back();

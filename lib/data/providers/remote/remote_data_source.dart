@@ -8,6 +8,7 @@ import 'package:nha_gia_re/data/enums/enums.dart';
 import 'package:nha_gia_re/data/models/conversation.dart';
 import 'package:nha_gia_re/data/models/message.dart';
 import 'package:nha_gia_re/data/models/notification.dart';
+import 'package:nha_gia_re/data/providers/remote/request/account_verification_requests.dart';
 import 'package:nha_gia_re/data/providers/remote/request/filter_request.dart';
 import 'package:nha_gia_re/routers/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -23,6 +24,8 @@ class RemoteDataSource {
   static const String tableUserFollow = 'user_follow';
   static const String tablePost = 'post';
   static const String tableNotification = 'notification';
+  static const String tableAccountVerificationRequest =
+      'account_verification_requests';
   final SupabaseClient supabaseClient = Supabase.instance.client;
 
   void showSessionExpiredDialog(String? code) {
@@ -68,6 +71,20 @@ class RemoteDataSource {
           .delete()
           .eq('id', id)
           .select();
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> isVerifiedBadge(String uid) async {
+    Map<String, dynamic> request = {
+      'uid': uid,
+    };
+    try {
+      return await supabaseClient.rpc('check_verified_badge', params: request);
     } on PostgrestException catch (e) {
       showSessionExpiredDialog(e.code);
       rethrow;
@@ -538,7 +555,8 @@ class RemoteDataSource {
   Future<Map<String, dynamic>> getPostById(String id) async {
     try {
       debugPrint(id);
-      final data = await supabaseClient.from(tablePost).select().eq('id', id).limit(1);
+      final data =
+          await supabaseClient.from(tablePost).select().eq('id', id).limit(1);
       debugPrint(data.toString());
       return Map<String, dynamic>.from(data.first);
     } on PostgrestException catch (e) {
@@ -1007,5 +1025,38 @@ class RemoteDataSource {
         .from('transactions')
         .select('*, membership_package(*), membership_package_subscription(*)')
         .eq('user_id', uid));
+  }
+
+  Future<void> sendAccountVerificationRequest(
+      AccountVerificationRequests request) async {
+    await supabaseClient
+        .from(tableAccountVerificationRequest)
+        .insert(request.toJson());
+  }
+
+  Future<List<Map<String, dynamic>>> getAccountVerificationRequest() async {
+    final res = await supabaseClient
+        .from(tableAccountVerificationRequest)
+        .select()
+        .eq("reviewed_at", null);
+    return List<Map<String, dynamic>>.from(res);
+  }
+
+  Future<bool?> isAdmin(String userId) async {
+    try {
+      final res = await supabaseClient
+          .from('admins')
+          .select()
+          .eq('user_id', userId)
+          .limit(1);
+      List<Map<String, dynamic>> data = List<Map<String, dynamic>>.from(res);
+      if (data.isEmpty || data.first.isEmpty) return true;
+      return false;
+    } on PostgrestException catch (e) {
+      showSessionExpiredDialog(e.code);
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
   }
 }

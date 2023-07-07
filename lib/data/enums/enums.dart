@@ -1,7 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
-import 'package:nha_gia_re/core/theme/app_colors.dart';
 import 'package:nha_gia_re/core/values/app_strings.dart';
 
 enum PropertyType {
@@ -375,6 +373,7 @@ enum MessageType {
     throw Exception("Can't parse MessageType! Your input value is \"$value\"");
   }
 }
+
 enum NotificationType {
   suggest,
   expirationWarning,
@@ -382,7 +381,7 @@ enum NotificationType {
   acceptPost,
   newFollower,
   advertise;
-  
+
   @override
   String toString() {
     switch (this) {
@@ -400,13 +399,15 @@ enum NotificationType {
         return "newFollower";
     }
   }
+
   static NotificationType parse(String value) {
     for (NotificationType type in NotificationType.values) {
       if (type.toString() == value) {
         return type;
       }
     }
-    throw Exception("Can't parse NotificationType! Your input value is \"$value\"");
+    throw Exception(
+        "Can't parse NotificationType! Your input value is \"$value\"");
   }
 }
 
@@ -417,4 +418,22 @@ enum TypeNavigate {
   province,
   user,
   favorite,
+}
+
+enum TypeIndetificationDocument {
+  chungMinhNhanDan,
+  canCuocCongDan,
+  hoChieu;
+
+  @override
+  String toString() {
+    switch (this) {
+      case TypeIndetificationDocument.chungMinhNhanDan:
+        return "Chứng minh nhân dân";
+      case TypeIndetificationDocument.canCuocCongDan:
+        return "Căn cước công dân";
+      case TypeIndetificationDocument.hoChieu:
+        return "Hộ chiếu";
+    }
+  }
 }

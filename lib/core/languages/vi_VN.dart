@@ -199,4 +199,8 @@ const Map<String, String> viLanguagePackage = {
   'acceptPost': 'Đã được duyệt',
   'newFollower' : 'Bạn vừa có người theo dõi mới.',
   'Posts Management' : 'Quản lý tin',
+
+  // verification
+  'Account verification': 'Định danh tài khoản',
+  'Premium': 'Gói Pro'
 };

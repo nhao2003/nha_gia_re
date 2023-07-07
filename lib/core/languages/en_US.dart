@@ -3,9 +3,9 @@
 const Map<String, String> enLanguagePackage = {
   //tab
   'Home': 'Home',
-  'Account' : 'Account',
-  'Blog' : 'Blog',
-  'Posts management' : 'Posts',
+  'Account': 'Account',
+  'Blog': 'Blog',
+  'Posts management': 'Posts',
   // login
   'Login': 'Login',
   'Forgot password?': 'Forgot password?',
@@ -35,7 +35,7 @@ const Map<String, String> enLanguagePackage = {
   '- Numeric character': '- Numeric character',
   '- Special character': '- Special character',
   '- Lowercase letter': '- Lowercase letter',
-  '- Normal letter': '- Normal letter',  
+  '- Normal letter': '- Normal letter',
   // home
   'ago': 'ago',
   'year': 'year',
@@ -51,15 +51,15 @@ const Map<String, String> enLanguagePackage = {
   'Yesterday': 'Yesterday',
   'Just now': 'Just now',
   'Search...': 'Search...',
-  'For Sale' : 'For Sale',
-  'For Lease' : 'For Lease',
-  'Post' : 'Post',
-  'Provinces' : 'Provinces',
-  'Near you' : 'Near You',
-  'See more' : 'See More',
-  'thousand' : 'thousand',
-  'million' : 'million',
-  'billion' : 'billion',
+  'For Sale': 'For Sale',
+  'For Lease': 'For Lease',
+  'Post': 'Post',
+  'Provinces': 'Provinces',
+  'Near you': 'Near You',
+  'See more': 'See More',
+  'thousand': 'thousand',
+  'million': 'million',
+  'billion': 'billion',
 
   // app filter
   "Nha Gia Re": "Nha Gia Re",
@@ -100,24 +100,25 @@ const Map<String, String> enLanguagePackage = {
   "Full": "Full",
   "High end": "High end",
   // Setting
-  'This field cannot be empty.' :'This field cannot be empty.',
-  'Incorrect password.' : 'Incorrect password.',
-  'New password cannot be the same as the old password.' : 'New password cannot be the same as the old password.',
-  'Notification' : 'Notification',
-  'Change password successfully!' : 'Change password successfully',
-  'English' : 'English',
-  'Vietnamese' : 'Vietnamese',
-  'Enter your current password' : 'Enter your current password',
-  'Enter your new password' : 'Enter your new password',
+  'This field cannot be empty.': 'This field cannot be empty.',
+  'Incorrect password.': 'Incorrect password.',
+  'New password cannot be the same as the old password.':
+      'New password cannot be the same as the old password.',
+  'Notification': 'Notification',
+  'Change password successfully!': 'Change password successfully',
+  'English': 'English',
+  'Vietnamese': 'Vietnamese',
+  'Enter your current password': 'Enter your current password',
+  'Enter your new password': 'Enter your new password',
   'Favorite': 'Favorite',
   'Update information': 'Update information',
   'Change password': 'Change password',
   'Settings': 'Settings',
   'Language': 'Language',
-  'Save' : 'Save',
+  'Save': 'Save',
   // update profile
-  'Male' : 'Male',
-  'Female' : 'Female',
+  'Male': 'Male',
+  'Female': 'Female',
   'Sign out': 'Sign out',
   'Full name': 'Full name',
   'Phone number': 'Phone number',
@@ -128,7 +129,7 @@ const Map<String, String> enLanguagePackage = {
   'Complete': 'Complete',
   'Choose address': 'Choose address',
   'Date of birth': 'Date of birth',
-  'Write something about you' :'Write something about you' ,
+  'Write something about you': 'Write something about you',
   'Bio': 'Bio',
   // post detail
   'SMS messages': 'SMS messages',
@@ -140,9 +141,9 @@ const Map<String, String> enLanguagePackage = {
   'View profile': 'View profile',
   'Agency': 'Agency',
   'Independence': 'Independence',
-  'Expand' : 'Expand',
-  'Collapse' : 'Collapse',
-  // 
+  'Expand': 'Expand',
+  'Collapse': 'Collapse',
+  //
   'Deposit:': 'Deposit:',
   'Area:': 'Area:',
   'Price/m2:': 'Price/m2:',
@@ -154,7 +155,7 @@ const Map<String, String> enLanguagePackage = {
   'Water Price:': 'Water Price:',
   'Electric Price:': 'Electric Price:',
   'Furniture Status:': 'Furniture Status:',
-  'rooms' : 'rooms',
+  'rooms': 'rooms',
   'Deposit': 'Deposit',
   'Property Status:': 'Property Status:',
   'Not Handed Over': 'Not Handed Over',
@@ -171,8 +172,8 @@ const Map<String, String> enLanguagePackage = {
   'Main Door Direction': 'Main Door Direction', 
   'Balcony Direction': 'Balcony Direction',
   'Corner Apartment': 'Corner Apartment',
-  'm3' : 'm3',
-  // personal 
+  'm3': 'm3',
+  // personal
   'Followers': 'Followers',
   'Following': 'Following',
   'Follow': 'Follow',
@@ -180,8 +181,9 @@ const Map<String, String> enLanguagePackage = {
   'Edit Profile': 'Edit Profile',
   'Join date:': 'Join date:',
   'Posted Properties': 'Posted Properties',
-  'Session expired.' : 'Session expired.',
-  'Please log in again to refresh your session.' : 'Please log in again to refresh your session.',
+  'Session expired.': 'Session expired.',
+  'Please log in again to refresh your session.':
+      'Please log in again to refresh your session.',
   // notification
   'suggest' : 'You may be interested',
    "expirationWarning" :  "Your post will expire in 1 days",
@@ -190,4 +192,9 @@ const Map<String, String> enLanguagePackage = {
    'newFollower' : 'You just have a new follower',
    'Posts Management' : 'Posts Management',
     "No news has been posted." :  "No news has been posted.",
+
+  // verification
+  'Account verification': 'Account verification',
+  'Continue': 'Continue',
+  'Premium': 'Premium'
 };
