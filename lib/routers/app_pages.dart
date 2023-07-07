@@ -164,7 +164,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: AppRoutes.admin_post_detail,
-      page: () => const AdminPostDetailScreen(),
+      page: () => AdminPostDetailScreen(),
       binding: AdminPostDetailBinding(),
     ),
     GetPage(

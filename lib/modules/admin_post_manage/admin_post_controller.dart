@@ -36,6 +36,14 @@ class AdminPostController extends GetxController {
     rejectedPosts = repository.getRejectedPosts();
   }
 
+  getPendingPost() {
+    pendingPosts = repository.getPendingPosts();
+  }
+
+  getRejectedPost() {
+    rejectedPosts = repository.getRejectedPosts();
+  }
+
   handleEditAutoForm() {}
   String formatTime(DateTime timestamp) {
     DateTime now = DateTime.now();
@@ -86,7 +94,7 @@ class AdminPostController extends GetxController {
   // }
 
   void navigateToDetailSceen(Post post) {
-    Get.toNamed(AppRoutes.admin_post_detail, arguments: post);
+    Get.to(AppRoutes.admin_post_detail, arguments: post);
   }
 
   // pay() async {
