@@ -1046,11 +1046,13 @@ class RemoteDataSource {
         .limit(1));
     return data.first;
   }
+
   Future<List<Map<String, dynamic>>> getUserTransactions(String uid) async {
     return List<Map<String, dynamic>>.from(await Supabase.instance.client
         .from('transactions')
         .select('*, membership_package(*), membership_package_subscription(*)')
-        .eq('user_id', uid));
+        .eq('user_id', uid)
+        .order('time_stamp', ascending: false));
   }
 
   Future<void> sendAccountVerificationRequest(

@@ -11,16 +11,20 @@ import '../personal/screens/personal_screen.dart';
 import 'tab_controller.dart';
 
 // ignore: must_be_immutable
-class TabScreen extends StatelessWidget {
-  final controller = Get.put(TabNavController());
-
-  List<Widget> _pages = [];
-  List<TabItem<dynamic>> _tab = [];
+class TabScreen extends StatefulWidget {
 
   TabScreen({super.key});
-
   @override
-  Widget build(BuildContext context) {
+  State<TabScreen> createState() => _TabScreenState();
+}
+
+class _TabScreenState extends State<TabScreen> with SingleTickerProviderStateMixin{
+  List<Widget> _pages = [];
+  List<TabItem<dynamic>> _tab = [];
+  final controller = Get.put(TabNavController());
+  @override
+  void initState() {
+    super.initState();
     _pages = [
       const HomeScreen(),
       PostManagementScreen(),
@@ -51,7 +55,7 @@ class TabScreen extends StatelessWidget {
       TabItem(
         icon: const Icon(Icons.newspaper_outlined),
         activeIcon:
-            Icon(Icons.newspaper_outlined, color: AppColors.primaryColor),
+        Icon(Icons.newspaper_outlined, color: AppColors.primaryColor),
         title: 'Blog'.tr,
       ),
       TabItem(
@@ -60,11 +64,16 @@ class TabScreen extends StatelessWidget {
         title: 'Account'.tr,
       ),
     ];
+    controller.tabController = TabController(length: _tab.length, vsync: this);
+  }
+  @override
+  Widget build(BuildContext context) {
+
     return GetBuilder<TabNavController>(
       builder: (_) {
         return Scaffold(
-          body: IndexedStack(
-            index: controller.tabIndex,
+          body: TabBarView(
+            controller: controller.tabController,
             children: _pages,
           ),
           bottomNavigationBar: ConvexAppBar(

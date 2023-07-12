@@ -25,6 +25,7 @@ class PostDetailsScreen extends StatefulWidget {
 
 class _PostDetailsScreenState extends State<PostDetailsScreen> {
   final PostDetailController _controller = PostDetailController();
+
   @override
   void initState() {
     super.initState();
@@ -33,36 +34,33 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<dynamic>>(
-        future: _controller.init(Get.arguments),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            _controller.post = snapshot.data?[1];
-            var auth = GetIt.instance<AuthRepository>();
-            if (_controller.post?.userID == auth.userID) {
-              _controller.isYourPost = true;
-            }
-            Future.delayed(Duration.zero).then((value) {
-              // your obx var, eg. global_variables.appBarTitle.value = "Messages";
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(_controller.post?.title??""),
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
+        ],
+      ),
+      body: FutureBuilder<List<dynamic>>(
+          future: _controller.init(Get.arguments),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              _controller.post = snapshot.data?[1];
+              var auth = GetIt.instance<AuthRepository>();
+              if (_controller.post?.userID == auth.userID) {
+                _controller.isYourPost = true;
+              }
               _controller.numOfLikes.value = _controller.post!.numOfLikes;
               _controller.liked.value = snapshot.data?[2];
-            });
-            _controller.userInfo = snapshot.data?.first;
-            _controller.relatedPost = snapshot.data?.last;
-            print(snapshot.data);
-            return Scaffold(
-              appBar: AppBar(
-                title: Text(_controller.post!.title),
-                actions: [
-                  IconButton(
-                      onPressed: () {}, icon: const Icon(Icons.more_vert)),
-                ],
-              ),
-              body: SingleChildScrollView(
+              _controller.userInfo = snapshot.data?.first;
+              _controller.relatedPost = snapshot.data?.last;
+              print(snapshot.data);
+
+              return SingleChildScrollView(
                 child: Column(children: [
                   CarouselAd(
                       imgList: _controller.post!.imagesUrl,
@@ -212,69 +210,69 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                     province: _controller.post!.address.cityName,
                   )
                 ]),
-              ),
-              bottomNavigationBar: (!_controller.isYourPost)
-                  ? BottomAppBar(
-                      child: SizedBox(
-                      height: 80,
-                      child: Row(children: [
-                        Expanded(
-                            child: MaterialButton(
-                                onPressed: _controller.launchPhone,
+              );
+            }
+          }),
+      bottomNavigationBar: (!_controller.isYourPost)
+          ? BottomAppBar(
+              child: SizedBox(
+              height: 80,
+              child: Row(children: [
+                Expanded(
+                    child: MaterialButton(
+                        onPressed: _controller.launchPhone,
+                        color: AppColors.green,
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.phone_in_talk_outlined,
+                                size: 24,
+                                color: Colors.white,
+                              ),
+                              Text(
+                                'Call'.tr,
+                                style: AppTextStyles.roboto12regular
+                                    .copyWith(color: Colors.white),
+                              )
+                            ]))),
+                Expanded(
+                    child: MaterialButton(
+                        onPressed: _controller.navToChat,
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                Assets.messCircle,
+                                width: 24,
                                 color: AppColors.green,
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(
-                                        Icons.phone_in_talk_outlined,
-                                        size: 24,
-                                        color: Colors.white,
-                                      ),
-                                      Text(
-                                        'Call'.tr,
-                                        style: AppTextStyles.roboto12regular
-                                            .copyWith(color: Colors.white),
-                                      )
-                                    ]))),
-                        Expanded(
-                            child: MaterialButton(
-                                onPressed: _controller.navToChat,
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        Assets.messCircle,
-                                        width: 24,
-                                        color: AppColors.green,
-                                      ),
-                                      Text(
-                                        'Chat'.tr,
-                                        style: AppTextStyles.roboto12regular
-                                            .copyWith(color: AppColors.green),
-                                      )
-                                    ]))),
-                        Expanded(
-                            child: MaterialButton(
-                                onPressed: _controller.launchSms,
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.sms_outlined,
-                                        size: 24,
-                                        color: AppColors.green,
-                                      ),
-                                      Text(
-                                        'SMS messages'.tr,
-                                        style: AppTextStyles.roboto12regular
-                                            .copyWith(color: AppColors.green),
-                                      )
-                                    ])))
-                      ]),
-                    ))
-                  : null,
-            );
-          }
-        });
+                              ),
+                              Text(
+                                'Chat'.tr,
+                                style: AppTextStyles.roboto12regular
+                                    .copyWith(color: AppColors.green),
+                              )
+                            ]))),
+                Expanded(
+                    child: MaterialButton(
+                        onPressed: _controller.launchSms,
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.sms_outlined,
+                                size: 24,
+                                color: AppColors.green,
+                              ),
+                              Text(
+                                'SMS messages'.tr,
+                                style: AppTextStyles.roboto12regular
+                                    .copyWith(color: AppColors.green),
+                              )
+                            ])))
+              ]),
+            ))
+          : null,
+    );
   }
 }
