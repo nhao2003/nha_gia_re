@@ -1,56 +1,65 @@
 # Nha Gia Re
 
-**The idea**: A mobile application serving as a platform connecting real estate sellers and buyers for searching, buying, and renting properties.
+![Untitled](images/Untitled.png)
 
-## Project stucture
-
-- assets
-  - animation: chứa các file lotifile, animate
-  - icons : chứa các ảnh icon để sử dụng
-  - images: chứa các ảnh dùng cho app
-  - fonts : chứa fonts chữ của app (không cần lắm do dùng google font)
-- app
-
-  - core
-
-    - extensions: chứa các phương thức mở rộng cho các giá trị trong app
-    - utils: chứa các hàm xử lí chung cho app
-    - languages:
-      - en: sub english
-      - vi: sub vietnamese
-    - values
-      - app_string: chứa các string chung của app
-      - app_value: chứa các giá trị mặc định cho app
-      - image: chứa đường dẫn tới các image
-    - theme:
-      - app_colors: là nơi định nghĩa màu cho cả app
-      - text_styles: là nơi định nghĩa textStyle cho cả app
-
-  - data
-
-    - enums: chứa enum tự định nghĩa
-    - models: chứa các models của app
-    - providers: nơi cung cấp data (api, database, firebase,...)
-    - services: chứa các hàm service của app (https, authen_service,...)
-
-  - global_widgets: chứa các widgets được sử dụng nhiều lần trong app
-
-  - modules
-
-    - <module_name>: được đặt tên theo tên chức năng
-      - screens: chứa các trang của tính năng
-      - widgets: chứa các local widgets chỉ xuất hiện trong tính năng này
-      - <module_name>\_controller.dart: Khởi tạo controller cho tính năng
-      - <module_name>\_binding.dart: Định nghĩa các hàm và biến cho controller
-
-  - routes
-    - app_pages.dart: dẫn các route đến các trang tương ứng
-    - app_routes.dart: chứa tên các route
-
-- main.dart
-
-## Resources
-
-- Design Figma: https://www.figma.com/file/9iuWpQ1psfTWTmDjaDwnsZ/Untitled?node-id=1%3A15&t=YfcIgabdHXBUrCGr-1
-- Git: https://github.com/nhao2003/nha_gia_re
-- Reference codebase: https://github.com/kauemurakami/getx_pattern
+- **Giới thiệu đề tài:**
+    - Nhà giá rẻ là một ứng dụng giúp cho những người mua bán hoặc thuê bất động sản tìm kiếm và chọn được bất động sản theo nhu cầu của mình. Ứng dụng hỗ trợ người dùng tìm kiếm bất động sản phù hợp nhất với nhu cầu của mình, cũng như kết nối họ với những cá nhân, nhà môi giới có nhu cầu đăng tin bất động sản một cách dễ dàng và tiện lợi.
+    - Nhà giá rẻ có các chức năng cơ bản như tìm kiếm bất động sản, chat với người môi giới, đăng tin bất động sản, xem blog về bất động sản,...
+- **Danh sách chức năng:**
+    - Quản lý tài khoản người dùng
+    - Quản lí bài đăng
+    - Đăng kí gói đăng bài pro
+    - Đăng tin bất động sản
+    - Tìm kiếm bất động sản ở gần bạn
+    - Tìm kiếm bất động sản theo vị trí
+    - Chat với người đăng tin
+- Công nghệ sử dụng
+    
+    
+    **Flutte**
+    
+    ![Untitled](images/Untitled%201.png)
+    
+    **Supabase**
+    
+    ![Untitled](images/Untitled%202.png)
+    
+- **Một số sơ đồ**
+    
+    ![Sơ đồ Usecase](images/Untitled%203.png)
+    
+    Sơ đồ Usecase
+    
+    ![Sở đồ ERD](images/Untitled%204.png)
+    
+    Sở đồ ERD
+    
+- **Screenshots**
+    
+    Màn hình đăng nhâp/đăng ký
+    
+    ![Untitled](images/Untitled%205.png)
+    
+    ![Untitled](images/Untitled%206.png)
+    
+    Màn hình chính và bài đăng chi tiết
+    
+    ![Untitled](images/Untitled%207.png)
+    
+    ![Untitled](images/Untitled%208.png)
+    
+    Màn hình nhắn tin
+    
+    ![Untitled](images/Untitled%209.png)
+    
+    ![Untitled](images/Untitled%2010.png)
+    
+    ![Untitled](images/Untitled%2011.png)
+    
+    Màn hình tạo bài đăng:
+    
+    ![Untitled](images/Untitled%2012.png)
+    
+    ![Untitled](images/Untitled%2013.png)
+    
+    ![Untitled](images/Untitled%2014.png)
