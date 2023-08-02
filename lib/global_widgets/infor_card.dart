@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nha_gia_re/core/extensions/date_ex.dart';
@@ -29,8 +30,8 @@ class InforCard extends StatelessWidget {
             ClipRRect(
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-              child: Image.network(
-                post.imagesUrl.first,
+              child: CachedNetworkImage(
+                imageUrl: post.imagesUrl.first,
                 fit: BoxFit.fill,
                 height: 110,
                 width: 180,
@@ -76,13 +77,20 @@ class InforCard extends StatelessWidget {
 }
 
 class InforCardList extends StatefulWidget {
-  const InforCardList({super.key, required this.title, required this.list, required this.navType, this.province, this.uid});
+  const InforCardList(
+      {super.key,
+      required this.title,
+      required this.list,
+      required this.navType,
+      this.province,
+      this.uid});
 
   final String title;
   final List<Post> list;
   final TypeNavigate navType;
   final String? province;
   final String? uid;
+
   @override
   State<InforCardList> createState() => _InforCardListState();
 }
@@ -91,6 +99,7 @@ class _InforCardListState extends State<InforCardList> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      constraints: const BoxConstraints(maxHeight: 350),
       padding: const EdgeInsets.all(10),
       color: AppColors.white,
       child: Column(
@@ -104,8 +113,7 @@ class _InforCardListState extends State<InforCardList> {
             height: 10,
           ),
           if (widget.list.isNotEmpty)
-            SizedBox(
-              height: 220,
+            Flexible(
               child: ListView.separated(
                   shrinkWrap: true,
                   itemCount: widget.list.length,
@@ -119,7 +127,8 @@ class _InforCardListState extends State<InforCardList> {
                       child:
                           InforCard(key: UniqueKey(), post: widget.list[index]),
                       onTap: () {
-                        Get.toNamed(AppRoutes.getPostRoute( widget.list[index].id),
+                        Get.toNamed(
+                            AppRoutes.getPostRoute(widget.list[index].id),
                             arguments: widget.list[index]);
                       },
                     );
@@ -135,28 +144,33 @@ class _InforCardListState extends State<InforCardList> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ZoomTapAnimation( child: InkWell(
-                child: Text(
-                  'See more'.tr,
-                  style: AppTextStyles.roboto16regular
-                      .copyWith(color: AppColors.blue),
-                ),
-                onTap: () {
-                  String? matchingProvince;
-                  if(widget.province != null) {
-                    matchingProvince = FilterValues.instance.provinces.firstWhere(
-                        (item) => widget.province!.noAccentVietnamese().contains(item.noAccentVietnamese()),
+              ZoomTapAnimation(
+                child: InkWell(
+                  child: Text(
+                    'See more'.tr,
+                    style: AppTextStyles.roboto16regular
+                        .copyWith(color: AppColors.blue),
+                  ),
+                  onTap: () {
+                    String? matchingProvince;
+                    if (widget.province != null) {
+                      matchingProvince =
+                          FilterValues.instance.provinces.firstWhere(
+                        (item) => widget.province!
+                            .noAccentVietnamese()
+                            .contains(item.noAccentVietnamese()),
                       );
-                  }
-                  var data = {
-                    "title": widget.title,
-                    "type": widget.navType,
-                    "province" : matchingProvince,
-                    "uid" : widget.uid,
-                  };
-                  Get.toNamed(AppRoutes.resultArg, arguments: data);
-                },
-              ),)
+                    }
+                    var data = {
+                      "title": widget.title,
+                      "type": widget.navType,
+                      "province": matchingProvince,
+                      "uid": widget.uid,
+                    };
+                    Get.toNamed(AppRoutes.resultArg, arguments: data);
+                  },
+                ),
+              )
             ],
           )
         ],
