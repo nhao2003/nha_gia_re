@@ -78,6 +78,10 @@ class MessageRow extends StatelessWidget {
                     ),
                     child: CachedNetworkImage(
                       imageUrl: MapUtils.getStaticMapUrl(message.location!, 10),
+                      errorWidget: (context, url, error) => const Icon(
+                        Icons.error_outline,
+                        color: Colors.red,
+                      ),
                     ),
                   ),
                   ListTile(

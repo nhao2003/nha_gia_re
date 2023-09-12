@@ -80,6 +80,7 @@ class HomeController extends GetxController {
       userInfo = value;
       data = await Future.wait(
           [getLeasePosts(), repository.getAllPosts(filter), getSellPosts()]);
+      print("Data: $data");
     });
     print("Data Length: ${data.length}");
     return data;

@@ -191,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    InforCardList(
+                    if(data[1].isNotEmpty) InforCardList(
                       title: 'Gần bạn',
                       list: data[1],
                       navType: TypeNavigate.province,
